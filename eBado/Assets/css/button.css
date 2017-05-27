@@ -1,0 +1,57 @@
+.transparent-btn {
+float:right;
+  background: #343434;
+  border: 1px #3498db solid;
+
+  font-family: Arial;
+  color: #3498db;
+  font-size: 15px;
+  padding: 6px 14px 6px 14px;
+  text-decoration: none;
+  margin-left: 5px;
+}
+
+.transparent-btn:hover {
+  background: #00b6ff; 
+  border: 1px #00b6ff solid;
+  color: #fff;
+}
+
+/***** Form Button*****/
+
+.form-btn-transparent {
+float:none;
+background-color:#fff;
+  border: 2px #00b6ff solid;
+  font-family: Arial;
+  color: #00b6ff;
+  font-size: 15px;
+  padding: 6px 14px 6px 14px;
+  text-decoration: none;
+  margin-left: 5px;
+}
+
+.form-btn-transparent:hover {
+  background: #00b6ff; 
+  border: 2px #00b6ff solid;
+  color: #fff;
+}
+
+.form-btn {
+float:none;
+background-color:#00b6ff;
+  border: 2px #00b6ff solid;
+  font-family: Arial;
+  color: #fff;
+  font-size: 15px;
+  padding: 6px 14px 6px 14px;
+  text-decoration: none;
+  margin-left: 5px;
+  max-width:590px;
+}
+
+.form-btn:hover {
+  background: #0880AF; 
+  border: 2px #0880AF solid;
+  color: #fff;
+}

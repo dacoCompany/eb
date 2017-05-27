@@ -5,38 +5,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <!-- Top panel -->
+    <div class="top-panel">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
+            <div class="top-panel-img"></div>
+            <div class="top-panel-drop">
+                @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
+
+    <!-- Top menu -->
+    @*<nav class="navbar" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navbar-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="top-navbar-1">
+                    <ul class="nav navbar-nav navbar-right">
+
+                        <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active" : "")">
+                            <a href="@Url.Action("Index", "Home")"><i class="fa fa-camera"></i><br>bazár</a>
+                        </li>
+                        <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index2" ? "active" : "")">
+                            <a href="@Url.Action("Index2", "Home")"><i class="fa fa-comments"></i><br>dopyt</a>
+                        </li>
+                        <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index3" ? "active" : "")">
+                            <a href="@Url.Action("Index3", "Home")"><i class="fa fa-tasks"></i><br>faq</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-user"></i><br>cenník</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>*@
+
+    <!--SubMenu-->
+    <div class="submenu" id="SubMenuId">
+        <div class="container">
+            <div class="position">
+                <a class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active_menu" : "")" href="@Url.Action("Index", "Home")">bazár</a>
+                <a class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index2" ? "active_menu" : "")" href="@Url.Action("Index2", "Home")">dopyt</a>
+                <a href="#contact">faq</a>
+                <a href="#about">cenník</a>
+            </div>
+            <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
+        </div>
     </div>
 
+    <script>
+        function myFunction() {
+            var x = document.getElementById("SubMenuId");
+            if (x.className === "submenu") {
+                x.className += " responsive";
+            } else {
+                x.className = "submenu";
+            }
+        }
+    </script>
+
+    @*<div class="e-wrapper">
+            @RenderBody()
+            <div class="e-pull-left"></div>
+            <div class="e-footer">
+                <p>&copy; @DateTime.Now.Year - eBado Application</p>
+            </div>
+        </div>*@
+
+    <div id="wrap">
+        @RenderBody()
+    </div>
+    <footer id="footer">
+        <div class="container">
+            <p>&copy; @DateTime.Now.Year - eBado Application</p>
+        </div>
+    </footer>
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>
 </html>
