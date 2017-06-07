@@ -8,17 +8,12 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="container">
+    <div class="container push_top_30">
         <div class="col-md-2"></div>
         <div class="row">
             <div class="col-md-7">
-                <!-- Nav tabs --><div class="card">
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation"><a href="@Url.Action("RegisterUser", "Account")" aria-controls="home" style="font-size:15px;">ZAKLADNY UCET</a></li>
-                        <li role="presentation"><a href="@Url.Action("RegisterPartTime", "Account")" aria-controls="profile" style="font-size:15px;">PRACA NA DOHODU</a></li>
-                        <li role="presentation" class="active"><a href="@Url.Action("RegisterSelfEmployed", "Account")" aria-controls="messages" style="font-size:15px;">ZIVNOSTNIK</a></li>
-                        <li role="presentation"><a href='@Url.Action("RegisterCompany", "Account")' aria-controls="settings" style="font-size:15px;">FIREMNY UCET</a></li>
-                    </ul>
+                <div class="card">
+                    @AccountHelper.RegisterMenu(Url, ViewContext.RouteData.Values["Action"].ToString())
                     <!-- Tab panes -->
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="basic">

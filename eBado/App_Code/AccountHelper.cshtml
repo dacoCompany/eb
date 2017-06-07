@@ -1,0 +1,23 @@
+﻿@using System.Web.Mvc
+
+@helper SettingsMenu(UrlHelper Url, string viewType) {
+    <div class="tab">
+        <input type="button" name="btn" class="@(viewType == "ChangePassword" ? "active" : "")" onclick="location.href='@Url.Action("ChangePassword", "Account")'" value="ZMENIT HESLO" />
+        <input type="button" name="btn" class="@(viewType == "RegisterUser" ? "active" : "")" onclick="location.href='@Url.Action("Login", "Account")'" value="PROFIL" />
+        <input type="button" name="btn" class="@(viewType == "RegisterUser" ? "active" : "")" onclick="location.href='@Url.Action("Login", "Account")'" value="GALERIA" />
+        <input type="button" name="btn" class="@(viewType == "RegisterUser" ? "active" : "")" onclick="location.href='@Url.Action("Login", "Account")'" value="NASTAVENIA" />
+    </div>
+}
+
+@helper RegisterMenu(UrlHelper Url, string viewType) {
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="@(viewType == "RegisterUser" ? "active" : "")">
+        <a href="@Url.Action("RegisterUser", "Account")" aria-controls="home" style="font-size:15px;">ZAKLADNY UCET</a></li>
+        <li role="presentation" class="@(viewType == "RegisterPartTime" ? "active" : "")">
+        <a href="@Url.Action("RegisterPartTime", "Account")" aria-controls="profile" style="font-size:15px;">PRACA NA DOHODU</a></li>
+        <li role="presentation" class="@(viewType == "RegisterSelfEmployed" ? "active" : "")">
+        <a href="@Url.Action("RegisterSelfEmployed", "Account")" aria-controls="messages" style="font-size:15px;">ZIVNOSTNIK</a></li>
+        <li role="presentation" class="@(viewType == "RegisterCompany" ? "active" : "")">
+        <a href='@Url.Action("RegisterCompany", "Account")' aria-controls="settings" style="font-size:15px;">FIREMNY UCET</a></li>
+    </ul>
+}
