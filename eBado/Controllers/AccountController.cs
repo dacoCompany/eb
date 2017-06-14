@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
 using Web.eBado.Models.Account;
 
@@ -180,7 +181,9 @@ namespace Web.eBado.Controllers
         [AllowAnonymous]
         public ActionResult ChangeSettings()
         {
-            return View();
+            ChangeSettingsModel model = new ChangeSettingsModel();
+            model.Title = "Ing.";
+            return View(model);
         }
 
         [HttpPost]
@@ -189,6 +192,20 @@ namespace Web.eBado.Controllers
         public ActionResult ChangeSettings(ChangeSettingsModel model)
         {
             return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult AccountGallery()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult AccountGallery(IEnumerable<HttpPostedFileBase> images)
+        {
+            return View();
         }
         #region Private methods
 

@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = "AccountGallery";
+}
+
+@using (Html.BeginForm("AccountGallery", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div id="multiple">
+        <input type="file" class="multiple" name="files" multiple />
+    </div>
+   
+    <button class="btn btn-default">Upload</button>
+}
+

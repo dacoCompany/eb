@@ -13,6 +13,10 @@ namespace Web.eBado.Models.Account
         public string PostalCode { get; set; }
 
         [Required(ErrorMessage = "Povinne pole")]
+        [Display(Name = "PostalCode")]
+        public string Title { get; set; }
+
+        [Required(ErrorMessage = "Povinne pole")]
         [Display(Name = "FirstName")]
         public string FirstName { get; set; }
 

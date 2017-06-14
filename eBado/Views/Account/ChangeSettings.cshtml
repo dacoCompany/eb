@@ -1,0 +1,71 @@
+﻿@model Web.eBado.Models.Account.ChangeSettingsModel
+
+@{
+    ViewBag.Title = "ChangeSettings";
+}
+
+@Styles.Render("~/Content/settings")
+@Styles.Render("~/Content/jquery_ui")
+@Scripts.Render("~/bundles/jquery_autocomplete")
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="container">
+        <div class="resp push_top_10">
+            @AccountHelper.SettingsMenu(Url, ViewContext.RouteData.Values["Action"].ToString())
+            <div class="tabcontent push_top_20">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="col-sm-12 reg-font">Kontaktná osoba</div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Titul" } })
+                        <div class="val-message">@Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Meno" } })
+                        <div class="val-message">@Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.Surname, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Priezvisko" } })
+                        <div class="val-message">@Html.ValidationMessageFor(model => model.Surname, "", new { @class = "text-danger" })</div>
+                    </div>
+                </div>
+                <div class="col-sm-12 reg-font">Kontaktné údaje spoločnosti</div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <input type="text" class="form-control txt-lg" id="txtPostalCode" placeholder="PSC" />
+                        @Html.HiddenFor(model => model.PostalCode, new { @id = "hiddenPostalCode" })
+                        <div class="val-message">@Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.Street, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Ulica" } })
+                        <div class="val-message">@Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.EditorFor(model => model.StreetNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Cislo" } })
+                        <div class="val-message">@Html.ValidationMessageFor(model => model.Surname, "", new { @class = "text-danger" })</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-10">
+                        <input type="submit" value="ZMENIT" class="form-btn" style="width:200px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

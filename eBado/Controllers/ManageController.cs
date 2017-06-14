@@ -26,7 +26,7 @@ namespace Web.eBado.Controllers
             List<PostalCodeModel> ObjList = new List<PostalCodeModel>()
             {
 
-                new PostalCodeModel {Id=1,PostalCode="040 01 - Kosice - Barca" },
+                new PostalCodeModel {Id=1,PostalCode="040 01" },
                 new PostalCodeModel {Id=2,PostalCode="040 02" },
                 new PostalCodeModel {Id=3,PostalCode="040 03" },
                 new PostalCodeModel {Id=4,PostalCode="040 04" },
