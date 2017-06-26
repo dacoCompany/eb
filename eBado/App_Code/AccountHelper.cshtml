@@ -4,7 +4,7 @@
     <div class="tab">
         <input type="button" name="btn" class="@(viewType == "ChangePassword" ? "active" : "")" onclick="location.href='@Url.Action("ChangePassword", "Account")'" value="ZMENIT HESLO" />
         <input type="button" name="btn" class="@(viewType == "ChangeSettings" ? "active" : "")" onclick="location.href='@Url.Action("ChangeSettings", "Account")'" value="PROFIL" />
-        <input type="button" name="btn" class="@(viewType == "RegisterUser" ? "active" : "")" onclick="location.href='@Url.Action("Login", "Account")'" value="GALERIA" />
+        <input type="button" name="btn" class="@(viewType == "AccountGallery" ? "active" : "")" onclick="location.href='@Url.Action("AccountGallery", "Account")'" value="GALERIA" />
         <input type="button" name="btn" class="@(viewType == "RegisterUser" ? "active" : "")" onclick="location.href='@Url.Action("Login", "Account")'" value="NASTAVENIA" />
     </div>
 }

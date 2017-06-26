@@ -607,3 +607,7 @@ hr.transparent {
 .push_top_30 {
     margin-top: 30px;
 }
+
+.no_margin{
+    margin: 0 auto !important;
+}
