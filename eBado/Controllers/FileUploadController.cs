@@ -23,7 +23,7 @@ namespace Web.eBado.Controllers
         String DeleteType = "GET";
         public FileUploadController()
         {
-            filesHelper = new FilesHelper(DeleteURL, DeleteType, StorageRoot, UrlBase, tempPath, serverMapPath);
+            filesHelper = new FilesHelper(DeleteURL, DeleteType, StorageRoot, UrlBase, serverMapPath);
         }
       
         public FilesViewModel Show()
