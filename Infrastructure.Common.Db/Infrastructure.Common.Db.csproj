@@ -72,6 +72,12 @@
     <Compile Include="AddressDbo.cs">
       <DependentUpon>EBADOModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="AttachmentDbo.cs">
+      <DependentUpon>EBADOModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BatchAttachmentDbo.cs">
+      <DependentUpon>EBADOModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="CategoryDbo.cs">
       <DependentUpon>EBADOModel.tt</DependentUpon>
     </Compile>

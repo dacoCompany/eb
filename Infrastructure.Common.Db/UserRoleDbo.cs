@@ -17,7 +17,7 @@ namespace Infrastructure.Common.DB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public UserRoleDbo()
         {
-            this.UserAccounts = new HashSet<UserAccountDbo>();
+            this.UserAccount = new HashSet<UserAccountDbo>();
         }
     
         public int Id { get; set; }
@@ -28,6 +28,6 @@ namespace Infrastructure.Common.DB
         public Nullable<System.DateTime> DateModified { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserAccountDbo> UserAccounts { get; set; }
+        public virtual ICollection<UserAccountDbo> UserAccount { get; set; }
     }
 }

@@ -12,24 +12,27 @@ namespace Infrastructure.Common.DB
     using System;
     using System.Collections.Generic;
     
-    public partial class CategoryDbo : IEntity
+    public partial class Location : IEntity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CategoryDbo()
+        public Location()
         {
-            this.SubCategory = new HashSet<SubCategoryDbo>();
+            this.Addresses = new HashSet<Address>();
         }
     
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public bool IsActive { get; set; }
-        public Nullable<System.DateTime> DateCreated { get; set; }
-        public Nullable<System.DateTime> DateModified { get; set; }
-        public int MainCategoryId { get; set; }
+        public string Country { get; set; }
+        public string PostalCode { get; set; }
+        public string City { get; set; }
+        public string County { get; set; }
+        public string District { get; set; }
+        public Nullable<decimal> Lat { get; set; }
+        public Nullable<decimal> Lon { get; set; }
+        public bool Is_Active { get; set; }
+        public Nullable<System.DateTime> Date_Created { get; set; }
+        public Nullable<System.DateTime> Date_Modified { get; set; }
     
-        public virtual MainCategoryDbo MainCategory { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SubCategoryDbo> SubCategory { get; set; }
+        public virtual ICollection<Address> Addresses { get; set; }
     }
 }

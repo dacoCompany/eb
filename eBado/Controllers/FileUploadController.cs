@@ -12,15 +12,14 @@ namespace Web.eBado.Controllers
     public class FileUploadController : Controller
     {
         FilesHelper filesHelper;
-        String tempPath = "~/somefiles/";
-        String serverMapPath = "~/Files/somefiles/";
+        string serverMapPath = "~/Files/somefiles/";
         private string StorageRoot
         {
             get { return Path.Combine(HostingEnvironment.MapPath(serverMapPath)); }
         }
         private string UrlBase = "/Files/somefiles/";
-        String DeleteURL = "/FileUpload/DeleteFile/?file=";
-        String DeleteType = "GET";
+        string DeleteURL = "/FileUpload/DeleteFile/?file=";
+        string DeleteType = "GET";
         public FileUploadController()
         {
             filesHelper = new FilesHelper(DeleteURL, DeleteType, StorageRoot, UrlBase, serverMapPath);

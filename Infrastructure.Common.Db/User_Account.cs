@@ -12,40 +12,38 @@ namespace Infrastructure.Common.DB
     using System;
     using System.Collections.Generic;
     
-    public partial class UserAccountDbo : IEntity
+    public partial class User_Account : IEntity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public UserAccountDbo()
+        public User_Account()
         {
-            this.Addresses = new HashSet<AddressDbo>();
+            this.Addresses = new HashSet<Address>();
         }
     
         public int Id { get; set; }
         public string Title { get; set; }
-        public string FirstName { get; set; }
-        public string SecondName { get; set; }
+        public string First_Name { get; set; }
+        public string Second_Name { get; set; }
         public string Surname { get; set; }
-        public string UniqueName { get; set; }
-        public int PhoneNumber { get; set; }
-        public Nullable<int> AdditionalPhoneNumber { get; set; }
+        public string Unique_Name { get; set; }
+        public int Phone_Number { get; set; }
+        public Nullable<int> Additional_Phone_Number { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string Salt { get; set; }
         public string Ico { get; set; }
         public string Dic { get; set; }
-        public bool IsActive { get; set; }
-        public Nullable<System.DateTime> DateCreated { get; set; }
-        public Nullable<System.DateTime> DateModified { get; set; }
-        public int AttachmentId { get; set; }
-        public int UserRoleId { get; set; }
-        public Nullable<int> SubCatId { get; set; }
-        public int BatchAttachmentId { get; set; }
+        public bool Is_Active { get; set; }
+        public Nullable<System.DateTime> Date_Created { get; set; }
+        public Nullable<System.DateTime> Date_Modified { get; set; }
+        public int At_Id { get; set; }
+        public int Ro_Id { get; set; }
+        public Nullable<int> Sub_Cat_Id { get; set; }
     
-        public virtual AccountTypeDbo AccountType { get; set; }
-        public virtual BatchAttachmentDbo BatchAttachment { get; set; }
-        public virtual SubCategoryDbo SubCategory { get; set; }
-        public virtual UserRoleDbo UserRole { get; set; }
+        public virtual Account_Type Account_Type { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AddressDbo> Addresses { get; set; }
+        public virtual ICollection<Address> Addresses { get; set; }
+        public virtual Sub_Category Sub_Category { get; set; }
+        public virtual User_Role User_Role { get; set; }
     }
 }

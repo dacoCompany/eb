@@ -121,13 +121,13 @@ namespace Web.eBado.Controllers
                         Title = model.Title,
                         FirstName = model.FirstName,
                         Surname = model.Surname,
-                        CompanyName = model.AccountName,
+                        UniqueName = model.AccountName,
                         Ico = model.Ico,
                         Dic = model.Dic,
-                        SubCategoryId = Convert.ToInt32(model.SelectedSubCategory),
+                        SubCatId = Convert.ToInt32(model.SelectedSubCategory),
                         Password = EncodePassword(password, salt),
                         Salt = salt,
-                        AccountTypeId = (int)AccountType.Company
+                        UserRoleId = (int)AccountType.Company
                     };
                     accountModel.Addresses.Add(addressModel);
 

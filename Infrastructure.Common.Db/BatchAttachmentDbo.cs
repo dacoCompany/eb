@@ -12,12 +12,12 @@ namespace Infrastructure.Common.DB
     using System;
     using System.Collections.Generic;
     
-    public partial class CategoryDbo : IEntity
+    public partial class BatchAttachmentDbo : IEntity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CategoryDbo()
+        public BatchAttachmentDbo()
         {
-            this.SubCategory = new HashSet<SubCategoryDbo>();
+            this.UserAccount = new HashSet<UserAccountDbo>();
         }
     
         public int Id { get; set; }
@@ -26,10 +26,10 @@ namespace Infrastructure.Common.DB
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
-        public int MainCategoryId { get; set; }
+        public int AttachmentId { get; set; }
     
-        public virtual MainCategoryDbo MainCategory { get; set; }
+        public virtual AttachmentDbo Attachment { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SubCategoryDbo> SubCategory { get; set; }
+        public virtual ICollection<UserAccountDbo> UserAccount { get; set; }
     }
 }
