@@ -11,7 +11,7 @@ namespace Infrastructure.Common.DB
     /// <seealso cref="Infrastructure.Common.DB.IUnitOfWork" />
     public class UnitOfWork : IUnitOfWork
     {
-        private DbContext context = new EBADODBEntities(@"metadata=res://*/EBADOModel.csdl|res://*/EBADOModel.ssdl|res://*/EBADOModel.msl;provider=System.Data.SqlClient;provider connection string='data source=localhost\masterdb;initial catalog=EBADODB;integrated security=False;persist security info=True;user id=sa;password=oracle;MultipleActiveResultSets=True;App=EntityFramework'");
+        private DbContext context = new EBADODBEntities(@"metadata=res://*/EBADOModel.csdl|res://*/EBADOModel.ssdl|res://*/EBADOModel.msl;provider=System.Data.SqlClient;provider connection string='data source=ebadodbsrv.database.windows.net;initial catalog=ebado_development;integrated security=False;persist security info=True;user id=ebadoadmin;password=ebado.159;MultipleActiveResultSets=True;App=EntityFramework'");
         private bool disposed = false;
 
         private Repository<AccountTypeDbo> accountTypeRepository;

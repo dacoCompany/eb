@@ -1,15 +1,71 @@
-﻿
+﻿@model Web.eBado.Models.Shared.FilesViewModel
+@using Web.eBado.Helpers
 @{
     ViewBag.Title = "AccountGallery";
 }
 
-@using (Html.BeginForm("AccountGallery", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
-    <div id="multiple">
-        <input type="file" class="multiple" name="files" multiple />
+@Styles.Render("~/Content/settings")
+@Styles.Render("~/Content/jQuery-File-Upload")
+
+
+@Html.AntiForgeryToken()
+<div class="container">
+    <div class="resp push_top_10">
+        @AccountHelper.SettingsMenu(Url, ViewContext.RouteData.Values["Action"].ToString())
+        <div class="tabcontent-gallery push_top_10">
+            <div style="float:left; margin-bottom: 50px; width:100%">
+                <button type="submit" class="form-btn col-lg-2" style="float:left" onclick="location.href='@Url.Action("EditAccountGallery", "Account")'">Pridat/Editovat</button>
+            </div>
+            <div class="push_top_20">
+                <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
+                    <div class="slides"></div>
+                    <h3 class="title"></h3>
+                    <a class="prev">‹</a>
+                    <a class="next">›</a>
+                    <a class="close">×</a>
+                    <a class="play-pause"></a>
+                    <ol class="indicator"></ol>
+                </div>
+                <div id="links" style="float:left; width:100%">
+                    @if (@Model.Files != null && @Model.Files.Length != 0)
+                    {
+                        foreach (ViewDataUploadFilesResult file in @Model.Files)
+                        {
+
+                            if (file.type.Equals("video/mp4"))
+                            {
+
+                                <a href="@file.url" title="@file.name" type="video/mp4"><img src="@file.thumbnailUrl" alt="@file.name"></a>
+
+
+                            }
+                            else
+                            {
+                                <div style="margin:10px; display:inline; float:left"><a href="@file.url" title="@file.name"><img src="@file.thumbnailUrl" alt="@file.name"></a></div>
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        <p>No files</p>
+                    }
+                </div>
+            </div>
+        </div>
     </div>
-   
-    <button class="btn btn-default">Upload</button>
-}
+</div>
+
+<script>
+    document.getElementById('links').onclick = function (event) {
+        event = event || window.event;
+        var target = event.target || event.srcElement,
+            link = target.src ? target.parentNode : target,
+            options = { index: link, event: event },
+            links = this.getElementsByTagName('a');
+        blueimp.Gallery(links, options);
+    };
+</script>
+
+@Scripts.Render("~/bundles/Blueimp-Gallerry2")
 

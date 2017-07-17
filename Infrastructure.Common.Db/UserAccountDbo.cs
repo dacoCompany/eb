@@ -23,28 +23,29 @@ namespace Infrastructure.Common.DB
         public int Id { get; set; }
         public string Title { get; set; }
         public string FirstName { get; set; }
-        public string SecoundName { get; set; }
+        public string SecondName { get; set; }
         public string Surname { get; set; }
-        public string Nickname { get; set; }
+        public string UniqueName { get; set; }
         public int PhoneNumber { get; set; }
         public Nullable<int> AdditionalPhoneNumber { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string Salt { get; set; }
-        public string CompanyName { get; set; }
         public string Ico { get; set; }
         public string Dic { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
-        public int AccountTypeId { get; set; }
-        public int RoleId { get; set; }
-        public Nullable<int> SubCategoryId { get; set; }
+        public int AttachmentId { get; set; }
+        public int UserRoleId { get; set; }
+        public Nullable<int> SubCatId { get; set; }
+        public int BatchAttachmentId { get; set; }
     
         public virtual AccountTypeDbo AccountType { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AddressDbo> Addresses { get; set; }
+        public virtual BatchAttachmentDbo BatchAttachment { get; set; }
         public virtual SubCategoryDbo SubCategory { get; set; }
         public virtual UserRoleDbo UserRole { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AddressDbo> Addresses { get; set; }
     }
 }

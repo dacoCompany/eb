@@ -9,6 +9,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using Web.eBado.Models.Account;
+using Web.eBado.Models.Shared;
 
 namespace Web.eBado.Controllers
 {
@@ -121,13 +122,13 @@ namespace Web.eBado.Controllers
                         Title = model.Title,
                         FirstName = model.FirstName,
                         Surname = model.Surname,
-                        CompanyName = model.AccountName,
+                        UniqueName = model.AccountName,
                         Ico = model.Ico,
                         Dic = model.Dic,
-                        SubCategoryId = Convert.ToInt32(model.SelectedSubCategory),
+                        SubCatId = Convert.ToInt32(model.SelectedSubCategory),
                         Password = EncodePassword(password, salt),
                         Salt = salt,
-                        AccountTypeId = (int)AccountType.Company
+                        UserRoleId = (int)AccountType.Company
                     };
                     accountModel.Addresses.Add(addressModel);
 
@@ -196,18 +197,18 @@ namespace Web.eBado.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult AccountGallery()
+        public ActionResult AccountGallery(FilesViewModel model)
+        {
+            model = new FileUploadController().Show();
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult EditAccountGallery()
         {
             return View();
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public ActionResult AccountGallery(IEnumerable<HttpPostedFileBase> images)
-        {
-            return View();
-        }
         #region Private methods
 
         private static string GeneratePassword()

@@ -17,7 +17,7 @@ namespace Infrastructure.Common.DB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public CategoryDbo()
         {
-            this.SubCategories = new HashSet<SubCategoryDbo>();
+            this.SubCategory = new HashSet<SubCategoryDbo>();
         }
     
         public int Id { get; set; }
@@ -30,6 +30,6 @@ namespace Infrastructure.Common.DB
     
         public virtual MainCategoryDbo MainCategory { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SubCategoryDbo> SubCategories { get; set; }
+        public virtual ICollection<SubCategoryDbo> SubCategory { get; set; }
     }
 }

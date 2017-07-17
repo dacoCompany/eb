@@ -31,6 +31,29 @@
           <Property Name="Ua_Id" Type="int" Nullable="false" />
           <Property Name="Loc_Id" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="Attachment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Original_Url" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Thumbnail_Url" Type="varchar" MaxLength="255" />
+          <Property Name="Is_Active" Type="bit" Nullable="false" />
+          <Property Name="Date_Created" Type="datetime2" Precision="0" />
+          <Property Name="Date_Modified" Type="datetime2" Precision="0" />
+        </EntityType>
+        <EntityType Name="Batch_Attachment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="100" />
+          <Property Name="Is_Active" Type="bit" Nullable="false" />
+          <Property Name="Date_Created" Type="datetime2" Precision="0" />
+          <Property Name="Date_Modified" Type="datetime2" Precision="0" />
+          <Property Name="Att_Id" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Category">
           <Key>
             <PropertyRef Name="Id" />
@@ -53,8 +76,8 @@
           <Property Name="City" Type="varchar" MaxLength="100" />
           <Property Name="County" Type="varchar" MaxLength="100" />
           <Property Name="District" Type="varchar" MaxLength="100" />
-          <Property Name="Lat" Type="decimal" Precision="10" Scale="2" />
-          <Property Name="Lon" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Lat" Type="decimal" Precision="10" Scale="4" />
+          <Property Name="Lon" Type="decimal" Precision="10" Scale="4" />
           <Property Name="Is_Active" Type="bit" Nullable="false" />
           <Property Name="Date_Created" Type="datetime2" Precision="0" />
           <Property Name="Date_Modified" Type="datetime2" Precision="0" />
@@ -89,15 +112,14 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Title" Type="varchar" MaxLength="20" />
           <Property Name="First_Name" Type="varchar" MaxLength="50" />
-          <Property Name="Secound_Name" Type="varchar" MaxLength="50" />
+          <Property Name="Second_Name" Type="varchar" MaxLength="50" />
           <Property Name="Surname" Type="varchar" MaxLength="50" />
-          <Property Name="Nickname" Type="varchar" MaxLength="50" />
+          <Property Name="Unique_Name" Type="varchar" MaxLength="50" />
           <Property Name="Phone_Number" Type="int" Nullable="false" />
           <Property Name="Additional_Phone_Number" Type="int" />
           <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Password" Type="varchar" MaxLength="25" Nullable="false" />
-          <Property Name="Salt" Type="varchar" MaxLength="25" Nullable="false" />
-          <Property Name="Company_Name" Type="varchar" MaxLength="50" />
+          <Property Name="Password" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Salt" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="Ico" Type="varchar" MaxLength="20" />
           <Property Name="Dic" Type="varchar" MaxLength="20" />
           <Property Name="Is_Active" Type="bit" Nullable="false" />
@@ -106,6 +128,7 @@
           <Property Name="At_Id" Type="int" Nullable="false" />
           <Property Name="Ro_Id" Type="int" Nullable="false" />
           <Property Name="Sub_Cat_Id" Type="int" />
+          <Property Name="Batch_Att_Id" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="User_Role">
           <Key>
@@ -139,6 +162,18 @@
             </Principal>
             <Dependent Role="Address">
               <PropertyRef Name="Ua_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Batch_Attachment_Attachment_Id">
+          <End Role="Attachment" Type="Self.Attachment" Multiplicity="1" />
+          <End Role="Batch_Attachment" Type="Self.Batch_Attachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Attachment">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Batch_Attachment">
+              <PropertyRef Name="Att_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -178,6 +213,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_User_Account_Batch_Attachment_Id">
+          <End Role="Batch_Attachment" Type="Self.Batch_Attachment" Multiplicity="1" />
+          <End Role="User_Account" Type="Self.User_Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Batch_Attachment">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User_Account">
+              <PropertyRef Name="Batch_Att_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_User_Account_Sub_Category_Id">
           <End Role="Sub_Category" Type="Self.Sub_Category" Multiplicity="0..1" />
           <End Role="User_Account" Type="Self.User_Account" Multiplicity="*" />
@@ -205,6 +252,8 @@
         <EntityContainer Name="EBADODBModelStoreContainer">
           <EntitySet Name="Account_Type" EntityType="Self.Account_Type" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Address" EntityType="Self.Address" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Attachment" EntityType="Self.Attachment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Batch_Attachment" EntityType="Self.Batch_Attachment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Location" EntityType="Self.Location" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Main_Category" EntityType="Self.Main_Category" Schema="dbo" store:Type="Tables" />
@@ -219,6 +268,10 @@
             <End Role="User_Account" EntitySet="User_Account" />
             <End Role="Address" EntitySet="Address" />
           </AssociationSet>
+          <AssociationSet Name="FK_Batch_Attachment_Attachment_Id" Association="Self.FK_Batch_Attachment_Attachment_Id">
+            <End Role="Attachment" EntitySet="Attachment" />
+            <End Role="Batch_Attachment" EntitySet="Batch_Attachment" />
+          </AssociationSet>
           <AssociationSet Name="FK_Category_Main_Category_Id" Association="Self.FK_Category_Main_Category_Id">
             <End Role="Main_Category" EntitySet="Main_Category" />
             <End Role="Category" EntitySet="Category" />
@@ -229,6 +282,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_User_Account_Account_Type_Id" Association="Self.FK_User_Account_Account_Type_Id">
             <End Role="Account_Type" EntitySet="Account_Type" />
+            <End Role="User_Account" EntitySet="User_Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Account_Batch_Attachment_Id" Association="Self.FK_User_Account_Batch_Attachment_Id">
+            <End Role="Batch_Attachment" EntitySet="Batch_Attachment" />
             <End Role="User_Account" EntitySet="User_Account" />
           </AssociationSet>
           <AssociationSet Name="FK_User_Account_Sub_Category_Id" Association="Self.FK_User_Account_Sub_Category_Id">
@@ -244,38 +301,27 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="EBADODBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="AccountTypeDbo">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="DateCreated" Type="DateTime" Precision="3" />
-          <Property Name="DateModified" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="UserAccounts" Relationship="EBADODBModel.FK_User_Account_Account_Type_Id" FromRole="AccountTypeDbo" ToRole="User_Account" />
-        </EntityType>
         <EntityContainer Name="EBADODBEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Account_Type" EntityType="EBADODBModel.AccountTypeDbo" />
-          <EntitySet Name="UserAccountDboes" EntityType="EBADODBModel.UserAccountDbo" />
-          <AssociationSet Name="FK_User_Account_Account_Type_Id" Association="EBADODBModel.FK_User_Account_Account_Type_Id">
-            <End Role="AccountTypeDbo" EntitySet="Account_Type" />
-            <End Role="User_Account" EntitySet="UserAccountDboes" />
-          </AssociationSet>
-          <EntitySet Name="AddressDboes" EntityType="EBADODBModel.AddressDbo" />
+          <EntitySet Name="AccountTypeDboes" EntityType="EBADODBModel.AccountTypeDbo" />
+          <EntitySet Name="AttachmentDboes" EntityType="EBADODBModel.AttachmentDbo" />
+          <EntitySet Name="BatchAttachmentDboes" EntityType="EBADODBModel.BatchAttachmentDbo" />
           <EntitySet Name="CategoryDboes" EntityType="EBADODBModel.CategoryDbo" />
           <EntitySet Name="LocationDboes" EntityType="EBADODBModel.LocationDbo" />
           <EntitySet Name="MainCategoryDboes" EntityType="EBADODBModel.MainCategoryDbo" />
           <EntitySet Name="SubCategoryDboes" EntityType="EBADODBModel.SubCategoryDbo" />
+          <EntitySet Name="UserAccountDboes" EntityType="EBADODBModel.UserAccountDbo" />
           <EntitySet Name="UserRoleDboes" EntityType="EBADODBModel.UserRoleDbo" />
-          <AssociationSet Name="FK_Address_Location_Id" Association="EBADODBModel.FK_Address_Location_Id">
-            <End Role="Location" EntitySet="LocationDboes" />
-            <End Role="Address" EntitySet="AddressDboes" />
+          <AssociationSet Name="FK_User_Account_Account_Type_Id" Association="EBADODBModel.FK_User_Account_Account_Type_Id">
+            <End Role="Account_Type" EntitySet="AccountTypeDboes" />
+            <End Role="User_Account" EntitySet="UserAccountDboes" />
           </AssociationSet>
-          <AssociationSet Name="FK_Address_User_Account_Id" Association="EBADODBModel.FK_Address_User_Account_Id">
-            <End Role="UserAccountDbo" EntitySet="UserAccountDboes" />
-            <End Role="Address" EntitySet="AddressDboes" />
+          <AssociationSet Name="FK_Batch_Attachment_Attachment_Id" Association="EBADODBModel.FK_Batch_Attachment_Attachment_Id">
+            <End Role="Attachment" EntitySet="AttachmentDboes" />
+            <End Role="Batch_Attachment" EntitySet="BatchAttachmentDboes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Account_Batch_Attachment_Id" Association="EBADODBModel.FK_User_Account_Batch_Attachment_Id">
+            <End Role="Batch_Attachment" EntitySet="BatchAttachmentDboes" />
+            <End Role="User_Account" EntitySet="UserAccountDboes" />
           </AssociationSet>
           <AssociationSet Name="FK_Category_Main_Category_Id" Association="EBADODBModel.FK_Category_Main_Category_Id">
             <End Role="Main_Category" EntitySet="MainCategoryDboes" />
@@ -287,70 +333,59 @@
           </AssociationSet>
           <AssociationSet Name="FK_User_Account_Sub_Category_Id" Association="EBADODBModel.FK_User_Account_Sub_Category_Id">
             <End Role="Sub_Category" EntitySet="SubCategoryDboes" />
-            <End Role="UserAccountDbo" EntitySet="UserAccountDboes" />
+            <End Role="User_Account" EntitySet="UserAccountDboes" />
           </AssociationSet>
           <AssociationSet Name="FK_User_User_Role_Id" Association="EBADODBModel.FK_User_User_Role_Id">
             <End Role="User_Role" EntitySet="UserRoleDboes" />
+            <End Role="User_Account" EntitySet="UserAccountDboes" />
+          </AssociationSet>
+          <EntitySet Name="AddressDboes" EntityType="EBADODBModel.AddressDbo" />
+          <AssociationSet Name="FK_Address_Location_Id" Association="EBADODBModel.FK_Address_Location_Id">
+            <End Role="LocationDbo" EntitySet="LocationDboes" />
+            <End Role="Address" EntitySet="AddressDboes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Address_User_Account_Id" Association="EBADODBModel.FK_Address_User_Account_Id">
             <End Role="UserAccountDbo" EntitySet="UserAccountDboes" />
+            <End Role="Address" EntitySet="AddressDboes" />
           </AssociationSet>
         </EntityContainer>
-        <EntityType Name="UserAccountDbo">
+        <EntityType Name="AccountTypeDbo">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Title" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="SecoundName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Nickname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="PhoneNumber" Type="Int32" Nullable="false" />
-          <Property Name="AdditionalPhoneNumber" Type="Int32" />
-          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Password" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="Salt" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="CompanyName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Ico" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Dic" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="DateCreated" Type="DateTime" Precision="0" />
-          <Property Name="DateModified" Type="DateTime" Precision="2" />
-          <Property Name="AccountTypeId" Type="Int32" Nullable="false" />
-          <Property Name="RoleId" Type="Int32" Nullable="false" />
-          <Property Name="SubCategoryId" Type="Int32" />
-          <NavigationProperty Name="AccountType" Relationship="EBADODBModel.FK_User_Account_Account_Type_Id" FromRole="User_Account" ToRole="AccountTypeDbo" />
-          <NavigationProperty Name="Addresses" Relationship="EBADODBModel.FK_Address_User_Account_Id" FromRole="UserAccountDbo" ToRole="Address" />
-          <NavigationProperty Name="SubCategory" Relationship="EBADODBModel.FK_User_Account_Sub_Category_Id" FromRole="UserAccountDbo" ToRole="Sub_Category" />
-          <NavigationProperty Name="UserRole" Relationship="EBADODBModel.FK_User_User_Role_Id" FromRole="UserAccountDbo" ToRole="User_Role" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="DateModified" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="UserAccount" Relationship="EBADODBModel.FK_User_Account_Account_Type_Id" FromRole="Account_Type" ToRole="User_Account" />
         </EntityType>
-        <Association Name="FK_User_Account_Account_Type_Id">
-          <End Type="EBADODBModel.AccountTypeDbo" Role="AccountTypeDbo" Multiplicity="1" />
-          <End Type="EBADODBModel.UserAccountDbo" Role="User_Account" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AccountTypeDbo">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="User_Account">
-              <PropertyRef Name="AccountTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="AddressDbo">
+        <EntityType Name="AttachmentDbo">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Street" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Number" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="IsDeliveryAddress" Type="Boolean" />
-          <Property Name="IsBillingAddress" Type="Boolean" />
+          <Property Name="OriginalUrl" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ThumbnailUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="DateCreated" Type="DateTime" Precision="0" />
           <Property Name="DateModified" Type="DateTime" Precision="0" />
-          <Property Name="UserAccountId" Type="Int32" Nullable="false" />
-          <Property Name="LocationId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Location" Relationship="EBADODBModel.FK_Address_Location_Id" FromRole="Address" ToRole="Location" />
-          <NavigationProperty Name="UserAccount" Relationship="EBADODBModel.FK_Address_User_Account_Id" FromRole="Address" ToRole="UserAccountDbo" />
+          <NavigationProperty Name="BatchAttachment" Relationship="EBADODBModel.FK_Batch_Attachment_Attachment_Id" FromRole="Attachment" ToRole="Batch_Attachment" />
+        </EntityType>
+        <EntityType Name="BatchAttachmentDbo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="0" />
+          <Property Name="DateModified" Type="DateTime" Precision="0" />
+          <Property Name="AttachmentId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Attachment" Relationship="EBADODBModel.FK_Batch_Attachment_Attachment_Id" FromRole="Batch_Attachment" ToRole="Attachment" />
+          <NavigationProperty Name="UserAccount" Relationship="EBADODBModel.FK_User_Account_Batch_Attachment_Id" FromRole="Batch_Attachment" ToRole="User_Account" />
         </EntityType>
         <EntityType Name="CategoryDbo">
           <Key>
@@ -364,7 +399,7 @@
           <Property Name="DateModified" Type="DateTime" Precision="0" />
           <Property Name="MainCategoryId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="MainCategory" Relationship="EBADODBModel.FK_Category_Main_Category_Id" FromRole="Category" ToRole="Main_Category" />
-          <NavigationProperty Name="SubCategories" Relationship="EBADODBModel.FK_Sub_Category_Category_Id" FromRole="Category" ToRole="Sub_Category" />
+          <NavigationProperty Name="SubCategory" Relationship="EBADODBModel.FK_Sub_Category_Category_Id" FromRole="Category" ToRole="Sub_Category" />
         </EntityType>
         <EntityType Name="LocationDbo">
           <Key>
@@ -376,12 +411,12 @@
           <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="County" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="District" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Lat" Type="Decimal" Precision="10" Scale="2" />
-          <Property Name="Lon" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Lat" Type="Decimal" Precision="10" Scale="4" />
+          <Property Name="Lon" Type="Decimal" Precision="10" Scale="4" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="DateCreated" Type="DateTime" Precision="0" />
           <Property Name="DateModified" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="Addresses" Relationship="EBADODBModel.FK_Address_Location_Id" FromRole="Location" ToRole="Address" />
+          <NavigationProperty Name="Addresses" Relationship="EBADODBModel.FK_Address_Location_Id" FromRole="LocationDbo" ToRole="Address" />
         </EntityType>
         <EntityType Name="MainCategoryDbo">
           <Key>
@@ -407,7 +442,37 @@
           <Property Name="DateModified" Type="DateTime" Precision="0" />
           <Property Name="CategoryId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Category" Relationship="EBADODBModel.FK_Sub_Category_Category_Id" FromRole="Sub_Category" ToRole="Category" />
-          <NavigationProperty Name="UserAccounts" Relationship="EBADODBModel.FK_User_Account_Sub_Category_Id" FromRole="Sub_Category" ToRole="UserAccountDbo" />
+          <NavigationProperty Name="UserAccount" Relationship="EBADODBModel.FK_User_Account_Sub_Category_Id" FromRole="Sub_Category" ToRole="User_Account" />
+        </EntityType>
+        <EntityType Name="UserAccountDbo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SecondName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UniqueName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNumber" Type="Int32" Nullable="false" />
+          <Property Name="AdditionalPhoneNumber" Type="Int32" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Salt" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Ico" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Dic" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="0" />
+          <Property Name="DateModified" Type="DateTime" Precision="2" />
+          <Property Name="AttachmentId" Type="Int32" Nullable="false" />
+          <Property Name="UserRoleId" Type="Int32" Nullable="false" />
+          <Property Name="SubCatId" Type="Int32" />
+          <Property Name="BatchAttachmentId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AccountType" Relationship="EBADODBModel.FK_User_Account_Account_Type_Id" FromRole="User_Account" ToRole="Account_Type" />
+          <NavigationProperty Name="BatchAttachment" Relationship="EBADODBModel.FK_User_Account_Batch_Attachment_Id" FromRole="User_Account" ToRole="Batch_Attachment" />
+          <NavigationProperty Name="SubCategory" Relationship="EBADODBModel.FK_User_Account_Sub_Category_Id" FromRole="User_Account" ToRole="Sub_Category" />
+          <NavigationProperty Name="UserRole" Relationship="EBADODBModel.FK_User_User_Role_Id" FromRole="User_Account" ToRole="User_Role" />
+          <NavigationProperty Name="Addresses" Relationship="EBADODBModel.FK_Address_User_Account_Id" FromRole="UserAccountDbo" ToRole="Address" />
         </EntityType>
         <EntityType Name="UserRoleDbo">
           <Key>
@@ -419,29 +484,41 @@
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="DateCreated" Type="DateTime" Precision="0" />
           <Property Name="DateModified" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="UserAccounts" Relationship="EBADODBModel.FK_User_User_Role_Id" FromRole="User_Role" ToRole="UserAccountDbo" />
+          <NavigationProperty Name="UserAccount" Relationship="EBADODBModel.FK_User_User_Role_Id" FromRole="User_Role" ToRole="User_Account" />
         </EntityType>
-        <Association Name="FK_Address_Location_Id">
-          <End Type="EBADODBModel.LocationDbo" Role="Location" Multiplicity="1" />
-          <End Type="EBADODBModel.AddressDbo" Role="Address" Multiplicity="*" />
+        <Association Name="FK_User_Account_Account_Type_Id">
+          <End Type="EBADODBModel.AccountTypeDbo" Role="Account_Type" Multiplicity="1" />
+          <End Type="EBADODBModel.UserAccountDbo" Role="User_Account" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Location">
+            <Principal Role="Account_Type">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Address">
-              <PropertyRef Name="LocationId" />
+            <Dependent Role="User_Account">
+              <PropertyRef Name="AttachmentId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Address_User_Account_Id">
-          <End Type="EBADODBModel.UserAccountDbo" Role="UserAccountDbo" Multiplicity="1" />
-          <End Type="EBADODBModel.AddressDbo" Role="Address" Multiplicity="*" />
+        <Association Name="FK_Batch_Attachment_Attachment_Id">
+          <End Type="EBADODBModel.AttachmentDbo" Role="Attachment" Multiplicity="1" />
+          <End Type="EBADODBModel.BatchAttachmentDbo" Role="Batch_Attachment" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="UserAccountDbo">
+            <Principal Role="Attachment">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Address">
-              <PropertyRef Name="UserAccountId" />
+            <Dependent Role="Batch_Attachment">
+              <PropertyRef Name="AttachmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Account_Batch_Attachment_Id">
+          <End Type="EBADODBModel.BatchAttachmentDbo" Role="Batch_Attachment" Multiplicity="1" />
+          <End Type="EBADODBModel.UserAccountDbo" Role="User_Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Batch_Attachment">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User_Account">
+              <PropertyRef Name="BatchAttachmentId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -471,84 +548,108 @@
         </Association>
         <Association Name="FK_User_Account_Sub_Category_Id">
           <End Type="EBADODBModel.SubCategoryDbo" Role="Sub_Category" Multiplicity="0..1" />
-          <End Type="EBADODBModel.UserAccountDbo" Role="UserAccountDbo" Multiplicity="*" />
+          <End Type="EBADODBModel.UserAccountDbo" Role="User_Account" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Sub_Category">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="UserAccountDbo">
-              <PropertyRef Name="SubCategoryId" />
+            <Dependent Role="User_Account">
+              <PropertyRef Name="SubCatId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_User_User_Role_Id">
           <End Type="EBADODBModel.UserRoleDbo" Role="User_Role" Multiplicity="1" />
-          <End Type="EBADODBModel.UserAccountDbo" Role="UserAccountDbo" Multiplicity="*" />
+          <End Type="EBADODBModel.UserAccountDbo" Role="User_Account" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User_Role">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="UserAccountDbo">
-              <PropertyRef Name="RoleId" />
+            <Dependent Role="User_Account">
+              <PropertyRef Name="UserRoleId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <EntityType Name="AddressDbo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Street" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Number" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeliveryAddress" Type="Boolean" />
+          <Property Name="IsBillingAddress" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="0" />
+          <Property Name="DateModified" Type="DateTime" Precision="0" />
+          <Property Name="UserAccountId" Type="Int32" Nullable="false" />
+          <Property Name="LocationId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Location" Relationship="EBADODBModel.FK_Address_Location_Id" FromRole="Address" ToRole="LocationDbo" />
+          <NavigationProperty Name="UserAccount" Relationship="EBADODBModel.FK_Address_User_Account_Id" FromRole="Address" ToRole="UserAccountDbo" />
+        </EntityType>
+        <Association Name="FK_Address_Location_Id">
+          <End Type="EBADODBModel.LocationDbo" Role="LocationDbo" Multiplicity="1" />
+          <End Type="EBADODBModel.AddressDbo" Role="Address" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LocationDbo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Address">
+              <PropertyRef Name="LocationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Address_User_Account_Id">
+          <End Type="EBADODBModel.UserAccountDbo" Role="UserAccountDbo" Multiplicity="1" />
+          <End Type="EBADODBModel.AddressDbo" Role="Address" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccountDbo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Address">
+              <PropertyRef Name="UserAccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="EBADODBModelStoreContainer" CdmEntityContainer="EBADODBEntities">
-          <EntitySetMapping Name="Account_Type">
+          <EntitySetMapping Name="AccountTypeDboes">
             <EntityTypeMapping TypeName="EBADODBModel.AccountTypeDbo">
               <MappingFragment StoreEntitySet="Account_Type">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DateModified" ColumnName="Date_Modified" />
+                <ScalarProperty Name="DateCreated" ColumnName="Date_Created" />
+                <ScalarProperty Name="IsActive" ColumnName="Is_Active" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="IsActive" ColumnName="Is_Active" />
-                <ScalarProperty Name="DateCreated" ColumnName="Date_Created" />
-                <ScalarProperty Name="DateModified" ColumnName="Date_Modified" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserAccountDboes">
-            <EntityTypeMapping TypeName="EBADODBModel.UserAccountDbo">
-              <MappingFragment StoreEntitySet="User_Account">
-                <ScalarProperty Name="SubCategoryId" ColumnName="Sub_Cat_Id" />
-                <ScalarProperty Name="RoleId" ColumnName="Ro_Id" />
-                <ScalarProperty Name="AccountTypeId" ColumnName="At_Id" />
-                <ScalarProperty Name="DateModified" ColumnName="Date_Modified" />
-                <ScalarProperty Name="DateCreated" ColumnName="Date_Created" />
-                <ScalarProperty Name="IsActive" ColumnName="Is_Active" />
-                <ScalarProperty Name="Dic" ColumnName="Dic" />
-                <ScalarProperty Name="Ico" ColumnName="Ico" />
-                <ScalarProperty Name="CompanyName" ColumnName="Company_Name" />
-                <ScalarProperty Name="Salt" ColumnName="Salt" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="AdditionalPhoneNumber" ColumnName="Additional_Phone_Number" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="Phone_Number" />
-                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
-                <ScalarProperty Name="Surname" ColumnName="Surname" />
-                <ScalarProperty Name="SecoundName" ColumnName="Secound_Name" />
-                <ScalarProperty Name="FirstName" ColumnName="First_Name" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="AddressDboes">
-            <EntityTypeMapping TypeName="EBADODBModel.AddressDbo">
-              <MappingFragment StoreEntitySet="Address">
-                <ScalarProperty Name="LocationId" ColumnName="Loc_Id" />
-                <ScalarProperty Name="UserAccountId" ColumnName="Ua_Id" />
+          <EntitySetMapping Name="AttachmentDboes">
+            <EntityTypeMapping TypeName="EBADODBModel.AttachmentDbo">
+              <MappingFragment StoreEntitySet="Attachment">
                 <ScalarProperty Name="DateModified" ColumnName="Date_Modified" />
                 <ScalarProperty Name="DateCreated" ColumnName="Date_Created" />
                 <ScalarProperty Name="IsActive" ColumnName="Is_Active" />
-                <ScalarProperty Name="IsBillingAddress" ColumnName="Is_BillingAddress" />
-                <ScalarProperty Name="IsDeliveryAddress" ColumnName="Is_DeliveryAddress" />
-                <ScalarProperty Name="Number" ColumnName="Number" />
-                <ScalarProperty Name="Street" ColumnName="Street" />
+                <ScalarProperty Name="ThumbnailUrl" ColumnName="Thumbnail_Url" />
+                <ScalarProperty Name="OriginalUrl" ColumnName="Original_Url" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BatchAttachmentDboes">
+            <EntityTypeMapping TypeName="EBADODBModel.BatchAttachmentDbo">
+              <MappingFragment StoreEntitySet="Batch_Attachment">
+                <ScalarProperty Name="AttachmentId" ColumnName="Att_Id" />
+                <ScalarProperty Name="DateModified" ColumnName="Date_Modified" />
+                <ScalarProperty Name="DateCreated" ColumnName="Date_Created" />
+                <ScalarProperty Name="IsActive" ColumnName="Is_Active" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -608,6 +709,32 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="UserAccountDboes">
+            <EntityTypeMapping TypeName="EBADODBModel.UserAccountDbo">
+              <MappingFragment StoreEntitySet="User_Account">
+                <ScalarProperty Name="BatchAttachmentId" ColumnName="Batch_Att_Id" />
+                <ScalarProperty Name="SubCatId" ColumnName="Sub_Cat_Id" />
+                <ScalarProperty Name="UserRoleId" ColumnName="Ro_Id" />
+                <ScalarProperty Name="AttachmentId" ColumnName="At_Id" />
+                <ScalarProperty Name="DateModified" ColumnName="Date_Modified" />
+                <ScalarProperty Name="DateCreated" ColumnName="Date_Created" />
+                <ScalarProperty Name="IsActive" ColumnName="Is_Active" />
+                <ScalarProperty Name="Dic" ColumnName="Dic" />
+                <ScalarProperty Name="Ico" ColumnName="Ico" />
+                <ScalarProperty Name="Salt" ColumnName="Salt" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="AdditionalPhoneNumber" ColumnName="Additional_Phone_Number" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="Phone_Number" />
+                <ScalarProperty Name="UniqueName" ColumnName="Unique_Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="SecondName" ColumnName="Second_Name" />
+                <ScalarProperty Name="FirstName" ColumnName="First_Name" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="UserRoleDboes">
             <EntityTypeMapping TypeName="EBADODBModel.UserRoleDbo">
               <MappingFragment StoreEntitySet="User_Role">
@@ -616,6 +743,22 @@
                 <ScalarProperty Name="IsActive" ColumnName="Is_Active" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AddressDboes">
+            <EntityTypeMapping TypeName="EBADODBModel.AddressDbo">
+              <MappingFragment StoreEntitySet="Address">
+                <ScalarProperty Name="LocationId" ColumnName="Loc_Id" />
+                <ScalarProperty Name="UserAccountId" ColumnName="Ua_Id" />
+                <ScalarProperty Name="DateModified" ColumnName="Date_Modified" />
+                <ScalarProperty Name="DateCreated" ColumnName="Date_Created" />
+                <ScalarProperty Name="IsActive" ColumnName="Is_Active" />
+                <ScalarProperty Name="IsBillingAddress" ColumnName="Is_BillingAddress" />
+                <ScalarProperty Name="IsDeliveryAddress" ColumnName="Is_DeliveryAddress" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="Street" ColumnName="Street" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
