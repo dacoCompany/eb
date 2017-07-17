@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Common;
 using Infrastructure.Common.DB;
+using Infrastructure.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

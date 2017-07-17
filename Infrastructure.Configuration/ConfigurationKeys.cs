@@ -2,10 +2,12 @@
 {
     public static class ConfigurationKeys
     {
-        public const string EmailFrom = "From";
-        public const string EmailServer = "Server";
-        public const string EmailPort = "Port";
-        public const string EmailUser = "User";
-        public const string EmailPassword = "Password";
+        public const string EmailFrom = "Email_From";
+        public const string EmailServer = "Email_Server";
+        public const string EmailPort = "Email_Port";
+        public const string EmailLogin = "Email_Login";
+        public const string EmailPassword = "Email_Password";
+        public const string EmailUseSsl = "Email_UseSsl";
+        public const string EmailDisplayName = "Email_DisplayName";
     }
 }

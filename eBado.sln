@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.eBado", "eBado\Web.eBado.csproj", "{294EF68E-1610-424D-A1A7-8A7ADB988730}"
 EndProject
@@ -16,6 +16,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Common", "Infrastructure.Common\Infrastructure.Common.csproj", "{C0F4027E-B71A-448E-9950-A27E5CE6D55C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Configuration", "Infrastructure.Configuration\Infrastructure.Configuration.csproj", "{AEDF78F1-5D47-4D81-9DB1-BD64C22F4310}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Messaging", "Messaging", "{070A4630-5B4D-435D-A4DA-1E9790A7D2DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messaging.Email", "Messaging.Email\Messaging.Email.csproj", "{DFE452B4-8A20-463F-84EE-D8D9CD631053}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +47,10 @@ Global
 		{AEDF78F1-5D47-4D81-9DB1-BD64C22F4310}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEDF78F1-5D47-4D81-9DB1-BD64C22F4310}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEDF78F1-5D47-4D81-9DB1-BD64C22F4310}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFE452B4-8A20-463F-84EE-D8D9CD631053}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFE452B4-8A20-463F-84EE-D8D9CD631053}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFE452B4-8A20-463F-84EE-D8D9CD631053}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFE452B4-8A20-463F-84EE-D8D9CD631053}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,5 +61,6 @@ Global
 		{6B3ADF23-F140-4A73-96F0-23F98F14F90F} = {273DD6C5-5742-4CB9-ADB7-941C4A3467B4}
 		{C0F4027E-B71A-448E-9950-A27E5CE6D55C} = {273DD6C5-5742-4CB9-ADB7-941C4A3467B4}
 		{AEDF78F1-5D47-4D81-9DB1-BD64C22F4310} = {273DD6C5-5742-4CB9-ADB7-941C4A3467B4}
+		{DFE452B4-8A20-463F-84EE-D8D9CD631053} = {070A4630-5B4D-435D-A4DA-1E9790A7D2DF}
 	EndGlobalSection
 EndGlobal

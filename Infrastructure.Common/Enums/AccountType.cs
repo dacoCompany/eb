@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Common
+﻿namespace Infrastructure.Common.Enums
 {
     public enum AccountType
     {

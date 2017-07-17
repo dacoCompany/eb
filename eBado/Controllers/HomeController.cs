@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace Web.eBado.Controllers
 {
@@ -10,6 +6,12 @@ namespace Web.eBado.Controllers
     {
         public ActionResult Index()
         {
+            // Dependency resolving example
+            // using (var uow = NinjectResolver.GetInstance<IUnitOfWork>())
+            // {
+            //     var location = uow.LocationRepository.FindAll();
+            // }
+
             return View();
         }
 
