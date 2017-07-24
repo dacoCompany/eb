@@ -1,9 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Web;
+using System.Web.Helpers;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using Microsoft.Azure;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 using Web.eBado.Helpers;
 using Web.eBado.Models.Shared;
 
@@ -66,6 +72,76 @@ namespace Web.eBado.Controllers
         {
             filesHelper.DeleteFile(file);
             return Json("OK", JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public void UploadFileAzure()
+        {
+            var container = GetAzureBlobContainer();
+
+            var files = MapAttachmentsFromRequest();
+
+            foreach (var file in files)
+            {
+                CloudBlockBlob blockBlob = container.GetBlockBlobReference("photos/" + file.Name);
+                blockBlob.UploadFromByteArray(file.Content, 0, file.Content.Length);
+                file.Url = blockBlob.Uri.ToString();
+
+                string fileThumb = Path.GetFileNameWithoutExtension(file.Name) + "_thumbImg.jpg";
+                using (MemoryStream stream = new MemoryStream(file.Content))
+                {
+                    var thumbnail = new WebImage(stream).Resize(130, 100, true, true);
+                    thumbnail.FileName = fileThumb;
+                    //blockBlob.UploadFromByteArray(thumbnail); // get the byte data from the image, upload to blob
+                }
+            }
+
+
+        }
+
+        private CloudBlobContainer GetAzureBlobContainer()
+        {
+            // get connection string
+            var storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
+
+            // create blob client
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+
+            // retrieve container reference
+            CloudBlobContainer container = blobClient.GetContainerReference("webgallery");
+
+            // create container if doesn't exist
+            container.CreateIfNotExists();
+
+            // set container permissions
+            container.SetPermissions(new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Container });
+
+            return container;
+        }
+
+        private ICollection<FileModel> MapAttachmentsFromRequest()
+        {
+            HttpRequestBase currentRequest = HttpContext.Request;
+            ICollection<FileModel> fileCollection = new Collection<FileModel>();
+
+            if (currentRequest.Files.Count <= 0)
+                return fileCollection;
+
+            foreach (HttpPostedFileBase httpPostedFile in currentRequest.Files.AllKeys.Select(key => currentRequest.Files[key]).Where(httpPostedFile => httpPostedFile != null))
+            {
+                using (BinaryReader reader = new BinaryReader(httpPostedFile.InputStream))
+                {
+                    var byteFile = reader.ReadBytes(httpPostedFile.ContentLength);
+                    fileCollection.Add(new FileModel
+                    {
+                        Name = new FileInfo(httpPostedFile.FileName).Name,
+                        ContentType = httpPostedFile.ContentType,
+                        Content = byteFile
+                    });
+                }
+            }
+
+            return fileCollection;
         }
 
     }
