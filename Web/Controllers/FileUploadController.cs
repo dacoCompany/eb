@@ -12,6 +12,7 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Web.eBado.Helpers;
 using Web.eBado.Models.Shared;
+using WebAPIFactory.Configuration.Core;
 
 namespace Web.eBado.Controllers
 {
@@ -26,8 +27,12 @@ namespace Web.eBado.Controllers
         private string UrlBase = "/Files/somefiles/";
         string DeleteURL = "/FileUpload/DeleteFile/?file=";
         string DeleteType = "GET";
-        public FileUploadController()
+        private const string StorageConnectionStringKey = "StorageConnectionString";
+        private readonly IConfiguration configuration;
+
+        public FileUploadController(IConfiguration configuration)
         {
+            this.configuration = configuration;
             filesHelper = new FilesHelper(DeleteURL, DeleteType, StorageRoot, UrlBase, serverMapPath);
         }
       
@@ -102,7 +107,7 @@ namespace Web.eBado.Controllers
         private CloudBlobContainer GetAzureBlobContainer()
         {
             // get connection string
-            var storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
+            var storageAccount = CloudStorageAccount.Parse(configuration.GetValueByKey(StorageConnectionStringKey));
 
             // create blob client
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();

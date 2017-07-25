@@ -146,7 +146,7 @@ namespace Messaging.Email
         /// </returns>
         private string GetHtmlBodyString<T>(MailMessageType messageType, T model) where T : new()
         {
-            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Email\Views", string.Concat(messageType.ToString(), ".cshtml"));
+            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Views\Email", string.Concat(messageType.ToString(), ".cshtml"));
             var templateContent = File.ReadAllText(filePath);
             return RazorEngine.Engine.Razor.RunCompile(templateContent, messageType.ToString(), typeof(T), model);
         }
