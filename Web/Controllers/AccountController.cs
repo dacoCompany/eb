@@ -1,21 +1,22 @@
-﻿using Infrastructure.Common;
-using Infrastructure.Common.DB;
+﻿using Infrastructure.Common.DB;
 using Infrastructure.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Web;
 using System.Web.Mvc;
 using Web.eBado.Models.Account;
 using Web.eBado.Models.Shared;
+using WebAPIFactory.Configuration.Core;
 
 namespace Web.eBado.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        #region HTTP GET
+
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
@@ -23,18 +24,80 @@ namespace Web.eBado.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        public ActionResult RegisterUser()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult RegisterPartTime()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult RegisterSelfEmployed()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult RegisterCompany()
+        {
+            // GetCategories();
+            return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult UserAccountSettings()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult ChangeSettings()
+        {
+            ChangeSettingsModel model = new ChangeSettingsModel();
+            model.Title = "Ing.";
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult AccountGallery(FilesViewModel model)
+        {
+            model = new FileUploadController(new Configuration()).Show();
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult EditAccountGallery()
+        {
+            return View();
+        }
+
+        #endregion
+
+        #region HTTP POST
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel model, string returnUrl)
         {
             return View(model);
-        }
-
-        [AllowAnonymous]
-        public ActionResult RegisterUser()
-        {
-            return View();
         }
 
         [HttpPost]
@@ -45,12 +108,6 @@ namespace Web.eBado.Controllers
             return View(model);
         }
 
-        [AllowAnonymous]
-        public ActionResult RegisterPartTime()
-        {
-            return View();
-        }
-
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -59,25 +116,12 @@ namespace Web.eBado.Controllers
             return View(model);
         }
 
-        [AllowAnonymous]
-        public ActionResult RegisterSelfEmployed()
-        {
-            return View();
-        }
-
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult RegisterSelfEmployed(RegisterSelfEmployed model)
         {
             return View(model);
-        }
-
-        [AllowAnonymous]
-        public ActionResult RegisterCompany()
-        {
-            // GetCategories();
-            return View();
         }
 
         [HttpPost]
@@ -137,12 +181,6 @@ namespace Web.eBado.Controllers
             return View(model);
         }
 
-        [AllowAnonymous]
-        public ActionResult ForgotPassword()
-        {
-            return View();
-        }
-
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -159,31 +197,11 @@ namespace Web.eBado.Controllers
             }
         }
 
-        [AllowAnonymous]
-        public ActionResult UserAccountSettings()
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
-        public ActionResult ChangePassword()
-        {
-            return View();
-        }
-
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult ChangePassword(ChangePasswordModel model)
         {
-            return View(model);
-        }
-
-        [AllowAnonymous]
-        public ActionResult ChangeSettings()
-        {
-            ChangeSettingsModel model = new ChangeSettingsModel();
-            model.Title = "Ing.";
             return View(model);
         }
 
@@ -202,18 +220,7 @@ namespace Web.eBado.Controllers
             return View(model);
         }
 
-        [AllowAnonymous]
-        public ActionResult AccountGallery(FilesViewModel model)
-        {
-            model = new FileUploadController().Show();
-            return View(model);
-        }
-
-        [AllowAnonymous]
-        public ActionResult EditAccountGallery()
-        {
-            return View();
-        }
+        #endregion
 
         #region Private methods
 
