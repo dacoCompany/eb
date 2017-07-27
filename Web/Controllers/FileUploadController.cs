@@ -97,11 +97,12 @@ namespace Web.eBado.Controllers
                 {
                     var thumbnail = new WebImage(stream).Resize(130, 100, true, true);
                     thumbnail.FileName = fileThumb;
-                    //blockBlob.UploadFromByteArray(thumbnail); // get the byte data from the image, upload to blob
+                    byte[] thumb = thumbnail.GetBytes("image/jpeg");
+                    CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference("photos/" + fileThumb);
+                    blockBlobThumb.UploadFromByteArray(thumb, 0, thumb.Length);
+                    file.ThumbnailUrl = blockBlobThumb.Uri.ToString();
                 }
             }
-
-
         }
 
         private CloudBlobContainer GetAzureBlobContainer()
@@ -113,7 +114,7 @@ namespace Web.eBado.Controllers
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
 
             // retrieve container reference
-            CloudBlobContainer container = blobClient.GetContainerReference("webgallery");
+            CloudBlobContainer container = blobClient.GetContainerReference("ebadogallery");
 
             // create container if doesn't exist
             container.CreateIfNotExists();

@@ -22,6 +22,8 @@ namespace Infrastructure.Common.DB
         private Repository<SubCategoryDbo> subCategoryRepository;
         private Repository<UserAccountDbo> userAccountRepository;
         private Repository<UserRoleDbo> userRoleRepository;
+        private Repository<BatchAttachmentDbo> batchAttachmentRepository;
+        private Repository<AttachmentDbo> attachmentRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UnitOfWork"/> class.
@@ -36,13 +38,7 @@ namespace Infrastructure.Common.DB
         /// <value>
         /// The account type repository.
         /// </value>
-        public IRepository<AccountTypeDbo> AccountTypeRepository
-        {
-            get
-            {
-                return accountTypeRepository ?? (accountTypeRepository = new Repository<AccountTypeDbo>(context));
-            }
-        }
+        public IRepository<AccountTypeDbo> AccountTypeRepository => accountTypeRepository ?? (accountTypeRepository = new Repository<AccountTypeDbo>(context));
 
         /// <summary>
         /// Gets the address repository.
@@ -50,13 +46,7 @@ namespace Infrastructure.Common.DB
         /// <value>
         /// The address repository.
         /// </value>
-        public IRepository<AddressDbo> AddressRepository
-        {
-            get
-            {
-                return addressRepository ?? (addressRepository = new Repository<AddressDbo>(context));
-            }
-        }
+        public IRepository<AddressDbo> AddressRepository => addressRepository ?? (addressRepository = new Repository<AddressDbo>(context));
 
         /// <summary>
         /// Gets the category repository.
@@ -64,13 +54,7 @@ namespace Infrastructure.Common.DB
         /// <value>
         /// The category repository.
         /// </value>
-        public IRepository<CategoryDbo> CategoryRepository
-        {
-            get
-            {
-                return categoryRepository ?? (categoryRepository = new Repository<CategoryDbo>(context));
-            }
-        }
+        public IRepository<CategoryDbo> CategoryRepository => categoryRepository ?? (categoryRepository = new Repository<CategoryDbo>(context));
 
         /// <summary>
         /// Gets the location repository.
@@ -78,13 +62,7 @@ namespace Infrastructure.Common.DB
         /// <value>
         /// The location repository.
         /// </value>
-        public IRepository<LocationDbo> LocationRepository
-        {
-            get
-            {
-                return locationRepository ?? (locationRepository = new Repository<LocationDbo>(context));
-            }
-        }
+        public IRepository<LocationDbo> LocationRepository => locationRepository ?? (locationRepository = new Repository<LocationDbo>(context));
 
         /// <summary>
         /// Gets the main category repository.
@@ -92,13 +70,7 @@ namespace Infrastructure.Common.DB
         /// <value>
         /// The main category repository.
         /// </value>
-        public IRepository<MainCategoryDbo> MainCategoryRepository
-        {
-            get
-            {
-                return mainCategoryRepository ?? (mainCategoryRepository = new Repository<MainCategoryDbo>(context));
-            }
-        }
+        public IRepository<MainCategoryDbo> MainCategoryRepository => mainCategoryRepository ?? (mainCategoryRepository = new Repository<MainCategoryDbo>(context));
 
         /// <summary>
         /// Gets the sub category repository.
@@ -106,13 +78,7 @@ namespace Infrastructure.Common.DB
         /// <value>
         /// The sub category repository.
         /// </value>
-        public IRepository<SubCategoryDbo> SubCategoryRepository
-        {
-            get
-            {
-                return subCategoryRepository ?? (subCategoryRepository = new Repository<SubCategoryDbo>(context));
-            }
-        }
+        public IRepository<SubCategoryDbo> SubCategoryRepository => subCategoryRepository ?? (subCategoryRepository = new Repository<SubCategoryDbo>(context));
 
         /// <summary>
         /// Gets the user account repository.
@@ -120,13 +86,7 @@ namespace Infrastructure.Common.DB
         /// <value>
         /// The user account repository.
         /// </value>
-        public IRepository<UserAccountDbo> UserAccountRepository
-        {
-            get
-            {
-                return userAccountRepository ?? (userAccountRepository = new Repository<UserAccountDbo>(context));
-            }
-        }
+        public IRepository<UserAccountDbo> UserAccountRepository => userAccountRepository ?? (userAccountRepository = new Repository<UserAccountDbo>(context));
 
         /// <summary>
         /// Gets the user role repository.
@@ -134,13 +94,17 @@ namespace Infrastructure.Common.DB
         /// <value>
         /// The user role repository.
         /// </value>
-        public IRepository<UserRoleDbo> UserRoleRepository
-        {
-            get
-            {
-                return userRoleRepository ?? (userRoleRepository = new Repository<UserRoleDbo>(context));
-            }
-        }
+        public IRepository<UserRoleDbo> UserRoleRepository => userRoleRepository ?? (userRoleRepository = new Repository<UserRoleDbo>(context));
+
+        /// <summary>
+        /// Gets the batch attachment repository.
+        /// </summary>
+        public IRepository<BatchAttachmentDbo> BatchAttachmentRepository => batchAttachmentRepository ?? (batchAttachmentRepository = new Repository<BatchAttachmentDbo>(context));
+
+        /// <summary>
+        /// Gets the attachment repository.
+        /// </summary>
+        public IRepository<AttachmentDbo> AttachmentRepository => attachmentRepository ?? (attachmentRepository = new Repository<AttachmentDbo>(context));
 
         /// <summary>
         /// Implementation of commit method

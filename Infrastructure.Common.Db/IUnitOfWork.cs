@@ -16,6 +16,8 @@ namespace Infrastructure.Common.DB
         IRepository<SubCategoryDbo> SubCategoryRepository { get; }
         IRepository<UserAccountDbo> UserAccountRepository { get; }
         IRepository<UserRoleDbo> UserRoleRepository { get; }
+        IRepository<BatchAttachmentDbo> BatchAttachmentRepository { get; }
+        IRepository<AttachmentDbo> AttachmentRepository { get; }
 
         void Commit();
     }

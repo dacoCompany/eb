@@ -8,6 +8,7 @@ using System.Text;
 using System.Web.Mvc;
 using Web.eBado.Models.Account;
 using Web.eBado.Models.Shared;
+using WebAPIFactory.Configuration.Core;
 
 namespace Web.eBado.Controllers
 {
@@ -77,7 +78,7 @@ namespace Web.eBado.Controllers
         [AllowAnonymous]
         public ActionResult AccountGallery(FilesViewModel model)
         {
-            model = new FileUploadController().Show();
+            model = new FileUploadController(new Configuration()).Show();
             return View(model);
         }
 
