@@ -78,7 +78,7 @@ namespace Web.eBado.Controllers
         [AllowAnonymous]
         public ActionResult AccountGallery(FilesViewModel model)
         {
-            model = new FileUploadController(new Configuration()).Show();
+            model = new FileUploadController(new Configuration(), new UnitOfWork()).Show();
             return View(model);
         }
 

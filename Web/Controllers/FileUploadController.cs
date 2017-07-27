@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using Infrastructure.Common.DB;
 using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
@@ -29,13 +30,15 @@ namespace Web.eBado.Controllers
         string DeleteType = "GET";
         private const string StorageConnectionStringKey = "StorageConnectionString";
         private readonly IConfiguration configuration;
+        private readonly IUnitOfWork unitOfWork;
 
-        public FileUploadController(IConfiguration configuration)
+        public FileUploadController(IConfiguration configuration, IUnitOfWork unitOfWork)
         {
             this.configuration = configuration;
+            this.unitOfWork = unitOfWork;
             filesHelper = new FilesHelper(DeleteURL, DeleteType, StorageRoot, UrlBase, serverMapPath);
         }
-      
+
         public FilesViewModel Show()
         {
             JsonFiles ListOfFiles = filesHelper.GetFileList();
@@ -86,6 +89,12 @@ namespace Web.eBado.Controllers
 
             var files = MapAttachmentsFromRequest();
 
+            var batch = new BatchAttachmentDbo
+            {
+                Description = "Some batch",
+                Name = "TestBatch"
+            };
+
             foreach (var file in files)
             {
                 CloudBlockBlob blockBlob = container.GetBlockBlobReference("photos/" + file.Name);
@@ -102,7 +111,44 @@ namespace Web.eBado.Controllers
                     blockBlobThumb.UploadFromByteArray(thumb, 0, thumb.Length);
                     file.ThumbnailUrl = blockBlobThumb.Uri.ToString();
                 }
+
+                var attachment = new AttachmentDbo
+                {
+                    OriginalUrl = file.Url,
+                    ThumbnailUrl = file.ThumbnailUrl
+                };
+                batch.Attachments.Add(attachment);
+
             }
+
+            // TODO: resolve exception with FK, might be related to account id
+            unitOfWork.BatchAttachmentRepository.Add(batch);
+            unitOfWork.Commit();
+        }
+
+        [HttpGet]
+        public JsonResult DeleteFileAzure(string fileName)
+        {
+            var container = GetAzureBlobContainer();
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference("photos/" + fileName);
+            bool result = blockBlob.DeleteIfExists(DeleteSnapshotsOption.IncludeSnapshots);
+
+            string thumbName = Path.GetFileNameWithoutExtension(fileName) + "_thumbImg.jpg";
+            CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference("photos/" + thumbName);
+            bool resultThumb = blockBlobThumb.DeleteIfExists(DeleteSnapshotsOption.IncludeSnapshots);
+
+            var attachment = unitOfWork.AttachmentRepository.FirstOrDefault(a => a.OriginalUrl.Contains(fileName));
+            bool dboDeleted = false;
+
+            if (attachment != null)
+            {
+                attachment.IsActive = false;
+                unitOfWork.Commit();
+                dboDeleted = true;
+            }
+
+
+            return result && resultThumb && dboDeleted ? Json("Deleted") : Json("Error");
         }
 
         private CloudBlobContainer GetAzureBlobContainer()
