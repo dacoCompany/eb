@@ -36,16 +36,15 @@ namespace Infrastructure.Common.DB
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
-        public int AttachmentId { get; set; }
-        public int UserRoleId { get; set; }
+        public int AtId { get; set; }
+        public int RoId { get; set; }
         public Nullable<int> SubCatId { get; set; }
-        public int BatchAttachmentId { get; set; }
+        public bool IsPremium { get; set; }
     
-        public virtual AccountTypeDbo AccountType { get; set; }
-        public virtual BatchAttachmentDbo BatchAttachment { get; set; }
-        public virtual SubCategoryDbo SubCategory { get; set; }
-        public virtual UserRoleDbo UserRole { get; set; }
+        public virtual AccountTypeDbo AccountTypeId { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AddressDbo> Addresses { get; set; }
+        public virtual SubCategoryDbo SubCategoryId { get; set; }
+        public virtual UserRoleDbo UserRole { get; set; }
     }
 }

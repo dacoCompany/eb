@@ -18,6 +18,7 @@
 			[Salt] VARCHAR (255) NOT NULL,
 			[Ico] VARCHAR(20),
 			[Dic] VARCHAR(20),
+            [Is_Premium] BIT NOT NULL DEFAULT 'false',
 			[Is_Active] BIT NOT NULL DEFAULT 'true',
 			[Date_Created] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
 			[Date_Modified] DATETIME2(2) DEFAULT CURRENT_TIMESTAMP,
@@ -199,18 +200,18 @@
 		ADD CONSTRAINT FK_User_Account_Sub_Category_Id FOREIGN KEY (Sub_Cat_Id) REFERENCES Sub_Category(Id)
 		PRINT 'Foreign key successfully created'
 
-		PRINT 'Creating foreign key FK_Batch_Attachment_Attachment_Id'
+		PRINT 'Creating foreign key FK_User_Account_Batch_Attachment_Id'
 		ALTER TABLE [Batch_Attachment]
-		ADD [Att_Id] INT NOT NULL
+		ADD [User_Account_Id] INT NOT NULL
 		ALTER TABLE [Batch_Attachment]
-		ADD CONSTRAINT FK_Batch_Attachment_Attachment_Id FOREIGN KEY (Att_Id) REFERENCES Attachment(Id)
+		ADD CONSTRAINT FK_User_Account_Batch_Attachment_Id FOREIGN KEY ([User_Account_Id]) REFERENCES User_Account(Id)
 		PRINT 'Foreign key successfully created'
 		
-		PRINT 'Creating foreign key FK_User_Account_Batch_Attachment_Id'
-		ALTER TABLE [User_Account]
+		PRINT 'Creating foreign key FK_Attachment_Batch_Attachment_Id'
+		ALTER TABLE [Attachment]
 		ADD [Batch_Att_Id] INT NOT NULL
-		ALTER TABLE [User_Account]
-		ADD CONSTRAINT FK_User_Account_Batch_Attachment_Id FOREIGN KEY (Batch_Att_Id) REFERENCES Batch_Attachment(Id)
+		ALTER TABLE [Attachment]
+		ADD CONSTRAINT FK_Attachment_Batch_Attachment_Id FOREIGN KEY (Batch_Att_Id) REFERENCES Batch_Attachment(Id)
 		PRINT 'Foreign key successfully created'
 				
 		COMMIT TRANSACTION

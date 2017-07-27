@@ -26,14 +26,14 @@ namespace Infrastructure.Common.DB
         }
     
         public virtual DbSet<AccountTypeDbo> AccountTypeDboes { get; set; }
-        public virtual DbSet<AttachmentDbo> AttachmentDboes { get; set; }
-        public virtual DbSet<BatchAttachmentDbo> BatchAttachmentDboes { get; set; }
         public virtual DbSet<CategoryDbo> CategoryDboes { get; set; }
         public virtual DbSet<LocationDbo> LocationDboes { get; set; }
         public virtual DbSet<MainCategoryDbo> MainCategoryDboes { get; set; }
         public virtual DbSet<SubCategoryDbo> SubCategoryDboes { get; set; }
-        public virtual DbSet<UserAccountDbo> UserAccountDboes { get; set; }
         public virtual DbSet<UserRoleDbo> UserRoleDboes { get; set; }
         public virtual DbSet<AddressDbo> AddressDboes { get; set; }
+        public virtual DbSet<AttachmentDbo> AttachmentDboes { get; set; }
+        public virtual DbSet<BatchAttachmentDbo> BatchAttachmentDboes { get; set; }
+        public virtual DbSet<UserAccountDbo> UserAccountDboes { get; set; }
     }
 }

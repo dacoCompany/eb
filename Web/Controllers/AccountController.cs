@@ -128,7 +128,6 @@ namespace Web.eBado.Controllers
                         SubCatId = Convert.ToInt32(model.SelectedSubCategory),
                         Password = EncodePassword(password, salt),
                         Salt = salt,
-                        UserRoleId = (int)AccountType.Company
                     };
                     accountModel.Addresses.Add(addressModel);
 
@@ -193,6 +192,13 @@ namespace Web.eBado.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangeSettings(ChangeSettingsModel model)
         {
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult BatchAccountGallery()
+        {
+            var model = new List<BatchGalleryModel>();
             return View(model);
         }
 

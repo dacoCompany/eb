@@ -17,7 +17,7 @@ namespace Infrastructure.Common.DB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public BatchAttachmentDbo()
         {
-            this.UserAccount = new HashSet<UserAccountDbo>();
+            this.Attachments = new HashSet<AttachmentDbo>();
         }
     
         public int Id { get; set; }
@@ -26,10 +26,10 @@ namespace Infrastructure.Common.DB
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
-        public int AttachmentId { get; set; }
+        public int UserAccountId { get; set; }
     
-        public virtual AttachmentDbo Attachment { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserAccountDbo> UserAccount { get; set; }
+        public virtual ICollection<AttachmentDbo> Attachments { get; set; }
+        public virtual UserAccountDbo UserAccId { get; set; }
     }
 }

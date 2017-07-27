@@ -22,6 +22,8 @@ namespace Infrastructure.Common.DB
         private Repository<SubCategoryDbo> subCategoryRepository;
         private Repository<UserAccountDbo> userAccountRepository;
         private Repository<UserRoleDbo> userRoleRepository;
+        private Repository<BatchAttachmentDbo> batchAttachmentRepository;
+        private Repository<AttachmentDbo> attchamentRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UnitOfWork"/> class.
@@ -139,6 +141,34 @@ namespace Infrastructure.Common.DB
             get
             {
                 return userRoleRepository ?? (userRoleRepository = new Repository<UserRoleDbo>(context));
+            }
+        }
+
+        /// <summary>
+        /// Gets the batch attachment repository.
+        /// </summary>
+        /// <value>
+        /// The batch attachment repository.
+        /// </value>
+        public IRepository<BatchAttachmentDbo> BatchAttachmentRepository
+        {
+            get
+            {
+                return batchAttachmentRepository ?? (batchAttachmentRepository = new Repository<BatchAttachmentDbo>(context));
+            }
+        }
+
+        /// <summary>
+        /// Gets the attachment repository.
+        /// </summary>
+        /// <value>
+        /// The attachment repository.
+        /// </value>
+        public IRepository<AttachmentDbo> AttachmentRepository
+        {
+            get
+            {
+                return attchamentRepository ?? (attchamentRepository = new Repository<AttachmentDbo>(context));
             }
         }
 

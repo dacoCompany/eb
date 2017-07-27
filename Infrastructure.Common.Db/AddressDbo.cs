@@ -26,6 +26,6 @@ namespace Infrastructure.Common.DB
         public int LocationId { get; set; }
     
         public virtual LocationDbo Location { get; set; }
-        public virtual UserAccountDbo UserAccount { get; set; }
+        public virtual UserAccountDbo User_Account { get; set; }
     }
 }

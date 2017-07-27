@@ -1,0 +1,38 @@
+﻿@model List<Web.eBado.Models.Account.BatchGalleryModel>
+@using Web.eBado.Helpers
+@{
+    ViewBag.Title = "BatchAccountGallery";
+}
+
+@Styles.Render("~/Content/settings")
+
+
+@Html.AntiForgeryToken()
+<div class="container">
+    <div class="resp push_top_10">
+        @AccountHelper.SettingsMenu(Url, ViewContext.RouteData.Values["Action"].ToString())
+        <div class="tabcontent push_top_20">
+            <div style="float:left; margin-bottom: 50px; width:100%">
+                <button type="submit" class="form-btn col-lg-3" style="float:left" onclick="location.href='@Url.Action("EditAccountGallery", "Account")'">Pridat/Editovat</button>
+            </div>
+
+            @if (Model.Any())
+            {
+                foreach (var batch in Model)
+                {
+
+                    <div>@batch.Name</div>
+                }
+            }
+            else
+            {
+                <p>Gallery is empty</p>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+
+

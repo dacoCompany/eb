@@ -14,20 +14,14 @@ namespace Infrastructure.Common.DB
     
     public partial class AttachmentDbo : IEntity
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public AttachmentDbo()
-        {
-            this.BatchAttachment = new HashSet<BatchAttachmentDbo>();
-        }
-    
         public int Id { get; set; }
         public string OriginalUrl { get; set; }
         public string ThumbnailUrl { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
+        public int BatchAttId { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BatchAttachmentDbo> BatchAttachment { get; set; }
+        public virtual BatchAttachmentDbo BatchAttachmentId { get; set; }
     }
 }
