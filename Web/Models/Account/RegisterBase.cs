@@ -22,6 +22,14 @@ namespace Web.eBado.Models.Account
         [Display(Name = "AccountName")]
         public string AccountName { get; set; }
 
+        [Required(ErrorMessage = "Povinne pole")]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Povinne pole")]
+        [Display(Name = "RepeatPassword")]
+        public string RepeatPassword { get; set; }
+
         [Display(Name = "Title")]
         public string Title { get; set; }
 
