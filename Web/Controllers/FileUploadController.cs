@@ -14,6 +14,7 @@ using Microsoft.WindowsAzure.Storage.Blob;
 using Web.eBado.Helpers;
 using Web.eBado.Models.Shared;
 using WebAPIFactory.Configuration.Core;
+using System.Drawing;
 
 namespace Web.eBado.Controllers
 {
@@ -28,6 +29,24 @@ namespace Web.eBado.Controllers
         private string UrlBase = "/Files/somefiles/";
         string DeleteURL = "/FileUpload/DeleteFile/?file=";
         string DeleteType = "GET";
+        private readonly HashSet<string> supportedImageTypes = new HashSet<string> { "image/jpg", "image/jpeg", "image/png", "image/png", "image/bmp", "image/tiff", "image/tif" };
+        private readonly HashSet<string> supportedFileTypes = new HashSet<string>
+        {
+            "application/msword",
+            "application/vnd.ms-word.document.macroEnabled.12",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "application/vnd.ms-excel",
+            "application/vnd.ms-excel.sheet.macroEnabled.12",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "application/vnd.ms-powerpoint",
+            "application/vnd.ms-powerpoint.presentation.macroenabled.12",
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+            "application/vnd.ms-powerpoint.slideshow.macroenabled.12",
+            "application/vnd.openxmlformats-officedocument.presentationml.slideshow",
+            "application/pdf",
+            "application/x-zip-compressed",
+            "application/x-7z-compressed"
+        };
         private const string StorageConnectionStringKey = "StorageConnectionString";
         private readonly IConfiguration configuration;
         private readonly IUnitOfWork unitOfWork;
@@ -83,7 +102,7 @@ namespace Web.eBado.Controllers
         }
 
         [HttpPost]
-        public void UploadFileAzure()
+        public JsonResult UploadFileAzure()
         {
             var container = GetAzureBlobContainer();
 
@@ -92,7 +111,8 @@ namespace Web.eBado.Controllers
             var batch = new BatchAttachmentDbo
             {
                 Description = "Some batch",
-                Name = "TestBatch"
+                Name = "TestBatch",
+                UserAccountId = 1
             };
 
             foreach (var file in files)
@@ -101,15 +121,35 @@ namespace Web.eBado.Controllers
                 blockBlob.UploadFromByteArray(file.Content, 0, file.Content.Length);
                 file.Url = blockBlob.Uri.ToString();
 
+                if (!supportedFileTypes.Contains(file.ContentType))
+                    continue;
+
                 string fileThumb = Path.GetFileNameWithoutExtension(file.Name) + "_thumbImg.jpg";
-                using (MemoryStream stream = new MemoryStream(file.Content))
+                if (supportedImageTypes.Contains(file.ContentType))
                 {
-                    var thumbnail = new WebImage(stream).Resize(130, 100, true, true);
-                    thumbnail.FileName = fileThumb;
-                    byte[] thumb = thumbnail.GetBytes("image/jpeg");
-                    CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference("photos/" + fileThumb);
-                    blockBlobThumb.UploadFromByteArray(thumb, 0, thumb.Length);
-                    file.ThumbnailUrl = blockBlobThumb.Uri.ToString();
+                    using (MemoryStream stream = new MemoryStream(file.Content))
+                    {
+                        var thumbnail = new WebImage(stream).Resize(130, 100, true, true);
+                        thumbnail.FileName = fileThumb;
+                        byte[] thumb = thumbnail.GetBytes("image/jpeg");
+                        CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference("photos/" + fileThumb);
+                        blockBlobThumb.UploadFromByteArray(thumb, 0, thumb.Length);
+                        file.ThumbnailUrl = blockBlobThumb.Uri.ToString();
+                    }
+                }
+                else
+                {
+                    // get thumbnail for non-image file
+                    string extension = GetExtensionFromMimeType(file.ContentType);
+                    string path = HostingEnvironment.MapPath($@"~/Content/Free-file-icons/48px/{extension}.png");
+                    using (var stream = new FileStream(path, FileMode.Open))
+                    {
+                        byte[] thumb = new byte[1048576];
+                        stream.ReadAsync(thumb, 0, (int)stream.Length);
+                        CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference("photos/" + fileThumb);
+                        blockBlobThumb.UploadFromByteArray(thumb, 0, thumb.Length);
+                        file.ThumbnailUrl = blockBlobThumb.Uri.ToString();
+                    }
                 }
 
                 var attachment = new AttachmentDbo
@@ -120,10 +160,11 @@ namespace Web.eBado.Controllers
                 batch.Attachments.Add(attachment);
 
             }
-
-            // TODO: resolve exception with FK, might be related to account id
+            
             unitOfWork.BatchAttachmentRepository.Add(batch);
             unitOfWork.Commit();
+
+            return files.Count == batch.Attachments.Count ? Json("Success", JsonRequestBehavior.AllowGet) : Json("Some files are not supported.", JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -148,7 +189,7 @@ namespace Web.eBado.Controllers
             }
 
 
-            return result && resultThumb && dboDeleted ? Json("Deleted") : Json("Error");
+            return result && resultThumb && dboDeleted ? Json("Deleted", JsonRequestBehavior.AllowGet) : Json("Error", JsonRequestBehavior.AllowGet);
         }
 
         private CloudBlobContainer GetAzureBlobContainer()
@@ -179,8 +220,12 @@ namespace Web.eBado.Controllers
             if (currentRequest.Files.Count <= 0)
                 return fileCollection;
 
-            foreach (HttpPostedFileBase httpPostedFile in currentRequest.Files.AllKeys.Select(key => currentRequest.Files[key]).Where(httpPostedFile => httpPostedFile != null))
+            foreach (string file in currentRequest.Files)
             {
+                var httpPostedFile = currentRequest.Files[file] as HttpPostedFileBase;
+                if (httpPostedFile.ContentLength == 0)
+                    continue;
+
                 using (BinaryReader reader = new BinaryReader(httpPostedFile.InputStream))
                 {
                     var byteFile = reader.ReadBytes(httpPostedFile.ContentLength);
@@ -194,6 +239,34 @@ namespace Web.eBado.Controllers
             }
 
             return fileCollection;
+        }
+
+        private string GetExtensionFromMimeType(string mimeType)
+        {
+            switch (mimeType)
+            {
+                case "application/msword":
+                case "application/vnd.ms-word.document.macroEnabled.12":
+                case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+                    return "doc";
+                case "application/vnd.ms-excel":
+                case "application/vnd.ms-excel.sheet.macroEnabled.12":
+                case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+                    return "xls";
+                case "application/vnd.ms-powerpoint":
+                case "application/vnd.ms-powerpoint.presentation.macroenabled.12":
+                case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
+                case "application/vnd.ms-powerpoint.slideshow.macroenabled.12":
+                case "application/vnd.openxmlformats-officedocument.presentationml.slideshow":
+                    return "ppt";
+                case "application/pdf":
+                    return "pdf";
+                case "application/x-zip-compressed":
+                case "application/x-7z-compressed":
+                    return "zip";
+                default:
+                    return "_blank";
+            }
         }
 
     }
