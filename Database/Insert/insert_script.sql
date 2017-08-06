@@ -2,12 +2,12 @@
 	
 	BEGIN TRANSACTION
 
-	PRINT 'Insert AccountType data'
-	INSERT INTO [Account_Type](Name) VALUES ('User')
-	INSERT INTO [Account_Type](Name) VALUES ('PartTime')
-	INSERT INTO [Account_Type](Name) VALUES ('SelfEmployed')
-	INSERT INTO [Account_Type](Name) VALUES ('Company')
-	PRINT 'Insert AccountType completed'
+	PRINT 'Insert CompanyType data'
+	INSERT INTO [Company_Type](Name) VALUES ('User')
+	INSERT INTO [Company_Type](Name) VALUES ('PartTime')
+	INSERT INTO [Company_Type](Name) VALUES ('SelfEmployed')
+	INSERT INTO [Company_Type](Name) VALUES ('Company')
+	PRINT 'Insert CompanyType completed'
 
 	PRINT 'Insert UserRole data'
 	INSERT INTO [User_Role](Name) VALUES ('User')

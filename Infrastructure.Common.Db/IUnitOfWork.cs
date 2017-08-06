@@ -8,16 +8,17 @@ namespace Infrastructure.Common.DB
     /// <seealso cref="System.IDisposable" />
     public interface IUnitOfWork : IDisposable
     {
-        IRepository<AccountTypeDbo> AccountTypeRepository { get; }
+        IRepository<CompanyTypeDbo> CompanyTypeRepository { get; }
         IRepository<AddressDbo> AddressRepository { get; }
         IRepository<CategoryDbo> CategoryRepository { get; }
         IRepository<LocationDbo> LocationRepository { get; }
         IRepository<MainCategoryDbo> MainCategoryRepository { get; }
         IRepository<SubCategoryDbo> SubCategoryRepository { get; }
-        IRepository<UserAccountDbo> UserAccountRepository { get; }
+        IRepository<UserDetailsDbo> UserDetailsRepository { get; }
         IRepository<UserRoleDbo> UserRoleRepository { get; }
         IRepository<BatchAttachmentDbo> BatchAttachmentRepository { get; }
         IRepository<AttachmentDbo> AttachmentRepository { get; }
+        IRepository<CompanyDetailsDbo> CompanyDetailsRepositry { get; }
 
         void Commit();
     }

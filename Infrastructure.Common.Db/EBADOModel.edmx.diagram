@@ -4,26 +4,41 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="954c1c9ab9e9408f96ae752cc0a5c5e7" Name="Diagram1" ZoomLevel="88">
-        <EntityTypeShape EntityType="EBADODBModel.AccountTypeDbo" Width="1.875" PointX="4.875" PointY="10.25" />
-        <EntityTypeShape EntityType="EBADODBModel.CategoryDbo" Width="1.5" PointX="3" PointY="2.625" />
-        <EntityTypeShape EntityType="EBADODBModel.LocationDbo" Width="1.5" PointX="7.5" PointY="8.375" />
-        <EntityTypeShape EntityType="EBADODBModel.MainCategoryDbo" Width="1.5" PointX="0.75" PointY="2.875" />
-        <EntityTypeShape EntityType="EBADODBModel.SubCategoryDbo" Width="1.5" PointX="5.25" PointY="2.625" />
-        <EntityTypeShape EntityType="EBADODBModel.UserRoleDbo" Width="1.5" PointX="5.25" PointY="7.125" />
-        <AssociationConnector Association="EBADODBModel.FK_Category_Main_Category_Id" />
-        <AssociationConnector Association="EBADODBModel.FK_Sub_Category_Category_Id" />
-        <EntityTypeShape EntityType="EBADODBModel.AddressDbo" Width="1.5" PointX="9.75" PointY="4.75" />
-        <AssociationConnector Association="EBADODBModel.FK_Address_Location_Id" />
-        <EntityTypeShape EntityType="EBADODBModel.AttachmentDbo" Width="1.5" PointX="12" PointY="1.375" />
-        <EntityTypeShape EntityType="EBADODBModel.BatchAttachmentDbo" Width="1.5" PointX="9.75" PointY="1.25" />
-        <EntityTypeShape EntityType="EBADODBModel.UserAccountDbo" Width="1.5" PointX="7.5" PointY="1.75" />
-        <AssociationConnector Association="EBADODBModel.FK_User_Account_Account_Type_Id" />
-        <AssociationConnector Association="EBADODBModel.FK_Address_User_Account_Id" />
-        <AssociationConnector Association="EBADODBModel.FK_Attachment_Batch_Attachment_Id" />
-        <AssociationConnector Association="EBADODBModel.FK_User_Account_Batch_Attachment_Id" />
-        <AssociationConnector Association="EBADODBModel.FK_User_Account_Sub_Category_Id" />
-        <AssociationConnector Association="EBADODBModel.FK_User_User_Role_Id" />
+      <Diagram DiagramId="cbb9275523fd4207abc8c1f21b288315" Name="Diagram1">
+        <EntityTypeShape EntityType="Model.AddressDbo" Width="1.5" PointX="9.75" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.AttachmentDbo" Width="1.5" PointX="12" PointY="10.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.BatchAttachmentDbo" Width="1.5" PointX="9.75" PointY="10.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.CategoryDbo" Width="1.5" PointX="3" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.CompanyDetailsDbo" Width="1.5" PointX="7.5" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.CompanyDetails2UserDetailsDbo" Width="1.5" PointX="12.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.CompanyPermissionDbo" Width="1.5" PointX="8.25" PointY="20" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.CompanyRoleDbo" Width="1.5" PointX="5.25" PointY="9.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.CompanyRole2CompanyPermissionDbo" Width="1.5" PointX="10.5" PointY="14" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.CompanyTypeDbo" Width="2" PointX="3.375" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.LocationDbo" Width="1.5" PointX="9.875" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.MainCategoryDbo" Width="1.5" PointX="0.75" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.SubCategoryDbo" Width="1.5" PointX="5.25" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.UserDetailsDbo" Width="1.5" PointX="7.5" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.UserPermissionDbo" Width="1.5" PointX="5.25" PointY="17.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.UserRoleDbo" Width="1.5" PointX="5.25" PointY="13.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.UserRole2UserPermissionDbo" Width="1.5" PointX="7.5" PointY="16.625" IsExpanded="true" />
+        <AssociationConnector Association="Model.FK_Address_Company_Details_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_Address_Location_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_Address_User_Details_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_Attachment_Batch_Attachment_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_Company_Details_Batch_Attachment_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_Main_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_Company_Details" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_Company_Type" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_Sub_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_User_Details" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_Company_Permission" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_Company_Role" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_User_Details_Company_Role" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_User_Details_User_Role" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_User_Permission" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_User_Role" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

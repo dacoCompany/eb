@@ -313,21 +313,13 @@ public class CodeStringGenerator
     
     public string EntityClassOpening(EntityType entity)
     {
-		var inherits = new List<string>();
-		if (!String.IsNullOrEmpty(_typeMapper.GetTypeName(entity.BaseType)))
-		{
-			inherits.Add(_typeMapper.GetTypeName(entity.BaseType));
-		}
-		
-		inherits.Add("IEntity");
-
         return string.Format(
             CultureInfo.InvariantCulture,
             "{0} {1}partial class {2}{3}",
             Accessibility.ForType(entity),
             _code.SpaceAfter(_code.AbstractOption(entity)),
             _code.Escape(entity),
-            _code.StringBefore(" : ", String.Join(", ", inherits)));
+            _code.StringBefore(" : ", _typeMapper.GetTypeName(entity.BaseType)));
     }
     
     public string EnumOpening(SimpleType enumType)

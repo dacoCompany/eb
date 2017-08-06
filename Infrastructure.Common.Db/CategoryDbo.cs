@@ -11,15 +11,15 @@ namespace Infrastructure.Common.DB
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class CategoryDbo : IEntity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public CategoryDbo()
         {
-            this.SubCategory = new HashSet<SubCategoryDbo>();
+            this.SubCategories = new HashSet<SubCategoryDbo>();
         }
-    
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -27,9 +27,9 @@ namespace Infrastructure.Common.DB
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
         public int MainCategoryId { get; set; }
-    
-        public virtual MainCategoryDbo MainCategory { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SubCategoryDbo> SubCategory { get; set; }
+        public virtual ICollection<SubCategoryDbo> SubCategories { get; set; }
+        public virtual MainCategoryDbo MainCategory { get; set; }
     }
 }

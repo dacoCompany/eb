@@ -11,22 +11,16 @@ namespace Infrastructure.Common.DB
 {
     using System;
 
-    public partial class AddressDbo : IEntity
+    public partial class UserRole2UserPermissionDbo : IEntity
     {
         public int Id { get; set; }
-        public string Street { get; set; }
-        public string Number { get; set; }
-        public Nullable<bool> IsDeliveryAddress { get; set; }
-        public Nullable<bool> IsBillingAddress { get; set; }
+        public Nullable<int> UserRoleId { get; set; }
+        public Nullable<int> UserPermissionId { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
-        public int LocationId { get; set; }
-        public Nullable<int> UserDetailsId { get; set; }
-        public Nullable<int> CompanyDetailsId { get; set; }
 
-        public virtual CompanyDetailsDbo CompanyDetails { get; set; }
-        public virtual LocationDbo Location { get; set; }
-        public virtual UserDetailsDbo UserDetails { get; set; }
+        public virtual UserPermissionDbo UserPermission { get; set; }
+        public virtual UserRoleDbo UserRole { get; set; }
     }
 }

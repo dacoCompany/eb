@@ -30,7 +30,7 @@ namespace Messaging.Email
         /// </summary>
         /// <param name="type">The type.</param>
         /// <param name="userAccount">The user account.</param>
-        public void CreateMessage(MailMessageType type, UserAccountDbo userAccount)
+        public void CreateMessage(MailMessageType type, UserDetailsDbo userAccount)
         {
             message = new MailMessage();
             BuildMessage(type, userAccount);
@@ -98,7 +98,7 @@ namespace Messaging.Email
         /// <param name="type">The type.</param>
         /// <param name="userAccount">The user account.</param>
         /// TODO Need to create additional message types
-        private void BuildMessage(MailMessageType messageType, UserAccountDbo userAccount, params object[] additionalParams)
+        private void BuildMessage(MailMessageType messageType, UserDetailsDbo userAccount, params object[] additionalParams)
         {
             string addressFrom = EbadoConfiguration.AppSettings.Get(ConfigurationKeys.EmailFrom);
             string displayName = EbadoConfiguration.AppSettings.Get(ConfigurationKeys.EmailDisplayName);
@@ -127,7 +127,7 @@ namespace Messaging.Email
         /// Model
         /// </returns>
 
-        private ForgotPasswordModel CreateForgotPasswordModel(UserAccountDbo userAccount)
+        private ForgotPasswordModel CreateForgotPasswordModel(UserDetailsDbo userAccount)
         {
             return new ForgotPasswordModel
             {

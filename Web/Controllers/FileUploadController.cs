@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Infrastructure.Common.DB;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -7,14 +9,9 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Hosting;
 using System.Web.Mvc;
-using Infrastructure.Common.DB;
-using Microsoft.Azure;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
 using Web.eBado.Helpers;
 using Web.eBado.Models.Shared;
 using WebAPIFactory.Configuration.Core;
-using System.Drawing;
 
 namespace Web.eBado.Controllers
 {
@@ -112,7 +109,7 @@ namespace Web.eBado.Controllers
             {
                 Description = "Some batch",
                 Name = "TestBatch",
-                UserAccountId = 1
+                CompanyDetailsId = 1
             };
 
             foreach (var file in files)
@@ -160,7 +157,7 @@ namespace Web.eBado.Controllers
                 batch.Attachments.Add(attachment);
 
             }
-            
+
             unitOfWork.BatchAttachmentRepository.Add(batch);
             unitOfWork.Commit();
 

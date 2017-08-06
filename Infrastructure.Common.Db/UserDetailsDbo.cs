@@ -11,40 +11,37 @@ namespace Infrastructure.Common.DB
 {
     using System;
     using System.Collections.Generic;
-    
-    public partial class UserAccountDbo : IEntity
+
+    public partial class UserDetailsDbo : IEntity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public UserAccountDbo()
+        public UserDetailsDbo()
         {
             this.Addresses = new HashSet<AddressDbo>();
+            this.CompanyDetails2UserDetails = new HashSet<CompanyDetails2UserDetailsDbo>();
         }
-    
+
         public int Id { get; set; }
         public string Title { get; set; }
         public string FirstName { get; set; }
         public string SecondName { get; set; }
         public string Surname { get; set; }
-        public string UniqueName { get; set; }
-        public int PhoneNumber { get; set; }
+        public string DisplayName { get; set; }
+        public Nullable<int> PhoneNumber { get; set; }
         public Nullable<int> AdditionalPhoneNumber { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public string Salt { get; set; }
-        public string Ico { get; set; }
-        public string Dic { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
-        public int AtId { get; set; }
-        public int RoId { get; set; }
-        public Nullable<int> SubCatId { get; set; }
-        public bool IsPremium { get; set; }
-    
-        public virtual AccountTypeDbo AccountTypeId { get; set; }
+        public int UserRoleId { get; set; }
+        public Nullable<int> CompanyRoleId { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AddressDbo> Addresses { get; set; }
-        public virtual SubCategoryDbo SubCategoryId { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CompanyDetails2UserDetailsDbo> CompanyDetails2UserDetails { get; set; }
+        public virtual CompanyRoleDbo CompanyRole { get; set; }
         public virtual UserRoleDbo UserRole { get; set; }
     }
 }

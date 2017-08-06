@@ -1,5 +1,4 @@
 ﻿using Infrastructure.Common.DB;
-using Infrastructure.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -127,63 +126,6 @@ namespace Web.eBado.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult RegisterCompany(RegisterCompany model)
-        {
-            // GetCategories();
-            if (ModelState.IsValid)
-            {
-                string password = GeneratePassword();
-                string salt = GenerateSalt();
-
-                using (var uow = new UnitOfWork())
-                {
-                    if (CheckIfEmailExist(model.Email, uow))
-                    {
-                        ModelState.AddModelError("Email", "Email is not unique!");
-                        return View(model);
-                    }
-
-                    if (!model.SelectedSubCategory.Any())
-                    {
-                        ModelState.AddModelError("SubCategory", "Subcategory!");
-                        return View(model);
-                    }
-
-                    var accountLocation = uow.LocationRepository.FindWhere(lr => lr.PostalCode == model.PostalCode).FirstOrDefault();
-
-                    var addressModel = new AddressDbo
-                    {
-                        Street = model.Street,
-                        Number = model.StreetNumber,
-                        LocationId = accountLocation.Id,
-                        IsBillingAddress = true
-                    };
-
-                    var accountModel = new UserAccountDbo
-                    {
-                        Email = model.Email,
-                        PhoneNumber = model.PhoneNumber,
-                        Title = model.Title,
-                        FirstName = model.FirstName,
-                        Surname = model.Surname,
-                        UniqueName = model.AccountName,
-                        Ico = model.Ico,
-                        Dic = model.Dic,
-                        SubCatId = Convert.ToInt32(model.SelectedSubCategory),
-                        Password = EncodePassword(password, salt),
-                        Salt = salt,
-                    };
-                    accountModel.Addresses.Add(addressModel);
-
-                    uow.Commit();
-                }
-            }
-            return View(model);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         public ActionResult ForgotPassword(ForgotPasswordModel model)
         {
             using (var uow = new UnitOfWork())
@@ -266,7 +208,7 @@ namespace Web.eBado.Controllers
 
         private bool CheckIfEmailExist(string email, UnitOfWork uow)
         {
-            var userEmail = uow.UserAccountRepository.FindWhere(ua => ua.Email == email).FirstOrDefault();
+            var userEmail = uow.UserDetailsRepository.FindWhere(ua => ua.Email == email).FirstOrDefault();
             return userEmail == null ? true : false;
         }
 

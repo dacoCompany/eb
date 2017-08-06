@@ -12,27 +12,23 @@ namespace Infrastructure.Common.DB
     using System;
     using System.Collections.Generic;
 
-    public partial class LocationDbo : IEntity
+    public partial class CompanyTypeDbo : IEntity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public LocationDbo()
+        public CompanyTypeDbo()
         {
-            this.Addresses = new HashSet<AddressDbo>();
+            this.CompaniesDetails = new HashSet<CompanyDetailsDbo>();
         }
 
         public int Id { get; set; }
-        public string Country { get; set; }
-        public string PostalCode { get; set; }
-        public string City { get; set; }
-        public string County { get; set; }
-        public string District { get; set; }
-        public Nullable<decimal> Lat { get; set; }
-        public Nullable<decimal> Lon { get; set; }
+        public string Name { get; set; }
+        public string Code { get; set; }
+        public string Description { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AddressDbo> Addresses { get; set; }
+        public virtual ICollection<CompanyDetailsDbo> CompaniesDetails { get; set; }
     }
 }

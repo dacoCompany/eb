@@ -6,12 +6,6 @@ namespace Web.eBado.Controllers
     {
         public ActionResult Index()
         {
-            // Dependency resolving example
-            // using (var uow = NinjectResolver.GetInstance<IUnitOfWork>())
-            // {
-            //     var location = uow.LocationRepository.FindAll();
-            // }
-
             return View();
         }
 

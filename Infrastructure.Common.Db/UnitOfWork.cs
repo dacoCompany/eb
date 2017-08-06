@@ -11,19 +11,20 @@ namespace Infrastructure.Common.DB
     /// <seealso cref="Infrastructure.Common.DB.IUnitOfWork" />
     public class UnitOfWork : IUnitOfWork
     {
-        private DbContext context = new EBADODBEntities(@"metadata=res://*/EBADOModel.csdl|res://*/EBADOModel.ssdl|res://*/EBADOModel.msl;provider=System.Data.SqlClient;provider connection string='data source=ebadodbsrv.database.windows.net;initial catalog=ebado_development;integrated security=False;persist security info=True;user id=ebadoadmin;password=ebado.159;MultipleActiveResultSets=True;App=EntityFramework'");
+        private DbContext context = new EBADOEntities(@"metadata=res://*/EBADOModel.csdl|res://*/EBADOModel.ssdl|res://*/EBADOModel.msl;provider=System.Data.SqlClient;provider connection string='data source=ebadodbsrv.database.windows.net;initial catalog=ebado_development;integrated security=False;persist security info=True;user id=ebadoadmin;password=ebado.159;MultipleActiveResultSets=True;App=EntityFramework'");
         private bool disposed = false;
 
-        private Repository<AccountTypeDbo> accountTypeRepository;
+        private Repository<CompanyTypeDbo> companyTypeRepository;
         private Repository<AddressDbo> addressRepository;
         private Repository<CategoryDbo> categoryRepository;
         private Repository<LocationDbo> locationRepository;
         private Repository<MainCategoryDbo> mainCategoryRepository;
         private Repository<SubCategoryDbo> subCategoryRepository;
-        private Repository<UserAccountDbo> userAccountRepository;
+        private Repository<UserDetailsDbo> userDetailsRepository;
         private Repository<UserRoleDbo> userRoleRepository;
         private Repository<BatchAttachmentDbo> batchAttachmentRepository;
         private Repository<AttachmentDbo> attachmentRepository;
+        private Repository<CompanyDetailsDbo> companyDetailsRespository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UnitOfWork"/> class.
@@ -38,7 +39,7 @@ namespace Infrastructure.Common.DB
         /// <value>
         /// The account type repository.
         /// </value>
-        public IRepository<AccountTypeDbo> AccountTypeRepository => accountTypeRepository ?? (accountTypeRepository = new Repository<AccountTypeDbo>(context));
+        public IRepository<CompanyTypeDbo> CompanyTypeRepository => companyTypeRepository ?? (companyTypeRepository = new Repository<CompanyTypeDbo>(context));
 
         /// <summary>
         /// Gets the address repository.
@@ -86,7 +87,7 @@ namespace Infrastructure.Common.DB
         /// <value>
         /// The user account repository.
         /// </value>
-        public IRepository<UserAccountDbo> UserAccountRepository => userAccountRepository ?? (userAccountRepository = new Repository<UserAccountDbo>(context));
+        public IRepository<UserDetailsDbo> UserDetailsRepository => userDetailsRepository ?? (userDetailsRepository = new Repository<UserDetailsDbo>(context));
 
         /// <summary>
         /// Gets the user role repository.
@@ -105,6 +106,12 @@ namespace Infrastructure.Common.DB
         /// Gets the attachment repository.
         /// </summary>
         public IRepository<AttachmentDbo> AttachmentRepository => attachmentRepository ?? (attachmentRepository = new Repository<AttachmentDbo>(context));
+
+        /// <summary>
+        /// Gets or sets the company details repositry.
+        /// </summary>
+        public IRepository<CompanyDetailsDbo> CompanyDetailsRepositry => companyDetailsRespository ?? (companyDetailsRespository = new Repository<CompanyDetailsDbo>(context));
+
 
         /// <summary>
         /// Implementation of commit method

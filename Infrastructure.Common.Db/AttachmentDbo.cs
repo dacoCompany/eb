@@ -10,8 +10,7 @@
 namespace Infrastructure.Common.DB
 {
     using System;
-    using System.Collections.Generic;
-    
+
     public partial class AttachmentDbo : IEntity
     {
         public int Id { get; set; }
@@ -21,7 +20,7 @@ namespace Infrastructure.Common.DB
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
         public int BatchAttId { get; set; }
-    
-        public virtual BatchAttachmentDbo BatchAttachmentId { get; set; }
+
+        public virtual BatchAttachmentDbo BatchAttachment { get; set; }
     }
 }
