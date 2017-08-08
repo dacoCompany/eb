@@ -101,17 +101,12 @@ namespace WebApi.CompanyRegister.Controllers
                 var keys = new HashSet<string>
                 {
                     "Obchodné meno:",
-                    "Miesto podnikania:",
                     "Sídlo:",
-                    "Bydlisko:",
                     "IČO:",
-                    "Právna forma:",
-                    "Predmet činnosti:",
-                    "Štatutárny orgán:",
-                    "Dátum aktualizácie údajov:"
+                    "Právna forma:"
                 };
 
-                var pNodes2 = from tableNode in tableNodes
+                var pNodes = from tableNode in tableNodes
                     from cellInRow in tableNode.Descendants("tr").First().Descendants("td")
                     where cellInRow.InnerText.Trim().Replace("&nbsp;", string.Empty).IsAnyOf(keys.ToArray())
                     select cellInRow.ParentNode into dataNodes                                                 // rows which represent useful data
@@ -126,13 +121,10 @@ namespace WebApi.CompanyRegister.Controllers
 
                 model = new CompanyDetailsModel
                 {
-                    Name = pNodes2.FirstOrDefault(n => n.Name == "Obchodné meno")?.Value.FirstOrDefault(),
-                    Ico = pNodes2.FirstOrDefault(p => p.Name == "IČO")?.Value.FirstOrDefault(),
-                    Location = pNodes2.FirstOrDefault(p => p.Name == "Miesto podnikania")?.Value.FirstOrDefault(),
-                    PostCode = GetPostCode(pNodes2.FirstOrDefault(p => p.Name == "Sídlo" || p.Name == "Bydlisko")?.Value.FirstOrDefault()),
-                    CompanyType = pNodes2.FirstOrDefault(p => p.Name == "Právna forma")?.Value.FirstOrDefault(),
-                    Executives = pNodes2.FirstOrDefault(p => p.Name == "Štatutárny orgán")?.Value,
-                    Activities = pNodes2.FirstOrDefault(p => p.Name == "Predmet činnosti")?.Value
+                    Name = pNodes.FirstOrDefault(n => n.Name == "Obchodné meno")?.Value.FirstOrDefault(),
+                    Ico = pNodes.FirstOrDefault(p => p.Name == "IČO")?.Value.FirstOrDefault(),
+                    PostCode = GetPostCode(pNodes.FirstOrDefault(p => p.Name == "Sídlo")?.Value.FirstOrDefault()),
+                    CompanyType = pNodes.FirstOrDefault(p => p.Name == "Právna forma")?.Value.FirstOrDefault(),
                 };
             }
         }
