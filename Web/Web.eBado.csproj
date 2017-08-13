@@ -189,6 +189,7 @@
     <Compile Include="Helpers\ImageHandler.cs" />
     <Compile Include="IoC\NinjectResolver.cs" />
     <Compile Include="Models\Account\BatchGalleryModel.cs" />
+    <Compile Include="Models\Account\CategoriesModel.cs" />
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
     <Compile Include="Models\Account\ChangeSettingsModel.cs" />
     <Compile Include="Models\Account\ForgotPasswordModel.cs" />
@@ -208,6 +209,7 @@
     <Content Include="Content\BaseContent\css\button.css" />
     <Content Include="Content\BaseContent\css\font-awesome.min.css" />
     <Content Include="Content\BaseContent\css\jquery-ui.css" />
+    <Content Include="Content\BaseContent\css\check_radio.css" />
     <Content Include="Content\BaseContent\css\user-settings.css" />
     <Content Include="Content\BaseContent\css\media-queries.css" />
     <Content Include="Content\BaseContent\css\register.css" />
@@ -490,6 +492,7 @@
     <Content Include="Content\jQuery.FileUpload\img\loading.gif" />
     <Content Include="Content\jQuery.FileUpload\img\progressbar.gif" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\blueimp-gallery2\js\blueimp-gallery-fullscreen.js" />
     <Content Include="Scripts\blueimp-gallery2\js\blueimp-gallery-fullscreen.min.js" />
@@ -507,9 +510,9 @@
     <Content Include="Scripts\blueimp-gallery2\js\blueimp-helper.min.js" />
     <Content Include="Scripts\blueimp-gallery2\js\jquery.blueimp-gallery.js" />
     <Content Include="Scripts\blueimp-gallery2\js\jquery.blueimp-gallery.min.js" />
-    <Content Include="Scripts\categories.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\categories.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -535,6 +538,9 @@
     <Content Include="Views\Email\ForgotPassword.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -584,8 +590,6 @@
     <Content Include="Views\Home\Index2.cshtml" />
     <Content Include="Views\Home\Index3.cshtml" />
     <Content Include="Views\Account\RegisterCompany.cshtml" />
-    <Content Include="Views\Account\RegisterPartTime.cshtml" />
-    <Content Include="Views\Account\RegisterSelfEmployed.cshtml" />
     <Content Include="Views\Account\RegisterUser.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
@@ -621,6 +625,10 @@
     <ProjectReference Include="..\Infrastructure.Configuration\Infrastructure.Configuration.csproj">
       <Project>{AEDF78F1-5D47-4D81-9DB1-BD64C22F4310}</Project>
       <Name>Infrastructure.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Infrastructure.Resources\Infrastructure.Resources.csproj">
+      <Project>{aa25df85-e53c-46e4-9ecd-20367cd4015c}</Project>
+      <Name>Infrastructure.Resources</Name>
     </ProjectReference>
     <ProjectReference Include="..\Messaging.Email\Messaging.Email.csproj">
       <Project>{DFE452B4-8A20-463F-84EE-D8D9CD631053}</Project>

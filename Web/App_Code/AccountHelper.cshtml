@@ -1,4 +1,6 @@
 ﻿@using System.Web.Mvc
+@using Infrastructure.Resources
+@using Web.eBado
 
 @helper SettingsMenu(UrlHelper Url, string viewType) {
     <div class="tab">
@@ -12,12 +14,8 @@
 @helper RegisterMenu(UrlHelper Url, string viewType) {
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="@(viewType == "RegisterUser" ? "active" : "")">
-        <a href="@Url.Action("RegisterUser", "Account")" aria-controls="home" style="font-size:15px;">ZAKLADNY UCET</a></li>
-        <li role="presentation" class="@(viewType == "RegisterPartTime" ? "active" : "")">
-        <a href="@Url.Action("RegisterPartTime", "Account")" aria-controls="profile" style="font-size:15px;">PRACA NA DOHODU</a></li>
-        <li role="presentation" class="@(viewType == "RegisterSelfEmployed" ? "active" : "")">
-        <a href="@Url.Action("RegisterSelfEmployed", "Account")" aria-controls="messages" style="font-size:15px;">ZIVNOSTNIK</a></li>
+        <a href="@Url.Action("RegisterUser", "Account")" aria-controls="home" style="font-size:15px;">@Resources.BasicAccount</a></li>
         <li role="presentation" class="@(viewType == "RegisterCompany" ? "active" : "")">
-        <a href='@Url.Action("RegisterCompany", "Account")' aria-controls="settings" style="font-size:15px;">FIREMNY UCET</a></li>
+        <a href='@Url.Action("RegisterCompany", "Account")' aria-controls="settings" style="font-size:15px;">@Resources.CompanyAccount</a></li>
     </ul>
 }

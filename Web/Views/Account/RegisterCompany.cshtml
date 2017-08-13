@@ -1,12 +1,69 @@
 ﻿@model Web.eBado.Models.Account.RegisterCompany
+@using Infrastructure.Common.Enums
+@using Infrastructure.Resources
 
 @{
     ViewBag.Title = "RegisterCompany";
 }
 
-@Styles.Render("~/Content/jquery_ui")
+@Styles.Render("~/Content/check-radio")
 @Scripts.Render("~/bundles/jquery_autocomplete")
-@Scripts.Render("~/bundles/categories")
+<script>
+    $(document).ready(
+        function () {
+            $("#validateBtn").click(function () {
+
+                var btn = $("#validateBtn");
+                var oldText = btn.text();
+                btn.text('');
+                btn.html('<span id=\"spn2\" class=\"glyphicon glyphicon-refresh glyphicon-refresh-animate\"></span>');
+                var cn = $("#txtCompanyNumber").val().replace(" ", "");
+
+                if (cn == null || cn.length < 8) {
+                    return;
+                }
+                
+                $.ajax({
+                    url: "http://localhost:50198/api/SKRegister/GetCompanyDetailsById",
+                    data: JSON.parse("{ \"id\": \"" + cn + "\"}"),
+                    dataType: "json",
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $("#txtCompanyName").val(data.Name);
+                        $("#txtCompanyPostalCode").val(data.PostCode != null ? data.PostCode : "");
+                        if (data.CompanyType === "Samostatne podnikajúca fyzická osoba") {
+                            $("#AccountTypeDropDown").val('2');
+                        } else {
+                            $("#AccountTypeDropDown").val('3');
+                        }
+                        $("#companyDiv").show();
+                        btn.text(oldText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+        });
+
+    $(function () {
+        $("#WithoutIco").click(function () {
+            $("#companyDiv").show();
+            $("#AccountTypeDropDown").val('1');
+        });
+        $("#WithIco").click(function () {
+            $("#companyDiv").hide();
+        });
+    });
+</script>
+
+<script>
+    
+</script>
 
 @using (Html.BeginForm())
 {
@@ -22,108 +79,137 @@
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="basic">
                             <form>
-                                <div class="col-sm-12 reg-font">Prihlasovacie údaje</div>
+                                <div class="col-sm-12 reg-font">@Resources.LoginInfo</div>
                                 <hr class="col-sm-12 transparent" />
                                 <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Email*" } })
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHEmail } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.Email)
                                     </label>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.AccountName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Užívateľské meno*" } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessageFor(model => model.AccountName)
-                                    </label>
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Telefonický kontakt*" } })
+                                    @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPhoneNumber } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.PhoneNumber)
                                     </label>
                                 </div>
                                 <div class="col-sm-12 reg-font"></div>
                                 <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Heslo*" } })
+                                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPassword } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.Password)
                                     </label>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.RepeatPassword, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Zopakovat heslo*" } })
+                                    @Html.EditorFor(model => model.RepeatPassword, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHRepeatPassword } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.RepeatPassword)
                                     </label>
                                 </div>
-                                <div class="col-sm-12 reg-font">Kontaktná osoba</div>
+                                <div class="col-sm-12 reg-font">@Resources.ContactPerson</div>
                                 <hr class="col-sm-12 transparent" />
                                 <div class="form-group col-sm-3">
-                                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Titul" } })
+                                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHTitle } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.Title)
                                     </label>
                                 </div>
                                 <div class="form-group col-sm-4">
-                                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Meno*" } })
+                                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHFirstname } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.FirstName)
                                     </label>
                                 </div>
                                 <div class="form-group col-sm-5">
-                                    @Html.EditorFor(model => model.Surname, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Priezvisko*" } })
+                                    @Html.EditorFor(model => model.Surname, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHLastName } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.Surname)
                                     </label>
                                 </div>
-                                <div class="col-sm-12 reg-font">Kontaktné údaje spoločnosti</div>
+                                <div class="col-sm-12 reg-font">@Resources.ContactDetails</div>
                                 <hr class="col-sm-12 transparent" />
                                 <div class="form-group col-sm-3">
-                                    @Html.EditorFor(model => model.PostalCode, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "PSČ*" } })
+                                    <input type="text" class="form-control txt-lg" id="txtPostalCode" placeholder="@Resources.PHPostalCode" />
+                                    @Html.HiddenFor(model => model.PostalCode, new { @id = "hiddenPostalCode" })
+                                    <input type="hidden" id="hfCustomer" name="CustomerId" />
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.PostalCode)
                                     </label>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.Street, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Ulica*" } })
+                                    @Html.EditorFor(model => model.Street, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetName } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.Street)
                                     </label>
                                 </div>
                                 <div class="form-group col-sm-3">
-                                    @Html.EditorFor(model => model.StreetNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Číslo*" } })
+                                    @Html.EditorFor(model => model.StreetNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetNumber } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.StreetNumber)
                                     </label>
                                 </div>
-                                <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.Ico, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Ičo*" } })
+                                <div class="col-sm-12 reg-font">@Resources.CompanyInfo</div>
+                                <hr class="col-sm-12 transparent" />
+                                <div class="form-group col-sm-1">
+                                    <input checked="checked" id="WithIco" name="ICO_choose" type="radio" />
+                                </div>
+                                <div class="form-group col-sm-7">
+                                    @Html.EditorFor(model => model.Ico, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtCompanyNumber", @placeholder = @Resources.PHCompanyNumber } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.Ico)
                                     </label>
                                 </div>
-                                <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.Dic, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Dič*" } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessageFor(model => model.Dic)
-                                    </label>
+                                <div class="form-group col-sm-4">
+                                    <button type="button" id="validateBtn" class="form-btn col-sm-12"><span id="spn"></span>@Resources.Validate</button>
                                 </div>
-                                <div class="col-sm-12 reg-font">Oblasť podnikania</div>
+                                <div class="form-group col-sm-12">
+                                    <input id="WithoutIco" name="ICO_choose" class="radio inline" type="radio" /> <span class="h4"> @Resources.DontHaveCopanyNumber</span>
+                                </div>
                                 <hr class="col-sm-12 transparent" />
+                                <div id="companyDiv" style="display:none">
+                                    <div class="form-group col-sm-12">
+                                        @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtCompanyName", @placeholder = @Resources.PHCompanyName } })
+                                        <label class="label-form" for="email">
+                                            @Html.ValidationMessageFor(model => model.CompanyName)
+                                        </label>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        @Html.DropDownListFor(model => model.CompanyType, EnumHelper.GetSelectList(typeof(AccountType)), new { @class = "form-control txt-lg", @id = "AccountTypeDropDown" })
+                                        <label class="label-form" for="email">
+                                            @Html.ValidationMessageFor(model => model.CompanyType)
+                                        </label>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <input type="text" class="form-control txt-lg" id="txtCompanyPostalCode" placeholder="@Resources.PHPostalCode" />
+                                        @Html.HiddenFor(model => model.CompanyPostalCode, new { @id = "hiddenCompanyPostalCode" })
+                                        <input type="hidden" id="hfCustomer" name="CustomerId" />
+                                        <label class="label-form" for="email">
+                                            @Html.ValidationMessageFor(model => model.CompanyPostalCode)
+                                        </label>
+                                    </div>
+                                </div>
                                 <div class="form-group col-sm-6">
-                                    @Html.DropDownList("Category", ViewData["categories"] as List<SelectListItem>, new { @class = "form-control" })
+                                    @Html.EditorFor(model => model.CompanyStreet, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetName } })
                                     <label class="label-form" for="email">
-                                        @Html.ValidationMessageFor(model => model.Specialization)
+                                        @Html.ValidationMessageFor(model => model.CompanyStreet)
                                     </label>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    @Html.DropDownList("SubCategory", new SelectList(string.Empty, "Value", "Text"), "", new { style = "width:250px", @class = "form-control", @disabled = "disabled" })
+                                    @Html.EditorFor(model => model.CompanyStreetNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetNumber } })
                                     <label class="label-form" for="email">
-                                        @Html.ValidationMessageFor(model => model.Specialization)
+                                        @Html.ValidationMessageFor(model => model.CompanyStreetNumber)
                                     </label>
                                 </div>
-                                @Html.HiddenFor(m => m.SelectedSubCategory, new { id = "CatID" })
+                                <div class="col-sm-12 reg-font">@Resources.BusinessArea</div>
+                                <hr class="col-sm-12 transparent" />
+                                <div class="form-group col-sm-12">
+                                    <textarea type="text" placeholder="categories" id="cat_list" class="form-control" rows="3"></textarea>
+                                    <label class="label-form" for="email">
+                                        @Html.ValidationMessageFor(model => model.Categories)
+                                    </label>
+                                </div>
 
-                                <button type="submit" id="MyButton" class="form-btn col-sm-12">REGISTROVAT</button>
+                                <button type="submit" id="MyButton" class="form-btn col-sm-12">@Resources.Register2</button>
                             </form>
                         </div>
                     </div>

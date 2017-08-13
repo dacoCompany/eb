@@ -20,7 +20,7 @@ namespace Web.eBado.Controllers
             return Json(new SelectList(subCategories, "Value", "Text"));
         }
 
-        [HttpPost]
+        [HttpGet]
         public JsonResult GetPostalCodes(string prefix)
         {
             List<PostalCodeModel> ObjList = new List<PostalCodeModel>()
