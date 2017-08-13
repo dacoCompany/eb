@@ -1,4 +1,5 @@
-﻿@model Web.eBado.Models.Account.RegisterUser
+﻿@using Infrastructure.Resources
+@model Web.eBado.Models.Account.RegisterUser
 
 @{
     ViewBag.Title = "RegisterUser";
@@ -22,58 +23,58 @@
                             <form>
                                 <div class="col-sm-12 reg-font" id="error_display_div"></div>
 
-                                <div class="col-sm-12 reg-font">Prihlasovacie údaje</div>
+                                <div class="col-sm-12 reg-font">@Resources.LoginInfo</div>
                                 <hr class="col-sm-12 transparent" />
                                 <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Email*", @id="myId" } })
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHEmail, @id="myId" } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.Email)
                                     </label>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Telefonický kontakt*" } })
+                                    @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPhoneNumber } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.PhoneNumber)
                                     </label>
                                 </div>
                                 <div class="col-sm-12 reg-font"></div>
                                 <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Heslo*" } })
+                                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPassword } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.Password)
                                     </label>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.RepeatPassword, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Zopakovat heslo*" } })
+                                    @Html.EditorFor(model => model.RepeatPassword, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHRepeatPassword } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.RepeatPassword)
                                     </label>
                                 </div>
 
-                                <div class="col-sm-12 reg-font">Kontaktná osoba</div>
+                                <div class="col-sm-12 reg-font">@Resources.ContactPerson</div>
                                 <hr class="col-sm-12 transparent" />
                                 <div class="form-group col-sm-3">
-                                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Titul" } })
+                                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHTitle } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.Title)
                                     </label>
                                 </div>
                                 <div class="form-group col-sm-4">
-                                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Meno*" } })
+                                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHFirstname } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.FirstName)
                                     </label>
                                 </div>
                                 <div class="form-group col-sm-5">
-                                    @Html.EditorFor(model => model.Surname, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Priezvisko*" } })
+                                    @Html.EditorFor(model => model.Surname, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHLastName } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.Surname)
                                     </label>
                                 </div>
-                                <div class="col-sm-12 reg-font">Kontaktné údaje</div>
+                                <div class="col-sm-12 reg-font">@Resources.ContactDetails</div>
                                 <hr class="col-sm-12 transparent" />
                                 <div class="form-group col-sm-4">
-                                    <input type="text" class="form-control txt-lg" id="txtPostalCode" placeholder="PSC" />
+                                    <input type="text" class="form-control txt-lg" id="txtPostalCode" placeholder="@Resources.PHPostalCode" />
                                     @Html.HiddenFor(model => model.PostalCode, new { @id = "hiddenPostalCode" })
                                     <input type="hidden" id="hfCustomer" name="CustomerId" />
                                     <label class="label-form" for="email">
@@ -81,18 +82,18 @@
                                     </label>
                                 </div>
                                 <div class="form-group col-sm-5">
-                                    @Html.EditorFor(model => model.Street, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Ulica*" } })
+                                    @Html.EditorFor(model => model.Street, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetName } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.Street)
                                     </label>
                                 </div>
                                 <div class="form-group col-sm-3">
-                                    @Html.EditorFor(model => model.StreetNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Číslo*" } })
+                                    @Html.EditorFor(model => model.StreetNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetNumber } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.StreetNumber)
                                     </label>
                                 </div>
-                                <button type="submit" id="MyButton" class="form-btn col-sm-12">REGISTROVAT</button>
+                                <button type="submit" id="MyButton" class="form-btn col-sm-12">@Resources.Register2</button>
                             </form>
                         </div>
                     </div>

@@ -201,21 +201,6 @@
     <Compile Include="Models\Shared\FilesViewModel.cs" />
     <Compile Include="Models\Shared\PostalCodeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources.hu-HU.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.hu-HU.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources.sk-SK.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.sk-SK.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\BaseContent\css\bootstrap-theme.css" />
@@ -636,24 +621,14 @@
       <Project>{AEDF78F1-5D47-4D81-9DB1-BD64C22F4310}</Project>
       <Name>Infrastructure.Configuration</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Infrastructure.Resources\Infrastructure.Resources.csproj">
+      <Project>{aa25df85-e53c-46e4-9ecd-20367cd4015c}</Project>
+      <Name>Infrastructure.Resources</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Messaging.Email\Messaging.Email.csproj">
       <Project>{DFE452B4-8A20-463F-84EE-D8D9CD631053}</Project>
       <Name>Messaging.Email</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources.hu-HU.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.hu-HU.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources.sk-SK.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.sk-SK.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,4 +1,5 @@
-﻿@if (Request.IsAuthenticated)
+﻿@using Infrastructure.Resources
+@if (Request.IsAuthenticated)
 {
     <nav-account>
         <ul>
@@ -17,8 +18,8 @@
 }
 else
 {
-    <input type="button" name="btn" class="form-btn-transparent" onclick="location.href='@Url.Action("RegisterUser", "Account")'" value="REGISTRÁCIA" />
-    <input type="button" name="btn" class="form-btn-transparent" onclick="location.href='@Url.Action("Login", "Account")'" value="PRIHLÁSENIE" />
+    <input type="button" name="btn" class="form-btn-transparent" onclick="location.href='@Url.Action("RegisterUser", "Account")'" value="@Resources.Register" />
+    <input type="button" name="btn" class="form-btn-transparent" onclick="location.href='@Url.Action("Login", "Account")'" value="@Resources.Login" />
 
      <!-- Modal -->
     @*<div class="modal fade popup-form" id="e-login-form" role="dialog">

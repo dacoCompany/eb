@@ -117,10 +117,88 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AccountTypeCompany" xml:space="preserve">
+    <value>Spoločnosť</value>
+  </data>
+  <data name="AccountTypeContractor" xml:space="preserve">
+    <value>Contractor</value>
+  </data>
+  <data name="AccountTypeSelfEmployed" xml:space="preserve">
+    <value>Živnostník</value>
+  </data>
+  <data name="BasicAccount" xml:space="preserve">
+    <value>Záklaný účet</value>
+  </data>
+  <data name="BusinessArea" xml:space="preserve">
+    <value>Oblasť podnikania</value>
+  </data>
+  <data name="CompanyAccount" xml:space="preserve">
+    <value>Firemný účet</value>
+  </data>
+  <data name="CompanyInfo" xml:space="preserve">
+    <value>Informácie o spoločnosti</value>
+  </data>
+  <data name="ContactDetails" xml:space="preserve">
+    <value>Kontaktné údaje</value>
+  </data>
+  <data name="ContactPerson" xml:space="preserve">
+    <value>Kontaktná osoba</value>
+  </data>
+  <data name="DontHaveCopanyNumber" xml:space="preserve">
+    <value>Nemám IČO</value>
+  </data>
   <data name="Login" xml:space="preserve">
-    <value>Bejelentkezés</value>
+    <value>Prihlásenie</value>
+  </data>
+  <data name="LoginInfo" xml:space="preserve">
+    <value>Prihlasovacie údaje</value>
+  </data>
+  <data name="PHCompanyName" xml:space="preserve">
+    <value>Názov spoločnosti</value>
+  </data>
+  <data name="PHCompanyNumber" xml:space="preserve">
+    <value>IČO</value>
+  </data>
+  <data name="PHEmail" xml:space="preserve">
+    <value>E-mail*</value>
+  </data>
+  <data name="PHFirstname" xml:space="preserve">
+    <value>Meno*</value>
+  </data>
+  <data name="PHLastName" xml:space="preserve">
+    <value>Priezvisko*</value>
+  </data>
+  <data name="PHPassword" xml:space="preserve">
+    <value>Heslo*</value>
+  </data>
+  <data name="PHPhoneNumber" xml:space="preserve">
+    <value>Telefón*</value>
+  </data>
+  <data name="PHPostalCode" xml:space="preserve">
+    <value>PSČ*</value>
+  </data>
+  <data name="PHRepeatPassword" xml:space="preserve">
+    <value>Zopakovať heslo *</value>
+  </data>
+  <data name="PHStreetName" xml:space="preserve">
+    <value>Ulica*</value>
+  </data>
+  <data name="PHStreetNumber" xml:space="preserve">
+    <value>Číslo*</value>
+  </data>
+  <data name="PHTitle" xml:space="preserve">
+    <value>Titul</value>
   </data>
   <data name="Register" xml:space="preserve">
-    <value>Regisztráció</value>
+    <value>Registrácia</value>
+  </data>
+  <data name="Register2" xml:space="preserve">
+    <value>REGISTROVAŤ</value>
+  </data>
+  <data name="RequiredField" xml:space="preserve">
+    <value>Povinné pole</value>
+  </data>
+  <data name="Vaildate" xml:space="preserve">
+    <value>Overiť</value>
   </data>
 </root>

@@ -117,10 +117,88 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AccountTypeCompany" xml:space="preserve">
+    <value>Vállalat</value>
+  </data>
+  <data name="AccountTypeContractor" xml:space="preserve">
+    <value>Contractor</value>
+  </data>
+  <data name="AccountTypeSelfEmployed" xml:space="preserve">
+    <value>Egyéni vállalkozó</value>
+  </data>
+  <data name="BasicAccount" xml:space="preserve">
+    <value>Alap fiók</value>
+  </data>
+  <data name="BusinessArea" xml:space="preserve">
+    <value>Üzleti terület</value>
+  </data>
+  <data name="CompanyAccount" xml:space="preserve">
+    <value>Vállalati fiók</value>
+  </data>
+  <data name="CompanyInfo" xml:space="preserve">
+    <value>Céginformáció</value>
+  </data>
+  <data name="ContactDetails" xml:space="preserve">
+    <value>Elérhetőség</value>
+  </data>
+  <data name="ContactPerson" xml:space="preserve">
+    <value>Kapcsolattartó személy</value>
+  </data>
+  <data name="DontHaveCopanyNumber" xml:space="preserve">
+    <value>Nincs cégjegyzékszám</value>
+  </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>BEJELENTKEZÉS</value>
+  </data>
+  <data name="LoginInfo" xml:space="preserve">
+    <value>Bejelentkezési adatok</value>
+  </data>
+  <data name="PHCompanyName" xml:space="preserve">
+    <value>Cég neve</value>
+  </data>
+  <data name="PHCompanyNumber" xml:space="preserve">
+    <value>Cégjegyzékszám*</value>
+  </data>
+  <data name="PHEmail" xml:space="preserve">
+    <value>E-mail*</value>
+  </data>
+  <data name="PHFirstname" xml:space="preserve">
+    <value>Keresztnév*</value>
+  </data>
+  <data name="PHLastName" xml:space="preserve">
+    <value>Vezetéknév*</value>
+  </data>
+  <data name="PHPassword" xml:space="preserve">
+    <value>Jelszó*</value>
+  </data>
+  <data name="PHPhoneNumber" xml:space="preserve">
+    <value>Telefonszám*</value>
+  </data>
+  <data name="PHPostalCode" xml:space="preserve">
+    <value>Irányítószám*</value>
+  </data>
+  <data name="PHRepeatPassword" xml:space="preserve">
+    <value>Jelszó ismét*</value>
+  </data>
+  <data name="PHStreetName" xml:space="preserve">
+    <value>Utcanév*</value>
+  </data>
+  <data name="PHStreetNumber" xml:space="preserve">
+    <value>Házszám*</value>
+  </data>
+  <data name="PHTitle" xml:space="preserve">
+    <value>Cím</value>
   </data>
   <data name="Register" xml:space="preserve">
-    <value>Register</value>
+    <value>REGISZTRÁCIÓ</value>
+  </data>
+  <data name="Register2" xml:space="preserve">
+    <value>REGISZTRÁLOK</value>
+  </data>
+  <data name="RequiredField" xml:space="preserve">
+    <value>Kötelező mező</value>
+  </data>
+  <data name="Vaildate" xml:space="preserve">
+    <value>Érvényesítés</value>
   </data>
 </root>
