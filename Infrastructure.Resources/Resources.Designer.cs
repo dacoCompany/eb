@@ -151,7 +151,7 @@ namespace Infrastructure.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Login.
+        ///   Looks up a localized string similar to LOGIN.
         /// </summary>
         public static string Login {
             get {
@@ -277,7 +277,7 @@ namespace Infrastructure.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Register.
+        ///   Looks up a localized string similar to REGISTER.
         /// </summary>
         public static string Register {
             get {
@@ -286,7 +286,7 @@ namespace Infrastructure.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Register.
+        ///   Looks up a localized string similar to REGISTER.
         /// </summary>
         public static string Register2 {
             get {
@@ -304,11 +304,11 @@ namespace Infrastructure.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vaildate.
+        ///   Looks up a localized string similar to Validate.
         /// </summary>
-        public static string Vaildate {
+        public static string Validate {
             get {
-                return ResourceManager.GetString("Vaildate", resourceCulture);
+                return ResourceManager.GetString("Validate", resourceCulture);
             }
         }
     }

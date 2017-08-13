@@ -148,7 +148,7 @@
     <value>I don't have a company number</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>LOGIN</value>
   </data>
   <data name="LoginInfo" xml:space="preserve">
     <value>Login information</value>
@@ -190,15 +190,15 @@
     <value>Title</value>
   </data>
   <data name="Register" xml:space="preserve">
-    <value>Register</value>
+    <value>REGISTER</value>
   </data>
   <data name="Register2" xml:space="preserve">
-    <value>Register</value>
+    <value>REGISTER</value>
   </data>
   <data name="RequiredField" xml:space="preserve">
     <value>Required field</value>
   </data>
-  <data name="Vaildate" xml:space="preserve">
-    <value>Vaildate</value>
+  <data name="Validate" xml:space="preserve">
+    <value>Validate</value>
   </data>
 </root>

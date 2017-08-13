@@ -31,6 +31,6 @@ namespace Web.eBado.Models.Account
 
         public string StreetNumber { get; set; }
 
-        public string PostalCode { get; set; }
+        public int PostalCode { get; set; }
     }
 }

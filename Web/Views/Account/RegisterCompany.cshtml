@@ -11,8 +11,42 @@
 <script>
     $(document).ready(
         function () {
-            $("#showBtn").click(function () {
-                $("#companyDiv").show();
+            $("#validateBtn").click(function () {
+
+                var btn = $("#validateBtn");
+                var oldText = btn.text();
+                btn.text('');
+                btn.html('<span id=\"spn2\" class=\"glyphicon glyphicon-refresh glyphicon-refresh-animate\"></span>');
+                var cn = $("#txtCompanyNumber").val().replace(" ", "");
+
+                if (cn == null || cn.length < 8) {
+                    return;
+                }
+                
+                $.ajax({
+                    url: "http://localhost:50198/api/SKRegister/GetCompanyDetailsById",
+                    data: JSON.parse("{ \"id\": \"" + cn + "\"}"),
+                    dataType: "json",
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $("#txtCompanyName").val(data.Name);
+                        $("#txtCompanyPostalCode").val(data.PostCode != null ? data.PostCode : "");
+                        if (data.CompanyType === "Samostatne podnikajúca fyzická osoba") {
+                            $("#AccountTypeDropDown").val('2');
+                        } else {
+                            $("#AccountTypeDropDown").val('3');
+                        }
+                        $("#companyDiv").show();
+                        btn.text(oldText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
             });
         });
 
@@ -25,6 +59,10 @@
             $("#companyDiv").hide();
         });
     });
+</script>
+
+<script>
+    
 </script>
 
 @using (Html.BeginForm())
@@ -91,7 +129,9 @@
                                 <div class="col-sm-12 reg-font">@Resources.ContactDetails</div>
                                 <hr class="col-sm-12 transparent" />
                                 <div class="form-group col-sm-3">
-                                    @Html.EditorFor(model => model.PostalCode, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPostalCode } })
+                                    <input type="text" class="form-control txt-lg" id="txtPostalCode" placeholder="@Resources.PHPostalCode" />
+                                    @Html.HiddenFor(model => model.PostalCode, new { @id = "hiddenPostalCode" })
+                                    <input type="hidden" id="hfCustomer" name="CustomerId" />
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.PostalCode)
                                     </label>
@@ -114,13 +154,13 @@
                                     <input checked="checked" id="WithIco" name="ICO_choose" type="radio" />
                                 </div>
                                 <div class="form-group col-sm-7">
-                                    @Html.EditorFor(model => model.Ico, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHCompanyNumber } })
+                                    @Html.EditorFor(model => model.Ico, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtCompanyNumber", @placeholder = @Resources.PHCompanyNumber } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.Ico)
                                     </label>
                                 </div>
                                 <div class="form-group col-sm-4">
-                                    <button type="button" id="showBtn" class="form-btn col-sm-12">@Resources.Vaildate</button>
+                                    <button type="button" id="validateBtn" class="form-btn col-sm-12"><span id="spn"></span>@Resources.Validate</button>
                                 </div>
                                 <div class="form-group col-sm-12">
                                     <input id="WithoutIco" name="ICO_choose" class="radio inline" type="radio" /> <span class="h4"> @Resources.DontHaveCopanyNumber</span>
@@ -128,7 +168,7 @@
                                 <hr class="col-sm-12 transparent" />
                                 <div id="companyDiv" style="display:none">
                                     <div class="form-group col-sm-12">
-                                        @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHCompanyName } })
+                                        @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtCompanyName", @placeholder = @Resources.PHCompanyName } })
                                         <label class="label-form" for="email">
                                             @Html.ValidationMessageFor(model => model.CompanyName)
                                         </label>
@@ -140,7 +180,9 @@
                                         </label>
                                     </div>
                                     <div class="form-group col-sm-6">
-                                        @Html.EditorFor(model => model.CompanyPostalCode, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPostalCode } })
+                                        <input type="text" class="form-control txt-lg" id="txtCompanyPostalCode" placeholder="@Resources.PHPostalCode" />
+                                        @Html.HiddenFor(model => model.CompanyPostalCode, new { @id = "hiddenCompanyPostalCode" })
+                                        <input type="hidden" id="hfCustomer" name="CustomerId" />
                                         <label class="label-form" for="email">
                                             @Html.ValidationMessageFor(model => model.CompanyPostalCode)
                                         </label>

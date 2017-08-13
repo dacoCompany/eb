@@ -29,7 +29,7 @@ namespace Web.eBado.Models.Account
         public string CompanyStreetNumber { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
-        public string CompanyPostalCode { get; set; }
+        public int CompanyPostalCode { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         public ICollection<CategoriesModel> Categories { get; set; }

@@ -198,7 +198,7 @@
   <data name="RequiredField" xml:space="preserve">
     <value>Kötelező mező</value>
   </data>
-  <data name="Vaildate" xml:space="preserve">
+  <data name="Validate" xml:space="preserve">
     <value>Érvényesítés</value>
   </data>
 </root>

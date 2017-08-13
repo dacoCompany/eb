@@ -148,7 +148,7 @@
     <value>Nemám IČO</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Prihlásenie</value>
+    <value>PRIHLÁSENIE</value>
   </data>
   <data name="LoginInfo" xml:space="preserve">
     <value>Prihlasovacie údaje</value>
@@ -178,7 +178,7 @@
     <value>PSČ*</value>
   </data>
   <data name="PHRepeatPassword" xml:space="preserve">
-    <value>Zopakovať heslo *</value>
+    <value>Zopakovať heslo*</value>
   </data>
   <data name="PHStreetName" xml:space="preserve">
     <value>Ulica*</value>
@@ -190,7 +190,7 @@
     <value>Titul</value>
   </data>
   <data name="Register" xml:space="preserve">
-    <value>Registrácia</value>
+    <value>REGISTRÁCIA</value>
   </data>
   <data name="Register2" xml:space="preserve">
     <value>REGISTROVAŤ</value>
@@ -198,7 +198,7 @@
   <data name="RequiredField" xml:space="preserve">
     <value>Povinné pole</value>
   </data>
-  <data name="Vaildate" xml:space="preserve">
+  <data name="Validate" xml:space="preserve">
     <value>Overiť</value>
   </data>
 </root>

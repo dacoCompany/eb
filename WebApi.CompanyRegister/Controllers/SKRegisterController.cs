@@ -24,7 +24,7 @@ namespace WebApi.CompanyRegister.Controllers
         [ResponseType(typeof(CompanyDetailsModel))]
         public IHttpActionResult GetCompanyDetailsById(string id)
         {
-            companyId = id;
+            companyId = id.Replace(" ", string.Empty);
 
             CompanyDetailsModel response = null;
             var th = new Thread(() =>
@@ -37,7 +37,7 @@ namespace WebApi.CompanyRegister.Controllers
             });
             th.SetApartmentState(ApartmentState.STA);
             th.Start();
-            th.Join(1000);
+            th.Join(5000);
             
             return Ok(model);
         }
@@ -131,7 +131,10 @@ namespace WebApi.CompanyRegister.Controllers
 
         private string GetPostCode(string address)
         {
-            var match = Regex.Match(address, @"^(\d{3}\s\d{2})", RegexOptions.None);
+            if (string.IsNullOrEmpty(address))
+                return null;
+
+            var match = Regex.Match(address, @"(\d{3}\s\d{2})", RegexOptions.None);
             return match.Success ? match.Result("$1") : null;
         }
     }
