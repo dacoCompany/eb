@@ -1,39 +1,36 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Infrastructure.Common.Enums;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Web.eBado.Models.Account
 {
-    public class RegisterCompany : RegisterBase
+    public class RegisterCompany : RegisterUser
     {
-        [Required(ErrorMessage = "Povinne pole")]
-        [Display(Name = "PostalCode")]
-        public string PostalCode { get; set; }
+        [Required(ErrorMessage = "Required field!")]
+        public AccountType CompanyType { get; set; }
 
-        [Required(ErrorMessage = "Povinne pole")]
-        [Display(Name = "FirstName")]
-        public string FirstName { get; set; }
+        public string CompanyName { get; set; }
 
-        [Required(ErrorMessage = "Povinne pole")]
-        [Display(Name = "Surname")]
-        public string Surname { get; set; }
-
-        [Required(ErrorMessage = "Povinne pole")]
-        [Display(Name = "Street")]
-        public string Street { get; set; }
-
-        [Required(ErrorMessage = "Povinne pole")]
-        [Display(Name = "StreetNumber")]
-        public string StreetNumber { get; set; }
-
-        [Required(ErrorMessage = "Povinne pole")]
-        [Display(Name = "Ico")]
+        [Required(ErrorMessage = "Required field!")]
         public string Ico { get; set; }
 
-        [Required(ErrorMessage = "Povinne pole")]
-        [Display(Name = "Dic")]
-        public string Dic { get; set; }
+        [Required(ErrorMessage = "Required field!")]
+        [DataType(DataType.PhoneNumber)]
+        public string CompanyPhoneNumber { get; set; }
 
-        [Required(ErrorMessage = "Povinne pole")]
-        [Display(Name = "Specialization")]
-        public string Specialization { get; set; }       
+        [DataType(DataType.PhoneNumber)]
+        public string CompanyAdditionalPhoneNumber { get; set; }
+
+        [Required(ErrorMessage = "Required field!")]
+        public string CompanyStreet { get; set; }
+
+        [Required(ErrorMessage = "Required field!")]
+        public string CompanyStreetNumber { get; set; }
+
+        [Required(ErrorMessage = "Required field!")]
+        public string CompanyPostalCode { get; set; }
+
+        [Required(ErrorMessage = "Required field!")]
+        public ICollection<CategoriesModel> Categories { get; set; }
     }
 }

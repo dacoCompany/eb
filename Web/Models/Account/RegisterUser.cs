@@ -2,21 +2,34 @@
 
 namespace Web.eBado.Models.Account
 {
-    public class RegisterUser : RegisterBase
-    {
-        [Display(Name = "PostalCode")]
-        public string PostalCode { get; set; }
+    public class RegisterUser
+    { 
+        public string Title { get; set; }
 
-        [Display(Name = "FirstName")]
         public string FirstName { get; set; }
 
-        [Display(Name = "Surname")]
         public string Surname { get; set; }
 
-        [Display(Name = "Street")]
+        [Required(ErrorMessage = "Required field!")]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "Required field!")]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Required field!")]
+        public string RepeatPassword { get; set; }
+
+        [DataType(DataType.PhoneNumber)]
+        public string PhoneNumber { get; set; }
+
+        [DataType(DataType.PhoneNumber)]
+        public string AdditionalPhoneNumber { get; set; }
+
         public string Street { get; set; }
 
-        [Display(Name = "StreetNumber")]
         public string StreetNumber { get; set; }
+
+        public string PostalCode { get; set; }
     }
 }

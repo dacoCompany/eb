@@ -189,14 +189,12 @@
     <Compile Include="Helpers\ImageHandler.cs" />
     <Compile Include="IoC\NinjectResolver.cs" />
     <Compile Include="Models\Account\BatchGalleryModel.cs" />
+    <Compile Include="Models\Account\CategoriesModel.cs" />
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
     <Compile Include="Models\Account\ChangeSettingsModel.cs" />
     <Compile Include="Models\Account\ForgotPasswordModel.cs" />
     <Compile Include="Models\Account\LoginModel.cs" />
-    <Compile Include="Models\Account\RegisterBase.cs" />
     <Compile Include="Models\Account\RegisterCompany.cs" />
-    <Compile Include="Models\Account\RegisterPartTime.cs" />
-    <Compile Include="Models\Account\RegisterSelfEmployed.cs" />
     <Compile Include="Models\Account\RegisterUser.cs" />
     <Compile Include="Models\Account\UserAccountSettingsModel.cs" />
     <Compile Include="Models\Shared\FileModel.cs" />
@@ -210,6 +208,7 @@
     <Content Include="Content\BaseContent\css\button.css" />
     <Content Include="Content\BaseContent\css\font-awesome.min.css" />
     <Content Include="Content\BaseContent\css\jquery-ui.css" />
+    <Content Include="Content\BaseContent\css\check_radio.css" />
     <Content Include="Content\BaseContent\css\user-settings.css" />
     <Content Include="Content\BaseContent\css\media-queries.css" />
     <Content Include="Content\BaseContent\css\register.css" />
@@ -586,8 +585,6 @@
     <Content Include="Views\Home\Index2.cshtml" />
     <Content Include="Views\Home\Index3.cshtml" />
     <Content Include="Views\Account\RegisterCompany.cshtml" />
-    <Content Include="Views\Account\RegisterPartTime.cshtml" />
-    <Content Include="Views\Account\RegisterSelfEmployed.cshtml" />
     <Content Include="Views\Account\RegisterUser.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />

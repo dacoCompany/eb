@@ -20,18 +20,14 @@
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="basic">
                             <form>
+                                <div class="col-sm-12 reg-font" id="error_display_div"></div>
+
                                 <div class="col-sm-12 reg-font">Prihlasovacie údaje</div>
                                 <hr class="col-sm-12 transparent" />
                                 <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Email*" } })
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Email*", @id="myId" } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.Email)
-                                    </label>
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.AccountName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Užívateľské meno*" } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessageFor(model => model.AccountName)
                                     </label>
                                 </div>
                                 <div class="form-group col-sm-6">
@@ -74,7 +70,7 @@
                                         @Html.ValidationMessageFor(model => model.Surname)
                                     </label>
                                 </div>
-                                <div class="col-sm-12 reg-font">Kontaktné údaje spoločnosti</div>
+                                <div class="col-sm-12 reg-font">Kontaktné údaje</div>
                                 <hr class="col-sm-12 transparent" />
                                 <div class="form-group col-sm-4">
                                     <input type="text" class="form-control txt-lg" id="txtPostalCode" placeholder="PSC" />
@@ -107,3 +103,4 @@
 
 
 }
+

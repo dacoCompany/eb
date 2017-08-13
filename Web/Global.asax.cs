@@ -20,25 +20,25 @@ namespace Web.eBado
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
 
-        protected void Application_AcquireRequestState(object sender, EventArgs e)
-        {
-            string requestLang = (string)HttpContext.Current.Request.RequestContext.RouteData.Values["lang"];
+        //protected void Application_AcquireRequestState(object sender, EventArgs e)
+        //{
+        //    string requestLang = (string)HttpContext.Current.Request.RequestContext.RouteData.Values["lang"];
 
-            CultureInfo ci;
+        //    CultureInfo ci;
 
-            if (string.IsNullOrEmpty(requestLang))
-            {
-                string langName = "en-US";
-                ci = new CultureInfo(langName);
-            }
-            else
-            {
-                ci = new CultureInfo(requestLang);
-            }
+        //    if (string.IsNullOrEmpty(requestLang))
+        //    {
+        //        string langName = "en-US";
+        //        ci = new CultureInfo(langName);
+        //    }
+        //    else
+        //    {
+        //        ci = new CultureInfo(requestLang);
+        //    }
 
-            Thread.CurrentThread.CurrentUICulture = ci;
-            Thread.CurrentThread.CurrentCulture = ci;
-        }
+        //    Thread.CurrentThread.CurrentUICulture = ci;
+        //    Thread.CurrentThread.CurrentCulture = ci;
+        //}
 
     }
 }
