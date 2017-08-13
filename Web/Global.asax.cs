@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
@@ -22,23 +23,54 @@ namespace Web.eBado
 
         protected void Application_AcquireRequestState(object sender, EventArgs e)
         {
-            string requestLang = (string)HttpContext.Current.Request.RequestContext.RouteData.Values["lang"];
+            var langCookie = HttpContext.Current.Request.Cookies["lang"];
 
             CultureInfo ci;
 
-            if (string.IsNullOrEmpty(requestLang))
+            // Get the language from cookie value, if not present(first call to page), set it based on browser language
+            if (langCookie != null)
             {
-                string langName = "en-US";
-                ci = new CultureInfo(langName);
+                ci = GetCultureInfo(langCookie.Value);
             }
             else
             {
-                ci = new CultureInfo(requestLang);
+                string[] requestLang = HttpContext.Current.Request.UserLanguages;
+                
+                if (requestLang == null || !requestLang.Any())
+                {
+                    string langName = "en-US";
+                    ci = new CultureInfo(langName);
+                }
+                else
+                {
+                    string lang = requestLang.First();
+                    ci = GetCultureInfo(lang);
+                }
+
+                langCookie = new HttpCookie("lang", ci.Name) { HttpOnly = true };
+
+                HttpContext.Current.Response.AppendCookie(langCookie);
             }
+            
 
             Thread.CurrentThread.CurrentUICulture = ci;
             Thread.CurrentThread.CurrentCulture = ci;
         }
 
+        private CultureInfo GetCultureInfo(string lang)
+        {
+            CultureInfo ci;
+            try
+            {
+                ci = new CultureInfo(lang);
+            }
+            catch (CultureNotFoundException exception)
+            {
+                Console.WriteLine(exception);
+                string langName = "en-US";
+                ci = new CultureInfo(langName);
+            }
+            return ci;
+        }
     }
 }
