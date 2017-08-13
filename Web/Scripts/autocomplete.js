@@ -2,7 +2,7 @@ $(function () {
     $("#txtPostalCode").autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: '/Manage/GetPostalCodes/',
+                url: '/Manage/GetPostalCodes',
                 data: "{ 'prefix': '" + request.term + "'}",
                 dataType: "json",
                 type: "POST",

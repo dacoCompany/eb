@@ -30,21 +30,8 @@ namespace Web.eBado.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult RegisterPartTime()
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
-        public ActionResult RegisterSelfEmployed()
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
         public ActionResult RegisterCompany()
         {
-            // GetCategories();
             return View();
         }
 
@@ -110,15 +97,7 @@ namespace Web.eBado.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult RegisterPartTime(RegisterPartTime model)
-        {
-            return View(model);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public ActionResult RegisterSelfEmployed(RegisterSelfEmployed model)
+        public ActionResult RegisterCompany(RegisterCompany model)
         {
             return View(model);
         }
