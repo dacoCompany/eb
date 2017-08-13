@@ -18,7 +18,6 @@ namespace Infrastructure.Common.DB
         private Repository<AddressDbo> addressRepository;
         private Repository<CategoryDbo> categoryRepository;
         private Repository<LocationDbo> locationRepository;
-        private Repository<MainCategoryDbo> mainCategoryRepository;
         private Repository<SubCategoryDbo> subCategoryRepository;
         private Repository<UserDetailsDbo> userDetailsRepository;
         private Repository<UserRoleDbo> userRoleRepository;
@@ -64,14 +63,6 @@ namespace Infrastructure.Common.DB
         /// The location repository.
         /// </value>
         public IRepository<LocationDbo> LocationRepository => locationRepository ?? (locationRepository = new Repository<LocationDbo>(context));
-
-        /// <summary>
-        /// Gets the main category repository.
-        /// </summary>
-        /// <value>
-        /// The main category repository.
-        /// </value>
-        public IRepository<MainCategoryDbo> MainCategoryRepository => mainCategoryRepository ?? (mainCategoryRepository = new Repository<MainCategoryDbo>(context));
 
         /// <summary>
         /// Gets the sub category repository.

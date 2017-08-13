@@ -12,7 +12,6 @@ namespace Infrastructure.Common.DB
         IRepository<AddressDbo> AddressRepository { get; }
         IRepository<CategoryDbo> CategoryRepository { get; }
         IRepository<LocationDbo> LocationRepository { get; }
-        IRepository<MainCategoryDbo> MainCategoryRepository { get; }
         IRepository<SubCategoryDbo> SubCategoryRepository { get; }
         IRepository<UserDetailsDbo> UserDetailsRepository { get; }
         IRepository<UserRoleDbo> UserRoleRepository { get; }

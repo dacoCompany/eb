@@ -18,6 +18,7 @@ namespace Infrastructure.Common.DB
         public CategoryDbo()
         {
             this.SubCategories = new HashSet<SubCategoryDbo>();
+            this.Category2CompanyDetails = new HashSet<Category2CompanyDetailsDbo>();
         }
 
         public int Id { get; set; }
@@ -26,10 +27,10 @@ namespace Infrastructure.Common.DB
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
-        public int MainCategoryId { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SubCategoryDbo> SubCategories { get; set; }
-        public virtual MainCategoryDbo MainCategory { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Category2CompanyDetailsDbo> Category2CompanyDetails { get; set; }
     }
 }

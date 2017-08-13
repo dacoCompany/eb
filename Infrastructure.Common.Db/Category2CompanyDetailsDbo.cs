@@ -10,26 +10,17 @@
 namespace Infrastructure.Common.DB
 {
     using System;
-    using System.Collections.Generic;
 
-    public partial class SubCategoryDbo : IEntity
+    public partial class Category2CompanyDetailsDbo : IEntity
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public SubCategoryDbo()
-        {
-            this.SubCategory2CompanyDetails = new HashSet<SubCategory2CompanyDetailsDbo>();
-        }
-
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public Nullable<int> CompanyDetailsId { get; set; }
+        public Nullable<int> CategorId { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
-        public int CategoryId { get; set; }
 
         public virtual CategoryDbo Category { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SubCategory2CompanyDetailsDbo> SubCategory2CompanyDetails { get; set; }
+        public virtual CompanyDetailsDbo CompanyDetails { get; set; }
     }
 }

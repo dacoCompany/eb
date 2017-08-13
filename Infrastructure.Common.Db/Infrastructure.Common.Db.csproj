@@ -75,6 +75,9 @@
     <Compile Include="BatchAttachmentDbo.cs">
       <DependentUpon>EBADOModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Category2CompanyDetailsDbo.cs">
+      <DependentUpon>EBADOModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="CategoryDbo.cs">
       <DependentUpon>EBADOModel.tt</DependentUpon>
     </Compile>
@@ -117,11 +120,11 @@
     <Compile Include="LocationDbo.cs">
       <DependentUpon>EBADOModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="MainCategoryDbo.cs">
-      <DependentUpon>EBADOModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
+    <Compile Include="SubCategory2CompanyDetailsDbo.cs">
+      <DependentUpon>EBADOModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="SubCategoryDbo.cs">
       <DependentUpon>EBADOModel.tt</DependentUpon>
     </Compile>

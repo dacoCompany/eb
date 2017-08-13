@@ -1,12 +1,16 @@
 ﻿using Infrastructure.Common.DB;
+using Infrastructure.Common.Enums;
+using Infrastructure.Common.Validations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web.Mvc;
+using Web.eBado.IoC;
 using Web.eBado.Models.Account;
 using Web.eBado.Models.Shared;
+using Web.eBado.Validators;
 using WebAPIFactory.Configuration.Core;
 
 namespace Web.eBado.Controllers
@@ -14,6 +18,12 @@ namespace Web.eBado.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        #region Constants
+
+        const string AllowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789";
+
+        #endregion
+
         #region HTTP GET
 
         [AllowAnonymous]
@@ -104,22 +114,53 @@ namespace Web.eBado.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult RegisterUser(RegisterUser model)
         {
-            return View(model);
-        }
+            using (var uow = NinjectResolver.GetInstance<IUnitOfWork>())
+            {
+                var validationResult = new ValidationResultCollection();
+                AccountValidator.ValidateUserRegistration(uow, validationResult, model);
 
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public ActionResult RegisterPartTime(RegisterPartTime model)
-        {
-            return View(model);
-        }
+                if (ModelState.IsValid)
+                {
+                    var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Code == UserRole.StandardUser.ToString());
+                    var companyType = uow.CompanyTypeRepository.FirstOrDefault(ct => ct.Code == model.CompanyType.ToString());
 
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public ActionResult RegisterSelfEmployed(RegisterSelfEmployed model)
-        {
+
+                    var userDetails = new UserDetailsDbo
+                    {
+                        Email = model.Email,
+                        Password = model.Password,
+                        Salt = GenerateSalt(),
+                        Title = model.Title,
+                        FirstName = model.FirstName,
+                        Surname = model.Surname,
+                        PhoneNumber = model.PhoneNumber,
+                        AdditionalPhoneNumber = model.AdditionalPhoneNumber,
+                        DisplayName = string.Format("{0} {1}", model.FirstName, model.Surname),
+                        UserRoleId = userRole.Id,
+                    };
+                    userDetails.Addresses.Add(new AddressDbo
+                    {
+                        Street = model.Street,
+                        Number = model.StreetNumber,
+                        IsBillingAddress = true,
+                    });
+
+                    var companyDetails = new CompanyDetailsDbo
+                    {
+                        Name = model.CompanyName,
+                        PhoneNumber = model.CompanyPhoneNumber,
+                        AdditionalPhoneNumber = model.CompanyAdditionalPhoneNumber,
+                        CompanyTypeId = companyType.Id,
+                    };
+                    companyDetails.Addresses.Add(new AddressDbo
+                    {
+                        Street = model.CompanyStreet,
+                        Number = model.CompanyStreetNumber,
+                        IsBillingAddress = true,
+                    });
+                }
+            }
+
             return View(model);
         }
 
@@ -166,24 +207,10 @@ namespace Web.eBado.Controllers
 
         #region Private methods
 
-        private static string GeneratePassword()
-        {
-            int length = 15;
-            const string allowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789";
-            var randNum = new Random();
-            var chars = new char[length];
-            var allowedCharCount = allowedChars.Length;
-            for (var i = 0; i <= length - 1; i++)
-            {
-                chars[i] = allowedChars[Convert.ToInt32((allowedChars.Length) * randNum.NextDouble())];
-            }
-            return new string(chars);
-        }
-
         private static string GenerateSalt()
         {
             int length = 10;
-            const string allowedChars = "abcdefghABCDEFGH0123456789";
+            const string allowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789";
             var randNum = new Random();
             var chars = new char[length];
             var allowedCharCount = allowedChars.Length;

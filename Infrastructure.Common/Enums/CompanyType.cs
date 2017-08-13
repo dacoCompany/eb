@@ -1,6 +1,6 @@
 ﻿namespace Infrastructure.Common.Enums
 {
-    public enum AccountType
+    public enum CompanyType
     {
         User = 1,
         PartTime = 2,

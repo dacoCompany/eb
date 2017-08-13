@@ -14,6 +14,7 @@
 			[Phone_Number] INT,
 			[Additional_Phone_Number] INT,
 			[Email] VARCHAR(50) UNIQUE NOT NULL,
+			[Salt] VARCHAR (25) NOT NULL,
 			[Password] VARCHAR(255) NOT NULL,
 			[Is_Active] BIT NOT NULL DEFAULT 'true',
 			[Date_Created] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
@@ -177,19 +178,6 @@
 		)
 		PRINT 'Table created successfully'
 
-		PRINT 'Creating Table [Main_Category]'
-		CREATE TABLE [Main_Category]
-		(
-			[Id] INT IDENTITY(1,1),
-			[Name] VARCHAR(50) NOT NULL,
-			[Description] VARCHAR(100),
-			[Is_Active] BIT NOT NULL DEFAULT 'true',
-			[Date_Created] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			[Date_Modified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			CONSTRAINT PK_Main_Category_Id PRIMARY KEY (Id),
-		)
-		PRINT 'Table created successfully'
-
 		PRINT 'Creating Table [Category]'
 		CREATE TABLE [Category]
 		(
@@ -242,6 +230,32 @@
 		)
 		PRINT 'Table created successfully'
 
+		PRINT 'Creating Table [Category_2_Company_Details]'
+		CREATE TABLE [Category_2_Company_Details]
+		(
+			[Id] INT IDENTITY(1,1),
+			[Company_Details_Id] INT,
+			[Category_Id] INT,
+			[Is_Active] BIT NOT NULL DEFAULT 'true',
+			[Date_Created] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[Date_Modified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PK_Category_2_Company_Details_Id PRIMARY KEY(Id) 
+		)
+		PRINT 'Table created successfully'
+
+		PRINT 'Creating Table [Sub_Category_2_Company_Details]'
+		CREATE TABLE [Sub_Category_2_Company_Details]
+		(
+			[Id] INT IDENTITY(1,1),
+			[Company_Details_Id] INT,
+			[Sub_Category_Id] INT,
+			[Is_Active] BIT NOT NULL DEFAULT 'true',
+			[Date_Created] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[Date_Modified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PK_Sub_Category_2_Company_Details_Id PRIMARY KEY(Id) 
+		)
+		PRINT 'Table created successfully'
+
 		/***** Creating foreign keys *****/
 
 		PRINT 'Creating foreign keys for table [Company_Details_2_User_Details]'
@@ -259,19 +273,8 @@
 		ALTER TABLE [Company_Details]
 		ADD [Company_Type_Id] INT NOT NULL
 		ALTER TABLE [Company_Details]
-		ADD [Sub_Category_Id] INT NOT NULL
-		ALTER TABLE [Company_Details]
 		ADD	CONSTRAINT FK_Company_Type FOREIGN KEY (Company_Type_Id) REFERENCES Company_Type(Id)
-		ALTER TABLE [Company_Details]
-		ADD	CONSTRAINT FK_Sub_Category FOREIGN KEY (Sub_Category_Id) REFERENCES Sub_Category(Id)
 		PRINT 'Foreign keys successfully created'
-
-		PRINT 'Creating foreign key for table [Category]'
-		ALTER TABLE [Category]
-		ADD [Main_Category_Id] INT NOT NULL
-		ALTER TABLE [Category]
-		ADD CONSTRAINT FK_Main_Category FOREIGN KEY (Main_Category_Id) REFERENCES Main_Category(Id)
-		PRINT 'Foreign key successfully created'
 
 		PRINT 'Creating foreign keys for table [Sub_Category]'
 		ALTER TABLE [Sub_Category]
@@ -333,6 +336,21 @@
 		ALTER TABLE [Batch_Attachment]
 		ADD CONSTRAINT FK_Company_Details_Batch_Attachment_Id FOREIGN KEY (Company_Details_Id) REFERENCES Company_Details(Id)
 		PRINT 'Foreign key successfully created'
+
+		PRINT 'Creating foreign keys for table [Category_2_Company_Details]'
+		ALTER TABLE [Category_2_Company_Details]
+		ADD	CONSTRAINT FK_Category_2_Company_Details_Company_Details FOREIGN KEY (Company_Details_Id) REFERENCES Company_Details(Id)
+		ALTER TABLE [Category_2_Company_Details]
+		ADD	CONSTRAINT FK_Category_2_Company_Details_Category FOREIGN KEY (Category_Id) REFERENCES Category(Id)
+		PRINT 'Foreign keys successfully created'
+
+		PRINT 'Creating foreign keys for table [Sub_Category_2_Company_Details]'
+		ALTER TABLE [Sub_Category_2_Company_Details]
+		ADD	CONSTRAINT FK_Sub_Category_2_Company_Details_Company_Details FOREIGN KEY (Company_Details_Id) REFERENCES Company_Details(Id)
+		ALTER TABLE [Sub_Category_2_Company_Details]
+		ADD	CONSTRAINT FK_Sub_Category_2_Company_Details_Sub_Category FOREIGN KEY (Sub_Category_Id) REFERENCES Sub_Category(Id)
+		PRINT 'Foreign keys successfully created'
+
 		PRINT 'Create script finished succesfully'
 				
 	COMMIT TRANSACTION
