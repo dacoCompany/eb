@@ -1,37 +1,36 @@
 ﻿using Infrastructure.Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Infrastructure.Resources;
+using System.Linq;
+using System.Web;
 
 namespace Web.eBado.Models.Account
 {
     public class RegisterCompany : RegisterUser
     {
-        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
-        public AccountType CompanyType { get; set; }
+        public CompanyType CompanyType { get; set; }
 
+        [Required(ErrorMessage = "Required field!")]
         public string CompanyName { get; set; }
 
-        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         public string Ico { get; set; }
 
-        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
+        [Required(ErrorMessage = "Required field!")]
         [DataType(DataType.PhoneNumber)]
-        public string CompanyPhoneNumber { get; set; }
+        public int? CompanyPhoneNumber { get; set; }
 
         [DataType(DataType.PhoneNumber)]
-        public string CompanyAdditionalPhoneNumber { get; set; }
+        public int? CompanyAdditionalPhoneNumber { get; set; }
 
-        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         public string CompanyStreet { get; set; }
 
-        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         public string CompanyStreetNumber { get; set; }
 
-        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
-        public int CompanyPostalCode { get; set; }
+        [Required(ErrorMessage = "Required field!")]
+        public string CompanyPostalCode { get; set; }
 
-        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
-        public ICollection<CategoriesModel> Categories { get; set; }
+        [Required(ErrorMessage = "Required field!")]
+        public ICollection<string> Categories { get; set; }
     }
 }

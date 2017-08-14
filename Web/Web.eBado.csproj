@@ -189,11 +189,11 @@
     <Compile Include="Helpers\ImageHandler.cs" />
     <Compile Include="IoC\NinjectResolver.cs" />
     <Compile Include="Models\Account\BatchGalleryModel.cs" />
-    <Compile Include="Models\Account\CategoriesModel.cs" />
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
     <Compile Include="Models\Account\ChangeSettingsModel.cs" />
     <Compile Include="Models\Account\ForgotPasswordModel.cs" />
     <Compile Include="Models\Account\LoginModel.cs" />
+    <Compile Include="Models\Account\RegisterCompany.cs" />
     <Compile Include="Models\Account\RegisterUser.cs" />
     <Compile Include="Models\Account\UserAccountSettingsModel.cs" />
     <Compile Include="Models\Shared\CategoriesModel.cs" />
