@@ -1,6 +1,7 @@
 ﻿using Infrastructure.Common.Enums;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Infrastructure.Resources;
 using Web.eBado.Models.Shared;
 
 namespace Web.eBado.Models.Account
@@ -13,14 +14,14 @@ namespace Web.eBado.Models.Account
 
         public string Surname { get; set; }
 
-        [Required(ErrorMessage = "Required field!")]
+        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         [EmailAddress]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Required field!")]
+        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "Required field!")]
+        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         public string RepeatPassword { get; set; }
 
         [DataType(DataType.PhoneNumber)]

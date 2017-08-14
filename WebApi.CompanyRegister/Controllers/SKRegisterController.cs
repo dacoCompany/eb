@@ -16,7 +16,9 @@ namespace WebApi.CompanyRegister.Controllers
     public class SKRegisterController : ApiController
     {
         private bool searchPage = false;
+        private bool searchPage2 = false;
         private Uri baseUrl = new Uri("http://orsr.sk/search_ico.asp");
+        private Uri baseUrl2 = new Uri("http://www.zrsr.sk/zr_ico.aspx");
         private CompanyDetailsModel model;
         private string companyId;
 
@@ -40,6 +42,102 @@ namespace WebApi.CompanyRegister.Controllers
             th.Join(5000);
             
             return Ok(model);
+        }
+
+        [HttpGet]
+        [ResponseType(typeof(CompanyDetailsModel))]
+        public IHttpActionResult GetCompanyDetailsById2(string id)
+        {
+            companyId = id.Replace(" ", string.Empty);
+
+            CompanyDetailsModel response = null;
+            var th = new Thread(() =>
+            {
+                var br = new WebBrowser();
+                br.DocumentCompleted += Br_DocumentCompleted2;
+                br.Navigate(baseUrl2);
+                Application.Run();
+                response = model;
+            });
+            th.SetApartmentState(ApartmentState.STA);
+            th.Start();
+            th.Join(5000);
+
+            return Ok(model);
+        }
+
+        private void Br_DocumentCompleted2(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            var document = ((WebBrowser)sender).Document;
+
+            if (!searchPage2)
+            {
+                foreach (HtmlElement element in document.GetElementsByTagName("input"))
+                {
+                    if (element.GetAttribute("name") == "tico")
+                    {
+                        element.SetAttribute("Value", companyId);
+                        break;
+                    }
+                }
+                foreach (HtmlElement element in document.GetElementsByTagName("input"))
+                {
+                    if (element.GetAttribute("value") == "Vyhľadať")
+                    {
+                        element.InvokeMember("click");
+                        searchPage2 = true;
+                        break;
+                    }
+                }
+            }
+
+            string url = document.Url.AbsoluteUri;
+            string hrefValue = null;
+            if (url.Contains("zr_browse"))
+            {
+                WebClient webClient = new WebClient();
+                string page = webClient.DownloadString(url);
+
+                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+                doc.LoadHtml(page);
+
+                foreach (HtmlNode link in doc.DocumentNode.Descendants("a[@href]"))
+                {
+                    string linkName = link.InnerText;
+                    if (linkName == "Aktuálny")
+                    {
+                        hrefValue = link.GetAttributeValue("href", string.Empty);
+                    }
+                }
+            }
+
+            string fullLink = ("http://ww.zrsr.sk/" + hrefValue).Replace("&amp;", "&");
+            if (fullLink.Contains("ID"))
+            {
+                WebClient webClient = new WebClient();
+                string page = webClient.DownloadString(fullLink);
+
+                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+                doc.LoadHtml(page);
+
+                var panelDiv = doc.DocumentNode.Descendants("div").FirstOrDefault(d => d.Attributes["id"].Value == "panel1")?.Descendants("dl").FirstOrDefault();
+
+                if (panelDiv == null)
+                {
+                    model = null;
+                    return;
+                }
+                
+                var pNodes = (from div in panelDiv.Descendants("dd")
+                    select div.InnerText).ToList();
+
+                model = new CompanyDetailsModel
+                {
+                    Name = pNodes[0],
+                    Ico = pNodes[1],
+                    PostCode = GetPostCode2(pNodes[2])
+                };
+            }
         }
 
         private void Br_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
@@ -135,6 +233,15 @@ namespace WebApi.CompanyRegister.Controllers
                 return null;
 
             var match = Regex.Match(address, @"(\d{3}\s\d{2})", RegexOptions.None);
+            return match.Success ? match.Result("$1") : null;
+        }
+
+        private string GetPostCode2(string address)
+        {
+            if (string.IsNullOrEmpty(address))
+                return null;
+
+            var match = Regex.Match(address, @"(\d{5})", RegexOptions.None);
             return match.Success ? match.Result("$1") : null;
         }
     }
