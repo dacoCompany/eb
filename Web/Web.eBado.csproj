@@ -189,11 +189,11 @@
     <Compile Include="Helpers\ImageHandler.cs" />
     <Compile Include="IoC\NinjectResolver.cs" />
     <Compile Include="Models\Account\BatchGalleryModel.cs" />
-    <Compile Include="Models\Account\CategoriesModel.cs" />
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
     <Compile Include="Models\Account\ChangeSettingsModel.cs" />
     <Compile Include="Models\Account\ForgotPasswordModel.cs" />
     <Compile Include="Models\Account\LoginModel.cs" />
+    <Compile Include="Models\Account\RegisterCompany.cs" />
     <Compile Include="Models\Account\RegisterUser.cs" />
     <Compile Include="Models\Account\UserAccountSettingsModel.cs" />
     <Compile Include="Models\Shared\CategoriesModel.cs" />
@@ -492,7 +492,6 @@
     <Content Include="Content\jQuery.FileUpload\img\loading.gif" />
     <Content Include="Content\jQuery.FileUpload\img\progressbar.gif" />
     <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\blueimp-gallery2\js\blueimp-gallery-fullscreen.js" />
     <Content Include="Scripts\blueimp-gallery2\js\blueimp-gallery-fullscreen.min.js" />
@@ -538,9 +537,6 @@
     <Content Include="Views\Email\ForgotPassword.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

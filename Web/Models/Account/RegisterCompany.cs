@@ -8,7 +8,7 @@ namespace Web.eBado.Models.Account
     public class RegisterCompany : RegisterUser
     {
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
-        public AccountType CompanyType { get; set; }
+        public CompanyType CompanyType { get; set; }
 
         public string CompanyName { get; set; }
 
@@ -32,6 +32,6 @@ namespace Web.eBado.Models.Account
         public int CompanyPostalCode { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
-        public ICollection<CategoriesModel> Categories { get; set; }
+        public ICollection<string> Categories { get; set; }
     }
 }
