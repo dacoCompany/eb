@@ -14,6 +14,9 @@ namespace Web.eBado
             bundles.Add(new ScriptBundle("~/bundles/jquery_autocomplete")
                .Include("~/Scripts/autocomplete.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/tagify")
+               .Include("~/Scripts/tagify.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/categories")
               .Include("~/Scripts/categories.js"));
 
@@ -39,6 +42,9 @@ namespace Web.eBado
 
             bundles.Add(new StyleBundle("~/Content/check-radio")
                 .Include("~/Content/BaseContent/css/check_radio.css"));
+
+            bundles.Add(new StyleBundle("~/Content/tagify")
+                .Include("~/Content/Tagify/css/tagify.css"));
 
             bundles.Add(new StyleBundle("~/Content/settings")
                .Include("~/Content/BaseContent/css/user-settings.css"));

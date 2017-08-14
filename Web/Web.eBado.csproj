@@ -491,6 +491,7 @@
     <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload.css" />
     <Content Include="Content\jQuery.FileUpload\img\loading.gif" />
     <Content Include="Content\jQuery.FileUpload\img\progressbar.gif" />
+    <Content Include="Content\Tagify\css\tagify.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\blueimp-gallery2\js\blueimp-gallery-fullscreen.js" />
@@ -534,6 +535,8 @@
     <Content Include="Content\Free-file-icons\icons.ai" />
     <Content Include="Content\Free-file-icons\icons.pdf" />
     <Content Include="Global.app.config" />
+    <Content Include="Scripts\jQuery.tagify.js" />
+    <Content Include="Scripts\tagify.js" />
     <Content Include="Views\Email\ForgotPassword.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
