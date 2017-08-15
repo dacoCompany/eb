@@ -1,36 +1,37 @@
 ﻿using Infrastructure.Common.Enums;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
+using Infrastructure.Resources;
 
 namespace Web.eBado.Models.Account
 {
     public class RegisterCompany : RegisterUser
     {
-        public CompanyType CompanyType { get; set; }
+        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
+        public AccountType CompanyType { get; set; }
 
-        [Required(ErrorMessage = "Required field!")]
         public string CompanyName { get; set; }
 
+        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         public string Ico { get; set; }
 
-        [Required(ErrorMessage = "Required field!")]
+        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         [DataType(DataType.PhoneNumber)]
-        public int? CompanyPhoneNumber { get; set; }
+        public string CompanyPhoneNumber { get; set; }
 
         [DataType(DataType.PhoneNumber)]
-        public int? CompanyAdditionalPhoneNumber { get; set; }
+        public string CompanyAdditionalPhoneNumber { get; set; }
 
+        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         public string CompanyStreet { get; set; }
 
+        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         public string CompanyStreetNumber { get; set; }
 
-        [Required(ErrorMessage = "Required field!")]
-        public string CompanyPostalCode { get; set; }
+        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
+        public int CompanyPostalCode { get; set; }
 
-        [Required(ErrorMessage = "Required field!")]
-        public ICollection<string> Categories { get; set; }
+        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
+        public ICollection<CategoriesModel> Categories { get; set; }
     }
 }
