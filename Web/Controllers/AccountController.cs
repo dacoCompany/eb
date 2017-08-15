@@ -40,18 +40,6 @@ namespace Web.eBado.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult RegisterPartTime()
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
-        public ActionResult RegisterSelfEmployed()
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
         public ActionResult RegisterCompany()
         {
             // GetCategories();
@@ -122,6 +110,45 @@ namespace Web.eBado.Controllers
                 if (ModelState.IsValid)
                 {
                     var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Code == UserRole.StandardUser.ToString());
+
+
+                    var userDetails = new UserDetailsDbo
+                    {
+                        Email = model.Email,
+                        Password = model.Password,
+                        Salt = GenerateSalt(),
+                        Title = model.Title,
+                        FirstName = model.FirstName,
+                        Surname = model.Surname,
+                        PhoneNumber = model.PhoneNumber,
+                        AdditionalPhoneNumber = model.AdditionalPhoneNumber,
+                        DisplayName = string.Format("{0} {1}", model.FirstName, model.Surname),
+                        UserRoleId = userRole.Id,
+                    };
+                    userDetails.Addresses.Add(new AddressDbo
+                    {
+                        Street = model.Street,
+                        Number = model.StreetNumber,
+                        IsBillingAddress = true,
+                    });
+                }
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult RegisterCompany(RegisterCompany model)
+        {
+            using (var uow = NinjectResolver.GetInstance<IUnitOfWork>())
+            {
+                var validationResult = new ValidationResultCollection();
+                AccountValidator.ValidateUserRegistration(uow, validationResult, model);
+
+                if (ModelState.IsValid)
+                {
+                    var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Code == UserRole.StandardUser.ToString());
                     var companyType = uow.CompanyTypeRepository.FirstOrDefault(ct => ct.Code == model.CompanyType.ToString());
 
 
@@ -148,8 +175,8 @@ namespace Web.eBado.Controllers
                     var companyDetails = new CompanyDetailsDbo
                     {
                         Name = model.CompanyName,
-                        PhoneNumber = model.CompanyPhoneNumber,
-                        AdditionalPhoneNumber = model.CompanyAdditionalPhoneNumber,
+                        // PhoneNumber = model.CompanyPhoneNumber,
+                        // AdditionalPhoneNumber = model.CompanyAdditionalPhoneNumber,
                         CompanyTypeId = companyType.Id,
                     };
                     companyDetails.Addresses.Add(new AddressDbo

@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Infrastructure.Common.DB;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Web.eBado.IoC;
 using Web.eBado.Models.Shared;
 
 namespace Web.eBado.Controllers
@@ -23,24 +26,34 @@ namespace Web.eBado.Controllers
         [HttpGet]
         public JsonResult GetPostalCodes(string prefix)
         {
-            List<PostalCodeModel> ObjList = new List<PostalCodeModel>()
-            {
+            //var location = new object();
+            //using (var uow = NinjectResolver.GetInstance<IUnitOfWork>())
+            //{
+            //    location = uow.LocationRepository.FindWhere(x => x.PostalCode.Contains(prefix)
+            //    || x.PostalCode.Replace(" ", "").Contains(prefix.Replace(" ", ""))
+            //    || x.City.Contains(prefix)).Select(x => new
+            //    {
+            //        val = x.Id,
+            //        label = x.PostalCode
+            //    }).ToList();
+            //}
+            //return Json(location, JsonRequestBehavior.AllowGet);
 
-                new PostalCodeModel {Id=1,PostalCode="040 01" },
-                new PostalCodeModel {Id=2,PostalCode="040 02" },
-                new PostalCodeModel {Id=3,PostalCode="040 03" },
-                new PostalCodeModel {Id=4,PostalCode="040 04" },
-                new PostalCodeModel {Id=5,PostalCode="040 05" },
-                new PostalCodeModel {Id=6,PostalCode="040 06" },
-                new PostalCodeModel {Id=7,PostalCode="040 07" }
 
-        };
-            var postalCode = ObjList.Where(p => p.PostalCode.StartsWith(prefix)).Select(s => new
+            var location = new object();
+            using (var uow = NinjectResolver.GetInstance<IUnitOfWork>())
             {
-                val = s.Id,
-                label = s.PostalCode
-            }).ToList();
-            return Json(postalCode, JsonRequestBehavior.AllowGet);
+                location = uow.LocationRepository.FindWhere(x => x.PostalCode.StartsWith(prefix)
+                    || x.PostalCode.Replace(" ", "").StartsWith(prefix.Replace(" ", ""))).Take(10).AsEnumerable()
+                    .Select(loc => new
+                    {
+                        val = loc.Id,
+                        label = $"{loc.PostalCode}-{loc.City}"
+                    }).ToList();
+            }
+
+            return Json(location, JsonRequestBehavior.AllowGet);
+
         }
     }
 }
