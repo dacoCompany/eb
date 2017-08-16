@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Windows.Forms;
@@ -16,9 +18,8 @@ namespace WebApi.CompanyRegister.Controllers
     public class SKRegisterController : ApiController
     {
         private bool searchPage = false;
-        private bool searchPage2 = false;
         private Uri baseUrl = new Uri("http://orsr.sk/search_ico.asp");
-        private Uri baseUrl2 = new Uri("http://www.zrsr.sk/zr_ico.aspx");
+        private Uri baseUrl2 = new Uri("https://www.indexpodnikatela.sk/");
         private CompanyDetailsModel model;
         private string companyId;
 
@@ -50,92 +51,61 @@ namespace WebApi.CompanyRegister.Controllers
         {
             companyId = id.Replace(" ", string.Empty);
 
+            var url = new Uri(baseUrl2, id);
+
             CompanyDetailsModel response = null;
             var th = new Thread(() =>
             {
                 var br = new WebBrowser();
                 br.DocumentCompleted += Br_DocumentCompleted2;
-                br.Navigate(baseUrl2);
+                br.Navigate(url);
                 Application.Run();
                 response = model;
             });
             th.SetApartmentState(ApartmentState.STA);
             th.Start();
-            th.Join(5000);
+            th.Join(8000);
 
             return Ok(model);
         }
 
         private void Br_DocumentCompleted2(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            var document = ((WebBrowser)sender).Document;
+            var document = ((WebBrowser)sender).Document;            
+            string url = document.Url.AbsoluteUri;
 
-            if (!searchPage2)
+            if (url.Contains("hladaj"))
             {
-                foreach (HtmlElement element in document.GetElementsByTagName("input"))
-                {
-                    if (element.GetAttribute("name") == "tico")
-                    {
-                        element.SetAttribute("Value", companyId);
-                        break;
-                    }
-                }
-                foreach (HtmlElement element in document.GetElementsByTagName("input"))
-                {
-                    if (element.GetAttribute("value") == "Vyhľadať")
-                    {
-                        element.InvokeMember("click");
-                        searchPage2 = true;
-                        break;
-                    }
-                }
+                return;
             }
 
-            string url = document.Url.AbsoluteUri;
-            string hrefValue = null;
-            if (url.Contains("zr_browse"))
+            string lastUrlPart = url.Split('/').Last();
+            if (!string.IsNullOrEmpty(lastUrlPart) && lastUrlPart.All(char.IsNumber))
             {
-                WebClient webClient = new WebClient();
+                WebClient webClient = new WebClient { Encoding = Encoding.UTF8 };
                 string page = webClient.DownloadString(url);
 
                 HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
                 doc.LoadHtml(page);
 
-                foreach (HtmlNode link in doc.DocumentNode.Descendants("a[@href]"))
-                {
-                    string linkName = link.InnerText;
-                    if (linkName == "Aktuálny")
+                var node = doc.DocumentNode.Descendants("dl").FirstOrDefault(htmlNode => htmlNode.Attributes["class"].Value == "dl-horizontal info");
+
+                var dts = node.SelectNodes("dt");
+                var dds = node.SelectNodes("dd");
+
+                var pNode = dts.Zip(dds,
+                    (dt, dd) => new
                     {
-                        hrefValue = link.GetAttributeValue("href", string.Empty);
-                    }
-                }
-            }
-
-            string fullLink = ("http://ww.zrsr.sk/" + hrefValue).Replace("&amp;", "&");
-            if (fullLink.Contains("ID"))
-            {
-                WebClient webClient = new WebClient();
-                string page = webClient.DownloadString(fullLink);
-
-                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-                doc.LoadHtml(page);
-
-                var panelDiv = doc.DocumentNode.Descendants("div").FirstOrDefault(d => d.Attributes["id"].Value == "panel1")?.Descendants("dl").FirstOrDefault();
-
-                if (panelDiv == null)
-                {
-                    model = null;
-                    return;
-                }
-                
-                var pNodes = (from div in panelDiv.Descendants("dd")
-                    select div.InnerText).ToList();
+                        Name = HttpUtility.HtmlDecode(dt.InnerText),
+                        Value =HttpUtility.HtmlDecode(dd.InnerText)
+                    });
 
                 model = new CompanyDetailsModel
                 {
-                    Name = pNodes[0],
-                    Ico = pNodes[1],
-                    PostCode = GetPostCode2(pNodes[2])
+                    Ico = pNode.FirstOrDefault(n => n.Name == "IČO")?.Value,
+                    CompanyType = pNode.FirstOrDefault(n => n.Name == "Právna forma")?.Value,
+                    PostCode = GetPostCode2(pNode.FirstOrDefault(n => n.Name == "Sídlo")?.Value),
+                    Name = GetCompanyName(pNode.FirstOrDefault(n => n.Name == "Sídlo")?.Value)
                 };
             }
         }
@@ -241,8 +211,20 @@ namespace WebApi.CompanyRegister.Controllers
             if (string.IsNullOrEmpty(address))
                 return null;
 
-            var match = Regex.Match(address, @"(\d{5})", RegexOptions.None);
+            string cleanString = address.Replace("\t", string.Empty);
+
+            var match = Regex.Match(cleanString, @"(\d{5})", RegexOptions.None);
             return match.Success ? match.Result("$1") : null;
+        }
+
+        private string GetCompanyName(string address)
+        {
+            if (string.IsNullOrEmpty(address))
+                return null;
+
+            string cleanString = address.Replace("\t", string.Empty).Remove(0,2);
+
+            return cleanString.Split('\n').FirstOrDefault();
         }
     }
 }
