@@ -20,8 +20,10 @@ namespace Web.eBado
             bundles.Add(new ScriptBundle("~/bundles/categories")
               .Include("~/Scripts/categories.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/jquery_ui")
+               .Include("~/Scripts/jquery-ui-{version}.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jquery_addons")
-               .Include("~/Scripts/jquery-ui-{version}.js")
                .Include("~/Scripts/jquery.validate.min.js")
                .Include("~/Scripts/respond.js")
                .Include("~/Scripts/modernizr-*")

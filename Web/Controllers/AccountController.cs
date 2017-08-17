@@ -265,22 +265,6 @@ namespace Web.eBado.Controllers
             var userEmail = uow.UserDetailsRepository.FindWhere(ua => ua.Email == email).FirstOrDefault();
             return userEmail == null ? true : false;
         }
-
-        private void GetCategories()
-        {
-            List<SelectListItem> categoriesList = new List<SelectListItem>();
-            using (var uow = new UnitOfWork())
-            {
-                var categories = uow.CategoryRepository.FindAll();
-                categoriesList.Add(new SelectListItem { Text = "---Select---", Value = "0" });
-                foreach (var category in categories.ToList())
-                {
-                    categoriesList.Add(new SelectListItem { Text = category.Name, Value = category.Id.ToString() });
-                }
-            };
-            ViewData["categories"] = categoriesList;
-        }
-
         #endregion
     }
 }
