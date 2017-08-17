@@ -15,7 +15,8 @@ namespace Web.eBado
                .Include("~/Scripts/autocomplete.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/tagify")
-               .Include("~/Scripts/tagify.js"));
+               .Include("~/Scripts/tagify.js")
+               .Include("~/Scripts/jQuery.tagify.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/categories")
               .Include("~/Scripts/categories.js"));

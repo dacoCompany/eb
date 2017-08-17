@@ -11,52 +11,82 @@
 @Styles.Render("~/Content/check-radio")
 @Scripts.Render("~/bundles/jquery_autocomplete")
 <script>
-    $(document).ready(
-        function () {
-            $("#validateBtn").click(function () {
 
-                var btn = $("#validateBtn");
-                var oldText = btn.text();
-                btn.text('');
-                btn.html('<span id=\"spn2\" class=\"glyphicon glyphicon-refresh glyphicon-refresh-animate\"></span>');
-                var cn = $("#txtCompanyNumber").val().replace(" ", "");
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "/Manage/GetCategories"
+        });
 
-                if (cn == null || cn.length < 8) {
-                    return;
-                }
-                
-                $.ajax({
-                    url: "http://localhost:50198/api/SKRegister/GetCompanyDetailsById",
-                    data: JSON.parse("{ \"id\": \"" + cn + "\"}"),
-                    dataType: "json",
-                    type: "GET",
-                    contentType: "application/json; charset=utf-8",
-                    success: function (data) {
-                        if (data != null && data.success) {
-                            $("#txtCompanyName").val(data.Name);
-                            $("#txtCompanyPostalCode").val(data.PostCode != null ? data.PostCode : "");
-                            if (data.CompanyType === "Samostatne podnikajúca fyzická osoba") {
-                                $("#AccountTypeDropDown").val('2');
-                            } else {
-                                $("#AccountTypeDropDown").val('3');
-                            }
-                            $("#companyDiv").show();
-                            btn.text(oldText);
+        return false;
+    //    MyProject.intro = "";
+
+    //    MyProject.intro = "something";
+    //    $.ajax({
+    //        url: '/Manage/GetCategories',
+    //        dataType: "json",
+    //        type: "GET",
+    //        contentType: "application/json; charset=utf-8",
+    //        success: function (data) {
+    //                daco = data;
+    //        },
+    //        error: function (response) {
+    //            alert(response.responseText);
+    //        },
+    //        failure: function (response) {
+    //            alert(response.responseText);
+    //        }
+    //    });
+    //    console.log("IN:\t" + MyProject.intro); // "something"
+
+
+    });
+
+    $(function () {
+        $("#validateBtn").click(function () {
+
+            var btn = $("#validateBtn");
+            var oldText = btn.text();
+            btn.text('');
+            btn.html('<span id=\"spn2\" class=\"glyphicon glyphicon-refresh glyphicon-refresh-animate\"></span>');
+            var cn = $("#txtCompanyNumber").val().replace(" ", "");
+
+            if (cn == null || cn.length < 8) {
+                return;
+            }
+
+            $.ajax({
+                url: "http://localhost:50198/api/SKRegister/GetCompanyDetailsById",
+                data: JSON.parse("{ \"id\": \"" + cn + "\"}"),
+                dataType: "json",
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data != null && data.success) {
+                        $("#txtCompanyName").val(data.Name);
+                        $("#txtCompanyPostalCode").val(data.PostCode != null ? data.PostCode : "");
+                        if (data.CompanyType === "Samostatne podnikajúca fyzická osoba") {
+                            $("#AccountTypeDropDown").val('2');
+                        } else {
+                            $("#AccountTypeDropDown").val('3');
                         }
-                        else {
-                            $("#IcoValidation").text("Sorry! We have not found this company identifier");
-                            btn.text(oldText);
-                        }
-                    },
-                    error: function (response) {
-                        alert(response.responseText);
-                    },
-                    failure: function (response) {
-                        alert(response.responseText);
+                        $("#companyDiv").show();
+                        btn.text(oldText);
                     }
-                });
+                    else {
+                        $("#IcoValidation").text("Sorry! We have not found this company identifier");
+                        btn.text(oldText);
+                    }
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
             });
         });
+    });
 
     $(function () {
         $("#WithoutIco").click(function () {
@@ -67,6 +97,8 @@
             $("#companyDiv").hide();
         });
     });
+
+
 </script>
 
 
@@ -74,7 +106,6 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-
     <div class="container push_top_30">
         <div class="col-md-2"></div>
         <div class="row">
@@ -218,14 +249,15 @@
                                 <button type="submit" id="MyButton" class="form-btn col-sm-12">@Resources.Register2</button>
                             </form>
 
-                            
+
                             <script>
+                                var CatData = @Html.Raw(Json.Encode(@TempData["Categories"]));
                                 var prefix = document.querySelector('textarea[name=tags2]'),
 
                                     tagify2 = new Tagify(prefix, {
                                         enforeWhitelist: true,
                                         maxTags: 6,
-                                        whitelist: [],
+                                        whitelist: CatData,
                                         callbacks: {
                                             add: onAddTag,
                                             remove: onRemoveTag
