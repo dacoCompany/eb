@@ -22,7 +22,7 @@ namespace Web.eBado
         }
 
         protected void Application_AcquireRequestState(object sender, EventArgs e)
-      {
+        {
             var langCookie = HttpContext.Current.Request.Cookies["lang"];
 
             CultureInfo ci;
