@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Infrastructure.Resources;
+using System.Web.Mvc;
 
 namespace Web.eBado.Models.Account
 {
@@ -32,6 +33,6 @@ namespace Web.eBado.Models.Account
         public int CompanyPostalCode { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
-        public ICollection<string> Categories { get; set; }
+        public CategoriesModel Categories { get; set; }
     }
 }

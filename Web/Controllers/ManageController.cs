@@ -1,12 +1,10 @@
 ﻿using Infrastructure.Common.DB;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Web.eBado.IoC;
-using Web.eBado.Models.Shared;
 
 namespace Web.eBado.Controllers
 {
@@ -45,13 +43,14 @@ namespace Web.eBado.Controllers
         public void GetCategories()
         {
             List<string> categoriesList = new List<string>();
-           for(var i=0; i<10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 var text = $"myText{i}";
                 categoriesList.Add(text);
             }
-            
-           TempData["Categories"] = categoriesList;
+
+            // TempData["Categories"] = categoriesList;
+            ViewBag.MultiselectCountry = new MultiSelectList(categoriesList);
         }
 
     }
