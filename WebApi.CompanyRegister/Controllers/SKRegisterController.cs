@@ -103,6 +103,7 @@ namespace WebApi.CompanyRegister.Controllers
                 model = new CompanyDetailsModel
                 {
                     Ico = pNode.FirstOrDefault(n => n.Name == "IČO")?.Value,
+                    Dic = pNode.FirstOrDefault(n => n.Name == "DIČ")?.Value,
                     CompanyType = pNode.FirstOrDefault(n => n.Name == "Právna forma")?.Value,
                     PostCode = GetPostCode2(pNode.FirstOrDefault(n => n.Name == "Sídlo")?.Value),
                     Name = GetCompanyName(pNode.FirstOrDefault(n => n.Name == "Sídlo")?.Value)
