@@ -195,6 +195,7 @@
     <Compile Include="Helpers\ImageHandler.cs" />
     <Compile Include="IoC\NinjectResolver.cs" />
     <Compile Include="Models\Account\BatchGalleryModel.cs" />
+    <Compile Include="Models\Account\CategoriesModel.cs" />
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
     <Compile Include="Models\Account\ChangeSettingsModel.cs" />
     <Compile Include="Models\Account\ForgotPasswordModel.cs" />
@@ -202,7 +203,6 @@
     <Compile Include="Models\Account\RegisterCompany.cs" />
     <Compile Include="Models\Account\RegisterUser.cs" />
     <Compile Include="Models\Account\UserAccountSettingsModel.cs" />
-    <Compile Include="Models\Shared\CategoriesModel.cs" />
     <Compile Include="Models\Shared\FileModel.cs" />
     <Compile Include="Models\Shared\FilesViewModel.cs" />
     <Compile Include="Models\Shared\PostalCodeModel.cs" />
@@ -213,6 +213,7 @@
     <Content Include="Content\BaseContent\css\bootstrap-theme.css" />
     <Content Include="Content\BaseContent\css\bootstrap.css" />
     <Content Include="Content\BaseContent\css\button.css" />
+    <Content Include="Content\BaseContent\css\chosen.css" />
     <Content Include="Content\BaseContent\css\font-awesome.min.css" />
     <Content Include="Content\BaseContent\css\jquery-ui.css" />
     <Content Include="Content\BaseContent\css\check_radio.css" />
@@ -541,6 +542,7 @@
     <Content Include="Content\Free-file-icons\icons.ai" />
     <Content Include="Content\Free-file-icons\icons.pdf" />
     <Content Include="Global.app.config" />
+    <Content Include="Scripts\chosen.jquery.js" />
     <Content Include="Scripts\jQuery.tagify.js" />
     <Content Include="Scripts\tagify.js" />
     <Content Include="Views\Email\ForgotPassword.cshtml">

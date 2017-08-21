@@ -42,8 +42,27 @@ namespace Web.eBado.Controllers
         [AllowAnonymous]
         public ActionResult RegisterCompany()
         {
-            // GetCategories();
-            return View();
+            RegisterCompany model = new RegisterCompany();
+            CategoriesModel cat = new CategoriesModel();
+            cat.AllCategories = GetAllCategories();
+            model.Categories = cat;
+            return View(model);
+        }
+
+        private IEnumerable<SelectListItem> GetAllCategories()
+        {
+            List<SelectListItem> allCars = new List<SelectListItem>();
+            //Add a few cars to make a list of cars
+            allCars.Add(new SelectListItem { Value = "BMW M3 Coupe", Text = "BMW M3 Coupe" });
+            allCars.Add(new SelectListItem { Value = "Aston Martin DB9", Text = "Aston Martin DB9" });
+            allCars.Add(new SelectListItem { Value = "Lamborghini Aventador" });
+            allCars.Add(new SelectListItem { Value = "Maserati Quattroporte" });
+            allCars.Add(new SelectListItem { Value = "Audi R8" });
+            allCars.Add(new SelectListItem { Value = "Mercedes SLS" });
+            allCars.Add(new SelectListItem { Value = "Pagani Zonda R" });
+            allCars.Add(new SelectListItem { Value = "Nissan GTR" });
+
+            return allCars.AsEnumerable();
         }
 
         [AllowAnonymous]
@@ -148,43 +167,58 @@ namespace Web.eBado.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Code == UserRole.StandardUser.ToString());
-                    var companyType = uow.CompanyTypeRepository.FirstOrDefault(ct => ct.Code == model.CompanyType.ToString());
+                    try
+                    {
+                        var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Code == UserRole.StandardUser.ToString());
+                        var companyType = uow.CompanyTypeRepository.FirstOrDefault(ct => ct.Code == model.CompanyType.ToString());
 
 
-                    var userDetails = new UserDetailsDbo
-                    {
-                        Email = model.Email,
-                        Password = model.Password,
-                        Salt = GenerateSalt(),
-                        Title = model.Title,
-                        FirstName = model.FirstName,
-                        Surname = model.Surname,
-                        PhoneNumber = model.PhoneNumber,
-                        AdditionalPhoneNumber = model.AdditionalPhoneNumber,
-                        DisplayName = string.Format("{0} {1}", model.FirstName, model.Surname),
-                        UserRoleId = userRole.Id,
-                    };
-                    userDetails.Addresses.Add(new AddressDbo
-                    {
-                        Street = model.Street,
-                        Number = model.StreetNumber,
-                        IsBillingAddress = true,
-                    });
+                        var userDetails = new UserDetailsDbo
+                        {
+                            Email = model.Email,
+                            Password = model.Password,
+                            Salt = GenerateSalt(),
+                            Title = model.Title,
+                            FirstName = model.FirstName,
+                            Surname = model.Surname,
+                            PhoneNumber = model.PhoneNumber,
+                            AdditionalPhoneNumber = model.AdditionalPhoneNumber,
+                            DisplayName = string.Format("{0} {1}", model.FirstName, model.Surname),
+                            UserRoleId = userRole.Id,
+                        };
+                        userDetails.Addresses.Add(new AddressDbo
+                        {
+                            Street = model.Street,
+                            Number = model.StreetNumber,
+                            IsBillingAddress = true,
+                        });
 
-                    var companyDetails = new CompanyDetailsDbo
+                        var companyDetails = new CompanyDetailsDbo
+                        {
+                            Name = model.CompanyName,
+                            // PhoneNumber = model.CompanyPhoneNumber,
+                            // AdditionalPhoneNumber = model.CompanyAdditionalPhoneNumber,
+                            CompanyTypeId = companyType.Id,
+                        };
+                        companyDetails.Addresses.Add(new AddressDbo
+                        {
+                            Street = model.CompanyStreet,
+                            Number = model.CompanyStreetNumber,
+                            IsBillingAddress = true,
+                        });
+                    }
+                    catch
                     {
-                        Name = model.CompanyName,
-                        // PhoneNumber = model.CompanyPhoneNumber,
-                        // AdditionalPhoneNumber = model.CompanyAdditionalPhoneNumber,
-                        CompanyTypeId = companyType.Id,
-                    };
-                    companyDetails.Addresses.Add(new AddressDbo
-                    {
-                        Street = model.CompanyStreet,
-                        Number = model.CompanyStreetNumber,
-                        IsBillingAddress = true,
-                    });
+                        CategoriesModel cat = new CategoriesModel();
+                        cat.AllCategories = GetAllCategories();
+                        model.Categories = cat;
+                    }
+                }
+                else
+                {
+                    CategoriesModel cat = new CategoriesModel();
+                    cat.AllCategories = GetAllCategories();
+                    model.Categories = cat;
                 }
             }
 
@@ -265,22 +299,6 @@ namespace Web.eBado.Controllers
             var userEmail = uow.UserDetailsRepository.FindWhere(ua => ua.Email == email).FirstOrDefault();
             return userEmail == null ? true : false;
         }
-
-        private void GetCategories()
-        {
-            List<SelectListItem> categoriesList = new List<SelectListItem>();
-            using (var uow = new UnitOfWork())
-            {
-                var categories = uow.CategoryRepository.FindAll();
-                categoriesList.Add(new SelectListItem { Text = "---Select---", Value = "0" });
-                foreach (var category in categories.ToList())
-                {
-                    categoriesList.Add(new SelectListItem { Text = category.Name, Value = category.Id.ToString() });
-                }
-            };
-            ViewData["categories"] = categoriesList;
-        }
-
         #endregion
     }
 }
