@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -22,6 +24,12 @@ namespace WebApi.CompanyRegister.Controllers
         private Uri baseUrl2 = new Uri("https://www.indexpodnikatela.sk/");
         private CompanyDetailsModel model;
         private string companyId;
+        private readonly HttpClient client;
+
+        public SKRegisterController()
+        {
+            this.client = new HttpClient();
+        }
 
         [HttpGet]
         [ResponseType(typeof(CompanyDetailsModel))]
@@ -49,24 +57,71 @@ namespace WebApi.CompanyRegister.Controllers
         [ResponseType(typeof(CompanyDetailsModel))]
         public IHttpActionResult GetCompanyDetailsById2(string id)
         {
+            return InternalServerError();
+
+            //companyId = id.Replace(" ", string.Empty);
+
+            //var url = new Uri(baseUrl2, id);
+
+            //CompanyDetailsModel response = null;
+            //var th = new Thread(() =>
+            //{
+            //    var br = new WebBrowser();
+            //    br.DocumentCompleted += Br_DocumentCompleted2;
+            //    br.Navigate(url);
+            //    Application.Run();
+            //    response = model;
+            //});
+            //th.SetApartmentState(ApartmentState.STA);
+            //th.Start();
+            //th.Join(8000);
+
+            //return Ok(model);
+        }
+
+        [HttpGet]
+        [ResponseType(typeof(CompanyDetailsModel))]
+        public async Task<IHttpActionResult> GetCompanyDetailsById3(string id)
+        {
             companyId = id.Replace(" ", string.Empty);
 
             var url = new Uri(baseUrl2, id);
 
-            CompanyDetailsModel response = null;
-            var th = new Thread(() =>
+            var response = await client.GetAsync(url);
+
+            if (!response.IsSuccessStatusCode)
             {
-                var br = new WebBrowser();
-                br.DocumentCompleted += Br_DocumentCompleted2;
-                br.Navigate(url);
-                Application.Run();
-                response = model;
-            });
-            th.SetApartmentState(ApartmentState.STA);
-            th.Start();
-            th.Join(8000);
+                return BadRequest("Company does not exist.");
+            }
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+            doc.LoadHtml(responseContent);
+
+            var node = doc.DocumentNode.Descendants("dl").FirstOrDefault(htmlNode => htmlNode.Attributes["class"].Value == "dl-horizontal info");
+
+            var dts = node.SelectNodes("dt");
+            var dds = node.SelectNodes("dd");
+
+            var pNode = dts.Zip(dds,
+                (dt, dd) => new
+                {
+                    Name = HttpUtility.HtmlDecode(dt.InnerText),
+                    Value = HttpUtility.HtmlDecode(dd.InnerText)
+                });
+
+            model = new CompanyDetailsModel
+            {
+                Ico = pNode.FirstOrDefault(n => n.Name == "IČO")?.Value,
+                Dic = pNode.FirstOrDefault(n => n.Name == "DIČ")?.Value,
+                CompanyType = pNode.FirstOrDefault(n => n.Name == "Právna forma")?.Value,
+                PostCode = GetPostCode2(pNode.FirstOrDefault(n => n.Name == "Sídlo")?.Value),
+                Name = GetCompanyName(pNode.FirstOrDefault(n => n.Name == "Sídlo")?.Value)
+            };
 
             return Ok(model);
+
         }
 
         private void Br_DocumentCompleted2(object sender, WebBrowserDocumentCompletedEventArgs e)
