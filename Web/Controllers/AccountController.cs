@@ -53,14 +53,18 @@ namespace Web.eBado.Controllers
         {
             List<SelectListItem> allCars = new List<SelectListItem>();
             //Add a few cars to make a list of cars
-            allCars.Add(new SelectListItem { Value = "BMW M3 Coupe", Text = "BMW M3 Coupe" });
-            allCars.Add(new SelectListItem { Value = "Aston Martin DB9", Text = "Aston Martin DB9" });
-            allCars.Add(new SelectListItem { Value = "Lamborghini Aventador" });
-            allCars.Add(new SelectListItem { Value = "Maserati Quattroporte" });
-            allCars.Add(new SelectListItem { Value = "Audi R8" });
-            allCars.Add(new SelectListItem { Value = "Mercedes SLS" });
-            allCars.Add(new SelectListItem { Value = "Pagani Zonda R" });
-            allCars.Add(new SelectListItem { Value = "Nissan GTR" });
+            for (var i = 0; i < 50; i++)
+            {
+                allCars.Add(new SelectListItem { Value = $"Tag Text{i}", Text = $"tag Text{i}" });
+
+            }
+            //allCars.Add(new SelectListItem { Value = "Aston Martin DB9", Text = "Aston Martin DB9" });
+            //allCars.Add(new SelectListItem { Value = "Lamborghini Aventador" });
+            //allCars.Add(new SelectListItem { Value = "Maserati Quattroporte" });
+            //allCars.Add(new SelectListItem { Value = "Audi R8" });
+            //allCars.Add(new SelectListItem { Value = "Mercedes SLS" });
+            //allCars.Add(new SelectListItem { Value = "Pagani Zonda R" });
+            //allCars.Add(new SelectListItem { Value = "Nissan GTR" });
 
             return allCars.AsEnumerable();
         }

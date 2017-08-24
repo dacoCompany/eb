@@ -85,7 +85,7 @@ namespace WebApi.CompanyRegister.Controllers
         {
             companyId = id.Replace(" ", string.Empty);
 
-            var url = new Uri(baseUrl2, id);
+            var url = new Uri(baseUrl2, companyId);
 
             var response = await client.GetAsync(url);
 

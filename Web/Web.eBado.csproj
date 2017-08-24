@@ -225,6 +225,8 @@
     <Content Include="Content\BaseContent\css\style.css" />
     <Content Include="Content\BaseContent\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\BaseContent\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\BaseContent\img\chosen-sprite%402x.png" />
+    <Content Include="Content\BaseContent\img\chosen-sprite.png" />
     <Content Include="Content\BaseContent\img\secure_lock.png" />
     <Content Include="Content\blueimp-gallery2\css\blueimp-gallery-indicator.css" />
     <Content Include="Content\blueimp-gallery2\css\blueimp-gallery-indicator.min.css" />
@@ -498,7 +500,6 @@
     <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload.css" />
     <Content Include="Content\jQuery.FileUpload\img\loading.gif" />
     <Content Include="Content\jQuery.FileUpload\img\progressbar.gif" />
-    <Content Include="Content\Tagify\css\tagify.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\blueimp-gallery2\js\blueimp-gallery-fullscreen.js" />
