@@ -42,8 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\UserPermission.cs" />
+    <Compile Include="Enums\CompanyPermission.cs" />
     <Compile Include="Enums\CompanyType.cs" />
     <Compile Include="Enums\MailMessageType.cs" />
+    <Compile Include="Enums\CompanyRole.cs" />
     <Compile Include="Models\CompanyDetailsModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Enums\UserRole.cs" />

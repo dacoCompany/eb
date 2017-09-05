@@ -12,6 +12,7 @@
     <Folder Include="$(MSBuildThisFileDirectory)Update\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Create\create_script - New.sql" />
     <None Include="$(MSBuildThisFileDirectory)Create\create_script.sql" />
     <None Include="$(MSBuildThisFileDirectory)Insert\insert_script.sql" />
   </ItemGroup>

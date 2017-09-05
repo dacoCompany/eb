@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace Web.eBado.Models.Account
 {
-    public class RegisterCompany : RegisterUser
+    public class RegisterCompanyModel : RegisterUserModel
     {
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         public CompanyType CompanyType { get; set; }
@@ -14,7 +14,9 @@ namespace Web.eBado.Models.Account
         public string CompanyName { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
-        public string Ico { get; set; }
+        public int? Ico { get; set; }
+
+        public int? Dic { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         [DataType(DataType.PhoneNumber)]
@@ -30,7 +32,7 @@ namespace Web.eBado.Models.Account
         public string CompanyStreetNumber { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
-        public int CompanyPostalCode { get; set; }
+        public string CompanyPostalCode { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         public CategoriesModel Categories { get; set; }

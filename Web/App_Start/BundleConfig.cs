@@ -17,6 +17,9 @@ namespace Web.eBado
             bundles.Add(new ScriptBundle("~/bundles/chosen")
                .Include("~/Scripts/chosen.jquery.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/register")
+               .Include("~/Scripts/register.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/categories")
               .Include("~/Scripts/categories.js"));
 

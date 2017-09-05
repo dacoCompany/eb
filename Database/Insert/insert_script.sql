@@ -1,17 +1,30 @@
-	USE [master]
-	
 	BEGIN TRANSACTION
 
 	PRINT 'Insert CompanyType data'
-	INSERT INTO [Company_Type](Name) VALUES ('User')
-	INSERT INTO [Company_Type](Name) VALUES ('PartTime')
-	INSERT INTO [Company_Type](Name) VALUES ('SelfEmployed')
-	INSERT INTO [Company_Type](Name) VALUES ('Company')
+	INSERT INTO [CompanyType](Name,Code) VALUES ('PartTime','1')
+	INSERT INTO [CompanyType](Name,Code) VALUES ('SelfEmployed','2')
+	INSERT INTO [CompanyType](Name,Code) VALUES ('Company','3')
 	PRINT 'Insert CompanyType completed'
 
 	PRINT 'Insert UserRole data'
-	INSERT INTO [User_Role](Name) VALUES ('User')
+	INSERT INTO [UserRole](Name,Code) VALUES ('User','1')
+	INSERT INTO [UserRole](Name,Code) VALUES ('Admin','2')
 	PRINT'Insert UserRole completed'
+
+	PRINT 'Insert CompanyRole data'
+	INSERT INTO CompanyRole(Name,Code) VALUES ('Owner','1')
+	INSERT INTO CompanyRole(Name,Code) VALUES ('Member','2')
+	PRINT'Insert CompanyRole completed'
+
+	PRINT 'Insert CompanyPermission data'
+	INSERT INTO CompanyPermission(Name,Code) VALUES ('Read','1')
+	INSERT INTO CompanyPermission(Name,Code) VALUES ('Write','2')
+	PRINT'Insert CompanyPermission completed'
+
+	PRINT 'Insert UserPermission data'
+	INSERT INTO UserPermission(Name,Code) VALUES ('Read','1')
+	INSERT INTO UserPermission(Name,Code) VALUES ('Write','2')
+	PRINT'Insert UserPermission completed'
 
 	PRINT 'Insert [Location] data'
 /* INSERT QUERY */INSERT INTO [Location](Country,PostalCode,City,County,District,Lat,Lon) VALUES( 'SK','974 01','Špania Dolina','Banskobystrický kraj','Banská Bystrica',48.8075,19.1341);

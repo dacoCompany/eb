@@ -11,26 +11,25 @@ namespace Infrastructure.Common.DB
 {
     using System;
     using System.Collections.Generic;
-
+    
     public partial class UserRoleDbo : IEntity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public UserRoleDbo()
         {
-            this.UsersDetails = new HashSet<UserDetailsDbo>();
+            this.UserDetails = new HashSet<UserDetailDbo>();
             this.UserRole2UserPermission = new HashSet<UserRole2UserPermissionDbo>();
         }
-
+    
         public int Id { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
-        public string Description { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
-
+    
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserDetailsDbo> UsersDetails { get; set; }
+        public virtual ICollection<UserDetailDbo> UserDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserRole2UserPermissionDbo> UserRole2UserPermission { get; set; }
     }

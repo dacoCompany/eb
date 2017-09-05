@@ -10,7 +10,8 @@
 namespace Infrastructure.Common.DB
 {
     using System;
-
+    using System.Collections.Generic;
+    
     public partial class SubCategory2CompanyDetailsDbo : IEntity
     {
         public int Id { get; set; }
@@ -19,8 +20,8 @@ namespace Infrastructure.Common.DB
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
-
-        public virtual CompanyDetailsDbo CompanyDetails { get; set; }
+    
+        public virtual CompanyDetailDbo CompanyDetail { get; set; }
         public virtual SubCategoryDbo SubCategory { get; set; }
     }
 }

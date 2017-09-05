@@ -191,6 +191,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\AccountHelper.cs" />
     <Compile Include="Helpers\FilesHelper.cs" />
     <Compile Include="Helpers\ImageHandler.cs" />
     <Compile Include="IoC\NinjectResolver.cs" />
@@ -200,8 +201,8 @@
     <Compile Include="Models\Account\ChangeSettingsModel.cs" />
     <Compile Include="Models\Account\ForgotPasswordModel.cs" />
     <Compile Include="Models\Account\LoginModel.cs" />
-    <Compile Include="Models\Account\RegisterCompany.cs" />
-    <Compile Include="Models\Account\RegisterUser.cs" />
+    <Compile Include="Models\Account\RegisterCompanyModel.cs" />
+    <Compile Include="Models\Account\RegisterUserModel.cs" />
     <Compile Include="Models\Account\UserAccountSettingsModel.cs" />
     <Compile Include="Models\Shared\FileModel.cs" />
     <Compile Include="Models\Shared\FilesViewModel.cs" />
@@ -545,6 +546,7 @@
     <Content Include="Global.app.config" />
     <Content Include="Scripts\chosen.jquery.js" />
     <Content Include="Scripts\jQuery.tagify.js" />
+    <Content Include="Scripts\register.js" />
     <Content Include="Scripts\tagify.js" />
     <Content Include="Views\Email\ForgotPassword.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

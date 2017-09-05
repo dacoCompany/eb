@@ -11,15 +11,15 @@ namespace Infrastructure.Common.DB
 {
     using System;
     using System.Collections.Generic;
-
+    
     public partial class CompanyTypeDbo : IEntity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public CompanyTypeDbo()
         {
-            this.CompaniesDetails = new HashSet<CompanyDetailsDbo>();
+            this.CompanyDetails = new HashSet<CompanyDetailDbo>();
         }
-
+    
         public int Id { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
@@ -27,8 +27,8 @@ namespace Infrastructure.Common.DB
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
-
+    
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CompanyDetailsDbo> CompaniesDetails { get; set; }
+        public virtual ICollection<CompanyDetailDbo> CompanyDetails { get; set; }
     }
 }

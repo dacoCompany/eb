@@ -10,7 +10,8 @@
 namespace Infrastructure.Common.DB
 {
     using System;
-
+    using System.Collections.Generic;
+    
     public partial class AddressDbo : IEntity
     {
         public int Id { get; set; }
@@ -24,9 +25,9 @@ namespace Infrastructure.Common.DB
         public int LocationId { get; set; }
         public Nullable<int> UserDetailsId { get; set; }
         public Nullable<int> CompanyDetailsId { get; set; }
-
-        public virtual CompanyDetailsDbo CompanyDetails { get; set; }
+    
+        public virtual CompanyDetailDbo CompanyDetail { get; set; }
         public virtual LocationDbo Location { get; set; }
-        public virtual UserDetailsDbo UserDetails { get; set; }
+        public virtual UserDetailDbo UserDetail { get; set; }
     }
 }

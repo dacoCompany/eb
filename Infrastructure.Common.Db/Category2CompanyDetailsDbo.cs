@@ -10,17 +10,18 @@
 namespace Infrastructure.Common.DB
 {
     using System;
-
+    using System.Collections.Generic;
+    
     public partial class Category2CompanyDetailsDbo : IEntity
     {
         public int Id { get; set; }
         public Nullable<int> CompanyDetailsId { get; set; }
-        public Nullable<int> CategorId { get; set; }
+        public Nullable<int> CategoryId { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
-
+    
         public virtual CategoryDbo Category { get; set; }
-        public virtual CompanyDetailsDbo CompanyDetails { get; set; }
+        public virtual CompanyDetailDbo CompanyDetail { get; set; }
     }
 }

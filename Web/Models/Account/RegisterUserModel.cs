@@ -6,7 +6,7 @@ using Web.eBado.Models.Shared;
 
 namespace Web.eBado.Models.Account
 {
-    public class RegisterUser
+    public class RegisterUserModel
     {
         public string Title { get; set; }
 
@@ -25,10 +25,10 @@ namespace Web.eBado.Models.Account
         public string RepeatPassword { get; set; }
 
         [DataType(DataType.PhoneNumber)]
-        public int? PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
 
         [DataType(DataType.PhoneNumber)]
-        public int? AdditionalPhoneNumber { get; set; }
+        public string AdditionalPhoneNumber { get; set; }
 
         public string Street { get; set; }
 

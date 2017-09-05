@@ -11,7 +11,8 @@ namespace Infrastructure.Common.DB
     /// <seealso cref="Infrastructure.Common.DB.IUnitOfWork" />
     public class UnitOfWork : IUnitOfWork
     {
-        private DbContext context = new EBADOEntities(@"metadata=res://*/EBADOModel.csdl|res://*/EBADOModel.ssdl|res://*/EBADOModel.msl;provider=System.Data.SqlClient;provider connection string='data source=ebadodbsrv.database.windows.net;initial catalog=ebado_development;integrated security=False;persist security info=True;user id=ebadoadmin;password=ebado.159;MultipleActiveResultSets=True;App=EntityFramework'");
+        
+        private DbContext context = new EBADOEntitiesTest(@"metadata=res://*/EBADOModel.csdl|res://*/EBADOModel.ssdl|res://*/EBADOModel.msl;provider=System.Data.SqlClient;provider connection string='data source=ebadodbsrv.database.windows.net;initial catalog=testDB;integrated security=False;persist security info=True;user id=ebadoadmin;password=ebado.159;MultipleActiveResultSets=True;App=EntityFramework'");
         private bool disposed = false;
 
         private Repository<CompanyTypeDbo> companyTypeRepository;
@@ -19,11 +20,19 @@ namespace Infrastructure.Common.DB
         private Repository<CategoryDbo> categoryRepository;
         private Repository<LocationDbo> locationRepository;
         private Repository<SubCategoryDbo> subCategoryRepository;
-        private Repository<UserDetailsDbo> userDetailsRepository;
+        private Repository<UserDetailDbo> userDetailsRepository;
         private Repository<UserRoleDbo> userRoleRepository;
         private Repository<BatchAttachmentDbo> batchAttachmentRepository;
         private Repository<AttachmentDbo> attachmentRepository;
-        private Repository<CompanyDetailsDbo> companyDetailsRespository;
+        private Repository<CompanyDetailDbo> companyDetailsRespository;
+        private Repository<CompanyDetails2UserDetailsDbo> companyDetails2UserDetailsRespository;
+        private Repository<Category2CompanyDetailsDbo> category2CompanyDetailsRespository;
+        private Repository<CompanyPermissionDbo> companyPermissionsRespository;
+        private Repository<CompanyRoleDbo> companyRoleRespository;
+        private Repository<CompanyRole2CompanyPermissionDbo> companyRole2CompanyPermissionsRespository;
+        private Repository<SubCategory2CompanyDetailsDbo> subCategory2CompanyDetailsRespository;
+        private Repository<UserPermissionDbo> userPermissionsRespository;
+        private Repository<UserRole2UserPermissionDbo> userRole2UserPermissionsRespository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UnitOfWork"/> class.
@@ -38,7 +47,8 @@ namespace Infrastructure.Common.DB
         /// <value>
         /// The account type repository.
         /// </value>
-        public IRepository<CompanyTypeDbo> CompanyTypeRepository => companyTypeRepository ?? (companyTypeRepository = new Repository<CompanyTypeDbo>(context));
+        public IRepository<CompanyTypeDbo> CompanyTypeRepository =>
+            companyTypeRepository ?? (companyTypeRepository = new Repository<CompanyTypeDbo>(context));
 
         /// <summary>
         /// Gets the address repository.
@@ -46,7 +56,8 @@ namespace Infrastructure.Common.DB
         /// <value>
         /// The address repository.
         /// </value>
-        public IRepository<AddressDbo> AddressRepository => addressRepository ?? (addressRepository = new Repository<AddressDbo>(context));
+        public IRepository<AddressDbo> AddressRepository =>
+            addressRepository ?? (addressRepository = new Repository<AddressDbo>(context));
 
         /// <summary>
         /// Gets the category repository.
@@ -54,7 +65,8 @@ namespace Infrastructure.Common.DB
         /// <value>
         /// The category repository.
         /// </value>
-        public IRepository<CategoryDbo> CategoryRepository => categoryRepository ?? (categoryRepository = new Repository<CategoryDbo>(context));
+        public IRepository<CategoryDbo> CategoryRepository =>
+            categoryRepository ?? (categoryRepository = new Repository<CategoryDbo>(context));
 
         /// <summary>
         /// Gets the location repository.
@@ -62,7 +74,8 @@ namespace Infrastructure.Common.DB
         /// <value>
         /// The location repository.
         /// </value>
-        public IRepository<LocationDbo> LocationRepository => locationRepository ?? (locationRepository = new Repository<LocationDbo>(context));
+        public IRepository<LocationDbo> LocationRepository =>
+            locationRepository ?? (locationRepository = new Repository<LocationDbo>(context));
 
         /// <summary>
         /// Gets the sub category repository.
@@ -70,7 +83,8 @@ namespace Infrastructure.Common.DB
         /// <value>
         /// The sub category repository.
         /// </value>
-        public IRepository<SubCategoryDbo> SubCategoryRepository => subCategoryRepository ?? (subCategoryRepository = new Repository<SubCategoryDbo>(context));
+        public IRepository<SubCategoryDbo> SubCategoryRepository =>
+            subCategoryRepository ?? (subCategoryRepository = new Repository<SubCategoryDbo>(context));
 
         /// <summary>
         /// Gets the user account repository.
@@ -78,7 +92,8 @@ namespace Infrastructure.Common.DB
         /// <value>
         /// The user account repository.
         /// </value>
-        public IRepository<UserDetailsDbo> UserDetailsRepository => userDetailsRepository ?? (userDetailsRepository = new Repository<UserDetailsDbo>(context));
+        public IRepository<UserDetailDbo> UserDetailsRepository =>
+            userDetailsRepository ?? (userDetailsRepository = new Repository<UserDetailDbo>(context));
 
         /// <summary>
         /// Gets the user role repository.
@@ -86,22 +101,53 @@ namespace Infrastructure.Common.DB
         /// <value>
         /// The user role repository.
         /// </value>
-        public IRepository<UserRoleDbo> UserRoleRepository => userRoleRepository ?? (userRoleRepository = new Repository<UserRoleDbo>(context));
+        public IRepository<UserRoleDbo> UserRoleRepository =>
+            userRoleRepository ?? (userRoleRepository = new Repository<UserRoleDbo>(context));
 
         /// <summary>
         /// Gets the batch attachment repository.
         /// </summary>
-        public IRepository<BatchAttachmentDbo> BatchAttachmentRepository => batchAttachmentRepository ?? (batchAttachmentRepository = new Repository<BatchAttachmentDbo>(context));
+        public IRepository<BatchAttachmentDbo> BatchAttachmentRepository =>
+            batchAttachmentRepository ?? (batchAttachmentRepository = new Repository<BatchAttachmentDbo>(context));
 
         /// <summary>
         /// Gets the attachment repository.
         /// </summary>
-        public IRepository<AttachmentDbo> AttachmentRepository => attachmentRepository ?? (attachmentRepository = new Repository<AttachmentDbo>(context));
+        public IRepository<AttachmentDbo> AttachmentRepository =>
+            attachmentRepository ?? (attachmentRepository = new Repository<AttachmentDbo>(context));
 
         /// <summary>
-        /// Gets or sets the company details repositry.
+        /// Gets or sets the company details repository.
         /// </summary>
-        public IRepository<CompanyDetailsDbo> CompanyDetailsRepositry => companyDetailsRespository ?? (companyDetailsRespository = new Repository<CompanyDetailsDbo>(context));
+        public IRepository<CompanyDetailDbo> CompanyDetailsRepository =>
+            companyDetailsRespository ?? (companyDetailsRespository = new Repository<CompanyDetailDbo>(context));
+
+        /// <summary>
+        /// Gets or sets the company details to user details repository.
+        /// </summary>
+        public IRepository<CompanyDetails2UserDetailsDbo> CompanyDetails2UserDetailsRepository =>
+            companyDetails2UserDetailsRespository ?? (companyDetails2UserDetailsRespository = new Repository<CompanyDetails2UserDetailsDbo>(context));
+
+        public IRepository<Category2CompanyDetailsDbo> Category2CompanyDetailsRepository =>
+            category2CompanyDetailsRespository ?? (category2CompanyDetailsRespository= new Repository<Category2CompanyDetailsDbo>(context));
+
+        public IRepository<CompanyRoleDbo> CompanyRoleRepository =>
+            companyRoleRespository ?? (companyRoleRespository= new Repository<CompanyRoleDbo>(context));
+
+        public IRepository<CompanyRole2CompanyPermissionDbo> CompanyRole2CompanyPermissionsRepository =>
+            companyRole2CompanyPermissionsRespository?? (companyRole2CompanyPermissionsRespository = new Repository<CompanyRole2CompanyPermissionDbo>(context));
+
+        public IRepository<SubCategory2CompanyDetailsDbo> SubCategory2CompanyDetailsRepository =>
+            subCategory2CompanyDetailsRespository ?? (subCategory2CompanyDetailsRespository= new Repository<SubCategory2CompanyDetailsDbo>(context));
+
+        public IRepository<CompanyPermissionDbo> CompanyPermissionsRepository =>
+            companyPermissionsRespository ?? (companyPermissionsRespository = new Repository<CompanyPermissionDbo>(context));
+
+        public IRepository<UserPermissionDbo> UserPermissionsRepository =>
+            userPermissionsRespository ?? (userPermissionsRespository= new Repository<UserPermissionDbo>(context));
+
+        public IRepository<UserRole2UserPermissionDbo> UserRole2UserPermissionsRepository =>
+            userRole2UserPermissionsRespository ?? (userRole2UserPermissionsRespository= new Repository<UserRole2UserPermissionDbo>(context));
 
 
         /// <summary>

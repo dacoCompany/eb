@@ -10,7 +10,8 @@
 namespace Infrastructure.Common.DB
 {
     using System;
-
+    using System.Collections.Generic;
+    
     public partial class CompanyDetails2UserDetailsDbo : IEntity
     {
         public int Id { get; set; }
@@ -19,8 +20,10 @@ namespace Infrastructure.Common.DB
         public Nullable<System.DateTime> DateModified { get; set; }
         public int CompanyDetailsId { get; set; }
         public int UserDetailsId { get; set; }
-
-        public virtual CompanyDetailsDbo CompanyDetails { get; set; }
-        public virtual UserDetailsDbo UserDetails { get; set; }
+        public int CompanyRoleId { get; set; }
+    
+        public virtual CompanyDetailDbo CompanyDetail { get; set; }
+        public virtual CompanyRoleDbo CompanyRole { get; set; }
+        public virtual UserDetailDbo UserDetail { get; set; }
     }
 }

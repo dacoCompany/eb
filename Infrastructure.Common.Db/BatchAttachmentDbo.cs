@@ -11,7 +11,7 @@ namespace Infrastructure.Common.DB
 {
     using System;
     using System.Collections.Generic;
-
+    
     public partial class BatchAttachmentDbo : IEntity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,7 +19,7 @@ namespace Infrastructure.Common.DB
         {
             this.Attachments = new HashSet<AttachmentDbo>();
         }
-
+    
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -27,9 +27,9 @@ namespace Infrastructure.Common.DB
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
         public int CompanyDetailsId { get; set; }
-
+    
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AttachmentDbo> Attachments { get; set; }
-        public virtual CompanyDetailsDbo CompanyDetails { get; set; }
+        public virtual CompanyDetailDbo CompanyDetail { get; set; }
     }
 }

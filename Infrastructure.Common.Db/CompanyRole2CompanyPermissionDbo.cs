@@ -10,7 +10,8 @@
 namespace Infrastructure.Common.DB
 {
     using System;
-
+    using System.Collections.Generic;
+    
     public partial class CompanyRole2CompanyPermissionDbo : IEntity
     {
         public int Id { get; set; }
@@ -19,7 +20,7 @@ namespace Infrastructure.Common.DB
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
-
+    
         public virtual CompanyPermissionDbo CompanyPermission { get; set; }
         public virtual CompanyRoleDbo CompanyRole { get; set; }
     }

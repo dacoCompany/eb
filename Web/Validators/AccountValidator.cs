@@ -9,7 +9,7 @@ namespace Web.eBado.Validators
     {
         #region Method specific validation
 
-        public static void ValidateUserRegistration(IUnitOfWork uow, ValidationResultCollection collection, RegisterUser model)
+        public static void ValidateUserRegistration(IUnitOfWork uow, ValidationResultCollection collection, RegisterUserModel model)
         {
             ValidateEmailExist(uow, collection, model.Email);
         }

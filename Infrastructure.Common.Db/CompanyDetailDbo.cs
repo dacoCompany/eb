@@ -11,38 +11,42 @@ namespace Infrastructure.Common.DB
 {
     using System;
     using System.Collections.Generic;
-
-    public partial class UserDetailsDbo : IEntity
+    
+    public partial class CompanyDetailDbo : IEntity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public UserDetailsDbo()
+        public CompanyDetailDbo()
         {
             this.Addresses = new HashSet<AddressDbo>();
+            this.BatchAttachments = new HashSet<BatchAttachmentDbo>();
+            this.Category2CompanyDetails = new HashSet<Category2CompanyDetailsDbo>();
             this.CompanyDetails2UserDetails = new HashSet<CompanyDetails2UserDetailsDbo>();
+            this.SubCategory2CompanyDetails = new HashSet<SubCategory2CompanyDetailsDbo>();
         }
-
+    
         public int Id { get; set; }
-        public string Title { get; set; }
-        public string FirstName { get; set; }
-        public string SecondName { get; set; }
-        public string Surname { get; set; }
-        public string DisplayName { get; set; }
-        public Nullable<int> PhoneNumber { get; set; }
-        public Nullable<int> AdditionalPhoneNumber { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string PhoneNumber { get; set; }
+        public string AdditionalPhoneNumber { get; set; }
+        public Nullable<int> Ico { get; set; }
+        public Nullable<int> Dic { get; set; }
+        public bool IsCompanyVerified { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
-        public int UserRoleId { get; set; }
-        public Nullable<int> CompanyRoleId { get; set; }
-        public string Salt { get; set; }
-
+        public int CompanyTypeId { get; set; }
+    
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AddressDbo> Addresses { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BatchAttachmentDbo> BatchAttachments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Category2CompanyDetailsDbo> Category2CompanyDetails { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CompanyDetails2UserDetailsDbo> CompanyDetails2UserDetails { get; set; }
-        public virtual CompanyRoleDbo CompanyRole { get; set; }
-        public virtual UserRoleDbo UserRole { get; set; }
+        public virtual CompanyTypeDbo CompanyType { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SubCategory2CompanyDetailsDbo> SubCategory2CompanyDetails { get; set; }
     }
 }
