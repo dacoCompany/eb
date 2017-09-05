@@ -1,4 +1,5 @@
-﻿using Infrastructure.Common.DB;
+﻿using System;
+using Infrastructure.Common.DB;
 using Infrastructure.Common.Validations;
 using System.Collections.Generic;
 using System.Linq;
@@ -112,7 +113,7 @@ namespace Web.eBado.Controllers
                     {
                         accountHelper.RegisterUser(model, uow);
                     }
-                    catch
+                    catch (Exception ex)
                     {
 
                     }
