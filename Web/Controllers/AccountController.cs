@@ -21,7 +21,7 @@ namespace Web.eBado.Controllers
         {
             this.accountHelper = new AccountHelper();
         }
-       
+
         #region HTTP GET
 
         [AllowAnonymous]
@@ -46,7 +46,7 @@ namespace Web.eBado.Controllers
             return View(model);
         }
 
-      
+
         [AllowAnonymous]
         public ActionResult ForgotPassword()
         {
@@ -107,21 +107,20 @@ namespace Web.eBado.Controllers
             {
                 var validationResult = new ValidationResultCollection();
                 AccountValidator.ValidateUserRegistration(uow, validationResult, model);
-
-                if (ModelState.IsValid)
+                if (AccountHelper.IsValidCaptcha())
                 {
-                    try
-                    {
-                        accountHelper.RegisterUser(model, uow);
-                    }
-                    catch
+                    if (ModelState.IsValid)
                     {
 
-                    }
-                }
-                else
-                {
+                        try
+                        {
+                            accountHelper.RegisterUser(model, uow);
+                        }
+                        catch
+                        {
 
+                        }
+                    }
                 }
             }
             return View(model);
@@ -136,22 +135,24 @@ namespace Web.eBado.Controllers
             {
                 var validationResult = new ValidationResultCollection();
                 AccountValidator.ValidateUserRegistration(uow, validationResult, model);
-
-                if (ModelState.IsValid)
+                if (AccountHelper.IsValidCaptcha())
                 {
-                    try
+                    if (ModelState.IsValid)
                     {
+                        try
+                        {
 
-                        accountHelper.RegisterCompany(model, uow);
+                            accountHelper.RegisterCompany(model, uow);
+                        }
+                        catch
+                        {
+                            accountHelper.InitializeAllCategories(model);
+                        }
                     }
-                    catch
+                    else
                     {
                         accountHelper.InitializeAllCategories(model);
                     }
-                }
-                else
-                {
-                    accountHelper. InitializeAllCategories(model);
                 }
             }
 

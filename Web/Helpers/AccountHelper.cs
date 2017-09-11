@@ -1,8 +1,10 @@
 ﻿using Infrastructure.Common.DB;
 using Infrastructure.Common.Enums;
+using Infrastructure.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -39,6 +41,29 @@ namespace Web.eBado.Helpers
             {
                 return Countries.Select;
             }
+        }
+
+        public static bool IsValidCaptcha()
+        {
+
+            var secret = ConfigurationManager.AppSettings.Get(ConfigurationKeys.ReCaptchaSecretKey);
+            var req =
+                (HttpWebRequest)WebRequest.Create(string.Format(ConfigurationManager.AppSettings.Get(ConfigurationKeys.ReCaptchaUri),
+                    secret, HttpContext.Current.Request.Form["g-recaptcha-response"]));
+
+            using (var wResponse = req.GetResponse())
+            {
+
+                using (StreamReader readStream = new StreamReader(wResponse.GetResponseStream()))
+                {
+                    string responseFromServer = readStream.ReadToEnd();
+                    if (!responseFromServer.Contains("\"success\": false"))
+                        return true;
+                }
+            }
+
+            return false;
+
         }
 
         public void RegisterCompany(RegisterCompanyModel model, IUnitOfWork uow)

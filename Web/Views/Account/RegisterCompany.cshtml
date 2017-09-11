@@ -15,7 +15,14 @@
 @Scripts.Render("~/bundles/jquery_autocomplete")
 @Scripts.Render("~/bundles/register")
 
-@using (Html.BeginForm())
+<script src='https://www.google.com/recaptcha/api.js'></script>
+<script>
+    function onSubmit(token) {
+        document.getElementById("htmlForm").submit();
+    }
+</script>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "htmlForm" }))
 {
     @Html.AntiForgeryToken()
     <div class="container push_top_30">
@@ -178,7 +185,7 @@
                                         </label>
                                     </div>
 
-                                    <button type="submit" id="MyButton" class="form-btn col-sm-12">@Resources.Register2</button>
+                                <button id="MyButton" class="g-recaptcha form-btn col-sm-12" data-sitekey="@System.Configuration.ConfigurationManager.AppSettings["ReCaptcha_PublicKey"]" data-callback="onSubmit">@Resources.Register2</button>
 </form>
                             <script>
                                 $('.chosen-select').chosen();
