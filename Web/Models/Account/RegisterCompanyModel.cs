@@ -11,6 +11,8 @@ namespace Web.eBado.Models.Account
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         public CompanyType CompanyType { get; set; }
 
+        public Countries CompanyLocation { get; set; }
+
         public string CompanyName { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]

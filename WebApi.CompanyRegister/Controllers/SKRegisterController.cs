@@ -19,6 +19,8 @@ namespace WebApi.CompanyRegister.Controllers
 {
     public class SKRegisterController : ApiController
     {
+        private const string company = "C";
+        private const string selfEmployed = "SE";
         private bool searchPage = false;
         private Uri baseUrl = new Uri("http://orsr.sk/search_ico.asp");
         private Uri baseUrl2 = new Uri("https://www.indexpodnikatela.sk/");
@@ -115,7 +117,7 @@ namespace WebApi.CompanyRegister.Controllers
             {
                 Ico = pNode.FirstOrDefault(n => n.Name == "IČO")?.Value,
                 Dic = pNode.FirstOrDefault(n => n.Name == "DIČ")?.Value,
-                CompanyType = pNode.FirstOrDefault(n => n.Name == "Právna forma")?.Value,
+                CompanyType = pNode.FirstOrDefault(n => n.Name == "Právna forma")?.Value == "Živnostník" ? selfEmployed : company,
                 PostCode = GetPostCode2(pNode.FirstOrDefault(n => n.Name == "Sídlo")?.Value),
                 Name = GetCompanyName(pNode.FirstOrDefault(n => n.Name == "Sídlo")?.Value)
             };

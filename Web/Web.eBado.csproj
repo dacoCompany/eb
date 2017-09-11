@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -546,6 +547,7 @@
     <Content Include="Global.app.config" />
     <Content Include="Scripts\chosen.jquery.js" />
     <Content Include="Scripts\jQuery.tagify.js" />
+    <Content Include="Scripts\recaptcha-api.js" />
     <Content Include="Scripts\register.js" />
     <Content Include="Scripts\tagify.js" />
     <Content Include="Views\Email\ForgotPassword.cshtml">
@@ -613,6 +615,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ReCaptcha\" />
     <Folder Include="Views\Manage\" />
   </ItemGroup>
   <ItemGroup>

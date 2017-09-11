@@ -26,17 +26,13 @@
                                 <div class="col-sm-12 reg-font">@Resources.LoginInfo</div>
                                 <hr class="col-sm-12 transparent" />
                                 <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHEmail, @id="myId" } })
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHEmail } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.Email)
                                     </label>
                                 </div>
-                                <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPhoneNumber } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessageFor(model => model.PhoneNumber)
-                                    </label>
-                                </div>
+                                <div class="form-group col-sm-6"></div>
+
                                 <div class="col-sm-12 reg-font"></div>
                                 <div class="form-group col-sm-6">
                                     @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPassword } })
@@ -50,7 +46,6 @@
                                         @Html.ValidationMessageFor(model => model.RepeatPassword)
                                     </label>
                                 </div>
-
                                 <div class="col-sm-12 reg-font">@Resources.ContactPerson</div>
                                 <hr class="col-sm-12 transparent" />
                                 <div class="form-group col-sm-3">
@@ -69,6 +64,18 @@
                                     @Html.EditorFor(model => model.Surname, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHLastName } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.Surname)
+                                    </label>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPhoneNumber } })
+                                    <label class="label-form" for="email">
+                                        @Html.ValidationMessageFor(model => model.PhoneNumber)
+                                    </label>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    @Html.EditorFor(model => model.AdditionalPhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPhoneNumber } })
+                                    <label class="label-form" for="email">
+                                        @Html.ValidationMessageFor(model => model.AdditionalPhoneNumber)
                                     </label>
                                 </div>
                                 <div class="col-sm-12 reg-font">@Resources.ContactDetails</div>

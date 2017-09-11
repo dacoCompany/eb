@@ -144,6 +144,18 @@
   <data name="ContactPerson" xml:space="preserve">
     <value>Kontaktná osoba</value>
   </data>
+  <data name="CountryCZ" xml:space="preserve">
+    <value>Česko</value>
+  </data>
+  <data name="CountryHU" xml:space="preserve">
+    <value>Maďarsko</value>
+  </data>
+  <data name="CountrySelect" xml:space="preserve">
+    <value>Zvoľte krajinu</value>
+  </data>
+  <data name="CountrySK" xml:space="preserve">
+    <value>Slovensko</value>
+  </data>
   <data name="DontHaveCopanyNumber" xml:space="preserve">
     <value>Nemám IČO</value>
   </data>

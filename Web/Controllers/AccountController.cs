@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Common.DB;
+using Infrastructure.Common.Enums;
 using Infrastructure.Common.Validations;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,7 @@ namespace Web.eBado.Controllers
         {
             RegisterCompanyModel model = new RegisterCompanyModel();
             accountHelper.InitializeAllCategories(model);
+            model.CompanyLocation = accountHelper.GetCountryByID();
             return View(model);
         }
 

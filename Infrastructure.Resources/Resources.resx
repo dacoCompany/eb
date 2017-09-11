@@ -144,6 +144,18 @@
   <data name="ContactPerson" xml:space="preserve">
     <value>Contact person</value>
   </data>
+  <data name="CountryCZ" xml:space="preserve">
+    <value>Czech republic</value>
+  </data>
+  <data name="CountryHU" xml:space="preserve">
+    <value>Hungary</value>
+  </data>
+  <data name="CountrySelect" xml:space="preserve">
+    <value>Select country</value>
+  </data>
+  <data name="CountrySK" xml:space="preserve">
+    <value>Slovak Republic</value>
+  </data>
   <data name="DontHaveCopanyNumber" xml:space="preserve">
     <value>I don't have a company number</value>
   </data>

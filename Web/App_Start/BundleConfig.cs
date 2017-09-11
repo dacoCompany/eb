@@ -7,6 +7,8 @@ namespace Web.eBado
     {
         public static void RegisterBundles(BundleCollection bundles)
         {
+            bundles.Add(new ScriptBundle("~/bundles/recaptcha", "//www.google.com/recaptcha/api.js").Include("~/Scripts/recaptcha-api.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jquery_base")
                .Include("~/Scripts/jquery-{version}.js")
                .Include("~/Scripts/bootstrap.js"));

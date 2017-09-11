@@ -1,11 +1,16 @@
 ﻿using Infrastructure.Common.DB;
 using Infrastructure.Common.Enums;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
+using System.Xml;
 using Web.eBado.Models.Account;
 
 namespace Web.eBado.Helpers
@@ -14,9 +19,28 @@ namespace Web.eBado.Helpers
     {
         #region Constants
         const string allowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789";
+        private Uri locationBaseUri = new Uri("http://freegeoip.net/xml/");
         #endregion
 
         #region Public Methods
+        public Countries GetCountryByID()
+        {
+            string ip = HttpContext.Current.Request.UserHostAddress;
+            var url = new Uri(locationBaseUri, ip);
+            XmlDocument doc = new XmlDocument();
+            doc.Load(url.ToString());
+            XmlNodeList nodeLstCity = doc.GetElementsByTagName("CountryName");
+            string countryName = nodeLstCity[0].InnerText;
+            if (!string.IsNullOrEmpty(countryName))
+            {
+                return (Countries)System.Enum.Parse(typeof(Countries), countryName);
+            }
+            else
+            {
+                return Countries.Select;
+            }
+        }
+
         public void RegisterCompany(RegisterCompanyModel model, IUnitOfWork uow)
         {
             var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Code == UserRole.StandardUser.ToString());

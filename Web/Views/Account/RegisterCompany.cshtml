@@ -36,12 +36,8 @@
                                         @Html.ValidationMessageFor(model => model.Email)
                                     </label>
                                 </div>
-                                <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPhoneNumber } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessageFor(model => model.PhoneNumber)
-                                    </label>
-                                </div>
+                                <div class="form-group col-sm-6"></div>
+                               
                                 <div class="col-sm-12 reg-font"></div>
                                 <div class="form-group col-sm-6">
                                     @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPassword } })
@@ -75,6 +71,18 @@
                                         @Html.ValidationMessageFor(model => model.Surname)
                                     </label>
                                 </div>
+                                <div class="form-group col-sm-6">
+                                    @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPhoneNumber } })
+                                    <label class="label-form" for="email">
+                                        @Html.ValidationMessageFor(model => model.PhoneNumber)
+                                    </label>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    @Html.EditorFor(model => model.AdditionalPhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPhoneNumber } })
+                                    <label class="label-form" for="email">
+                                        @Html.ValidationMessageFor(model => model.AdditionalPhoneNumber)
+                                    </label>
+                                </div>
                                 <div class="col-sm-12 reg-font">@Resources.ContactDetails</div>
                                 <hr class="col-sm-12 transparent" />
                                 <div class="form-group col-sm-3">
@@ -99,68 +107,79 @@
                                 </div>
                                 <div class="col-sm-12 reg-font">@Resources.CompanyInfo</div>
                                 <hr class="col-sm-12 transparent" />
-                                <div class="form-group col-sm-1">
-                                    <input checked="checked" id="WithIco" name="ICO_choose" type="radio" />
+                                <div class="form-group col-sm-8">
+                                    @Html.DropDownListFor(model => model.CompanyLocation, EnumHelper.GetSelectList(typeof(Countries)), new { @class = "form-control txt-lg" })
                                 </div>
-                                <div class="form-group col-sm-7">
-                                    @Html.EditorFor(model => model.Ico, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtCompanyNumber", @placeholder = @Resources.PHCompanyNumber } })
-                                    <label class="label-form" for="email" id="IcoValidation">
-                                        @Html.ValidationMessageFor(model => model.Ico)
-                                    </label>
-                                </div>
-                                <div class="form-group col-sm-4">
-                                    <button type="button" id="validateBtn" class="form-btn col-sm-12"><span id="spn"></span>@Resources.Validate</button>
-                                </div>
-                                <div class="form-group col-sm-12">
-                                    <input id="WithoutIco" name="ICO_choose" class="radio inline" type="radio" /> <span class="h4"> @Resources.DontHaveCopanyNumber</span>
-                                </div>
-                                <hr class="col-sm-12 transparent" />
-                                <div id="companyDiv" style="display:none">
-                                    <div class="form-group col-sm-12">
-                                        @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtCompanyName", @placeholder = @Resources.PHCompanyName } })
-                                        <label class="label-form" for="email">
-                                            @Html.ValidationMessageFor(model => model.CompanyName)
-                                        </label>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        @Html.DropDownListFor(model => model.CompanyType, EnumHelper.GetSelectList(typeof(CompanyType)), new { @class = "form-control txt-lg", @id = "AccountTypeDropDown" })
-                                        <label class="label-form" for="email">
-                                            @Html.ValidationMessageFor(model => model.CompanyType)
-                                        </label>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <input type="text" class="form-control txt-lg" id="txtCompanyPostalCode" placeholder="@Resources.PHPostalCode" />
-                                        @Html.HiddenFor(model => model.CompanyPostalCode, new { @id = "hiddenCompanyPostalCode" })
-                                        <input type="hidden" id="hfCustomer" name="CustomerId" />
-                                        <label class="label-form" for="email">
-                                            @Html.ValidationMessageFor(model => model.CompanyPostalCode)
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.CompanyStreet, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetName } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessageFor(model => model.CompanyStreet)
-                                    </label>
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.CompanyStreetNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetNumber } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessageFor(model => model.CompanyStreetNumber)
-                                    </label>
-                                </div>
-                                <div class="col-sm-12 reg-font">@Resources.BusinessArea</div>
-                                <hr class="col-sm-12 transparent" />
-                                <div class="form-group col-sm-12">
-                                   @Html.DropDownListFor(m => m.Categories.SelectedCategories, Model.Categories.AllCategories, new { @class = "chosen-select", @multiple="true", data_placeholder = "Choose a Emailaddress...", style = "width: 100%" })
-                                  
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessageFor(model => model.Categories)
-                                    </label>
-                                </div>
+                                <div class="form-group col-sm-12"></div>
 
-                                <button type="submit" id="MyButton" class="form-btn col-sm-12">@Resources.Register2</button>
-                            </form>
+                                    <div class="form-group col-sm-1">
+                                        <input checked="checked" id="WithIco" name="ICO_choose" type="radio" />
+                                    </div>
+                                    <div class="form-group col-sm-7">
+                                        @Html.EditorFor(model => model.Ico, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtCompanyNumber", @placeholder = @Resources.PHCompanyNumber } })
+                                        <label class="label-form" for="email" id="IcoValidation">
+                                            @Html.ValidationMessageFor(model => model.Ico)
+                                        </label>
+                                    </div>
+                                    <div class="form-group col-sm-4">
+                                        <button type="button" id="validateBtn" class="form-btn col-sm-12"><span id="spn"></span>@Resources.Validate</button>
+                                    </div>
+                                    <div class="form-group col-sm-12">
+                                        <input id="WithoutIco" name="ICO_choose" class="radio inline" type="radio" /> <span class="h4">&nbsp;&nbsp;&nbsp; @Resources.DontHaveCopanyNumber</span>
+                                    </div>
+                                    <hr class="col-sm-12 transparent" />
+                                    <div id="companyDiv" style="display:none">
+                                        <div class="form-group col-sm-8">
+                                            @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtCompanyName", @placeholder = @Resources.PHCompanyName } })
+                                            <label class="label-form" for="email">
+                                                @Html.ValidationMessageFor(model => model.CompanyName)
+                                            </label>
+                                        </div>
+                                        <div class="form-group col-sm-4">
+                                            @Html.EditorFor(model => model.Dic, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtDic", @placeholder = "Dic" } })
+                                            <label class="label-form" for="email">
+                                                @Html.ValidationMessageFor(model => model.Dic)
+                                            </label>
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            @Html.DropDownListFor(model => model.CompanyType, EnumHelper.GetSelectList(typeof(CompanyType)), new { @class = "form-control txt-lg", @id = "AccountTypeDropDown" })
+                                            <label class="label-form" for="email">
+                                                @Html.ValidationMessageFor(model => model.CompanyType)
+                                            </label>
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <input type="text" class="form-control txt-lg" id="txtCompanyPostalCode" placeholder="@Resources.PHPostalCode" />
+                                            @Html.HiddenFor(model => model.CompanyPostalCode, new { @id = "hiddenCompanyPostalCode" })
+                                            <input type="hidden" id="hfCustomer" name="CustomerId" />
+                                            <label class="label-form" for="email">
+                                                @Html.ValidationMessageFor(model => model.CompanyPostalCode)
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-8">
+                                        @Html.EditorFor(model => model.CompanyStreet, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetName } })
+                                        <label class="label-form" for="email">
+                                            @Html.ValidationMessageFor(model => model.CompanyStreet)
+                                        </label>
+                                    </div>
+                                    <div class="form-group col-sm-4">
+                                        @Html.EditorFor(model => model.CompanyStreetNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetNumber } })
+                                        <label class="label-form" for="email">
+                                            @Html.ValidationMessageFor(model => model.CompanyStreetNumber)
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-12 reg-font">@Resources.BusinessArea</div>
+                                    <hr class="col-sm-12 transparent" />
+                                    <div class="form-group col-sm-12">
+                                        @Html.DropDownListFor(m => m.Categories.SelectedCategories, Model.Categories.AllCategories, new { @class = "form-control chosen-select", @multiple = "true", data_placeholder = "Choose your business area..." })
+
+                                        <label class="label-form" for="email">
+                                            @Html.ValidationMessageFor(model => model.Categories)
+                                        </label>
+                                    </div>
+
+                                    <button type="submit" id="MyButton" class="form-btn col-sm-12">@Resources.Register2</button>
+</form>
                             <script>
                                 $('.chosen-select').chosen();
                             </script>
