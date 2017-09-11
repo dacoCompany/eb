@@ -227,9 +227,13 @@
     <Content Include="Content\BaseContent\css\style.css" />
     <Content Include="Content\BaseContent\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\BaseContent\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\BaseContent\img\flag_EN.png" />
     <Content Include="Content\BaseContent\img\chosen-sprite%402x.png" />
     <Content Include="Content\BaseContent\img\chosen-sprite.png" />
+    <Content Include="Content\BaseContent\img\flag_SK.png" />
+    <Content Include="Content\BaseContent\img\flag_HU.png" />
     <Content Include="Content\BaseContent\img\secure_lock.png" />
+    <Content Include="Content\BaseContent\img\flag_CZ.png" />
     <Content Include="Content\blueimp-gallery2\css\blueimp-gallery-indicator.css" />
     <Content Include="Content\blueimp-gallery2\css\blueimp-gallery-indicator.min.css" />
     <Content Include="Content\blueimp-gallery2\css\blueimp-gallery-video.css" />
