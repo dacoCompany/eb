@@ -68,7 +68,7 @@ namespace Web.eBado.Helpers
 
         public void RegisterCompany(RegisterCompanyModel model, IUnitOfWork uow)
         {
-            var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Code == UserRole.StandardUser.ToString());
+            var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Code == ((int)UserRole.StandardUser).ToString());
             var companyType = uow.CompanyTypeRepository.FirstOrDefault(ct => ct.Code == model.CompanyType.ToString());
             var companyRoleId = uow.CompanyRoleRepository.FirstOrDefault(cr => cr.Code == CompanyRole.Owner.ToString()).Id;
             var location = uow.LocationRepository.FirstOrDefault(l => l.PostalCode == model.PostalCode);
@@ -85,7 +85,7 @@ namespace Web.eBado.Helpers
                 Surname = model.Surname,
                 PhoneNumber = model.PhoneNumber,
                 AdditionalPhoneNumber = model.AdditionalPhoneNumber,
-                DisplayName = string.Format("{0} {1}", model.FirstName, model.Surname),
+                DisplayName = $"{model.FirstName} {model.Surname}",
                 UserRoleId = userRole.Id,
             };
             userDetails.Addresses.Add(new AddressDbo
@@ -118,13 +118,15 @@ namespace Web.eBado.Helpers
                 UserDetail = userDetails,
                 CompanyRoleId = companyRoleId
             };
+
+            uow.CompanyDetailsRepository.Add(companyDetails);
             uow.Commit();
         }
 
         public void RegisterUser(RegisterUserModel model, IUnitOfWork uow)
         {
-            var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Code == UserRole.StandardUser.ToString());
-            var location = uow.LocationRepository.FirstOrDefault(l => l.PostalCode == model.PostalCode);
+            var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Code == ((int)UserRole.StandardUser).ToString());
+            var location = uow.LocationRepository.FirstOrDefault(l => l.Id.ToString() == model.PostalCode);
             string salt = GenerateSalt();
 
             var userDetails = new UserDetailDbo
@@ -136,9 +138,9 @@ namespace Web.eBado.Helpers
                 FirstName = model.FirstName,
                 Surname = model.Surname,
                 PhoneNumber = model.PhoneNumber,
-                AdditionalPhoneNumber = model.AdditionalPhoneNumber,
-                DisplayName = string.Format("{0} {1}", model.FirstName, model.Surname),
-                UserRoleId = userRole.Id,
+                AdditionalPhoneNumber = string.IsNullOrEmpty(model.AdditionalPhoneNumber) ? null : model.AdditionalPhoneNumber,
+                DisplayName = $"{model.FirstName} {model.Surname}",
+                UserRole = userRole
             };
             userDetails.Addresses.Add(new AddressDbo
             {
@@ -147,6 +149,8 @@ namespace Web.eBado.Helpers
                 IsBillingAddress = true,
                 LocationId = location.Id
             });
+
+            uow.UserDetailsRepository.Add(userDetails);
             uow.Commit();
         }
 
