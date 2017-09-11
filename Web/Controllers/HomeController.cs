@@ -11,6 +11,11 @@ namespace Web.eBado.Controllers
 {
     public class HomeController : Controller
     {
+        public void SetLanguage(string language, string url)
+        {
+            Redirect(url);
+        }
+
         public async Task<ActionResult> Index()
         {
             var baseUri = new Uri("http://localhost:50198/");

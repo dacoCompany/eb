@@ -62,21 +62,62 @@ h3, h4 {
     color: #fff;
     text-shadow: none;
 }
-
-/***** Top panel *****/
+/***** Language panel *****/
 .lang-panel {
     width: 100%;
-    height:25px;
-    display:inline-block;
+    height: 25px;
+    display: inline-block;
 }
 
-.lang-panel-img {
-    width:25px;
-    height:25px;
-    float:right;
+.en {
+    background-image: url('../img/flag_EN.png');
+    background-size: 25px 25px
+}
+
+.sk {
+    background-image: url('../img/flag_SK.png');
+    background-size: 25px 25px
+}
+
+.cz {
+    background-image: url('../img/flag_CZ.png');
+    background-size: 25px 25px
+}
+
+.hu {
+    background-image: url('../img/flag_HU.png');
+    background-size: 25px 25px
+}
+
+.lang-div {
+    float: right;
     margin: 5px 5px 0 0;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    -webkit-transition: all 100ms ease-in;
+    -moz-transition: all 100ms ease-in;
+    transition: all 100ms ease-in;
+    -webkit-filter: brightness(1.1) grayscale(.4);
+    -moz-filter: brightness(1.1) grayscale(.4) opacity(.9);
+    filter: brightness(1.1) grayscale(.4) opacity(.9);
 }
 
+    .lang-div:hover {
+        -webkit-filter: none;
+        -moz-filter: none;
+        filter: none;
+    }
+
+.lang-active {
+    -webkit-filter: none;
+    -moz-filter: none;
+    filter: none;
+}
+
+/***** Top panel *****/
 .top-panel {
     width: 100%;
     height: 80px;
@@ -628,7 +669,7 @@ hr.transparent {
     margin-top: 30px;
 }
 
-.no_margin{
+.no_margin {
     margin: 0 auto !important;
 }
 
@@ -659,6 +700,7 @@ input[type='radio'] {
     input[type='radio']:checked:before {
         background: #00b6ff;
     }
+
     input[type='radio']:focus {
         outline: none;
     }
