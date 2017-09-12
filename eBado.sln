@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.eBado", "Web\Web.eBado.csproj", "{294EF68E-1610-424D-A1A7-8A7ADB988730}"
 EndProject
@@ -77,5 +77,8 @@ Global
 		{FA8EE37F-9CAA-4641-965F-6EC584F4AC24} = {89D6EE4F-5344-4EED-A0EC-F61D1672FE4F}
 		{CF31F5B3-DE63-4973-99CF-22CC43B22D55} = {D2D8A54B-D692-4830-9114-204FC5514BE0}
 		{AA25DF85-E53C-46E4-9ECD-20367CD4015C} = {273DD6C5-5742-4CB9-ADB7-941C4A3467B4}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.Database.6.0.1304.0\lib\NET45
 	EndGlobalSection
 EndGlobal

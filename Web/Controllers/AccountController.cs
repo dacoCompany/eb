@@ -10,6 +10,8 @@ using Web.eBado.Models.Account;
 using Web.eBado.Models.Shared;
 using Web.eBado.Validators;
 using WebAPIFactory.Configuration.Core;
+using WebAPIFactory.Logging.Core;
+using WebAPIFactory.Logging.Core.Diagnostics;
 
 namespace Web.eBado.Controllers
 {
@@ -105,13 +107,16 @@ namespace Web.eBado.Controllers
         {
             using (var uow = NinjectResolver.GetInstance<IUnitOfWork>())
             {
+                EntlibLogger.LogError("Account", "Register", $"Registration attempt with e-mail address: {model.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register" });
+                EntlibLogger.LogInfo("Account", "Register", $"Registration attempt with e-mail address: {model.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register"});
+                EntlibLogger.LogWarning("Account", "Register", $"Registration attempt with e-mail address: {model.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register" });
+                EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt with e-mail address: {model.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register" });
                 var validationResult = new ValidationResultCollection();
                 AccountValidator.ValidateUserRegistration(uow, validationResult, model);
                 if (AccountHelper.IsValidCaptcha())
                 {
                     if (ModelState.IsValid)
                     {
-
                         try
                         {
                             accountHelper.RegisterUser(model, uow);
