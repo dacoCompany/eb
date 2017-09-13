@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+
+<!-- UNCOMMENT AND SET VALUE IF YOU WANT TO OVERRIDE THE THRESHOLD	
+    <MaintainabilityIndexInClassTreshold>50</MaintainabilityIndexInClassTreshold>
+-->
+
+<!-- UNCOMMENT AND SET VALUE IF YOU WANT TO OVERRIDE THE THRESHOLD-->
+<MaintainabilityIndexInMethodTreshold>40</MaintainabilityIndexInMethodTreshold>
+
+
+<!-- UNCOMMENT AND SET VALUE IF YOU WANT TO OVERRIDE THE THRESHOLD
+    <CyclomaticComplexityInClassTreshold>0</CyclomaticComplexityInClassTreshold>
+-->
+
+<!--UNCOMMENT AND SET VALUE IF YOU WANT TO OVERRIDE THE THRESHOLD
+    <CyclomaticComplexityInMethodTreshold>15</CyclomaticComplexityInMethodTreshold>
+-->
+
+<!-- UNCOMMENT AND SET VALUE IF YOU WANT TO OVERRIDE THE THRESHOLD
+    <ClassCouplingInClassTreshold>80</ClassCouplingInClassTreshold>
+-->
+
+<!-- UNCOMMENT AND SET VALUE IF YOU WANT TO OVERRIDE THE THRESHOLD
+    <ClassCouplingInMethodTreshold>30</ClassCouplingInMethodTreshold>
+-->
+
+<!-- UNCOMMENT AND SET VALUE IF YOU WANT TO OVERRIDE THE THRESHOLD
+    <DepthOfInheritanceInClassTreshold>5</DepthOfInheritanceInClassTreshold>
+-->
+
+<!-- UNCOMMENT AND SET VALUE IF YOU WANT TO OVERRIDE THE THRESHOLD
+    <LinesOfCodeInClassTreshold>0</LinesOfCodeInClassTreshold>
+-->
+
+<!-- UNCOMMENT AND SET VALUE IF YOU WANT TO OVERRIDE THE THRESHOLD
+    <LinesOfCodeInMethodTreshold>80</LinesOfCodeInMethodTreshold>
+-->
+
+  </PropertyGroup>
+
+</Project>
+
