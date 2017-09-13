@@ -197,9 +197,11 @@
     <Compile Include="Helpers\ImageHandler.cs" />
     <Compile Include="IoC\NinjectResolver.cs" />
     <Compile Include="Models\Account\BatchGalleryModel.cs" />
+    <Compile Include="Models\Account\BatchModel.cs" />
     <Compile Include="Models\Account\CategoriesModel.cs" />
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
     <Compile Include="Models\Account\ChangeSettingsModel.cs" />
+    <Compile Include="Models\Account\Collecion.cs" />
     <Compile Include="Models\Account\ForgotPasswordModel.cs" />
     <Compile Include="Models\Account\LoginModel.cs" />
     <Compile Include="Models\Account\RegisterCompanyModel.cs" />
@@ -219,6 +221,7 @@
     <Content Include="Content\BaseContent\css\font-awesome.min.css" />
     <Content Include="Content\BaseContent\css\jquery-ui.css" />
     <Content Include="Content\BaseContent\css\check_radio.css" />
+    <Content Include="Content\BaseContent\css\batchGallery.css" />
     <Content Include="Content\BaseContent\css\user-settings.css" />
     <Content Include="Content\BaseContent\css\media-queries.css" />
     <Content Include="Content\BaseContent\css\register.css" />
@@ -232,6 +235,7 @@
     <Content Include="Content\BaseContent\img\chosen-sprite.png" />
     <Content Include="Content\BaseContent\img\flag_SK.png" />
     <Content Include="Content\BaseContent\img\flag_HU.png" />
+    <Content Include="Content\BaseContent\img\no_photo.jpg" />
     <Content Include="Content\BaseContent\img\secure_lock.png" />
     <Content Include="Content\BaseContent\img\flag_CZ.png" />
     <Content Include="Content\blueimp-gallery2\css\blueimp-gallery-indicator.css" />

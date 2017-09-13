@@ -86,6 +86,13 @@ namespace Web.eBado.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        public ActionResult BatchAccountGallery()
+        {
+            var model = new BatchGalleryModel();
+            return View(model);
+        }
+
         #endregion
 
         #region HTTP POST
@@ -193,13 +200,13 @@ namespace Web.eBado.Controllers
             return View(model);
         }
 
+        [HttpPost]
         [AllowAnonymous]
-        public ActionResult BatchAccountGallery()
+        [ValidateAntiForgeryToken]
+        public ActionResult BatchAccountGallery(BatchGalleryModel model)
         {
-            var model = new List<BatchGalleryModel>();
             return View(model);
         }
-
         #endregion
     }
 }

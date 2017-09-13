@@ -11,5 +11,6 @@
         public const string EmailDisplayName = "Email_DisplayName";
         public const string ReCaptchaUri = "ReCaptcha_Uri";
         public const string ReCaptchaSecretKey = "ReCaptcha_SecretKey";
+        public const string SupportedLanguagesKey = "Supported_Languages";
     }
 }
