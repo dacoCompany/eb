@@ -37,12 +37,14 @@ namespace Web.eBado
             bundles.Add(new StyleBundle("~/Content/css")
                 .Include("~/Content/BaseContent/css/bootstrap.css")
                 .Include("~/Content/BaseContent/css/bootstrap-theme.css")
-                .Include("~/Content/BaseContent/css/style.css")
                 .Include("~/Content/BaseContent/css/button.css")
                 .Include("~/Content/BaseContent/css/jquery-ui.css")
                 .Include("~/Content/BaseContent/css/reset.css")
                 .Include("~/Content/BaseContent/css/font-awesome.min.css")
                 .Include("~/Content/BaseContent/css/media-queries.css"));
+
+            bundles.Add(new StyleBundle("~/Content/main_style")
+                .Include("~/Content/BaseContent/css/style.css"));
 
             bundles.Add(new StyleBundle("~/Content/login")
                 .Include("~/Content/BaseContent/css/login.css"));
