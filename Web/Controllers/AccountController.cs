@@ -10,6 +10,8 @@ using Web.eBado.Models.Account;
 using Web.eBado.Models.Shared;
 using Web.eBado.Validators;
 using WebAPIFactory.Configuration.Core;
+using WebAPIFactory.Logging.Core;
+using WebAPIFactory.Logging.Core.Diagnostics;
 
 namespace Web.eBado.Controllers
 {
@@ -86,6 +88,13 @@ namespace Web.eBado.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        public ActionResult BatchAccountGallery()
+        {
+            var model = new BatchGalleryModel();
+            return View(model);
+        }
+
         #endregion
 
         #region HTTP POST
@@ -105,13 +114,16 @@ namespace Web.eBado.Controllers
         {
             using (var uow = NinjectResolver.GetInstance<IUnitOfWork>())
             {
+                EntlibLogger.LogError("Account", "Register", $"Registration attempt with e-mail address: {model.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register" });
+                EntlibLogger.LogInfo("Account", "Register", $"Registration attempt with e-mail address: {model.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register"});
+                EntlibLogger.LogWarning("Account", "Register", $"Registration attempt with e-mail address: {model.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register" });
+                EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt with e-mail address: {model.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register" });
                 var validationResult = new ValidationResultCollection();
                 AccountValidator.ValidateUserRegistration(uow, validationResult, model);
                 if (AccountHelper.IsValidCaptcha())
                 {
                     if (ModelState.IsValid)
                     {
-
                         try
                         {
                             accountHelper.RegisterUser(model, uow);
@@ -193,13 +205,13 @@ namespace Web.eBado.Controllers
             return View(model);
         }
 
+        [HttpPost]
         [AllowAnonymous]
-        public ActionResult BatchAccountGallery()
+        [ValidateAntiForgeryToken]
+        public ActionResult BatchAccountGallery(BatchGalleryModel model)
         {
-            var model = new List<BatchGalleryModel>();
             return View(model);
         }
-
         #endregion
     }
 }

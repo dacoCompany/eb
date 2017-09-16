@@ -71,6 +71,18 @@
     <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging.Database, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.Logging.Database.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Logging.Database.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.WindowsAzure.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.2.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
     </Reference>
@@ -149,6 +161,12 @@
     <Reference Include="WebAPIFactory.Configuration.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WebAPIFactory.Configuration.Core.1.0.0.0\lib\net46\WebAPIFactory.Configuration.Core.dll</HintPath>
     </Reference>
+    <Reference Include="WebAPIFactory.Logging.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a4eb1d9a89eab960, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebAPIFactory.Logging.Core.1.6.0\lib\net451\WebAPIFactory.Logging.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="WebAPIFactory.Logging.Database, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a4eb1d9a89eab960, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebAPIFactory.Logging.Database.1.0.0\lib\net45\WebAPIFactory.Logging.Database.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -197,9 +215,11 @@
     <Compile Include="Helpers\ImageHandler.cs" />
     <Compile Include="IoC\NinjectResolver.cs" />
     <Compile Include="Models\Account\BatchGalleryModel.cs" />
+    <Compile Include="Models\Account\BatchModel.cs" />
     <Compile Include="Models\Account\CategoriesModel.cs" />
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
     <Compile Include="Models\Account\ChangeSettingsModel.cs" />
+    <Compile Include="Models\Account\Collecion.cs" />
     <Compile Include="Models\Account\ForgotPasswordModel.cs" />
     <Compile Include="Models\Account\LoginModel.cs" />
     <Compile Include="Models\Account\RegisterCompanyModel.cs" />
@@ -219,6 +239,7 @@
     <Content Include="Content\BaseContent\css\font-awesome.min.css" />
     <Content Include="Content\BaseContent\css\jquery-ui.css" />
     <Content Include="Content\BaseContent\css\check_radio.css" />
+    <Content Include="Content\BaseContent\css\batchGallery.css" />
     <Content Include="Content\BaseContent\css\user-settings.css" />
     <Content Include="Content\BaseContent\css\media-queries.css" />
     <Content Include="Content\BaseContent\css\register.css" />
@@ -232,6 +253,7 @@
     <Content Include="Content\BaseContent\img\chosen-sprite.png" />
     <Content Include="Content\BaseContent\img\flag_SK.png" />
     <Content Include="Content\BaseContent\img\flag_HU.png" />
+    <Content Include="Content\BaseContent\img\no_photo.jpg" />
     <Content Include="Content\BaseContent\img\secure_lock.png" />
     <Content Include="Content\BaseContent\img\flag_CZ.png" />
     <Content Include="Content\blueimp-gallery2\css\blueimp-gallery-indicator.css" />
@@ -556,6 +578,8 @@
     <Content Include="Views\Email\ForgotPassword.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Logging.config" />
+    <Content Include="CodeMetrics.targets" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

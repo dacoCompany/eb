@@ -38,14 +38,13 @@ div.tab {
 .tabcontent {
     float: left;
     padding: 0px 12px;
-    margin-left: 150px;
+    margin-left: 50px;
     width: 50%;
     height: 100%;
 }
 
 .tabcontent-gallery {
     float: left;
-    padding: 0px 12px;
     width: 80%;
     height: 100%;
 }

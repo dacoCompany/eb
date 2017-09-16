@@ -18,10 +18,10 @@
     <!-- Top panel -->
     <div class="container">
         <div class="lang-panel">
-            <div value="hu" class="lang-div hu @(language == "hu-HU" ? "lang-active" : "")"></div> 
-            <div value="cz" class="lang-div cz @(language == "cz-CZ" ? "lang-active" : "")"></div>
-            <div value="sk" class="lang-div sk @(language == "sk-SK" ? "lang-active" : "")"></div>
-            <div value="en" class="lang-div en @(language == "en-EN" ? "lang-active" : "")"></div>
+            <div value="hu-HU" class="lang-div hu @(language.Contains("hu") ? "lang-active" : "")"></div> 
+            <div value="cz-CZ" class="lang-div cz @(language.Contains("cz") ? "lang-active" : "")"></div>
+            <div value="sk-SK" class="lang-div sk @(language.Contains("sk") ? "lang-active" : "")"></div>
+            <div value="en-US" class="lang-div en @(language.Contains("en") ? "lang-active" : "")"></div>
         </div>
         </div>
         <div class="top-panel">
@@ -89,12 +89,16 @@
 
             $(".lang-div").click(function () {
                 var langValue = $(this).attr('value');
-                var url = window.location.href; 
                 $.ajax({
                     type: 'POST',
-                    url: 'Home/SetLanguage',
-                    data: { language: langValue, url: url },
-                    dataType: "text"
+                    url: '@Url.Action("SetLanguage", "Home")',
+                    data: { language: langValue},
+                    dataType: "text",
+                    statusCode: {
+                        302: function() {
+                            location.reload(true);
+                        }
+                    }
                 });
             });
         </script>
