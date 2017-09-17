@@ -1,12 +1,10 @@
 ﻿using Infrastructure.Common.DB;
-using Infrastructure.Common.Enums;
 using Infrastructure.Common.Validations;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using Web.eBado.Helpers;
 using Web.eBado.IoC;
 using Web.eBado.Models.Account;
+using Web.eBado.Models.MvcExtensions;
 using Web.eBado.Models.Shared;
 using Web.eBado.Validators;
 using WebAPIFactory.Configuration.Core;
@@ -44,7 +42,7 @@ namespace Web.eBado.Controllers
         {
             RegisterCompanyModel model = new RegisterCompanyModel();
             accountHelper.InitializeAllCategories(model);
-            model.CompanyLocation = accountHelper.GetCountryByID();
+            model.CompanyModel.CompanyLocation = accountHelper.GetCountryByID();
             return View(model);
         }
 
@@ -115,7 +113,7 @@ namespace Web.eBado.Controllers
             using (var uow = NinjectResolver.GetInstance<IUnitOfWork>())
             {
                 EntlibLogger.LogError("Account", "Register", $"Registration attempt with e-mail address: {model.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register" });
-                EntlibLogger.LogInfo("Account", "Register", $"Registration attempt with e-mail address: {model.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register"});
+                EntlibLogger.LogInfo("Account", "Register", $"Registration attempt with e-mail address: {model.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register" });
                 EntlibLogger.LogWarning("Account", "Register", $"Registration attempt with e-mail address: {model.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register" });
                 EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt with e-mail address: {model.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register" });
                 var validationResult = new ValidationResultCollection();
@@ -146,14 +144,18 @@ namespace Web.eBado.Controllers
             using (var uow = NinjectResolver.GetInstance<IUnitOfWork>())
             {
                 var validationResult = new ValidationResultCollection();
-                AccountValidator.ValidateUserRegistration(uow, validationResult, model);
+                AccountValidator.ValidateUserRegistration(uow, validationResult, model.UserModel);
+                if (validationResult.Count > 0)
+                {
+                    ModelState.AddModelErrors(validationResult);
+                }
+
                 if (AccountHelper.IsValidCaptcha())
                 {
                     if (ModelState.IsValid)
                     {
                         try
                         {
-
                             accountHelper.RegisterCompany(model, uow);
                         }
                         catch

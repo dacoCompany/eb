@@ -1,8 +1,5 @@
-﻿using Infrastructure.Common.Enums;
-using System.Collections.Generic;
+﻿using Infrastructure.Resources;
 using System.ComponentModel.DataAnnotations;
-using Infrastructure.Resources;
-using Web.eBado.Models.Shared;
 
 namespace Web.eBado.Models.Account
 {
@@ -10,8 +7,10 @@ namespace Web.eBado.Models.Account
     {
         public string Title { get; set; }
 
+        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         public string FirstName { get; set; }
 
+        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         public string Surname { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]

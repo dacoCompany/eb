@@ -219,17 +219,19 @@
     <Compile Include="Models\Account\CategoriesModel.cs" />
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
     <Compile Include="Models\Account\ChangeSettingsModel.cs" />
-    <Compile Include="Models\Account\Collecion.cs" />
     <Compile Include="Models\Account\ForgotPasswordModel.cs" />
     <Compile Include="Models\Account\LoginModel.cs" />
+    <Compile Include="Models\Account\CompanyModel.cs" />
     <Compile Include="Models\Account\RegisterCompanyModel.cs" />
     <Compile Include="Models\Account\RegisterUserModel.cs" />
     <Compile Include="Models\Account\UserAccountSettingsModel.cs" />
+    <Compile Include="Models\MvcExtensions\ModelStateExtensions.cs" />
     <Compile Include="Models\Shared\FileModel.cs" />
     <Compile Include="Models\Shared\FilesViewModel.cs" />
     <Compile Include="Models\Shared\PostalCodeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validators\AccountValidator.cs" />
+    <Compile Include="Validators\CompanyRequiredAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\BaseContent\css\bootstrap-theme.css" />

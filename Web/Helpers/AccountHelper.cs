@@ -1,7 +1,6 @@
 ﻿using Infrastructure.Common.DB;
 using Infrastructure.Common.Enums;
 using Infrastructure.Configuration;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -68,47 +67,47 @@ namespace Web.eBado.Helpers
 
         public void RegisterCompany(RegisterCompanyModel model, IUnitOfWork uow)
         {
-            var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Code == ((int)UserRole.StandardUser).ToString());
-            var companyType = uow.CompanyTypeRepository.FirstOrDefault(ct => ct.Code == model.CompanyType.ToString());
+            var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Code == UserRole.StandardUser.ToString());
+            var companyType = uow.CompanyTypeRepository.FirstOrDefault(ct => ct.Code == model.CompanyModel.CompanyType.ToString());
             var companyRoleId = uow.CompanyRoleRepository.FirstOrDefault(cr => cr.Code == CompanyRole.Owner.ToString()).Id;
-            var location = uow.LocationRepository.FirstOrDefault(l => l.PostalCode == model.PostalCode);
-            var companyLocation = uow.LocationRepository.FirstOrDefault(l => l.PostalCode == model.CompanyPostalCode);
+            var location = uow.LocationRepository.FirstOrDefault(l => l.PostalCode == model.UserModel.PostalCode);
+            var companyLocation = uow.LocationRepository.FirstOrDefault(l => l.PostalCode == model.CompanyModel.CompanyPostalCode);
             string salt = GenerateSalt();
 
             var userDetails = new UserDetailDbo
             {
-                Email = model.Email,
-                Password = EncodePassword(model.Password, salt),
+                Email = model.UserModel.Email,
+                Password = EncodePassword(model.UserModel.Password, salt),
                 Salt = salt,
-                Title = model.Title,
-                FirstName = model.FirstName,
-                Surname = model.Surname,
-                PhoneNumber = model.PhoneNumber,
-                AdditionalPhoneNumber = model.AdditionalPhoneNumber,
-                DisplayName = $"{model.FirstName} {model.Surname}",
+                Title = model.UserModel.Title,
+                FirstName = model.UserModel.FirstName,
+                Surname = model.UserModel.Surname,
+                PhoneNumber = model.UserModel.PhoneNumber,
+                AdditionalPhoneNumber = model.UserModel.AdditionalPhoneNumber,
+                DisplayName = $"{model.UserModel.FirstName} {model.UserModel.Surname}",
                 UserRoleId = userRole.Id,
             };
             userDetails.Addresses.Add(new AddressDbo
             {
-                Street = model.Street,
-                Number = model.StreetNumber,
+                Street = model.UserModel.Street,
+                Number = model.UserModel.StreetNumber,
                 IsBillingAddress = true,
                 LocationId = location.Id
             });
 
             var companyDetails = new CompanyDetailDbo
             {
-                Name = model.CompanyName,
-                PhoneNumber = model.CompanyPhoneNumber,
-                AdditionalPhoneNumber = model.CompanyAdditionalPhoneNumber,
-                Ico = model.Ico,
-                Dic = model.Dic,
+                Name = model.CompanyModel.CompanyName,
+                PhoneNumber = model.CompanyModel.CompanyPhoneNumber,
+                AdditionalPhoneNumber = model.CompanyModel.CompanyAdditionalPhoneNumber,
+                Ico = model.CompanyModel.CompanyIco,
+                Dic = model.CompanyModel.CompanyDic,
                 CompanyTypeId = companyType.Id,
             };
             companyDetails.Addresses.Add(new AddressDbo
             {
-                Street = model.CompanyStreet,
-                Number = model.CompanyStreetNumber,
+                Street = model.CompanyModel.CompanyStreet,
+                Number = model.CompanyModel.CompanyStreetNumber,
                 IsBillingAddress = true,
                 LocationId = companyLocation.Id
             });
@@ -160,7 +159,7 @@ namespace Web.eBado.Helpers
         {
             CategoriesModel cat = new CategoriesModel();
             cat.AllCategories = GetAllCategories();
-            model.Categories = cat;
+            model.CompanyModel.Categories = cat;
         }
         #endregion
         #region Private Methods
