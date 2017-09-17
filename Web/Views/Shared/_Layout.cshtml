@@ -18,10 +18,10 @@
     <!-- Top panel -->
     <div class="container">
         <div class="lang-panel">
-            <div value="hu-HU" class="lang-div hu @(language.Contains("hu") ? "lang-active" : "")"></div> 
-            <div value="cz-CZ" class="lang-div cz @(language.Contains("cz") ? "lang-active" : "")"></div>
-            <div value="sk-SK" class="lang-div sk @(language.Contains("sk") ? "lang-active" : "")"></div>
-            <div value="en-US" class="lang-div en @(language.Contains("en") ? "lang-active" : "")"></div>
+            <div value="hu-HU" class="lang-div @(language.Contains("hu") ? "hu-active" : "hu")"></div> 
+            <div value="cz-CZ" class="lang-div @(language.Contains("cz") ? "cz-active" : "cz")"></div>
+            <div value="sk-SK" class="lang-div @(language.Contains("sk") ? "sk-active" : "sk")"></div>
+            <div value="en-US" class="lang-div @(language.Contains("en") ? "en-active" : "en")"></div>
         </div>
         </div>
         <div class="top-panel">
@@ -87,20 +87,20 @@
                 }
             }
 
-            $(".lang-div").click(function () {
-                var langValue = $(this).attr('value');
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("SetLanguage", "Home")',
-                    data: { language: langValue},
-                    dataType: "text",
-                    statusCode: {
-                        302: function() {
-                            location.reload(true);
+                $(".lang-div").click(function () {
+                    var langValue = $(this).attr('value');
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("SetLanguage", "Home")',
+                        data: { language: langValue },
+                        dataType: "text",
+                        statusCode: {
+                            302: setTimeout(function () {
+                                window.location.reload();
+                            }, 100)
                         }
-                    }
+                    });
                 });
-            });
         </script>
 
         @*<div class="e-wrapper">

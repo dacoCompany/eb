@@ -70,21 +70,41 @@ h3, h4 {
 }
 
 .en {
-    background-image: url('../img/flag_EN.png');
+    background-image: url('../img/flag_EN_B.png');
     background-size: 25px 25px
 }
 
 .sk {
-    background-image: url('../img/flag_SK.png');
+    background-image: url('../img/flag_SK_B.png');
     background-size: 25px 25px
 }
 
 .cz {
-    background-image: url('../img/flag_CZ.png');
+    background-image: url('../img/flag_CZ_B.png');
     background-size: 25px 25px
 }
 
 .hu {
+    background-image: url('../img/flag_HU_B.png');
+    background-size: 25px 25px
+}
+
+.en-active {
+    background-image: url('../img/flag_EN.png');
+    background-size: 25px 25px
+}
+
+.sk-active {
+    background-image: url('../img/flag_SK.png');
+    background-size: 25px 25px
+}
+
+.cz-active {
+    background-image: url('../img/flag_CZ.png');
+    background-size: 25px 25px
+}
+
+.hu-active {
     background-image: url('../img/flag_HU.png');
     background-size: 25px 25px
 }
@@ -97,25 +117,12 @@ h3, h4 {
     display: inline-block;
     width: 25px;
     height: 25px;
-    -webkit-transition: all 100ms ease-in;
-    -moz-transition: all 100ms ease-in;
-    transition: all 100ms ease-in;
-    -webkit-filter: grayscale(.7);
-    -moz-filter: grayscale(.7) opacity(.8);
-    filter: grayscale(.7) opacity(.8);
 }
 
     .lang-div:hover {
-        -webkit-filter: none;
-        -moz-filter: none;
-        filter: none;
+        background-color:#ccc;
     }
 
-.lang-active {
-    -webkit-filter: none;
-    -moz-filter: none;
-    filter: none;
-}
 
 /***** Top panel *****/
 .top-panel {
@@ -144,7 +151,7 @@ h3, h4 {
     .top-panel {
         width: 100%;
         height: 140px;
-        background-color: #343434;
+        background-color: #fff;
         text-align: center;
     }
 
@@ -154,7 +161,7 @@ h3, h4 {
         width: 100%;
         height: 80px;
         border: 1px;
-        border-color: #ffffff;
+        border-color: #000;
         border-style: solid;
     }
 
@@ -650,6 +657,11 @@ nav-account {
     text-align: left;
 }
 
+@media(max-width:750px){
+    .reg-font {
+        margin-bottom:10px;
+    }
+}
 hr.transparent {
     border: 1px solid #ffffff;
 }
