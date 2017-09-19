@@ -660,7 +660,7 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\eBado.Businesslogic\eBado.BusinessObjects.csproj">
+    <ProjectReference Include="..\eBado.BusinessObjects\eBado.BusinessObjects.csproj">
       <Project>{0C9B2CB1-F730-4DE3-A0CD-7E05421C45D6}</Project>
       <Name>eBado.BusinessObjects</Name>
     </ProjectReference>

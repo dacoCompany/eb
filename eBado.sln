@@ -29,7 +29,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Resources", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BusinessObjects", "BusinessObjects", "{907B0C1F-237E-48F6-9AAF-67737FAFD92F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eBado.BusinessObjects", "eBado.Businesslogic\eBado.BusinessObjects.csproj", "{0C9B2CB1-F730-4DE3-A0CD-7E05421C45D6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eBado.BusinessObjects", "eBado.BusinessObjects\eBado.BusinessObjects.csproj", "{0C9B2CB1-F730-4DE3-A0CD-7E05421C45D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eBado.Entities", "eBado.Entities\eBado.Entities.csproj", "{46C55C67-5CAA-411C-9E44-14C6E63FECD9}"
 EndProject
