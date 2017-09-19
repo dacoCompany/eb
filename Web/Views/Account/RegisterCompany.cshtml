@@ -92,7 +92,7 @@
                                 </div>
                                 <div class="col-sm-12 reg-font">@Resources.ContactDetails</div>
                                 <hr class="col-sm-12 transparent" />
-                                <div class="form-group col-sm-3">
+                                <div class="form-group col-sm-4">
                                     <input type="text" class="form-control txt-lg" id="txtPostalCode" placeholder="@Resources.PHPostalCode" />
                                     @Html.HiddenFor(model => model.UserModel.PostalCode, new { @id = "hiddenPostalCode" })
                                     <input type="hidden" id="hfCustomer" name="CustomerId" />
@@ -100,7 +100,7 @@
                                         @Html.ValidationMessageFor(model => model.UserModel.PostalCode)
                                     </label>
                                 </div>
-                                <div class="form-group col-sm-6">
+                                <div class="form-group col-sm-5">
                                     @Html.EditorFor(model => model.UserModel.Street, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetName } })
                                     <label class="label-form" for="email">
                                         @Html.ValidationMessageFor(model => model.UserModel.Street)
@@ -112,12 +112,12 @@
                                         @Html.ValidationMessageFor(model => model.UserModel.StreetNumber)
                                     </label>
                                 </div>
-                                <div class="col-sm-12 reg-font">@Resources.CompanyInfo</div>
-                                <hr class="col-sm-12 transparent" />
-                                <div class="form-group col-sm-8">
-                                    @Html.DropDownListFor(model => model.CompanyModel.CompanyLocation, EnumHelper.GetSelectList(typeof(Countries)), new { @class = "form-control txt-lg" })
-                                </div>
-                                <div class="form-group col-sm-12"></div>
+                                    <div class="col-sm-12 reg-font">@Resources.CompanyInfo</div>
+                                    <hr class="col-sm-12 transparent" />
+                                    <div class="form-group col-sm-8">
+                                        @Html.DropDownListFor(model => model.CompanyModel.CompanyLocation, EnumHelper.GetSelectList(typeof(Countries)), new { @class = "form-control txt-lg" })
+                                    </div>
+                                    <div class="form-group col-sm-12"></div>
 
                                     <div class="form-group col-sm-1">
                                         <input checked="checked" id="WithIco" name="ICO_choose" type="radio" />
@@ -149,7 +149,8 @@
                                             </label>
                                         </div>
                                         <div class="form-group col-sm-6">
-                                            @Html.DropDownListFor(model => model.CompanyModel.CompanyType, EnumHelper.GetSelectList(typeof(CompanyType)), new { @class = "form-control txt-lg", @id = "AccountTypeDropDown" })
+                                            @Html.DropDownListFor(model => model.CompanyModel.CompanyType, EnumHelper.GetSelectList(typeof(CompanyType)), new { @class = "form-control txt-lg input-disabled", @id = "AccountTypeDropDown" })
+                                            @Html.HiddenFor(model => model.CompanyModel.CompanyType)
                                             <label class="label-form" for="email">
                                                 @Html.ValidationMessageFor(model => model.CompanyModel.CompanyType)
                                             </label>
@@ -157,7 +158,6 @@
                                         <div class="form-group col-sm-6">
                                             <input type="text" class="form-control txt-lg" id="txtCompanyPostalCode" placeholder="@Resources.PHPostalCode" />
                                             @Html.HiddenFor(model => model.CompanyModel.CompanyPostalCode, new { @id = "hiddenCompanyPostalCode" })
-                                            <input type="hidden" id="hfCustomer" name="CustomerId" />
                                             <label class="label-form" for="email">
                                                 @Html.ValidationMessageFor(model => model.CompanyModel.CompanyPostalCode)
                                             </label>
@@ -185,8 +185,8 @@
                                         </label>
                                     </div>
 
-                                <button id="MyButton" class="g-recaptcha form-btn col-sm-12" data-sitekey="@System.Configuration.ConfigurationManager.AppSettings["ReCaptcha_PublicKey"]" data-callback="onSubmit">@Resources.Register2</button>
-                            </form>
+                                    <button id="MyButton" class="g-recaptcha form-btn col-sm-12" data-sitekey="@System.Configuration.ConfigurationManager.AppSettings["ReCaptcha_PublicKey"]" data-callback="onSubmit">@Resources.Register2</button>
+</form>
                             <script>
                                 $('.chosen-select').chosen({ width: '100%' });
                             </script>

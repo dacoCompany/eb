@@ -50,7 +50,7 @@ namespace Web.eBado
                 .Include("~/Content/BaseContent/css/login.css"));
 
             bundles.Add(new StyleBundle("~/Content/batch")
-               .Include("~/Content/BaseContent/css/batchGallery.css"));
+               .Include("~/Content/BaseContent/css/batch-gallery.css"));
 
             bundles.Add(new StyleBundle("~/Content/check-radio")
                 .Include("~/Content/BaseContent/css/check_radio.css"));
