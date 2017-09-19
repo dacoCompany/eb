@@ -1,6 +1,7 @@
 ﻿using Infrastructure.Common.DB;
 using Infrastructure.Common.Validations;
 using System.Web.Mvc;
+using eBado.BusinessObjects;
 using Web.eBado.Helpers;
 using Web.eBado.IoC;
 using Web.eBado.Models.Account;
@@ -17,9 +18,16 @@ namespace Web.eBado.Controllers
     public class AccountController : Controller
     {
         AccountHelper accountHelper;
-        public AccountController()
+        private readonly IConfiguration configuration;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IFilesBusinessObjects fileBo;
+
+        public AccountController(IConfiguration configuration, IUnitOfWork unitOfWork, IFilesBusinessObjects fileBo)
         {
             this.accountHelper = new AccountHelper();
+            this.configuration = configuration;
+            this.unitOfWork = unitOfWork;
+            this.fileBo = fileBo;
         }
 
         #region HTTP GET
@@ -76,12 +84,11 @@ namespace Web.eBado.Controllers
         [AllowAnonymous]
         public ActionResult AccountGallery(FilesViewModel model)
         {
-            model = new FileUploadController(new Configuration(), new UnitOfWork()).Show();
             return View(model);
         }
 
         [AllowAnonymous]
-        public ActionResult EditAccountGallery()
+        public ActionResult EditAccountGallery(string batchId)
         {
             return View();
         }
@@ -213,6 +220,16 @@ namespace Web.eBado.Controllers
         public ActionResult BatchAccountGallery(BatchGalleryModel model)
         {
             return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateBatch(BatchGalleryModel model)
+        {
+            string batchUniqueId = fileBo.CreateBatch(model.Name, model.Description);
+            EntlibLogger.LogInfo("File", "Create Batch", $"Created new batch with id: {batchUniqueId}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Account" });
+            return RedirectToAction("EditAccountGallery", new { batchId = batchUniqueId });
         }
         #endregion
     }

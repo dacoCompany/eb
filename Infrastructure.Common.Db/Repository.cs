@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Common.DB
 {
@@ -58,6 +60,40 @@ namespace Infrastructure.Common.DB
         public T FindById(int id)
         {
             return dataEntity.Where(entity => entity.Id == id).FirstOrDefault(entity => entity.IsActive == true);
+        }
+        
+        /// <summary>
+        /// Saves the specified instance.
+        /// </summary>
+        /// <param name="instance">The instance.</param>
+        /// <returns>Saved instance</returns>
+        public T Save(T instance)
+        {
+            long identity = instance.Id;
+            if (identity == 0)
+            {
+                dataEntity.Add(instance);
+                return instance;
+            }
+
+            dataContext.Entry(instance).State = EntityState.Modified;
+
+            return instance;
+        }
+
+        /// <summary>
+        /// Saves all instances.
+        /// </summary>
+        /// <param name="instances">The instances.</param>
+        /// <returns>Saved instances</returns>
+        public IEnumerable<T> SaveAll(IEnumerable<T> instances)
+        {
+            foreach (T instance in instances)
+            {
+                Save(instance);
+            }
+
+            return instances;
         }
 
         /// <summary>

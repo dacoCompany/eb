@@ -4,6 +4,7 @@ using Ninject;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using eBado.BusinessObjects;
 using WebAPIFactory.Configuration.Core;
 
 namespace Web.eBado.IoC
@@ -65,6 +66,7 @@ namespace Web.eBado.IoC
             kernel.Bind<IEmailSender>().To<SmtpEmailSender>().InSingletonScope();
             kernel.Bind<IUnitOfWork>().To<UnitOfWork>();
             kernel.Bind<IConfiguration>().To<Configuration>();
+            kernel.Bind<IFilesBusinessObjects>().To<FilesBusinessObjects>();
         }
     }
 }

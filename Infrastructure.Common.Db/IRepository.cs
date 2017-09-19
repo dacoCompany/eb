@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Common.DB
 {
@@ -37,6 +38,20 @@ namespace Infrastructure.Common.DB
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
         T FindById(int id);
+
+        /// <summary>
+        /// Saves the specified instance.
+        /// </summary>
+        /// <param name="instance">The instance.</param>
+        /// <returns>Saved instance</returns>
+        T Save(T instance);
+
+        /// <summary>
+        /// Saves all instances.
+        /// </summary>
+        /// <param name="instances">The instances.</param>
+        /// <returns>Saved instances</returns>
+        IEnumerable<T> SaveAll(IEnumerable<T> instances);
 
         /// <summary>
         /// Adds the specified object.

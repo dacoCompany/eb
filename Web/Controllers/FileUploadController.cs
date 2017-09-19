@@ -9,6 +9,9 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using AutoMapper;
+using eBado.BusinessObjects;
+using eBado.Entities;
 using Web.eBado.Helpers;
 using Web.eBado.Models.Shared;
 using WebAPIFactory.Configuration.Core;
@@ -18,14 +21,6 @@ namespace Web.eBado.Controllers
     public class FileUploadController : Controller
     {
         FilesHelper filesHelper;
-        string serverMapPath = "~/Files/somefiles/";
-        private string StorageRoot
-        {
-            get { return Path.Combine(HostingEnvironment.MapPath(serverMapPath)); }
-        }
-        private string UrlBase = "/Files/somefiles/";
-        string DeleteURL = "/FileUpload/DeleteFile/?file=";
-        string DeleteType = "GET";
         private readonly HashSet<string> supportedImageTypes = new HashSet<string> { "image/jpg", "image/jpeg", "image/png", "image/png", "image/bmp", "image/tiff", "image/tif" };
         private readonly HashSet<string> supportedFileTypes = new HashSet<string>
         {
@@ -44,15 +39,15 @@ namespace Web.eBado.Controllers
             "application/x-zip-compressed",
             "application/x-7z-compressed"
         };
-        private const string StorageConnectionStringKey = "StorageConnectionString";
         private readonly IConfiguration configuration;
         private readonly IUnitOfWork unitOfWork;
+        private readonly IFilesBusinessObjects filesBo;
 
-        public FileUploadController(IConfiguration configuration, IUnitOfWork unitOfWork)
+        public FileUploadController(IConfiguration configuration, IUnitOfWork unitOfWork, IFilesBusinessObjects filesBo)
         {
             this.configuration = configuration;
             this.unitOfWork = unitOfWork;
-            filesHelper = new FilesHelper(DeleteURL, DeleteType, StorageRoot, UrlBase, serverMapPath);
+            this.filesBo = filesBo;
         }
 
         public FilesViewModel Show()
@@ -69,23 +64,19 @@ namespace Web.eBado.Controllers
         [HttpPost]
         public JsonResult Upload()
         {
-            var resultList = new List<ViewDataUploadFilesResult>();
-
-            var CurrentContext = HttpContext;
-
-            filesHelper.UploadAndShowResults(CurrentContext, resultList);
-            JsonFiles files = new JsonFiles(resultList);
-
-            bool isEmpty = !resultList.Any();
-            if (isEmpty)
+            var files = MapAttachmentsFromRequest();
+            Mapper.Initialize(cfg =>
             {
-                return Json("Error ");
-            }
-            else
-            {
-                return Json(files);
-            }
+                cfg.CreateMap<FileModel, FileEntity>();
+            });
+
+            var fileEntities = Mapper.Map<ICollection<FileEntity>>(files);
+
+            int uploadedCount = filesBo.UploadFiles(fileEntities);
+
+            return files.Count == uploadedCount ? Json("Success", JsonRequestBehavior.AllowGet) : Json("Some files are not supported.", JsonRequestBehavior.AllowGet);
         }
+
         public JsonResult GetFileList()
         {
             var list = filesHelper.GetFileList();
@@ -94,119 +85,17 @@ namespace Web.eBado.Controllers
         [HttpGet]
         public JsonResult DeleteFile(string file)
         {
-            filesHelper.DeleteFile(file);
-            return Json("OK", JsonRequestBehavior.AllowGet);
+            bool deleted = filesBo.DeleteFile(file);
+
+            return deleted ? Json("Deleted", JsonRequestBehavior.AllowGet) : Json("Error", JsonRequestBehavior.AllowGet);
         }
-
-        [HttpPost]
-        public JsonResult UploadFileAzure()
-        {
-            var container = GetAzureBlobContainer();
-
-            var files = MapAttachmentsFromRequest();
-
-            var batch = new BatchAttachmentDbo
-            {
-                Description = "Some batch",
-                Name = "TestBatch",
-                CompanyDetailsId = 1
-            };
-
-            foreach (var file in files)
-            {
-                CloudBlockBlob blockBlob = container.GetBlockBlobReference("photos/" + file.Name);
-                blockBlob.UploadFromByteArray(file.Content, 0, file.Content.Length);
-                file.Url = blockBlob.Uri.ToString();
-
-                if (!supportedFileTypes.Contains(file.ContentType))
-                    continue;
-
-                string fileThumb = Path.GetFileNameWithoutExtension(file.Name) + "_thumbImg.jpg";
-                if (supportedImageTypes.Contains(file.ContentType))
-                {
-                    using (MemoryStream stream = new MemoryStream(file.Content))
-                    {
-                        var thumbnail = new WebImage(stream).Resize(130, 100, true, true);
-                        thumbnail.FileName = fileThumb;
-                        byte[] thumb = thumbnail.GetBytes("image/jpeg");
-                        CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference("photos/" + fileThumb);
-                        blockBlobThumb.UploadFromByteArray(thumb, 0, thumb.Length);
-                        file.ThumbnailUrl = blockBlobThumb.Uri.ToString();
-                    }
-                }
-                else
-                {
-                    // get thumbnail for non-image file
-                    string extension = GetExtensionFromMimeType(file.ContentType);
-                    string path = HostingEnvironment.MapPath($@"~/Content/Free-file-icons/48px/{extension}.png");
-                    using (var stream = new FileStream(path, FileMode.Open))
-                    {
-                        byte[] thumb = new byte[1048576];
-                        stream.ReadAsync(thumb, 0, (int)stream.Length);
-                        CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference("photos/" + fileThumb);
-                        blockBlobThumb.UploadFromByteArray(thumb, 0, thumb.Length);
-                        file.ThumbnailUrl = blockBlobThumb.Uri.ToString();
-                    }
-                }
-
-                var attachment = new AttachmentDbo
-                {
-                    OriginalUrl = file.Url,
-                    ThumbnailUrl = file.ThumbnailUrl
-                };
-                batch.Attachments.Add(attachment);
-
-            }
-
-            unitOfWork.BatchAttachmentRepository.Add(batch);
-            unitOfWork.Commit();
-
-            return files.Count == batch.Attachments.Count ? Json("Success", JsonRequestBehavior.AllowGet) : Json("Some files are not supported.", JsonRequestBehavior.AllowGet);
-        }
-
+        
         [HttpGet]
         public JsonResult DeleteFileAzure(string fileName)
         {
-            var container = GetAzureBlobContainer();
-            CloudBlockBlob blockBlob = container.GetBlockBlobReference("photos/" + fileName);
-            bool result = blockBlob.DeleteIfExists(DeleteSnapshotsOption.IncludeSnapshots);
+            bool deleted = filesBo.DeleteFile(fileName);
 
-            string thumbName = Path.GetFileNameWithoutExtension(fileName) + "_thumbImg.jpg";
-            CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference("photos/" + thumbName);
-            bool resultThumb = blockBlobThumb.DeleteIfExists(DeleteSnapshotsOption.IncludeSnapshots);
-
-            var attachment = unitOfWork.AttachmentRepository.FirstOrDefault(a => a.OriginalUrl.Contains(fileName));
-            bool dboDeleted = false;
-
-            if (attachment != null)
-            {
-                attachment.IsActive = false;
-                unitOfWork.Commit();
-                dboDeleted = true;
-            }
-
-
-            return result && resultThumb && dboDeleted ? Json("Deleted", JsonRequestBehavior.AllowGet) : Json("Error", JsonRequestBehavior.AllowGet);
-        }
-
-        private CloudBlobContainer GetAzureBlobContainer()
-        {
-            // get connection string
-            var storageAccount = CloudStorageAccount.Parse(configuration.GetValueByKey(StorageConnectionStringKey));
-
-            // create blob client
-            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-
-            // retrieve container reference
-            CloudBlobContainer container = blobClient.GetContainerReference("ebadogallery");
-
-            // create container if doesn't exist
-            container.CreateIfNotExists();
-
-            // set container permissions
-            container.SetPermissions(new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Container });
-
-            return container;
+            return deleted ? Json("Deleted", JsonRequestBehavior.AllowGet) : Json("Error", JsonRequestBehavior.AllowGet);
         }
 
         private ICollection<FileModel> MapAttachmentsFromRequest()

@@ -7,69 +7,79 @@
 @Styles.Render("~/Content/settings")
 @Styles.Render("~/Content/batch")
 
-
-@Html.AntiForgeryToken()
-<div class="container">
-    <div class="resp push_top_10">
-        @AccountHelper.SettingsMenu(Url, ViewContext.RouteData.Values["Action"].ToString())
-        <div class="tabcontent-gallery push_top_10">
-            <div style="float:left; margin-bottom: 30px; width:100%">
-                <button id="addBatch" class="form-btn col-lg-2" style="float:left">Create</button>
-            </div>
-            <div id="batchArea" class="col-lg-12" style="margin-bottom:30px; display:none">
-                <div class="form-group">
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Name" } })
-                        <div class="val-message">@Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })</div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Description" } })
-                        <div class="val-message">@Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })</div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-10">
-                        <input type="submit" id="createBatch" value="Create" class="form-btn col-lg-2" />
-                    </div>
-                </div>
-            </div>
-            @if (Model.Batch.Any())
-            {
-                foreach (var batch in Model.Batch)
-                {
-                    <div class="responsive">
-                        <div class="gallery">
-                            <div class="head">
-                                <div class="name">@batch.Name</div>
-                                <div class="att_count"><span class="glyphicon glyphicon-picture"><span style="color:darkolivegreen;font-weight:bold; margin-left:2px">@batch.AttachmentsCount</span></span></div>
-                            </div>
-                            <a target="_blank" href="@Url.Action("EditAccountGallery", "Account", new { id = batch.Id })">
-                            @batch.BaseThumbUrl != null ? <img src="@batch.BaseThumbUrl" width="300" height="200">
-                                : <img src="~/Content/BaseContent/img/no_photo.jpg" width="300" height="200"> 
-                            </a>
-                            <div class="desc">@batch.Description</div>
-                        </div>
-                    </div>
-                }
-            }
-
-        </div>
-    </div>
-</div>
-
 <script>
-    $(function () {
-        $("#addBatch").click(function () {
-            $(this).text(function (i, text) {
-                return text === "Create" ? "Close" : "Create";
-            })
-            $("#batchArea").slideToggle();
-        });
-    })
+    function onSubmit(token) {
+        document.getElementById("htmlForm").submit();
+    }
 </script>
 
+
+    <div class="container">
+        <div class="resp push_top_10">
+            @AccountHelper.SettingsMenu(Url, ViewContext.RouteData.Values["Action"].ToString())
+            <div class="tabcontent-gallery push_top_10">
+                <div style="float:left; margin-bottom: 30px; width:100%">
+                    <button id="addBatch" class="form-btn col-lg-2" style="float:left">Create</button>
+                </div>
+            @using (Html.BeginForm("CreateBatch", "Account", new { id = "htmlForm" }))
+            {
+                @Html.AntiForgeryToken()
+                <form>
+                    <div id="batchArea" class="col-lg-12" style="margin-bottom:30px; display:none">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Name" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Description" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <button id="MyButton" class="form-btn col-sm-12" data-callback="onSubmit">Create</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            }
+                @if (Model.Batch.Any())
+                {
+                    foreach (var batch in Model.Batch)
+                    {
+                        <div class="responsive">
+                            <div class="gallery">
+                                <div class="head">
+                                    <div class="name">@batch.Name</div>
+                                    <div class="att_count"><span class="glyphicon glyphicon-picture"><span style="color:darkolivegreen;font-weight:bold; margin-left:2px">@batch.AttachmentsCount</span></span></div>
+                                </div>
+                                <a target="_blank" href="@Url.Action("EditAccountGallery", "Account", new { id = batch.Id })">
+                                    @batch.BaseThumbUrl != null ? <img src="@batch.BaseThumbUrl" width="300" height="200">
+                                    : <img src="~/Content/BaseContent/img/no_photo.jpg" width="300" height="200">
+                                </a>
+                                <div class="desc">@batch.Description</div>
+                            </div>
+                        </div>
+                    }
+                }
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function () {
+            $("#addBatch").click(function () {
+                $(this).text(function (i, text) {
+                    return text === "Create" ? "Close" : "Create";
+                })
+                $("#batchArea").slideToggle();
+            });
+        })
+    </script>
 
 
 
