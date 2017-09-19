@@ -24,7 +24,7 @@ namespace Web.eBado.Helpers
         #endregion
 
         #region Public Methods
-        public Countries GetCountryByID()
+        public Countries GetCountryByIP()
         {
             string ip = HttpContext.Current.Request.UserHostAddress;
             var url = new Uri(locationBaseUri, ip);

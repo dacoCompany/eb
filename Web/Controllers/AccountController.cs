@@ -42,7 +42,7 @@ namespace Web.eBado.Controllers
         {
             RegisterCompanyModel model = new RegisterCompanyModel();
             accountHelper.InitializeAllCategories(model);
-            model.CompanyModel.CompanyLocation = accountHelper.GetCountryByID();
+            model.CompanyModel.CompanyLocation = accountHelper.GetCountryByIP();
             return View(model);
         }
 

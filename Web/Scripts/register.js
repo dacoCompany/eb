@@ -17,16 +17,13 @@ function disableFilledTextBoxes(data)
     }
     if (data.Name != null)
     {
-        $("#txtCompanyName").attr("disabled", "disabled");
+        $("#txtCompanyName").attr("readonly", true);
     }
     if (data.Dic != null) {
-        $("#txtDic").attr("disabled", "disabled");
-    }
-    if (data.CompanyType != null) {
-        $("#AccountTypeDropDown").attr("disabled", "disabled");
+        $("#txtDic").attr("readonly", true);
     }
     if (data.PostCode != null) {
-        $("#txtCompanyPostalCode").attr("disabled", "disabled");
+        $("#txtCompanyPostalCode").attr("readonly", true);
     }
 }
 
@@ -85,10 +82,8 @@ $(function () {
     $("#WithoutIco").click(function () {
         $("#companyDiv").show();
         $("#AccountTypeDropDown").val('1');
-        $("#AccountTypeDropDown").attr("disabled", "disabled");
     });
     $("#WithIco").click(function () {
         $("#companyDiv").hide();
-        $("#AccountTypeDropDown").removeAttr("disabled");
     });
 });
