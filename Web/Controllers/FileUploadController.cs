@@ -62,7 +62,7 @@ namespace Web.eBado.Controllers
         }
 
         [HttpPost]
-        public JsonResult Upload()
+        public JsonResult Upload(string batchId)
         {
             var files = MapAttachmentsFromRequest();
             Mapper.Initialize(cfg =>
@@ -72,15 +72,15 @@ namespace Web.eBado.Controllers
 
             var fileEntities = Mapper.Map<ICollection<FileEntity>>(files);
 
-            int uploadedCount = filesBo.UploadFiles(fileEntities);
+            int uploadedCount = filesBo.UploadFiles(fileEntities, batchId);
 
             return files.Count == uploadedCount ? Json("Success", JsonRequestBehavior.AllowGet) : Json("Some files are not supported.", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetFileList()
         {
-            var list = filesHelper.GetFileList();
-            return Json(list, JsonRequestBehavior.AllowGet);
+            //var list = filesHelper.GetFileList();
+            return Json(JsonRequestBehavior.AllowGet);
         }
         [HttpGet]
         public JsonResult DeleteFile(string file)

@@ -56,7 +56,7 @@
                                     <div class="name">@batch.Name</div>
                                     <div class="att_count"><span class="glyphicon glyphicon-picture"><span style="color:darkolivegreen;font-weight:bold; margin-left:2px">@batch.AttachmentsCount</span></span></div>
                                 </div>
-                                <a target="_blank" href="@Url.Action("EditAccountGallery", "Account", new { id = batch.Id })">
+                                <a target="_blank" href="@Url.Action("AccountGallery", "Account", new { id = batch.Id })">
                                     @batch.BaseThumbUrl != null ? <img src="@batch.BaseThumbUrl" width="300" height="200">
                                     : <img src="~/Content/BaseContent/img/no_photo.jpg" width="300" height="200">
                                 </a>

@@ -1,5 +1,5 @@
 ﻿
-<form id="fileupload" method="POST" enctype="multipart/form-data" data-url="@Url.Action("Upload","FileUpload")">
+<form id="fileupload" method="POST" enctype="multipart/form-data" data-url="@Url.Action("Upload","FileUpload", new { batchId = @ViewBag.batchId })">
     <div class="row fileupload-buttonbar" style="text-align:left">
             <div class="col-lg-10" style="margin:0 auto">
                 <span class="btn form-btn-transparent fileinput-button">

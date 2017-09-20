@@ -82,7 +82,7 @@ namespace Web.eBado.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult AccountGallery(FilesViewModel model)
+        public ActionResult AccountGallery(FilesViewModel model, string batchId)
         {
             return View(model);
         }
@@ -90,6 +90,7 @@ namespace Web.eBado.Controllers
         [AllowAnonymous]
         public ActionResult EditAccountGallery(string batchId)
         {
+            ViewBag.batchId = batchId;
             return View();
         }
 

@@ -5,7 +5,7 @@ namespace eBado.BusinessObjects
 {
     public interface IFilesBusinessObjects
     {
-        int UploadFiles(IEnumerable<FileEntity> files);
+        int UploadFiles(IEnumerable<FileEntity> files, string batchId);
 
         bool DeleteFile(string fileName);
 

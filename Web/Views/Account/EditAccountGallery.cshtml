@@ -40,6 +40,9 @@
             <div style="float:left; margin-bottom: 50px; width:100%">
                 <button type="submit" class="form-btn col-lg-2" style="float:left" onclick="location.href='@Url.Action("AccountGallery", "Account")'">Naspat</button>
             </div>
+            <div class="col-lg-10">
+                <h2>@ViewBag.batchId</h2>
+            </div>
             @Html.Partial("_Files")
         </div>
     </div>

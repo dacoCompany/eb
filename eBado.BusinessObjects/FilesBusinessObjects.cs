@@ -46,17 +46,12 @@ namespace eBado.BusinessObjects
             this.configuration = configuration;
         }
 
-        public int UploadFiles(IEnumerable<FileEntity> files)
+        public int UploadFiles(IEnumerable<FileEntity> files, string batchId)
         {
             var container = GetAzureBlobContainer();
 
-            var batch = new BatchAttachmentDbo
-            {
-                Description = "Some batch",
-                Name = "TestBatch",
-                CompanyDetailsId = 1
-            };
-
+            var batch = unitOfWork.BatchAttachmentRepository.FirstOrDefault(ba => ba.Name == batchId);
+            int fileCount = 0;
             foreach (var file in files)
             {
                 CloudBlockBlob blockBlob = container.GetBlockBlobReference("photos/" + file.Name);
@@ -100,12 +95,12 @@ namespace eBado.BusinessObjects
                     ThumbnailUrl = file.ThumbnailUrl
                 };
                 batch.Attachments.Add(attachment);
+                ++fileCount;
 
             }
 
-            unitOfWork.BatchAttachmentRepository.Add(batch);
             unitOfWork.Commit();
-            return 0;
+            return fileCount;
         }
 
         public bool DeleteFile(string fileName)
