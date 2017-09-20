@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -54,7 +55,7 @@ namespace eBado.BusinessObjects
             int fileCount = 0;
             foreach (var file in files)
             {
-                CloudBlockBlob blockBlob = container.GetBlockBlobReference("photos/" + file.Name);
+                CloudBlockBlob blockBlob = container.GetBlockBlobReference($"photos/{batchId}/{file.Name}");
                 blockBlob.UploadFromByteArray(file.Content, 0, file.Content.Length);
                 file.Url = blockBlob.Uri.ToString();
 
@@ -155,6 +156,20 @@ namespace eBado.BusinessObjects
             EntlibLogger.LogInfo("File", "Create Batch", $"Created new batch with id: {guid.ToString()}", new DiagnosticsLogging());
 
             return guid.ToString();
+        }
+
+        public ICollection<BatchEntity> GetBatches(int companyId)
+        {
+            var batches = unitOfWork.CompanyDetailsRepository.FindById(companyId).BatchAttachments;
+
+            var resposne = new Collection<BatchEntity>();
+
+            foreach (var batch in batches)
+            {
+                resposne.Add(new BatchEntity { Id = batch.Id, Name = batch.Name, Description = batch.Description, AttachmentsCount = batch.Attachments.Count });
+            }
+
+            return resposne;
         }
 
         private CloudBlobContainer GetAzureBlobContainer()

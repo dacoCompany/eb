@@ -1,7 +1,12 @@
-﻿using Infrastructure.Common.DB;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Infrastructure.Common.DB;
 using Infrastructure.Common.Validations;
 using System.Web.Mvc;
+using AutoMapper;
 using eBado.BusinessObjects;
+using eBado.Entities;
 using Web.eBado.Helpers;
 using Web.eBado.IoC;
 using Web.eBado.Models.Account;
@@ -84,6 +89,7 @@ namespace Web.eBado.Controllers
         [AllowAnonymous]
         public ActionResult AccountGallery(FilesViewModel model, string batchId)
         {
+            ViewBag.batchId = batchId;
             return View(model);
         }
 
@@ -97,8 +103,26 @@ namespace Web.eBado.Controllers
         [AllowAnonymous]
         public ActionResult BatchAccountGallery()
         {
-            var model = new BatchGalleryModel();
-            return View(model);
+            try
+            {
+                var model = new BatchGalleryModel();
+                var entities = fileBo.GetBatches(1);
+
+                Mapper.Initialize(cfg =>
+                {
+                    cfg.CreateMap<BatchModel, BatchEntity>().ReverseMap();
+                });
+
+                var fileEntities = Mapper.Map<Collection<BatchModel>>(entities);
+                model.Batch = fileEntities;
+                return View(model);
+            }
+            catch (Exception e)
+            {
+                EntlibLogger.LogError("Account", "FileUpload", e.Message, DiagnosticsLogging.Create("Controller", "Account"), e);
+                throw;
+            }
+
         }
 
         #endregion

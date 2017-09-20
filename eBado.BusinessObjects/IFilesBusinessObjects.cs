@@ -12,5 +12,7 @@ namespace eBado.BusinessObjects
         IEnumerable<FileEntity> GetBatchFiles(int batchId);
 
         string CreateBatch(string name, string description);
+
+        ICollection<BatchEntity> GetBatches(int companyId);
     }
 }

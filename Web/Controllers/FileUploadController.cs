@@ -1,4 +1,5 @@
-﻿using Infrastructure.Common.DB;
+﻿using System;
+using Infrastructure.Common.DB;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System.Collections.Generic;
@@ -12,9 +13,12 @@ using System.Web.Mvc;
 using AutoMapper;
 using eBado.BusinessObjects;
 using eBado.Entities;
+using Microsoft.Practices.EnterpriseLibrary.Logging;
 using Web.eBado.Helpers;
 using Web.eBado.Models.Shared;
 using WebAPIFactory.Configuration.Core;
+using WebAPIFactory.Logging.Core;
+using WebAPIFactory.Logging.Core.Diagnostics;
 
 namespace Web.eBado.Controllers
 {
@@ -64,17 +68,26 @@ namespace Web.eBado.Controllers
         [HttpPost]
         public JsonResult Upload(string batchId)
         {
-            var files = MapAttachmentsFromRequest();
-            Mapper.Initialize(cfg =>
+            try
             {
-                cfg.CreateMap<FileModel, FileEntity>();
-            });
+                var files = MapAttachmentsFromRequest();
+                Mapper.Initialize(cfg =>
+                {
+                    cfg.CreateMap<FileModel, FileEntity>();
+                });
 
-            var fileEntities = Mapper.Map<ICollection<FileEntity>>(files);
+                var fileEntities = Mapper.Map<ICollection<FileEntity>>(files);
 
-            int uploadedCount = filesBo.UploadFiles(fileEntities, batchId);
+                int uploadedCount = filesBo.UploadFiles(fileEntities, batchId);
 
-            return files.Count == uploadedCount ? Json("Success", JsonRequestBehavior.AllowGet) : Json("Some files are not supported.", JsonRequestBehavior.AllowGet);
+                return files.Count == uploadedCount ? Json("Success", JsonRequestBehavior.AllowGet) : Json("Some files are not supported.", JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                EntlibLogger.LogError("File", "Upload", e.Message, DiagnosticsLogging.Create("Controller", "File"), e);
+                throw;
+            }
+
         }
 
         public JsonResult GetFileList()
@@ -89,7 +102,7 @@ namespace Web.eBado.Controllers
 
             return deleted ? Json("Deleted", JsonRequestBehavior.AllowGet) : Json("Error", JsonRequestBehavior.AllowGet);
         }
-        
+
         [HttpGet]
         public JsonResult DeleteFileAzure(string fileName)
         {
@@ -112,6 +125,31 @@ namespace Web.eBado.Controllers
                 if (httpPostedFile.ContentLength == 0)
                     continue;
 
+                using (BinaryReader reader = new BinaryReader(httpPostedFile.InputStream))
+                {
+                    var byteFile = reader.ReadBytes(httpPostedFile.ContentLength);
+                    fileCollection.Add(new FileModel
+                    {
+                        Name = new FileInfo(httpPostedFile.FileName).Name,
+                        ContentType = httpPostedFile.ContentType,
+                        Content = byteFile
+                    });
+                }
+            }
+
+            return fileCollection;
+        }
+
+        private ICollection<FileModel> MapAttachmentsFromRequest2()
+        {
+            HttpRequestBase currentRequest = Request;
+            ICollection<FileModel> fileCollection = new Collection<FileModel>();
+
+            if (currentRequest.Files.Count <= 0)
+                return fileCollection;
+
+            foreach (HttpPostedFileBase httpPostedFile in currentRequest.Files.AllKeys.Select(key => currentRequest.Files[key]).Where(httpPostedFile => httpPostedFile != null))
+            {
                 using (BinaryReader reader = new BinaryReader(httpPostedFile.InputStream))
                 {
                     var byteFile = reader.ReadBytes(httpPostedFile.ContentLength);
