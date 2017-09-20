@@ -44,6 +44,8 @@
           <Property Name="DateCreated" Type="datetime2" Precision="0" />
           <Property Name="DateModified" Type="datetime2" Precision="0" />
           <Property Name="CompanyDetailsId" Type="int" Nullable="false" />
+          <Property Name="GuId" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="ThumbnailUrl" Type="varchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -564,7 +566,6 @@
         <EntityContainer Name="EBADOEntitiesTest" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AddressDboes" EntityType="testDBModel.AddressDbo" />
           <EntitySet Name="AttachmentDboes" EntityType="testDBModel.AttachmentDbo" />
-          <EntitySet Name="BatchAttachmentDboes" EntityType="testDBModel.BatchAttachmentDbo" />
           <EntitySet Name="CategoryDboes" EntityType="testDBModel.CategoryDbo" />
           <EntitySet Name="Category2CompanyDetailsDbo" EntityType="testDBModel.Category2CompanyDetailsDbo" />
           <EntitySet Name="CompanyDetailDboes" EntityType="testDBModel.CompanyDetailDbo" />
@@ -591,14 +592,6 @@
           <AssociationSet Name="FKAddressUserDetailsId" Association="testDBModel.FKAddressUserDetailsId">
             <End Role="UserDetail" EntitySet="UserDetailDboes" />
             <End Role="Address" EntitySet="AddressDboes" />
-          </AssociationSet>
-          <AssociationSet Name="FKAttachmentBatchAttachmentId" Association="testDBModel.FKAttachmentBatchAttachmentId">
-            <End Role="BatchAttachment" EntitySet="BatchAttachmentDboes" />
-            <End Role="Attachment" EntitySet="AttachmentDboes" />
-          </AssociationSet>
-          <AssociationSet Name="FKCompanyDetailsBatchAttachmentId" Association="testDBModel.FKCompanyDetailsBatchAttachmentId">
-            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
-            <End Role="BatchAttachment" EntitySet="BatchAttachmentDboes" />
           </AssociationSet>
           <AssociationSet Name="FKCategory" Association="testDBModel.FKCategory">
             <End Role="Category" EntitySet="CategoryDboes" />
@@ -656,6 +649,15 @@
             <End Role="UserRole" EntitySet="UserRoleDboes" />
             <End Role="UserRole2UserPermission" EntitySet="UserRole2UserPermissionDbo" />
           </AssociationSet>
+          <EntitySet Name="BatchAttachmentDboes" EntityType="testDBModel.BatchAttachmentDbo" />
+          <AssociationSet Name="FKAttachmentBatchAttachmentId" Association="testDBModel.FKAttachmentBatchAttachmentId">
+            <End Role="BatchAttachment" EntitySet="BatchAttachmentDboes" />
+            <End Role="AttachmentDbo" EntitySet="AttachmentDboes" />
+          </AssociationSet>
+          <AssociationSet Name="FKCompanyDetailsBatchAttachmentId" Association="testDBModel.FKCompanyDetailsBatchAttachmentId">
+            <End Role="CompanyDetailDbo" EntitySet="CompanyDetailDboes" />
+            <End Role="BatchAttachment" EntitySet="BatchAttachmentDboes" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="AddressDbo">
           <Key>
@@ -687,21 +689,7 @@
           <Property Name="DateCreated" Type="DateTime" Precision="0" />
           <Property Name="DateModified" Type="DateTime" Precision="0" />
           <Property Name="BatchAttId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="BatchAttachment" Relationship="testDBModel.FKAttachmentBatchAttachmentId" FromRole="Attachment" ToRole="BatchAttachment" />
-        </EntityType>
-        <EntityType Name="BatchAttachmentDbo">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="DateCreated" Type="DateTime" Precision="0" />
-          <Property Name="DateModified" Type="DateTime" Precision="0" />
-          <Property Name="CompanyDetailsId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Attachments" Relationship="testDBModel.FKAttachmentBatchAttachmentId" FromRole="BatchAttachment" ToRole="Attachment" />
-          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKCompanyDetailsBatchAttachmentId" FromRole="BatchAttachment" ToRole="CompanyDetail" />
+          <NavigationProperty Name="BatchAttachment" Relationship="testDBModel.FKAttachmentBatchAttachmentId" FromRole="AttachmentDbo" ToRole="BatchAttachment" />
         </EntityType>
         <EntityType Name="CategoryDbo">
           <Key>
@@ -746,11 +734,11 @@
           <Property Name="DateModified" Type="DateTime" Precision="0" />
           <Property Name="CompanyTypeId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Addresses" Relationship="testDBModel.FKAddressCompanyDetailsId" FromRole="CompanyDetail" ToRole="Address" />
-          <NavigationProperty Name="BatchAttachments" Relationship="testDBModel.FKCompanyDetailsBatchAttachmentId" FromRole="CompanyDetail" ToRole="BatchAttachment" />
           <NavigationProperty Name="Category2CompanyDetails" Relationship="testDBModel.FKCategory2CompanyDetailsCompanyDetails" FromRole="CompanyDetail" ToRole="Category2CompanyDetails" />
           <NavigationProperty Name="CompanyDetails2UserDetails" Relationship="testDBModel.FKCompanyDetails" FromRole="CompanyDetail" ToRole="CompanyDetails2UserDetails" />
           <NavigationProperty Name="CompanyType" Relationship="testDBModel.FKCompanyType" FromRole="CompanyDetail" ToRole="CompanyType" />
           <NavigationProperty Name="SubCategory2CompanyDetails" Relationship="testDBModel.FKSubCategory2CompanyDetailsCompanyDetails" FromRole="CompanyDetail" ToRole="SubCategory2CompanyDetails" />
+          <NavigationProperty Name="BatchAttachments" Relationship="testDBModel.FKCompanyDetailsBatchAttachmentId" FromRole="CompanyDetailDbo" ToRole="BatchAttachment" />
         </EntityType>
         <EntityType Name="CompanyDetails2UserDetailsDbo">
           <Key>
@@ -959,30 +947,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FKAttachmentBatchAttachmentId">
-          <End Type="testDBModel.BatchAttachmentDbo" Role="BatchAttachment" Multiplicity="1" />
-          <End Type="testDBModel.AttachmentDbo" Role="Attachment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="BatchAttachment">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Attachment">
-              <PropertyRef Name="BatchAttId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FKCompanyDetailsBatchAttachmentId">
-          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="1" />
-          <End Type="testDBModel.BatchAttachmentDbo" Role="BatchAttachment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CompanyDetail">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="BatchAttachment">
-              <PropertyRef Name="CompanyDetailsId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FKCategory">
           <End Type="testDBModel.CategoryDbo" Role="Category" Multiplicity="1" />
           <End Type="testDBModel.SubCategoryDbo" Role="SubCategory" Multiplicity="*" />
@@ -1151,6 +1115,46 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="BatchAttachmentDbo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="0" />
+          <Property Name="DateModified" Type="DateTime" Precision="0" />
+          <Property Name="CompanyDetailsId" Type="Int32" Nullable="false" />
+          <Property Name="GuId" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ThumbnailUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Attachments" Relationship="testDBModel.FKAttachmentBatchAttachmentId" FromRole="BatchAttachment" ToRole="AttachmentDbo" />
+          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKCompanyDetailsBatchAttachmentId" FromRole="BatchAttachment" ToRole="CompanyDetailDbo" />
+        </EntityType>
+        <Association Name="FKAttachmentBatchAttachmentId">
+          <End Type="testDBModel.BatchAttachmentDbo" Role="BatchAttachment" Multiplicity="1" />
+          <End Type="testDBModel.AttachmentDbo" Role="AttachmentDbo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BatchAttachment">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AttachmentDbo">
+              <PropertyRef Name="BatchAttId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKCompanyDetailsBatchAttachmentId">
+          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetailDbo" Multiplicity="1" />
+          <End Type="testDBModel.BatchAttachmentDbo" Role="BatchAttachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CompanyDetailDbo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BatchAttachment">
+              <PropertyRef Name="CompanyDetailsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1183,19 +1187,6 @@
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="ThumbnailUrl" ColumnName="ThumbnailUrl" />
                 <ScalarProperty Name="OriginalUrl" ColumnName="OriginalUrl" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BatchAttachmentDboes">
-            <EntityTypeMapping TypeName="testDBModel.BatchAttachmentDbo">
-              <MappingFragment StoreEntitySet="BatchAttachment">
-                <ScalarProperty Name="CompanyDetailsId" ColumnName="CompanyDetailsId" />
-                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
-                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1399,6 +1390,21 @@
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="UserPermissionId" ColumnName="UserPermissionId" />
                 <ScalarProperty Name="UserRoleId" ColumnName="UserRoleId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BatchAttachmentDboes">
+            <EntityTypeMapping TypeName="testDBModel.BatchAttachmentDbo">
+              <MappingFragment StoreEntitySet="BatchAttachment">
+                <ScalarProperty Name="ThumbnailUrl" ColumnName="ThumbnailUrl" />
+                <ScalarProperty Name="GuId" ColumnName="GuId" />
+                <ScalarProperty Name="CompanyDetailsId" ColumnName="CompanyDetailsId" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
