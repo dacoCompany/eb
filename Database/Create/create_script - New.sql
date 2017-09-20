@@ -206,8 +206,10 @@
 		CREATE TABLE [BatchAttachment]
 		(
 			[Id] INT IDENTITY(1,1),
+			[GuId] VARCHAR(255) NOT NULL,
 			[Name] VARCHAR(50) NOT NULL,
 			[Description] VARCHAR(100),
+			[ThumbnailUrl] VARCHAR(255),			
 			[IsActive] BIT NOT NULL DEFAULT 'true',
 			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
 			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,

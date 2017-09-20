@@ -15,8 +15,7 @@ namespace Infrastructure.Common.DB
     
     public partial class EBADOEntitiesTest : DbContext
     {
-        public EBADOEntitiesTest(string connString)
-            : base(connString)
+        public EBADOEntitiesTest(string connectionString)
         {
         }
     
@@ -27,7 +26,6 @@ namespace Infrastructure.Common.DB
     
         public virtual DbSet<AddressDbo> AddressDboes { get; set; }
         public virtual DbSet<AttachmentDbo> AttachmentDboes { get; set; }
-        public virtual DbSet<BatchAttachmentDbo> BatchAttachmentDboes { get; set; }
         public virtual DbSet<CategoryDbo> CategoryDboes { get; set; }
         public virtual DbSet<Category2CompanyDetailsDbo> Category2CompanyDetailsDbo { get; set; }
         public virtual DbSet<CompanyDetailDbo> CompanyDetailDboes { get; set; }
@@ -43,5 +41,6 @@ namespace Infrastructure.Common.DB
         public virtual DbSet<UserPermissionDbo> UserPermissionDboes { get; set; }
         public virtual DbSet<UserRoleDbo> UserRoleDboes { get; set; }
         public virtual DbSet<UserRole2UserPermissionDbo> UserRole2UserPermissionDbo { get; set; }
+        public virtual DbSet<BatchAttachmentDbo> BatchAttachmentDboes { get; set; }
     }
 }

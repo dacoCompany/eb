@@ -7,7 +7,6 @@
       <Diagram DiagramId="5579871a982d4a5aa13a099a2abe9042" Name="Diagram1" ZoomLevel="88">
         <EntityTypeShape EntityType="testDBModel.AddressDbo" Width="1.5" PointX="5.25" PointY="9.75" />
         <EntityTypeShape EntityType="testDBModel.AttachmentDbo" Width="1.5" PointX="7.5" PointY="25.125" />
-        <EntityTypeShape EntityType="testDBModel.BatchAttachmentDbo" Width="1.5" PointX="5.25" PointY="25" />
         <EntityTypeShape EntityType="testDBModel.CategoryDbo" Width="1.5" PointX="0.75" PointY="15.375" />
         <EntityTypeShape EntityType="testDBModel.Category2CompanyDetailsDbo" Width="1.5" PointX="8.25" PointY="10.375" />
         <EntityTypeShape EntityType="testDBModel.CompanyDetailDbo" Width="1.5" PointX="3" PointY="9.375" />
@@ -26,8 +25,6 @@
         <AssociationConnector Association="testDBModel.FKAddressCompanyDetailsId" />
         <AssociationConnector Association="testDBModel.FKAddressLocationId" />
         <AssociationConnector Association="testDBModel.FKAddressUserDetailsId" />
-        <AssociationConnector Association="testDBModel.FKAttachmentBatchAttachmentId" />
-        <AssociationConnector Association="testDBModel.FKCompanyDetailsBatchAttachmentId" />
         <AssociationConnector Association="testDBModel.FKCategory" />
         <AssociationConnector Association="testDBModel.FKCategory2CompanyDetailsCategory" />
         <AssociationConnector Association="testDBModel.FKCategory2CompanyDetailsCompanyDetails" />
@@ -42,6 +39,9 @@
         <AssociationConnector Association="testDBModel.FKUserDetailsUserRole" />
         <AssociationConnector Association="testDBModel.FKUserPermission" />
         <AssociationConnector Association="testDBModel.FKUserRole" />
+        <EntityTypeShape EntityType="testDBModel.BatchAttachmentDbo" Width="1.5" PointX="5.25" PointY="22" />
+        <AssociationConnector Association="testDBModel.FKAttachmentBatchAttachmentId" />
+        <AssociationConnector Association="testDBModel.FKCompanyDetailsBatchAttachmentId" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
