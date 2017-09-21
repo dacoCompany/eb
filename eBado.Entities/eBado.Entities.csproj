@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttachmentEntity.cs" />
+    <Compile Include="AttachmentGalleryEntity.cs" />
     <Compile Include="BatchEntity.cs" />
     <Compile Include="FileEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

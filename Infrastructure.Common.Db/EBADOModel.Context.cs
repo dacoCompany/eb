@@ -15,7 +15,7 @@ namespace Infrastructure.Common.DB
     
     public partial class EBADOEntitiesTest : DbContext
     {
-        public EBADOEntitiesTest(string connectionString)
+        public EBADOEntitiesTest(string connectionString) : base (connectionString)
         {
         }
     
@@ -24,23 +24,23 @@ namespace Infrastructure.Common.DB
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<AddressDbo> AddressDboes { get; set; }
-        public virtual DbSet<AttachmentDbo> AttachmentDboes { get; set; }
-        public virtual DbSet<CategoryDbo> CategoryDboes { get; set; }
+        public virtual DbSet<AddressDbo> AddressDbo { get; set; }
+        public virtual DbSet<AttachmentDbo> AttachmentDbo { get; set; }
+        public virtual DbSet<CategoryDbo> CategoryDbo { get; set; }
         public virtual DbSet<Category2CompanyDetailsDbo> Category2CompanyDetailsDbo { get; set; }
-        public virtual DbSet<CompanyDetailDbo> CompanyDetailDboes { get; set; }
+        public virtual DbSet<CompanyDetailDbo> CompanyDetailDbo { get; set; }
         public virtual DbSet<CompanyDetails2UserDetailsDbo> CompanyDetails2UserDetailsDbo { get; set; }
-        public virtual DbSet<CompanyPermissionDbo> CompanyPermissionDboes { get; set; }
-        public virtual DbSet<CompanyRoleDbo> CompanyRoleDboes { get; set; }
+        public virtual DbSet<CompanyPermissionDbo> CompanyPermissionDbo { get; set; }
+        public virtual DbSet<CompanyRoleDbo> CompanyRoleDbo { get; set; }
         public virtual DbSet<CompanyRole2CompanyPermissionDbo> CompanyRole2CompanyPermissionDbo { get; set; }
-        public virtual DbSet<CompanyTypeDbo> CompanyTypeDboes { get; set; }
-        public virtual DbSet<LocationDbo> LocationDboes { get; set; }
-        public virtual DbSet<SubCategoryDbo> SubCategoryDboes { get; set; }
+        public virtual DbSet<CompanyTypeDbo> CompanyTypeDbo { get; set; }
+        public virtual DbSet<LocationDbo> LocationDbo { get; set; }
+        public virtual DbSet<SubCategoryDbo> SubCategoryDbo { get; set; }
         public virtual DbSet<SubCategory2CompanyDetailsDbo> SubCategory2CompanyDetailsDbo { get; set; }
-        public virtual DbSet<UserDetailDbo> UserDetailDboes { get; set; }
-        public virtual DbSet<UserPermissionDbo> UserPermissionDboes { get; set; }
-        public virtual DbSet<UserRoleDbo> UserRoleDboes { get; set; }
+        public virtual DbSet<UserDetailDbo> UserDetailDbo { get; set; }
+        public virtual DbSet<UserPermissionDbo> UserPermissionDbo { get; set; }
+        public virtual DbSet<UserRoleDbo> UserRoleDbo { get; set; }
         public virtual DbSet<UserRole2UserPermissionDbo> UserRole2UserPermissionDbo { get; set; }
-        public virtual DbSet<BatchAttachmentDbo> BatchAttachmentDboes { get; set; }
+        public virtual DbSet<BatchAttachmentDbo> BatchAttachmentDbo { get; set; }
     }
 }

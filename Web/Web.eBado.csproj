@@ -239,6 +239,8 @@
     <Compile Include="Models\Account\RegisterUserModel.cs" />
     <Compile Include="Models\Account\UserAccountSettingsModel.cs" />
     <Compile Include="Models\MvcExtensions\ModelStateExtensions.cs" />
+    <Compile Include="Models\Shared\AttachmentGalleryModel.cs" />
+    <Compile Include="Models\Shared\AttachmentModel.cs" />
     <Compile Include="Models\Shared\FileModel.cs" />
     <Compile Include="Models\Shared\FilesViewModel.cs" />
     <Compile Include="Models\Shared\PostalCodeModel.cs" />

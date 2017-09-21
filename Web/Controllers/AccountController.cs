@@ -87,10 +87,13 @@ namespace Web.eBado.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult AccountGallery(FilesViewModel model, string batchId)
+        public ActionResult AccountGallery(string batchId)
         {
+            var model = new AttachmentGalleryModel();
+
+            var oldModel = new FilesViewModel();
             ViewBag.batchId = batchId;
-            return View(model);
+            return View(oldModel);
         }
 
         [AllowAnonymous]

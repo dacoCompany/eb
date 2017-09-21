@@ -32,6 +32,8 @@
           <Property Name="DateCreated" Type="datetime2" Precision="0" />
           <Property Name="DateModified" Type="datetime2" Precision="0" />
           <Property Name="BatchAttId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Size" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="BatchAttachment">
           <Key>
@@ -85,6 +87,7 @@
           <Property Name="DateCreated" Type="datetime2" Precision="0" />
           <Property Name="DateModified" Type="datetime2" Precision="0" />
           <Property Name="CompanyTypeId" Type="int" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="CompanyDetails2UserDetails">
           <Key>
@@ -690,6 +693,8 @@
           <Property Name="DateModified" Type="DateTime" Precision="0" />
           <Property Name="BatchAttId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="BatchAttachment" Relationship="testDBModel.FKAttachmentBatchAttachmentId" FromRole="AttachmentDbo" ToRole="BatchAttachment" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Size" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="CategoryDbo">
           <Key>
@@ -739,6 +744,7 @@
           <NavigationProperty Name="CompanyType" Relationship="testDBModel.FKCompanyType" FromRole="CompanyDetail" ToRole="CompanyType" />
           <NavigationProperty Name="SubCategory2CompanyDetails" Relationship="testDBModel.FKSubCategory2CompanyDetailsCompanyDetails" FromRole="CompanyDetail" ToRole="SubCategory2CompanyDetails" />
           <NavigationProperty Name="BatchAttachments" Relationship="testDBModel.FKCompanyDetailsBatchAttachmentId" FromRole="CompanyDetailDbo" ToRole="BatchAttachment" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="CompanyDetails2UserDetailsDbo">
           <Key>
@@ -1181,6 +1187,8 @@
           <EntitySetMapping Name="AttachmentDboes">
             <EntityTypeMapping TypeName="testDBModel.AttachmentDbo">
               <MappingFragment StoreEntitySet="Attachment">
+                <ScalarProperty Name="Size" ColumnName="Size" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="BatchAttId" ColumnName="BatchAttId" />
                 <ScalarProperty Name="DateModified" ColumnName="DateModified" />
                 <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
@@ -1218,6 +1226,7 @@
           <EntitySetMapping Name="CompanyDetailDboes">
             <EntityTypeMapping TypeName="testDBModel.CompanyDetailDbo">
               <MappingFragment StoreEntitySet="CompanyDetails">
+                <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="CompanyTypeId" ColumnName="CompanyTypeId" />
                 <ScalarProperty Name="DateModified" ColumnName="DateModified" />
                 <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
