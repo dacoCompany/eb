@@ -599,6 +599,7 @@
     </Content>
     <Content Include="Logging.config" />
     <Content Include="CodeMetrics.targets" />
+    <None Include="Properties\PublishProfiles\ebadoweb - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
