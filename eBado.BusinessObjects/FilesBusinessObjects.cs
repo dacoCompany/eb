@@ -166,7 +166,7 @@ namespace eBado.BusinessObjects
         {
             var guid = Guid.NewGuid();
 
-            var batchDbo = new BatchAttachmentDbo { Name = name, GuId = guid.ToString(), Description = description, CompanyDetailsId = 1 };
+            var batchDbo = new BatchAttachmentDbo { Name = name, GuId = guid.ToString(), Description = description, CompanyDetailsId = 2 };
 
             unitOfWork.BatchAttachmentRepository.Add(batchDbo);
             unitOfWork.Commit();
@@ -178,13 +178,30 @@ namespace eBado.BusinessObjects
 
         public ICollection<BatchEntity> GetBatches(int companyId)
         {
-            var batches = unitOfWork.CompanyDetailsRepository.FindById(companyId).BatchAttachments;
+            if (companyId <= 0)
+            {
+                throw new ArgumentNullException(nameof(companyId));
+            }
 
+            var companyDbo = unitOfWork.CompanyDetailsRepository.FindWhere(cd => cd.Id == companyId).Include(cd => cd.BatchAttachments).FirstOrDefault();
+
+            if (companyDbo == null)
+            {
+                throw new ArgumentException("Invalid company identifier.", nameof(companyId));
+            }
             var resposne = new Collection<BatchEntity>();
 
-            foreach (var batch in batches)
+            foreach (var batch in companyDbo.BatchAttachments)
             {
-                resposne.Add(new BatchEntity { Id = batch.Id, Name = batch.Name, Description = batch.Description, AttachmentsCount = batch.Attachments.Count });
+                resposne.Add(new BatchEntity
+                {
+                    Id = batch.Id,
+                    Name = batch.Name,
+                    Guid = batch.GuId,
+                    Description = batch.Description.Length > 100 ? batch.Description.Substring(0, 100) : batch.Description,
+                    AttachmentsCount = batch.Attachments.Count,
+                    BaseThumbUrl = batch.Attachments.Count > 0 ? batch.Attachments.First().ThumbnailUrl : null
+                });
             }
 
             return resposne;

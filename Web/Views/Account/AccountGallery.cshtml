@@ -1,5 +1,6 @@
-﻿@model Web.eBado.Models.Shared.FilesViewModel
+﻿@model Web.eBado.Models.Shared.AttachmentGalleryModel
 @using Web.eBado.Helpers
+@using Web.eBado.Models.Shared
 @{
     ViewBag.Title = "AccountGallery";
 }
@@ -14,10 +15,11 @@
         @AccountHelper.SettingsMenu(Url, ViewContext.RouteData.Values["Action"].ToString())
         <div class="tabcontent-gallery push_top_10">
             <div style="float:left; margin-bottom: 50px; width:100%">
-                <button type="submit" class="form-btn col-lg-2" style="float:left" onclick="location.href='@Url.Action("EditAccountGallery", "Account", new { batchId = @ViewBag.batchId })'">Pridat/Editovat</button>
+                <button type="submit" class="form-btn col-lg-2" style="float:left" onclick="location.href='@Url.Action("EditAccountGallery", "Account", new { batchId = @Model.Guid })'">Pridat/Editovat</button>
             </div>
             <div class="col-lg-10">
-                <h2>@ViewBag.batchId</h2>
+                <h2>@Model.Name</h2>
+                <h4>@Model.Description</h4>
             </div>
             <div class="push_top_20">
                 <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
@@ -30,22 +32,22 @@
                     <ol class="indicator"></ol>
                 </div>
                 <div id="links" style="float:left; width:100%">
-                    @if (@Model.Files != null && @Model.Files.Length != 0)
+                    @if (@Model.Attachments != null && @Model.Attachments.Count != 0)
                     {
-                        foreach (ViewDataUploadFilesResult file in @Model.Files)
+                        foreach (AttachmentModel file in @Model.Attachments)
                         {
 
-                            if (file.type.Equals("video/mp4"))
-                            {
+                            @*if (file.type.Equals("video/mp4"))
+    {
 
-                                <a href="@file.url" title="@file.name" type="video/mp4"><img src="@file.thumbnailUrl" alt="@file.name"></a>
+        <a href="@file.url" title="@file.name" type="video/mp4"><img src="@file.thumbnailUrl" alt="@file.name"></a>
 
 
-                            }
-                            else
-                            {
-                                <div class="thumb"><a href="@file.url" title="@file.name"><img src="@file.thumbnailUrl" alt="@file.name"></a></div>
-                            }
+    }
+    else
+    {*@
+                                <div class="thumb"><a href="@file.Url" title="@file.Name"><img src="@file.ThumbnailUrl" alt="@file.Name"></a></div>
+                            //}
 
                         }
                     }
