@@ -144,6 +144,9 @@ h3, h4 {
     border: 1px;
     border-color: #000;
     border-style: solid;
+    background-image: url("../img/ebado_logo_v1_c.png");
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 
 .top-panel-drop {

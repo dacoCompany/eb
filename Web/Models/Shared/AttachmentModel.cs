@@ -7,9 +7,9 @@ namespace Web.eBado.Models.Shared
 {
     public class AttachmentModel
     {
-        public string Name { get; set; }
-        public string Size { get; set; }
-        public string Url { get; set; }
-        public string ThumbnailUrl { get; set; }
+        public string name { get; set; }
+        public string size { get; set; }
+        public string url { get; set; }
+        public string thumbnailUrl { get; set; }
     }
 }

@@ -20,6 +20,8 @@
 
     $('#fileupload').addClass('fileupload-processing');
 
+    var model = @Html.Raw(Json.Encode(Model.Attachments));
+
     $.ajax({
         type: 'GET',
         contentType: "application/json; charset=utf-8",
@@ -27,8 +29,17 @@
         success: function (data) {
 
 
-            $('#fileupload').fileupload('option', 'done').call($('#fileupload'), $.Event('done'), { result: { files: data.files } })
-            $('#fileupload').removeClass('fileupload-processing');
+                $('#fileupload').fileupload('option', 'done').call($('#fileupload'),
+                    $.Event('done'),
+                    { result: { files: model } });
+                $('#fileupload').removeClass('fileupload-processing');
+        },
+            statusCode : {500 : function() {
+                $('#fileupload').fileupload('option', 'done').call($('#fileupload'),
+                    $.Event('done'),
+                    { result: { files: model } });
+                $('#fileupload').removeClass('fileupload-processing');
+            }
         }
     });
 </script>
@@ -64,15 +75,15 @@
                         {
 
                             @*if (file.type.Equals("video/mp4"))
-    {
+                                {
 
-        <a href="@file.url" title="@file.name" type="video/mp4"><img src="@file.thumbnailUrl" alt="@file.name"></a>
+                                    <a href="@file.url" title="@file.name" type="video/mp4"><img src="@file.thumbnailUrl" alt="@file.name"></a>
 
 
-    }
-    else
-    {*@
-                            <div class="thumb"><a href="@file.Url" title="@file.Name"><img src="@file.ThumbnailUrl" alt="@file.Name"></a></div>
+                                }
+                                else
+                                {*@
+                            <div class="thumb"><a href="@file.url" title="@file.name"><img src="@file.thumbnailUrl" alt="@file.name"></a></div>
                             //}
 
                         }
