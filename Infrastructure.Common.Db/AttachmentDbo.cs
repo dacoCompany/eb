@@ -21,6 +21,8 @@ namespace Infrastructure.Common.DB
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
         public int BatchAttId { get; set; }
+        public string Name { get; set; }
+        public int Size { get; set; }
     
         public virtual BatchAttachmentDbo BatchAttachment { get; set; }
     }

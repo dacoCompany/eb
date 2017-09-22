@@ -265,6 +265,10 @@
     <Content Include="Content\BaseContent\css\style.css" />
     <Content Include="Content\BaseContent\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\BaseContent\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\BaseContent\img\ebado_logo_v1_c.png" />
+    <Content Include="Content\BaseContent\img\ebado_logo_v1_u.png" />
+    <Content Include="Content\BaseContent\img\ebado_logo_v2_c.png" />
+    <Content Include="Content\BaseContent\img\ebado_logo_v2_u.png" />
     <Content Include="Content\BaseContent\img\flag_CZ_B.png" />
     <Content Include="Content\BaseContent\img\flag_EN.png" />
     <Content Include="Content\BaseContent\img\chosen-sprite%402x.png" />
@@ -599,6 +603,7 @@
     </Content>
     <Content Include="Logging.config" />
     <Content Include="CodeMetrics.targets" />
+    <None Include="Properties\PublishProfiles\ebadoweb - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

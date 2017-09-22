@@ -87,7 +87,28 @@ namespace Web.eBado.Controllers
                 EntlibLogger.LogError("File", "Upload", e.Message, DiagnosticsLogging.Create("Controller", "File"), e);
                 throw;
             }
+        }
 
+        [HttpPost]
+        public JsonResult Upload2()
+        {
+            var resultList = new List<ViewDataUploadFilesResult>();
+
+            var CurrentContext = HttpContext;
+
+            var filesHelper = new FilesHelper(null, null, null, null, null);
+            filesHelper.UploadAndShowResults(CurrentContext, resultList);
+            JsonFiles files = new JsonFiles(resultList);
+
+            bool isEmpty = !resultList.Any();
+            if (isEmpty)
+            {
+                return Json("Error ");
+            }
+            else
+            {
+                return Json(files);
+            }
         }
 
         public JsonResult GetFileList()
@@ -132,39 +153,15 @@ namespace Web.eBado.Controllers
                     {
                         Name = new FileInfo(httpPostedFile.FileName).Name,
                         ContentType = httpPostedFile.ContentType,
-                        Content = byteFile
+                        Content = byteFile,
+                        Size = byteFile.Length
                     });
                 }
             }
 
             return fileCollection;
         }
-
-        private ICollection<FileModel> MapAttachmentsFromRequest2()
-        {
-            HttpRequestBase currentRequest = Request;
-            ICollection<FileModel> fileCollection = new Collection<FileModel>();
-
-            if (currentRequest.Files.Count <= 0)
-                return fileCollection;
-
-            foreach (HttpPostedFileBase httpPostedFile in currentRequest.Files.AllKeys.Select(key => currentRequest.Files[key]).Where(httpPostedFile => httpPostedFile != null))
-            {
-                using (BinaryReader reader = new BinaryReader(httpPostedFile.InputStream))
-                {
-                    var byteFile = reader.ReadBytes(httpPostedFile.ContentLength);
-                    fileCollection.Add(new FileModel
-                    {
-                        Name = new FileInfo(httpPostedFile.FileName).Name,
-                        ContentType = httpPostedFile.ContentType,
-                        Content = byteFile
-                    });
-                }
-            }
-
-            return fileCollection;
-        }
-
+        
         private string GetExtensionFromMimeType(string mimeType)
         {
             switch (mimeType)

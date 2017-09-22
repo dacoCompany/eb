@@ -2,11 +2,14 @@
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Web.Helpers;
 using System.Web.Hosting;
+using ByteSizeLib;
 using eBado.Entities;
+using Infrastructure.Common;
 using Infrastructure.Common.DB;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
@@ -51,8 +54,9 @@ namespace eBado.BusinessObjects
         {
             var container = GetAzureBlobContainer();
 
-            var batch = unitOfWork.BatchAttachmentRepository.FirstOrDefault(ba => ba.Name == batchId);
+            var batch = unitOfWork.BatchAttachmentRepository.FirstOrDefault(ba => ba.GuId == batchId);
             int fileCount = 0;
+
             foreach (var file in files)
             {
                 CloudBlockBlob blockBlob = container.GetBlockBlobReference($"photos/{batchId}/{file.Name}");
@@ -93,7 +97,9 @@ namespace eBado.BusinessObjects
                 var attachment = new AttachmentDbo
                 {
                     OriginalUrl = file.Url,
-                    ThumbnailUrl = file.ThumbnailUrl
+                    ThumbnailUrl = file.ThumbnailUrl,
+                    Name = file.Name,
+                    Size = file.Size
                 };
                 batch.Attachments.Add(attachment);
                 ++fileCount;
@@ -127,46 +133,75 @@ namespace eBado.BusinessObjects
             return result && resultThumb && dboDeleted;
         }
 
-        public IEnumerable<FileEntity> GetBatchFiles(int batchId)
+        public AttachmentGalleryEntity GetBatchFiles(string batchId)
         {
-            var files = new Collection<FileEntity>();
-            return files;
-            var batch = unitOfWork.BatchAttachmentRepository.FindById(batchId);
-
-            if (batch.Attachments == null || !batch.Attachments.Any())
-                return files;
-
-            foreach (var attachment in batch.Attachments)
+            if (string.IsNullOrEmpty(batchId))
             {
-                files.Add(new FileEntity { Name = attachment.OriginalUrl.Split('/').Last(), ThumbnailUrl = attachment.ThumbnailUrl, Url = attachment.OriginalUrl });
+                throw new ArgumentNullException(nameof(batchId));
             }
 
-            return files;
+            var batchDbo = unitOfWork.BatchAttachmentRepository.FindWhere(ba => ba.GuId == batchId).Include(ba => ba.Attachments).FirstOrDefault();
+
+            if (batchDbo == null)
+            {
+                throw new ArgumentException("Invalid batch identifier.", nameof(batchId));
+            }
+
+            var result = new AttachmentGalleryEntity
+            {
+                Name = batchDbo.Name,
+                Description = batchDbo.Description,
+                Guid = batchDbo.GuId
+            };
+
+            foreach (var dbo in batchDbo.Attachments)
+            {
+                result.Attachments.Add(new AttachmentEntity { name = dbo.Name, size = ByteSize.FromBytes(dbo.Size).KiloBytes.ToString("N2"), thumbnailUrl = dbo.ThumbnailUrl, url = dbo.OriginalUrl });
+            }
+
+            return result;
         }
 
         public string CreateBatch(string name, string description)
         {
             var guid = Guid.NewGuid();
 
-            var batchDbo = new BatchAttachmentDbo { Name = guid.ToString(), Description = description, CompanyDetailsId = 1 };
+            var batchDbo = new BatchAttachmentDbo { Name = name, GuId = guid.ToString(), Description = description, CompanyDetailsId = 2 };
 
             unitOfWork.BatchAttachmentRepository.Add(batchDbo);
             unitOfWork.Commit();
 
-            EntlibLogger.LogInfo("File", "Create Batch", $"Created new batch with id: {guid.ToString()}", new DiagnosticsLogging());
+            EntlibLogger.LogInfo("File", "Create Batch", $"Created new batch with name '{name}', id: {guid.ToString()}", new DiagnosticsLogging());
 
             return guid.ToString();
         }
 
         public ICollection<BatchEntity> GetBatches(int companyId)
         {
-            var batches = unitOfWork.CompanyDetailsRepository.FindById(companyId).BatchAttachments;
+            if (companyId <= 0)
+            {
+                throw new ArgumentNullException(nameof(companyId));
+            }
 
+            var companyDbo = unitOfWork.CompanyDetailsRepository.FindWhere(cd => cd.Id == companyId).Include(cd => cd.BatchAttachments).FirstOrDefault();
+
+            if (companyDbo == null)
+            {
+                throw new ArgumentException("Invalid company identifier.", nameof(companyId));
+            }
             var resposne = new Collection<BatchEntity>();
 
-            foreach (var batch in batches)
+            foreach (var batch in companyDbo.BatchAttachments)
             {
-                resposne.Add(new BatchEntity { Id = batch.Id, Name = batch.Name, Description = batch.Description, AttachmentsCount = batch.Attachments.Count });
+                resposne.Add(new BatchEntity
+                {
+                    Id = batch.Id,
+                    Name = batch.Name,
+                    Guid = batch.GuId,
+                    Description = batch.Description.Length > 100 ? batch.Description.Substring(0, 100) : batch.Description,
+                    AttachmentsCount = batch.Attachments.Count,
+                    BaseThumbUrl = batch.Attachments.Count > 0 ? batch.Attachments.First().ThumbnailUrl : null
+                });
             }
 
             return resposne;

@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Enums\Countries.cs" />
     <Compile Include="Enums\UserPermission.cs" />
     <Compile Include="Enums\CompanyPermission.cs" />

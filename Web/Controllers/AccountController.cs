@@ -90,17 +90,36 @@ namespace Web.eBado.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult AccountGallery(FilesViewModel model, string batchId)
+        public ActionResult AccountGallery(string batchId)
         {
-            ViewBag.batchId = batchId;
+            var model = new AttachmentGalleryModel();
+
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<AttachmentEntity, AttachmentModel>();
+                cfg.CreateMap<AttachmentGalleryEntity, AttachmentGalleryModel>();
+            });
+
+            var entities = fileBo.GetBatchFiles(batchId);
+            model = Mapper.Map<AttachmentGalleryModel>(entities);
+            
             return View(model);
         }
 
         [AllowAnonymous]
         public ActionResult EditAccountGallery(string batchId)
         {
-            ViewBag.batchId = batchId;
-            return View();
+            var model = new AttachmentGalleryModel();
+
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<AttachmentEntity, AttachmentModel>();
+                cfg.CreateMap<AttachmentGalleryEntity, AttachmentGalleryModel>();
+            });
+
+            var entities = fileBo.GetBatchFiles(batchId);
+            model = Mapper.Map<AttachmentGalleryModel>(entities);
+            return View(model);
         }
 
         [AllowAnonymous]
@@ -109,7 +128,7 @@ namespace Web.eBado.Controllers
             try
             {
                 var model = new BatchGalleryModel();
-                var entities = fileBo.GetBatches(1);
+                var entities = fileBo.GetBatches(2);
 
                 Mapper.Initialize(cfg =>
                 {
