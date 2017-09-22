@@ -2,14 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Newtonsoft.Json;
 
 namespace Web.eBado.Models.Shared
 {
     public class AttachmentModel
     {
-        public string name { get; set; }
-        public string size { get; set; }
-        public string url { get; set; }
-        public string thumbnailUrl { get; set; }
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+        [JsonProperty(PropertyName = "size")]
+        public string Size { get; set; }
+        [JsonProperty(PropertyName = "url")]
+        public string Url { get; set; }
+        [JsonProperty(PropertyName = "thumbnailUrl")]
+        public string ThumbnailUrl { get; set; }
+        [JsonProperty(PropertyName = "deleteUrl")]
+        public string DeleteUrl { get; set; }
     }
 }

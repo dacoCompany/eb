@@ -156,7 +156,14 @@ namespace eBado.BusinessObjects
 
             foreach (var dbo in batchDbo.Attachments)
             {
-                result.Attachments.Add(new AttachmentEntity { name = dbo.Name, size = ByteSize.FromBytes(dbo.Size).KiloBytes.ToString("N2"), thumbnailUrl = dbo.ThumbnailUrl, url = dbo.OriginalUrl });
+                result.Attachments.Add(new AttachmentEntity
+                {
+                    Name = dbo.Name,
+                    Size = ByteSize.FromBytes(dbo.Size).KiloBytes.ToString("N2"),
+                    ThumbnailUrl = dbo.ThumbnailUrl,
+                    Url = dbo.OriginalUrl,
+                    DeleteUrl = $"FileUpload/Delete?batchId={batchDbo.GuId}&name={dbo.Name}"
+                });
             }
 
             return result;

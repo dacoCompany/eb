@@ -111,13 +111,23 @@ namespace Web.eBado.Controllers
             }
         }
 
-        public JsonResult GetFileList()
+        public JsonResult GetFileList(string batchId)
         {
-            //var list = filesHelper.GetFileList();
-            return Json(JsonRequestBehavior.AllowGet);
+            var model = new AttachmentGalleryModel();
+
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<AttachmentEntity, AttachmentModel>();
+                cfg.CreateMap<AttachmentGalleryEntity, AttachmentGalleryModel>();
+            });
+
+            var entities = filesBo.GetBatchFiles(batchId);
+            model = Mapper.Map<AttachmentGalleryModel>(entities);
+            return new JsonNetResult(model.Attachments);
         }
+
         [HttpGet]
-        public JsonResult DeleteFile(string file)
+        public JsonResult DeleteFile(string batchIs, string file)
         {
             bool deleted = filesBo.DeleteFile(file);
 
