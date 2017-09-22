@@ -19,25 +19,28 @@
     });
 
     $('#fileupload').addClass('fileupload-processing');
-
-    var model = @Html.Raw(Json.Encode(Model.Attachments));
+    
+    var batchId = @Html.Raw(Json.Encode(Model.Guid));
 
     $.ajax({
         type: 'GET',
         contentType: "application/json; charset=utf-8",
         url: '/FileUpload/GetFileList',
+        data: {
+            batchId: batchId
+        },
         success: function (data) {
 
 
                 $('#fileupload').fileupload('option', 'done').call($('#fileupload'),
                     $.Event('done'),
-                    { result: { files: model } });
+                    { result: { files: data } });
                 $('#fileupload').removeClass('fileupload-processing');
         },
             statusCode : {500 : function() {
                 $('#fileupload').fileupload('option', 'done').call($('#fileupload'),
                     $.Event('done'),
-                    { result: { files: model } });
+                    { result: { files: data } });
                 $('#fileupload').removeClass('fileupload-processing');
             }
         }
@@ -83,7 +86,7 @@
                                 }
                                 else
                                 {*@
-                            <div class="thumb"><a href="@file.url" title="@file.name"><img src="@file.thumbnailUrl" alt="@file.name"></a></div>
+                            <div class="thumb"><a href="@file.Url" title="@file.Name"><img src="@file.ThumbnailUrl" alt="@file.Name"></a></div>
                             //}
 
                         }

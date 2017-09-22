@@ -70,6 +70,7 @@
 			[Description] VARCHAR(250),
 			[PhoneNumber] VARCHAR(20),
 			[AdditionalPhoneNumber] VARCHAR(20),
+			[Email] VARCHAR(50) NOT NULL,
 			[Ico] INT,
 			[Dic] INT,
 			[IsCompanyVerified] BIT NOT NULL DEFAULT 'false',
@@ -206,7 +207,7 @@
 		CREATE TABLE [BatchAttachment]
 		(
 			[Id] INT IDENTITY(1,1),
-			[GuId] VARCHAR(255) NOT NULL,
+			[GuId] VARCHAR(36) NOT NULL,
 			[Name] VARCHAR(50) NOT NULL,
 			[Description] VARCHAR(100),
 			[ThumbnailUrl] VARCHAR(255),			
@@ -221,6 +222,8 @@
 		CREATE TABLE [Attachment]
 		(
 			[Id] INT IDENTITY(1,1),
+			[Name] VARCHAR(100) NOT NULL,
+			[Size] INT NOT NULL,
 			[OriginalUrl] VARCHAR(255) NOT NULL,
 			[ThumbnailUrl] VARCHAR(255),			
 			[IsActive] BIT NOT NULL DEFAULT 'true',

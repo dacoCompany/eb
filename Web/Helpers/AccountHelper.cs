@@ -124,7 +124,7 @@ namespace Web.eBado.Helpers
 
         public void RegisterUser(RegisterUserModel model, IUnitOfWork uow)
         {
-            var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Code == ((int)UserRole.StandardUser).ToString());
+            var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Code == UserRole.StandardUser.ToString());
             var location = uow.LocationRepository.FirstOrDefault(l => l.Id.ToString() == model.PostalCode);
             string salt = GenerateSalt();
 
