@@ -125,7 +125,7 @@ h3, h4 {
 }
 
     .lang-div:hover {
-        background-color:#ccc;
+        background-color: #ccc;
     }
 
 
@@ -144,7 +144,7 @@ h3, h4 {
     border: 1px;
     border-color: #000;
     border-style: solid;
-    background-image: url("../img/ebado_logo_v1_c.png");
+    background-image: url("../img/ebado_logo_v2_c.png");
     background-repeat: no-repeat;
     background-position: center center;
 }
@@ -411,20 +411,20 @@ nav-account {
             float: left;
             width: 250px;
             text-align: left;
+            border: 1px solid #00b6ff;
             border-bottom: 3px solid #00b6ff;
-            background: #444444;
-            border-radius: 5px;
+            background: #fff;
+            border-radius: 3px;
         }
 
             nav-account ul li:hover {
-                background: #514f4f;
-                border-radius: 5px;
+                background: #f9f9f9;
             }
 
             nav-account ul li a {
                 display: block;
                 padding: 15px 10px;
-                color: #fcfcfc;
+                color: #000;
                 text-decoration: none;
             }
 
@@ -442,13 +442,13 @@ nav-account {
             }
 
                 nav-account ul ul li a {
-                    padding: 15px 10px;
-                    color: #fcfcfc;
+                    padding: 10px 10px;
+                    color: #000;
                 }
 
                     nav-account ul ul li a:hover {
-                        background: #2d2d2d;
-                        color: #fff;
+                        background: #f9f9f9;
+                        color: #000;
                     }
 
 #down-triangle {
@@ -665,11 +665,12 @@ nav-account {
     text-align: left;
 }
 
-@media(max-width:750px){
+@media(max-width:750px) {
     .reg-font {
-        margin-bottom:10px;
+        margin-bottom: 10px;
     }
 }
+
 hr.transparent {
     border: 1px solid #ffffff;
 }
@@ -721,4 +722,3 @@ input[type='radio'] {
     input[type='radio']:focus {
         outline: none;
     }
-

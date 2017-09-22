@@ -13,7 +13,7 @@
     }
 </script>
 
-@using (Html.BeginForm(null,null,FormMethod.Post,new { id="htmlForm"}))
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "htmlForm" }))
 {
     @Html.AntiForgeryToken()
 
@@ -27,8 +27,6 @@
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="basic">
                             <form>
-                                <div class="col-sm-12 reg-font" id="error_display_div"></div>
-
                                 <div class="col-sm-12 reg-font">@Resources.LoginInfo</div>
                                 <hr class="col-sm-12 transparent" />
                                 <div class="form-group col-sm-6">
@@ -106,8 +104,8 @@
                                         @Html.ValidationMessageFor(model => model.StreetNumber)
                                     </label>
                                 </div>
-                                    <button id="MyButton" class="g-recaptcha form-btn col-sm-12" data-sitekey="@System.Configuration.ConfigurationManager.AppSettings["ReCaptcha_PublicKey"]" data-callback="onSubmit">@Resources.Register2</button>
-</form>
+                                <button id="MyButton" class="g-recaptcha form-btn col-sm-12" data-sitekey="@System.Configuration.ConfigurationManager.AppSettings["ReCaptcha_PublicKey"]" data-callback="onSubmit">@Resources.Register2</button>
+                            </form>
                         </div>
                     </div>
                 </div>

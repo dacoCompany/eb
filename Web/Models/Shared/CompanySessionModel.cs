@@ -5,6 +5,7 @@ namespace Web.eBado.Models.Shared
     public class CompanySessionModel
     {
         public int Id { get; set; }
+        public bool IsActive { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string CompanyRole { get; set; }

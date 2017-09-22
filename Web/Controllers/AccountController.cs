@@ -48,6 +48,14 @@ namespace Web.eBado.Controllers
         }
 
         [AllowAnonymous]
+        public ActionResult Logout()
+        {
+            FormsAuthentication.SignOut();
+            Session.Abandon();
+            return RedirectToAction("Index", "Home");
+        }
+
+        [AllowAnonymous]
         public ActionResult RegisterUser()
         {
             return View();
@@ -102,7 +110,7 @@ namespace Web.eBado.Controllers
 
             var entities = fileBo.GetBatchFiles(batchId);
             model = Mapper.Map<AttachmentGalleryModel>(entities);
-            
+
             return View(model);
         }
 
@@ -173,6 +181,7 @@ namespace Web.eBado.Controllers
                 SessionModel session = new SessionModel()
                 {
                     Id = userDetail.Id,
+                    IsActive = true,
                     Email = userDetail.Email,
                     Name = userDetail.DisplayName,
                     UserRole = userRole.Name,
@@ -193,11 +202,14 @@ namespace Web.eBado.Controllers
                     session.Companies.Add(companySession);
                 }
 
-                FormsAuthentication.SetAuthCookie(session.Email, false);
+                FormsAuthentication.SetAuthCookie(session.Email, true);
                 Session["User"] = session;
-
+                return RedirectToAction("Index", "Home");
             }
-            return View(model);
+            else
+            {
+                return View(model);
+            }
         }
 
         [HttpPost]

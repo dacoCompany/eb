@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Infrastructure.Configuration;
 using System.Configuration;
 using System.Net;
+using Web.eBado.Models.Shared;
 
 namespace Web.eBado.Controllers
 {

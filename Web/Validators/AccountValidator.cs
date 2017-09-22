@@ -17,14 +17,14 @@ namespace Web.eBado.Validators
 
         public static void ValidateUserLogin(IUnitOfWork uow, ValidationResultCollection collection, LoginModel model)
         {
-            ValidateUserExist(uow, collection, model);
+            ValidateUserCredentials(uow, collection, model);
         }
 
         #endregion
 
         #region Attribute specific validation
 
-        public static void ValidateEmailNotExist(IUnitOfWork uow, ValidationResultCollection collection, string emailAddress)
+        private static void ValidateEmailNotExist(IUnitOfWork uow, ValidationResultCollection collection, string emailAddress)
         {
             var userDetails = uow.UserDetailsRepository.FirstOrDefault(ud => ud.Email.Equals(emailAddress, StringComparison.OrdinalIgnoreCase));
 
@@ -34,7 +34,7 @@ namespace Web.eBado.Validators
             }
         }
 
-        public static void ValidateUserExist(IUnitOfWork uow, ValidationResultCollection collection, LoginModel model)
+        private static void ValidateUserCredentials(IUnitOfWork uow, ValidationResultCollection collection, LoginModel model)
         {
             var userDetails = uow.UserDetailsRepository.FirstOrDefault(ud => ud.Email.Equals(model.Email, StringComparison.OrdinalIgnoreCase));
             if (userDetails != null)
