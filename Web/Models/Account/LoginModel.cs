@@ -13,5 +13,8 @@ namespace Web.eBado.Models.Account
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
+
+        [Display(Name = "ErrorMessage")]
+        public string ErrorMessage { get; set; }
     }
 }

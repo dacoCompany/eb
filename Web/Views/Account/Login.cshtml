@@ -34,14 +34,11 @@
                         </div>
                         <div class="col-lg-12 col-md-12 col-sm-12">
                             @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @placeholder = "Please enter your username" } })
-                            <label class="label-form" for="email">
-                                @Html.ValidationMessageFor(model => model.Email)
-                            </label>
                         </div>
                         <div class="col-lg-12  col-md-12 col-sm-12">
                             @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @placeholder = "Please enter your password" } })
                             <label class="label-form" for="email">
-                                @Html.ValidationMessageFor(model => model.Password)
+                                @Html.ValidationMessageFor(model => model.ErrorMessage)
                             </label>
                         </div>
                         <div class="col-lg-12  col-md-12 col-sm-12">

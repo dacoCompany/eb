@@ -15,7 +15,7 @@ namespace Infrastructure.Common.DB
     
     public partial class EBADOEntitiesTest : DbContext
     {
-        public EBADOEntitiesTest(string connectionString)
+        public EBADOEntitiesTest(string connectionString) : base(connectionString)
         {
         }
     

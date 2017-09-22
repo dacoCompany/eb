@@ -26,6 +26,13 @@ namespace Infrastructure.Common.DB
         IQueryable<T> FindAll();
 
         /// <summary>
+        /// Any active result.
+        /// </summary>
+        /// <param name="predicate">The predicate.</param>
+        /// <returns></returns>
+        bool AnyActive(Expression<Func<T, bool>> predicate);
+
+        /// <summary>
         /// Firsts the or default.
         /// </summary>
         /// <param name="predicate">The predicate.</param>
@@ -72,5 +79,6 @@ namespace Infrastructure.Common.DB
         /// </summary>
         /// <param name="obj">The object.</param>
         void Delete(T obj);
+
     }
 }

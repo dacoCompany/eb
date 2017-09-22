@@ -161,7 +161,22 @@ namespace Web.eBado.Helpers
             cat.AllCategories = GetAllCategories();
             model.CompanyModel.Categories = cat;
         }
+
+        public static string EncodePassword(string pass, string salt)
+        {
+            byte[] bytes = Encoding.Unicode.GetBytes(pass);
+            byte[] src = Encoding.Unicode.GetBytes(salt);
+            byte[] dst = new byte[src.Length + bytes.Length];
+            System.Buffer.BlockCopy(src, 0, dst, 0, src.Length);
+            System.Buffer.BlockCopy(bytes, 0, dst, src.Length, bytes.Length);
+            HashAlgorithm algorithm = HashAlgorithm.Create("SHA1");
+            byte[] inArray = algorithm.ComputeHash(dst);
+
+            return Convert.ToBase64String(inArray);
+        }
+
         #endregion
+
         #region Private Methods
         private static string GenerateSalt()
         {
@@ -175,19 +190,6 @@ namespace Web.eBado.Helpers
                 chars[i] = allowedChars[Convert.ToInt32((allowedChars.Length) * randNum.NextDouble())];
             }
             return new string(chars);
-        }
-
-        public static string EncodePassword(string pass, string salt)
-        {
-            byte[] bytes = Encoding.Unicode.GetBytes(pass);
-            byte[] src = Encoding.Unicode.GetBytes(salt);
-            byte[] dst = new byte[src.Length + bytes.Length];
-            System.Buffer.BlockCopy(src, 0, dst, 0, src.Length);
-            System.Buffer.BlockCopy(bytes, 0, dst, src.Length, bytes.Length);
-            HashAlgorithm algorithm = HashAlgorithm.Create("SHA1");
-            byte[] inArray = algorithm.ComputeHash(dst);
-
-            return Convert.ToBase64String(inArray);
         }
 
         private bool CheckIfEmailExist(string email, UnitOfWork uow)

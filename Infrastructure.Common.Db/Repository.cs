@@ -140,7 +140,15 @@ namespace Infrastructure.Common.DB
             obj.IsActive = false;
         }
 
-
+        /// <summary>
+        /// Any active result.
+        /// </summary>
+        /// <param name="predicate">The predicate.</param>
+        /// <returns></returns>
+        public bool AnyActive(Expression<Func<T, bool>> predicate)
+        {
+            return dataEntity.Where(predicate).Any(de => de.IsActive == true);
+        }
 
         #endregion
     }

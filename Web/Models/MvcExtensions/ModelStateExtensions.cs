@@ -7,9 +7,12 @@ namespace Web.eBado.Models.MvcExtensions
     {
         public static void AddModelErrors(this ModelStateDictionary modelState, ValidationResultCollection collection)
         {
-            foreach (var validationResult in collection)
+            if (collection.Count > 0)
             {
-                modelState.AddModelError(validationResult.Name, validationResult.Description);
+                foreach (var validationResult in collection)
+                {
+                    modelState.AddModelError(validationResult.Name, validationResult.Description);
+                }
             }
         }
     }

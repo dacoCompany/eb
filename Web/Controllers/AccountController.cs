@@ -16,6 +16,9 @@ using Web.eBado.Validators;
 using WebAPIFactory.Configuration.Core;
 using WebAPIFactory.Logging.Core;
 using WebAPIFactory.Logging.Core.Diagnostics;
+using System.Linq;
+using System.Data.Entity;
+using System.Web.Security;
 
 namespace Web.eBado.Controllers
 {
@@ -134,6 +137,47 @@ namespace Web.eBado.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel model, string returnUrl)
         {
+            var validationResult = new ValidationResultCollection();
+            AccountValidator.ValidateUserLogin(unitOfWork, validationResult, model);
+            ModelState.AddModelErrors(validationResult);
+
+            if (ModelState.IsValid)
+            {
+                var userDetail = unitOfWork.UserDetailsRepository.FindWhere(ud => ud.Email.Equals(model.Email, StringComparison.OrdinalIgnoreCase))
+                    .Include(ud => ud.UserRole.UserRole2UserPermission.Select(ur => ur.UserPermission))
+                    .Include(ud => ud.CompanyDetails2UserDetails.Select(cd => cd.CompanyDetail))
+                    .Include(ud => ud.CompanyDetails2UserDetails.Select(cd => cd.CompanyRole.CompanyRole2CompanyPermission
+                      .Select(cr => cr.CompanyPermission))).FirstOrDefault();
+
+                var userRole = userDetail.UserRole;
+
+                SessionModel session = new SessionModel()
+                {
+                    Id = userDetail.Id,
+                    Email = userDetail.Email,
+                    Name = userDetail.DisplayName,
+                    UserRole = userRole.Name,
+                    UserPermissions = userRole.UserRole2UserPermission.Select(ur => ur.UserPermission.Name),
+                    HasCompany = userDetail.CompanyDetails2UserDetails.Any(cd => cd.IsActive == true)
+                };
+                foreach (var company in userDetail.CompanyDetails2UserDetails)
+                {
+                    var companyDetail = company.CompanyDetail;
+                    var companyRole = company.CompanyRole;
+                    CompanySessionModel companySession = new CompanySessionModel()
+                    {
+                        Id = companyDetail.Id,
+                        Name = companyDetail.Name,
+                        CompanyRole = companyRole.Name,
+                        CompanyPermissions = companyRole.CompanyRole2CompanyPermission.Select(cr => cr.CompanyPermission.Name)
+                    };
+                    session.Companies.Add(companySession);
+                }
+
+                FormsAuthentication.SetAuthCookie(session.Email, false);
+                Session["User"] = session;
+
+            }
             return View(model);
         }
 
