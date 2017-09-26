@@ -41,9 +41,8 @@ namespace Web.eBado.Controllers
         #region HTTP GET
 
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
+        public ActionResult Login()
         {
-            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
@@ -86,12 +85,22 @@ namespace Web.eBado.Controllers
         [AllowAnonymous]
         public ActionResult ChangePassword()
         {
+            var currentUrl = Request.Url.ToString();
+            if (UserNotAuthenticated())
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = currentUrl });
+            }
             return View();
         }
 
         [AllowAnonymous]
         public ActionResult ChangeSettings()
         {
+            var currentUrl = Request.Url.ToString();
+            if (UserNotAuthenticated())
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = currentUrl });
+            }
             ChangeSettingsModel model = new ChangeSettingsModel();
             model.Title = "Ing.";
             return View(model);
@@ -100,6 +109,11 @@ namespace Web.eBado.Controllers
         [AllowAnonymous]
         public ActionResult AccountGallery(string batchId)
         {
+            var currentUrl = Request.Url.ToString();
+            if (UserNotAuthenticated())
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = currentUrl });
+            }
             var model = new AttachmentGalleryModel();
 
             Mapper.Initialize(cfg =>
@@ -117,6 +131,11 @@ namespace Web.eBado.Controllers
         [AllowAnonymous]
         public ActionResult EditAccountGallery(string batchId)
         {
+            var currentUrl = Request.Url.ToString();
+            if (UserNotAuthenticated())
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = currentUrl });
+            }
             var model = new AttachmentGalleryModel();
 
             Mapper.Initialize(cfg =>
@@ -133,6 +152,11 @@ namespace Web.eBado.Controllers
         [AllowAnonymous]
         public ActionResult BatchAccountGallery()
         {
+            var currentUrl = Request.Url.ToString();
+            if (UserNotAuthenticated())
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = currentUrl });
+            }
             try
             {
                 var model = new BatchGalleryModel();
@@ -152,7 +176,6 @@ namespace Web.eBado.Controllers
                 EntlibLogger.LogError("Account", "FileUpload", e.Message, DiagnosticsLogging.Create("Controller", "Account"), e);
                 throw;
             }
-
         }
 
         #endregion
@@ -170,7 +193,7 @@ namespace Web.eBado.Controllers
 
             if (ModelState.IsValid)
             {
-                var userDetail = unitOfWork.UserDetailsRepository.FindWhere(ud => ud.Email.Equals(model.Email, StringComparison.OrdinalIgnoreCase))
+                var userDetail = unitOfWork.UserDetailsRepository.FindWhere(ud => ud.Email.ToLower().Equals(model.Email.ToLower()))
                     .Include(ud => ud.UserRole.UserRole2UserPermission.Select(ur => ur.UserPermission))
                     .Include(ud => ud.CompanyDetails2UserDetails.Select(cd => cd.CompanyDetail))
                     .Include(ud => ud.CompanyDetails2UserDetails.Select(cd => cd.CompanyRole.CompanyRole2CompanyPermission
@@ -204,7 +227,15 @@ namespace Web.eBado.Controllers
 
                 FormsAuthentication.SetAuthCookie(session.Email, true);
                 Session["User"] = session;
-                return RedirectToAction("Index", "Home");
+
+                if (returnUrl != null)
+                {
+                    return Redirect(returnUrl);
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
             else
             {
@@ -330,6 +361,14 @@ namespace Web.eBado.Controllers
             string batchUniqueId = fileBo.CreateBatch(model.Name, model.Description);
             EntlibLogger.LogInfo("File", "Create Batch", $"Created new batch with id: {batchUniqueId}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Account" });
             return RedirectToAction("EditAccountGallery", new { batchId = batchUniqueId });
+        }
+        #endregion
+
+        #region Private methods
+        private bool UserNotAuthenticated()
+        {
+            var session = (SessionModel)Session["User"];
+            return !Request.IsAuthenticated || session == null ? true : false;
         }
         #endregion
     }

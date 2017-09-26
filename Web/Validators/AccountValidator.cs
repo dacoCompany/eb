@@ -36,7 +36,7 @@ namespace Web.eBado.Validators
 
         private static void ValidateUserCredentials(IUnitOfWork uow, ValidationResultCollection collection, LoginModel model)
         {
-            var userDetails = uow.UserDetailsRepository.FirstOrDefault(ud => ud.Email.Equals(model.Email, StringComparison.OrdinalIgnoreCase));
+            var userDetails = uow.UserDetailsRepository.FirstOrDefault(ud => ud.Email.ToLower().Equals(model.Email.ToLower()));
             if (userDetails != null)
             {
                 var encodedPws = AccountHelper.EncodePassword(model.Password, userDetails.Salt);

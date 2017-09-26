@@ -18,7 +18,7 @@
         <div class="resp push_top_10">
             @AccountHelper.SettingsMenu(Url, ViewContext.RouteData.Values["Action"].ToString())
             <div class="tabcontent-gallery push_top_10">
-                <div style="float:left; margin-bottom: 30px; width:100%">
+                <div class="btn-position">
                     <button id="addBatch" class="form-btn col-lg-2" style="float:left">Create</button>
                 </div>
             @using (Html.BeginForm("CreateBatch", "Account", new { id = "htmlForm" }))
@@ -39,8 +39,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-md-10">
-                                <button id="MyButton" class="form-btn col-sm-12" data-callback="onSubmit">Create</button>
+                            <div class="col-lg-10">
+                                <button id="MyButton" class="form-btn" data-callback="onSubmit">Create</button>
                             </div>
                         </div>
                     </div>
@@ -56,9 +56,9 @@
                                     <div class="name">@batch.Name</div>
                                     <div class="att_count"><span class="glyphicon glyphicon-picture"><span style="color:darkolivegreen;font-weight:bold; margin-left:2px">@batch.AttachmentsCount</span></span></div>
                                 </div>
-                                <a target="_blank" href="@Url.Action("AccountGallery", "Account", new { batchId = batch.Guid })">
+                                <a  href="@Url.Action("AccountGallery", "Account", new { batchId = batch.Guid })">
                                     @if (batch.BaseThumbUrl != null)
-                                    {<img src="@batch.BaseThumbUrl" width="200" height="200">}
+                                    {<img src="@batch.BaseThumbUrl" style="height:150px; width:auto">}
                                     else
                                     { <img src="~/Content/BaseContent/img/no_photo.jpg" width="300" height="200">}
                                 </a>

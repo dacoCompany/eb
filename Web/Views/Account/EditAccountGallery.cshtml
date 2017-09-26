@@ -53,15 +53,12 @@
     <div class="resp push_top_10">
         @AccountHelper.SettingsMenu(Url, ViewContext.RouteData.Values["Action"].ToString())
         <div class="tabcontent-gallery push_top_10">
-            <div style="float:left; margin-bottom: 50px; width:100%">
+            <div class="btn-position">
                 <button type="submit" class="form-btn col-lg-2" style="float:left" onclick="location.href='@Url.Action("AccountGallery", "Account", new { batchId = @Model.Guid })'">Naspat</button>
             </div>
-            <div class="col-lg-10">
-                <h2>@Model.Name</h2>
-                <h4>@Model.Description</h4>
-            </div>
+           
             @Html.Partial("_Files")
-            <div class="push_top_20">
+            @*<div class="push_top_20">
                 <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
                     <div class="slides"></div>
                     <h3 class="title"></h3>
@@ -76,18 +73,7 @@
                     {
                         foreach (AttachmentModel file in @Model.Attachments)
                         {
-
-                            @*if (file.type.Equals("video/mp4"))
-                                {
-
-                                    <a href="@file.url" title="@file.name" type="video/mp4"><img src="@file.thumbnailUrl" alt="@file.name"></a>
-
-
-                                }
-                                else
-                                {*@
                             <div class="thumb"><a href="@file.Url" title="@file.Name"><img src="@file.ThumbnailUrl" alt="@file.Name"></a></div>
-                            //}
 
                         }
                     }
@@ -96,7 +82,7 @@
                         <p>No files</p>
                     }
                 </div>
-            </div>
+            </div>*@
         </div>
     </div>
 </div>

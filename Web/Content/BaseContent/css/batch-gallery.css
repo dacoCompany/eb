@@ -42,7 +42,7 @@ div.att_count {
     padding: 0 6px;
     float: left;
     width: 24.99999%;
-    margin-right: 5px;
+    margin-bottom: 10px;
 }
 
 @media only screen and (max-width: 700px) {
