@@ -107,28 +107,6 @@ namespace Web.eBado.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult AccountGallery(string batchId)
-        {
-            var currentUrl = Request.Url.ToString();
-            if (UserNotAuthenticated())
-            {
-                return RedirectToAction("Login", "Account", new { returnUrl = currentUrl });
-            }
-            var model = new AttachmentGalleryModel();
-
-            Mapper.Initialize(cfg =>
-            {
-                cfg.CreateMap<AttachmentEntity, AttachmentModel>();
-                cfg.CreateMap<AttachmentGalleryEntity, AttachmentGalleryModel>();
-            });
-
-            var entities = fileBo.GetBatchFiles(batchId);
-            model = Mapper.Map<AttachmentGalleryModel>(entities);
-
-            return View(model);
-        }
-
-        [AllowAnonymous]
         public ActionResult EditAccountGallery(string batchId)
         {
             var currentUrl = Request.Url.ToString();

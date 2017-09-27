@@ -162,7 +162,7 @@ namespace eBado.BusinessObjects
                     Size = ByteSize.FromBytes(dbo.Size).KiloBytes.ToString("N2"),
                     ThumbnailUrl = dbo.ThumbnailUrl,
                     Url = dbo.OriginalUrl,
-                    DeleteUrl = $"FileUpload/Delete?batchId={batchDbo.GuId}&name={dbo.Name}"
+                    Batch = batchDbo.GuId
                 });
             }
 

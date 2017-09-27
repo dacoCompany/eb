@@ -126,10 +126,10 @@ namespace Web.eBado.Controllers
             return new JsonNetResult(model.Attachments);
         }
 
-        [HttpGet]
-        public JsonResult DeleteFile(string batchIs, string file)
+        [HttpPost]
+        public JsonResult DeleteFile(string batchId, ICollection<string> file)
         {
-            bool deleted = filesBo.DeleteFile(file);
+            bool deleted = filesBo.DeleteFile(file.FirstOrDefault());
 
             return deleted ? Json("Deleted", JsonRequestBehavior.AllowGet) : Json("Error", JsonRequestBehavior.AllowGet);
         }

@@ -1,4 +1,4 @@
-div.tab {
+﻿div.tab {
     float: left;
     width: 20%;
     height: 100%;
@@ -50,7 +50,7 @@ div.tab {
     width: auto;
     height: 180px;
     display: inline-block;
-    float:left;
+    float: left;
 }
 
 .btn-position {
@@ -87,6 +87,7 @@ div.tab {
         margin: 0px;
         width: 100%;
     }
+
     .tabcontent {
         float: none;
         margin: 0px;
@@ -99,9 +100,10 @@ div.tab {
 
     .thumb {
         height: 100px;
-        float:none;
+        float: none;
         text-align: center;
     }
+
     div.tab {
         width: 100%;
     }
@@ -124,4 +126,123 @@ div.tab {
 .modal-content {
     height: 100%;
     border-radius: 0;
+}
+
+/***************Edit gallery*******************/
+
+div.polaroid {
+    width: 200px;
+    height: 200px;
+    background-color: #f8f8ff;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin: 0 40px 40px 0;
+    float: left;
+    position: relative;
+}
+
+    div.polaroid img {
+        width: 100%;
+        height: auto;
+    }
+
+div.con-tainer {
+    height: 20px;
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+div.over-flow-hidden {
+    overflow: hidden;
+}
+
+.btn-space {
+    margin: 10px 10px;
+}
+
+.center-div-up {
+    margin: 0 auto;
+    max-width: 500px;
+}
+
+div.btm {
+    display: inline-block;
+    width: 100%
+}
+
+.chBox {
+    float:left;
+    margin: 15px 0 0 20px;
+}
+
+.btn-space-5 {
+    margin: 5px;
+}
+
+.btn-right {
+    position: relative;
+    bottom: 0;
+    right: 0;
+}
+
+.ellipsis {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.zoom img {
+    -webkit-transition: all 1s ease; /* Safari and Chrome */
+    -moz-transition: all 1s ease; /* Firefox */
+    -o-transition: all 1s ease; /* IE 9 */
+    -ms-transition: all 1s ease; /* Opera */
+    transition: all 1s ease;
+}
+
+.zoom:hover img {
+    -webkit-transform: scale(1.25); /* Safari and Chrome */
+    -moz-transform: scale(1.25); /* Firefox */
+    -ms-transform: scale(1.25); /* IE 9 */
+    -o-transform: scale(1.25); /* Opera */
+    transform: scale(1.25);
+}
+
+.rating {
+    background: green;
+    position: absolute;
+    z-index: 999;
+    width: 100px;
+    height: 100px;
+}
+
+.hidden {
+    display: none;
+}
+
+.zoomzoom {
+    width: 100%;
+    display: block;
+    height: 150px;
+    background-size: cover;
+    background-position-x: 50%;
+    background-position-y: 50%;
+    -webkit-transition: all 1s ease; /* Safari and Chrome */
+    -moz-transition: all 1s ease; /* Firefox */
+    -o-transition: all 1s ease; /* IE 9 */
+    -ms-transition: all 1s ease; /* Opera */
+    transition: all 1s ease;
+}
+
+    .zoomzoom:hover {
+        -webkit-transform: scale(1.25); /* Safari and Chrome */
+        -moz-transform: scale(1.25); /* Firefox */
+        -ms-transform: scale(1.25); /* IE 9 */
+        -o-transform: scale(1.25); /* Opera */
+        transform: scale(1.25);
+    }
+
+
+input[type=checkbox] {
+    transform: scale(1.8);
+    margin: 5px;
 }

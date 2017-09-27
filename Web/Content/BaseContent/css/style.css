@@ -687,6 +687,10 @@ hr.transparent {
     margin-top: 30px;
 }
 
+.push_right_5 {
+    margin-right: 5px;
+}
+
 .no_margin {
     margin: 0 auto !important;
 }

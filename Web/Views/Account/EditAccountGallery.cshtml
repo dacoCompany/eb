@@ -19,7 +19,7 @@
     });
 
     $('#fileupload').addClass('fileupload-processing');
-    
+
     var batchId = @Html.Raw(Json.Encode(Model.Guid));
 
     $.ajax({
@@ -30,21 +30,16 @@
             batchId: batchId
         },
         success: function (data) {
-
-
-                $('#fileupload').fileupload('option', 'done').call($('#fileupload'),
-                    $.Event('done'),
-                    { result: { files: data } });
-                $('#fileupload').removeClass('fileupload-processing');
-        },
-            statusCode : {500 : function() {
-                $('#fileupload').fileupload('option', 'done').call($('#fileupload'),
-                    $.Event('done'),
-                    { result: { files: data } });
-                $('#fileupload').removeClass('fileupload-processing');
+            generateGallery(data);
             }
-        }
     });
+    function generateGallery(response, textStatus, jqXHR) {
+        var index = 1;
+        jQuery.each(response, function (index, item) {
+            jQuery("#imagesContainer").append('<div id="imgContainer' + index + '" class="polaroid zoom over-flow-hidden"><div style="overflow: hidden;"> <a target="_blank" href="' + item.url + '" style="background-image: url(' + item.thumbnailUrl + ');" class="zoomzoom"></a></div><div class="btm"><div class="chBox"><input type="checkbox" onchange="enableDeleteBtn()" id="btn' + index + '" value="btn' + item.name + '" /></div><div style="float:right"><button id="btn' + index + '" onclick="btnClick(\'btn' + item.name + '\', \'btn' + index + '\')" class="form-btn btn-space-5">Delete</button></div></div></div>');
+            index++;
+        });
+    };
 </script>
 
 
@@ -54,48 +49,74 @@
         @AccountHelper.SettingsMenu(Url, ViewContext.RouteData.Values["Action"].ToString())
         <div class="tabcontent-gallery push_top_10">
             <div class="btn-position">
-                <button type="submit" class="form-btn col-lg-2" style="float:left" onclick="location.href='@Url.Action("AccountGallery", "Account", new { batchId = @Model.Guid })'">Naspat</button>
+                <button type="submit" class="form-btn col-lg-2" style="float:left" onclick="location.href='@Url.Action("BatchAccountGallery", "Account")'"><span class="glyphicon glyphicon-arrow-left push_right_5"></span>Naspat</button>
             </div>
-           
-            @Html.Partial("_Files")
-            @*<div class="push_top_20">
-                <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
-                    <div class="slides"></div>
-                    <h3 class="title"></h3>
-                    <a class="prev">‹</a>
-                    <a class="next">›</a>
-                    <a class="close">×</a>
-                    <a class="play-pause"></a>
-                    <ol class="indicator"></ol>
-                </div>
-                <div id="links" style="float:left; width:100%">
-                    @if (@Model.Attachments != null && @Model.Attachments.Count != 0)
-                    {
-                        foreach (AttachmentModel file in @Model.Attachments)
-                        {
-                            <div class="thumb"><a href="@file.Url" title="@file.Name"><img src="@file.ThumbnailUrl" alt="@file.Name"></a></div>
 
-                        }
-                    }
-                    else
-                    {
-                        <p>No files</p>
-                    }
-                </div>
-            </div>*@
+            @Html.Partial("_Files")
+            <div id="links" style="float:left; width:auto; margin:0 auto">
+                <div id="imagesContainer"></div>
+            </div>
         </div>
     </div>
 </div>
 
 @Scripts.Render("~/bundles/jQuery-File-Upload")
 <script>
+    function enableDeleteBtn() {
+        $("#deleteSelected").prop("disabled", !$('input:checked').length);
+    }
+
+    function btnClick(name, id) {
+        $.ajax({
+            url: "/FileUpload/DeleteFile",
+            type: "POST",
+            data: JSON.stringify({ batchId: '@Model.Guid', file: name }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                var container = $("#" + id).parent().parent().parent().attr('id');
+                $("#" + container).hide(250);
+            },
+            error: function () {
+                alert("daco v pici!");
+            }
+        });
+    }
+
+    $("#deleteSelected").click(function () {
+        var selectedImg = [];
+        var selectedId = [];
+        $('#imagesContainer input:checked').each(function () {
+            selectedImg.push($(this).attr('value'));
+            selectedId.push($(this).attr('id'));
+        });
+        $.ajax({
+            url: "/FileUpload/DeleteFile",
+            type: "POST",
+            data: JSON.stringify({ batchId: '@Model.Guid', file: selectedImg }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $.each(selectedId, function (key, value) {
+                    var container = $("#" + selectedId[key]).parent().parent().parent().attr('id');
+                $("#" + container).hide(250);
+                });
+            },
+            error: function () {
+                alert("daco v pici!");
+            }
+        });
+    });
+
     document.getElementById('links').onclick = function (event) {
         event = event || window.event;
         var target = event.target || event.srcElement,
             link = target.src ? target.parentNode : target,
             options = { index: link, event: event },
             links = this.getElementsByTagName('a');
-        blueimp.Gallery(links, options);
+        if (target.nodeName != "DIV" && target.nodeName != "BUTTON" && target.nodeName != "INPUT") {
+            blueimp.Gallery(links, options);
+        }
     };
 </script>
 
