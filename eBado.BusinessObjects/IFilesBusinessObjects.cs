@@ -9,6 +9,10 @@ namespace eBado.BusinessObjects
 
         bool DeleteFile(string fileName);
 
+        bool DeleteFiles(IEnumerable<string> files, string batchId);
+
+        bool DeleteBatch(string batchId);
+
         AttachmentGalleryEntity GetBatchFiles(string batchId);
 
         string CreateBatch(string name, string description);
