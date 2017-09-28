@@ -131,7 +131,7 @@
 /***************Edit gallery*******************/
 
 div.polaroid {
-    width: 200px;
+    width: 230px;
     height: 200px;
     background-color: #f8f8ff;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -141,6 +141,21 @@ div.polaroid {
 }
 
     div.polaroid img {
+        width: 100%;
+        height: auto;
+    }
+
+div.polaroid-batch {
+    width: 230px;
+    height: 290px;
+    background-color: #f8f8ff;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin: 0 40px 40px 0;
+    float: left;
+    position: relative;
+}
+
+    div.polaroid-batch img {
         width: 100%;
         height: auto;
     }
@@ -168,6 +183,18 @@ div.over-flow-hidden {
 div.btm {
     display: inline-block;
     width: 100%
+}
+
+div.btm-desc {
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+    text-align:left;
+    height:50px;
+}
+
+.desc {
+    margin: 10px;
+    text-overflow: ellipsis;
 }
 
 .chBox {
