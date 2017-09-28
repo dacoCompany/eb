@@ -18,18 +18,19 @@ div.desc {
 }
 
 div.head {
-    height: 30px;
+    height: 35px;
     border-bottom: 1px solid #ccc;
 }
 
 div.name {
-    padding: 5px;
+    padding: 10px 0 0 10px;
     float: left;
     text-align: left;
+    font-size: 14px;
 }
 
 div.att_count {
-    padding: 5px;
+    padding: 10px 10px 0 0;
     float: right;
     text-align: right;
 }

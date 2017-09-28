@@ -134,6 +134,14 @@ namespace Web.eBado.Controllers
             return deleted ? Json("Deleted", JsonRequestBehavior.AllowGet) : Json("Error", JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public JsonResult DeleteBatch(string batchId)
+        {
+            bool deleted = true;
+
+            return deleted ? Json("Deleted", JsonRequestBehavior.AllowGet) : Json("Error", JsonRequestBehavior.AllowGet);
+        }
+
         [HttpGet]
         public JsonResult DeleteFileAzure(string fileName)
         {
