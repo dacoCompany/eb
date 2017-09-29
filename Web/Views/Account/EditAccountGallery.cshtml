@@ -38,7 +38,7 @@
     function generateGallery(response, textStatus, jqXHR) {
         var index = 1;
         jQuery.each(response, function (index, item) {
-            jQuery("#imagesContainer").append('<div id="imgContainer' + index + '" class="polaroid zoom over-flow-hidden"><div style="overflow: hidden;"> <a target="_blank" href="' + item.url + '" style="background-image: url(' + item.thumbnailUrl + ');" class="zoomzoom"></a></div><div class="btm"><div class="chBox"><input type="checkbox" onchange="enableDeleteBtn()" id="btn' + index + '" value="btn' + item.name + '" /></div><div style="float:right"><button id="btn' + index + '" onclick="btnClick(\'btn' + item.name + '\', \'btn' + index + '\')" class="form-btn btn-space-5">Delete</button></div></div></div>');
+            jQuery("#imagesContainer").append('<div id="imgContainer' + index + '" class="polaroid zoom over-flow-hidden"><div style="overflow: hidden;"> <a target="_blank" href="' + item.url + '" style="background-image: url(' + item.thumbnailUrl + ');" class="zoomzoom"></a></div><div class="btm"><div class="chBox"><input type="checkbox" onchange="enableDeleteBtn()" id="btn' + index + '" value="btn' + item.name + '" /></div><div style="float:right"><button id="btn' + index + '" onclick="btnClick(\'' + item.name + '\', \'btn' + index + '\')" class="form-btn btn-space-5">Delete</button></div></div></div>');
             index++;
         });
     };
@@ -241,7 +241,7 @@
 
     function btnClick(name, id) {
         $.ajax({
-            url: "/FileUpload/DeleteFile",
+            url: "/FileUpload/DeleteFiles",
             type: "POST",
             data: JSON.stringify({ batchId: '@Model.Guid', file: name }),
             dataType: "json",
@@ -250,8 +250,8 @@
                 var container = $("#" + id).parent().parent().parent().attr('id');
                 $("#" + container).hide(250);
             },
-            error: function () {
-                alert("daco v pici!");
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.responseText);
             }
         });
     }
@@ -287,7 +287,7 @@
             selectedId.push($(this).attr('id'));
         });
         $.ajax({
-            url: "/FileUpload/DeleteFile",
+            url: "/FileUpload/DeleteFiles",
             type: "POST",
             data: JSON.stringify({ batchId: '@Model.Guid', file: selectedImg }),
             dataType: "json",
@@ -298,8 +298,8 @@
                 $("#" + container).hide(250);
                 });
             },
-            error: function () {
-                alert("daco v pici!");
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.responseText);
             }
         });
     });

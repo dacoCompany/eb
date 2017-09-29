@@ -11,6 +11,7 @@ using ByteSizeLib;
 using eBado.Entities;
 using Infrastructure.Common;
 using Infrastructure.Common.DB;
+using Microsoft.Practices.EnterpriseLibrary.Common.Utility;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using WebAPIFactory.Configuration.Core;
@@ -74,7 +75,7 @@ namespace eBado.BusinessObjects
                         var thumbnail = new WebImage(stream).Resize(130, 100, true, true);
                         thumbnail.FileName = fileThumb;
                         byte[] thumb = thumbnail.GetBytes("image/jpeg");
-                        CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference("photos/" + fileThumb);
+                        CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference($"photos/{batchId}/{fileThumb}");
                         blockBlobThumb.UploadFromByteArray(thumb, 0, thumb.Length);
                         file.ThumbnailUrl = blockBlobThumb.Uri.ToString();
                     }
@@ -88,7 +89,7 @@ namespace eBado.BusinessObjects
                     {
                         byte[] thumb = new byte[1048576];
                         stream.ReadAsync(thumb, 0, (int)stream.Length);
-                        CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference("photos/" + fileThumb);
+                        CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference($"photos/{batchId}/{fileThumb}");
                         blockBlobThumb.UploadFromByteArray(thumb, 0, thumb.Length);
                         file.ThumbnailUrl = blockBlobThumb.Uri.ToString();
                     }
@@ -133,6 +134,74 @@ namespace eBado.BusinessObjects
             return result && resultThumb && dboDeleted;
         }
 
+        public bool DeleteFiles(IEnumerable<string> files, string batchId)
+        {
+            var container = GetAzureBlobContainer();
+            bool deletedAll = true;
+
+            foreach (string fileName in files)
+            {
+                CloudBlockBlob blockBlob = container.GetBlockBlobReference($"photos/{batchId}/{fileName}");
+                bool result = blockBlob.DeleteIfExists(DeleteSnapshotsOption.IncludeSnapshots);
+
+                string thumbName = Path.GetFileNameWithoutExtension(fileName) + "_thumbImg.jpg";
+                CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference($"photos/{batchId}/{thumbName}");
+                bool resultThumb = blockBlobThumb.DeleteIfExists(DeleteSnapshotsOption.IncludeSnapshots);
+
+                var attachment = unitOfWork.AttachmentRepository.FirstOrDefault(a => a.OriginalUrl.Contains(fileName));
+                bool dboDeleted = false;
+
+                if (attachment != null)
+                {
+                    attachment.IsActive = false;
+                    dboDeleted = true;
+                }
+
+                if (!(result && resultThumb && dboDeleted))
+                {
+                    EntlibLogger.LogWarning("File", "Delete Files", $"File '{fileName}' in batch {batchId} cannot be deleted.", DiagnosticsLogging.Create("BusinessObject", "DeleteFiles"));
+                    deletedAll = false;
+                }
+            }
+
+            unitOfWork.Commit();
+
+            return deletedAll;
+        }
+
+        public bool DeleteBatch(string batchId)
+        {
+            bool deletedBatch = false;
+
+            try
+            {
+                var container = GetAzureBlobContainer();
+                foreach (IListBlobItem blob in container.GetDirectoryReference(batchId).ListBlobs(true))
+                {
+                    if (blob.GetType() == typeof(CloudBlob) || blob.GetType().BaseType == typeof(CloudBlob))
+                    {
+                        ((CloudBlob)blob).DeleteIfExists();
+                    }
+                }
+
+                var batch = unitOfWork.BatchAttachmentRepository.FirstOrDefault(ba => ba.GuId == batchId);
+                batch.IsActive = false;
+
+                batch.Attachments.ForEach(b => b.IsActive = false);
+
+                unitOfWork.Commit();
+
+                deletedBatch = true;
+            }
+            catch (Exception ex)
+            {
+                EntlibLogger.LogWarning("File", "Delete Batch", $"Batch {batchId} cannot be deleted. {ex.Message}", DiagnosticsLogging.Create("BusinessObject", "DeleteBatch"), ex);
+                deletedBatch = false;
+            }
+
+            return deletedBatch;
+        }
+
         public AttachmentGalleryEntity GetBatchFiles(string batchId)
         {
             if (string.IsNullOrEmpty(batchId))
@@ -154,7 +223,7 @@ namespace eBado.BusinessObjects
                 Guid = batchDbo.GuId
             };
 
-            foreach (var dbo in batchDbo.Attachments)
+            foreach (var dbo in batchDbo.Attachments.Where(a => a.IsActive))
             {
                 result.Attachments.Add(new AttachmentEntity
                 {
