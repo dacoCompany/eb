@@ -691,6 +691,10 @@ hr.transparent {
     margin-right: 5px;
 }
 
+.push_left_10{
+    margin-left:10px;
+}
+
 .no_margin {
     margin: 0 auto !important;
 }

@@ -8,6 +8,8 @@
 @Styles.Render("~/Content/settings")
 @Styles.Render("~/Content/jQuery-File-Upload")
 
+<script src="http://blueimp.github.io/Gallery/js/blueimp-gallery-youtube.js"></script>
+
 <script>
     var $form = null;
     $(function () {
@@ -52,10 +54,181 @@
                 <button type="submit" class="form-btn col-lg-2" style="float:left" onclick="location.href='@Url.Action("BatchAccountGallery", "Account")'"><span class="glyphicon glyphicon-arrow-left push_right_5"></span>Naspat</button>
             </div>
 
-            @Html.Partial("_Files")
-            <div id="links" style="float:left; width:auto; margin:0 auto">
-                <div id="imagesContainer"></div>
+
+            <form id="fileupload" method="POST" enctype="multipart/form-data" data-url="@Url.Action("Upload","FileUpload", new { batchId = @Model.Guid })">
+                <div class="row fileupload-buttonbar" style="text-align:left">
+                    <div class="col-lg-10" style="margin:0 auto">
+                        <span class="btn form-btn-transparent fileinput-button">
+                            <i class="glyphicon glyphicon-picture"></i>
+                            <span>Add images</span>
+                            <input id="addButton" type="file" name="files[]" multiple>
+                        </span>
+                        <button id="addVideo" class="btn form-btn-transparent cancel">
+                            <i class="glyphicon glyphicon-facetime-video"></i>
+                            <span>Add video</span>
+                        </button>
+                        <button type="submit" class="btn form-btn-transparent start">
+                            <i class="glyphicon glyphicon-upload"></i>
+                            <span>Start upload</span>
+                        </button>
+                        <button type="reset" class="btn form-btn-transparent cancel">
+                            <i class="glyphicon glyphicon-ban-circle"></i>
+                            <span>Cancel upload</span>
+                        </button>
+                        <button id="deleteSelected" type="button" class="btn form-btn-transparent delete" disabled>
+                            <i class="glyphicon glyphicon-trash"></i>
+                            <span>Delete</span>
+                        </button>
+                        @*<input type="checkbox" class="toggle">*@
+                        <span class="fileupload-process"></span>
+                    </div>
+                </div>
+                <div id="videoArea" class="col-lg-12" style="margin-top:30px; display:none">
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Name" } })
+                            <div class="val-message">@Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-10">
+                            <button id="MyButton" class="form-btn" data-callback="onSubmit">Create</button>
+                            <a href="#" class="push_left_10">Ako tu jebnut link z YouTube?</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 fileupload-progress fade">
+                    <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                    </div>
+                    <div class="progress-extended">&nbsp;</div>
+                </div>
+                <div class="col-lg-5 fileupload-progress fade">
+                    <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                    </div>
+                    <div class="progress-extended">&nbsp;</div>
+                </div>
+
+                <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+            </form>
+            <br>
+            <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
+                <div class="slides"></div>
+                <h3 class="title"></h3>
+                <a class="prev">‹</a>
+                <a class="next">›</a>
+                <a class="close">×</a>
+                <a class="play-pause"></a>
+                <ol class="indicator"></ol>
             </div>
+            <script id="template-upload" type="text/x-tmpl">
+                {% for (var i=0, file; file=o.files[i]; i++) { %}
+                <tr class="template-upload fade">
+                    <td>
+                        <span class="preview"></span>
+                    </td>
+                    <td>
+                        <p class="name" style="max-width:350px">{%=file.name%}</p>
+                        <strong class="error text-danger"></strong>
+                    </td>
+                    <td>
+                        <p class="size">Processing...</p>
+                        <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+                    </td>
+                    <td>
+                        {% if (!i && !o.options.autoUpload) { %}
+                        <button class="btn form-btn-transparent start" disabled>
+                            <i class="glyphicon glyphicon-upload"></i>
+                            <span>Start</span>
+                        </button>
+                        {% } %}
+                        {% if (!i) { %}
+                        <button class="btn form-btn-transparent cancel">
+                            <i class="glyphicon glyphicon-trash"></i>
+                            <span>Remove</span>
+                        </button>
+                        {% } %}
+                    </td>
+                </tr>
+                {% } %}
+            </script>
+            <script id="template-download" type="text/x-tmpl">
+                {% for (var i=0, file; file=o.files[i]; i++) { %}
+                <tr class="template-download fade">
+                    <td>
+                        <span class="preview">
+                            {% if (file.thumbnailUrl) { %}
+                            <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
+                            {% } %}
+                        </span>
+                    </td>
+                    <td>
+                        <p class="name" style="max-width:350px; min-width:350px">
+                            {% if (file.url) { %}
+                            <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+                            {% } else { %}
+                            <span>{%=file.name%}</span>
+                            {% } %}
+                        </p>
+                        {% if (file.error) { %}
+                        <div><span class="label label-danger">Error</span> {%=file.error%}</div>
+                        {% } %}
+                    </td>
+                    <td>
+                        <span class="size">{%=file.size%} KB</span>
+                    </td>
+                    <td>
+                        {% if (file.deleteUrl) { %}
+                        <button class="btn form-btn-transparent delete no_margin" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}" {% if (file.deletewithcredentials) { %} data-xhr-fields='{"withCredentials":true}' {% } %}>
+                            <i class="glyphicon glyphicon-trash"></i>
+                            <span>Delete</span>
+                        </button>
+                        <input type="checkbox" name="delete" value="1" class="toggle">
+                        {% } else { %}
+                        <button class="btn btn-warning cancel">
+                            <i class="glyphicon glyphicon-ban-circle"></i>
+                            <span>Cancel</span>
+                        </button>
+                        {% } %}
+                    </td>
+                </tr>
+                {% } %}
+            </script>
+
+            <div id="links" style="float:left; width:auto; margin:0 auto">
+                <div id="imagesContainer">
+                </div>
+            </div>
+            @{ int index = 1; }
+            @foreach (var video in Model.Attachments.Where(att => att.AttachmentType == "video"))
+            {
+                <div id="videoContainer_@index" class="polaroid zoom over-flow-hidden">
+                    <div style="overflow: hidden;">
+                        <a onclick="playVideo('video_@index','youtube_@index')" style="background-image: url(@video.ThumbnailUrl);" class="zoomzoom"></a>
+                    </div>
+                    <div class="btm">
+                        <button id="btnVideo_@index" onclick="btnVideoClick('@video.Name','btnVideo_@index')" class="form-btn btn-space-5">Delete</button>
+                    </div>
+                </div>
+
+                <div id="video_@index" class="lightbox" onclick="hideVideo('video_@index','youtube_@index')">
+                    <div class="lightbox-container">
+                        <div class="lightbox-content">
+
+                            <button onclick="hideVideo('video_@index','youtube_@index')" class="lightbox-close">
+                                Close ✕
+                            </button>
+                            <div class="video-container">
+                                <iframe id="youtube_@index" width="960" height="540" src="@video.Url frameborder="0" allowfullscreen></iframe>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                ++index;
+            }
+
         </div>
     </div>
 </div>
@@ -82,6 +255,29 @@
             }
         });
     }
+
+    function btnVideoClick(name, id) {
+        $.ajax({
+            url: "/FileUpload/DeleteVideo",
+            type: "POST",
+            data: JSON.stringify({ batchId: '@Model.Guid', name: name }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                var container = $("#" + id).parent().parent().attr('id');
+                $("#" + container).hide(250);
+            },
+            error: function () {
+                alert("daco v pici!");
+            }
+        });
+    }
+
+    $(function () {
+        $("#addVideo").click(function () {
+            $("#videoArea").slideToggle();
+        });
+    })
 
     $("#deleteSelected").click(function () {
         var selectedImg = [];

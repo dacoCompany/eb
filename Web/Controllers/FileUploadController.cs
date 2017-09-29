@@ -126,6 +126,14 @@ namespace Web.eBado.Controllers
             return deleted ? new HttpStatusCodeResult(HttpStatusCode.OK) : new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "The gallery cannot be deleted. Please try again later.");
         }
 
+        [HttpPost]
+        public JsonResult DeleteVideo(string batchId, string name)
+        {
+            bool deleted = true;
+
+            return deleted ? Json("Deleted", JsonRequestBehavior.AllowGet) : Json("Error", JsonRequestBehavior.AllowGet);
+        }
+
         [HttpGet]
         public ActionResult DeleteFileAzure(string fileName)
         {

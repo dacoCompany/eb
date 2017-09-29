@@ -42,7 +42,7 @@
                                 }
                                 else
                                 {
-                                    <a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Companies.Where(c => c.IsActive == true).Select(c => c.Name)<div id="down-triangle"></div></a>
+                                    <a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Companies.Where(c => c.IsActive).Select(c => c.Name)<div id="down-triangle"></div></a>
                                 }
                                 <ul>
                                     <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Name<div class="circle"></div></a></li>
