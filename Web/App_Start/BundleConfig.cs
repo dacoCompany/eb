@@ -66,7 +66,8 @@ namespace Web.eBado
                    "~/Content/jQuery.FileUpload/css/jquery.fileupload-ui.css",
                    "~/Content/blueimp-gallery2/css/blueimp-gallery.css",
                    "~/Content/blueimp-gallery2/css/blueimp-gallery-video.css",
-                   "~/Content/blueimp-gallery2/css/blueimp-gallery-indicator.css"
+                   "~/Content/blueimp-gallery2/css/blueimp-gallery-indicator.css",
+                   "~/Content/BaseContent/css/youtube.css"
                    ));
 
             bundles.Add(new ScriptBundle("~/bundles/jQuery-File-Upload").Include(
@@ -85,7 +86,8 @@ namespace Web.eBado
                     "~/Scripts/blueimp-gallery2/js/blueimp-gallery.js",
                     "~/Scripts/blueimp-gallery2/js/blueimp-gallery-video.js",
                     "~/Scripts/blueimp-gallery2/js/blueimp-gallery-indicator.js",
-                    "~/Scripts/blueimp-gallery2/js/jquery.blueimp-gallery.js"
+                    "~/Scripts/blueimp-gallery2/js/jquery.blueimp-gallery.js",
+                    "~/Scripts/youtube.js"
                     ));
 
             bundles.Add(new ScriptBundle("~/bundles/Blueimp-Gallerry2").Include(
