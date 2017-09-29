@@ -139,6 +139,8 @@ namespace eBado.BusinessObjects
             var container = GetAzureBlobContainer();
             bool deletedAll = true;
 
+            int batchDboId = unitOfWork.BatchAttachmentRepository.FirstOrDefault(ba => ba.GuId.Equals(batchId)).Id;
+
             foreach (string fileName in files)
             {
                 CloudBlockBlob blockBlob = container.GetBlockBlobReference($"photos/{batchId}/{fileName}");
@@ -148,7 +150,7 @@ namespace eBado.BusinessObjects
                 CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference($"photos/{batchId}/{thumbName}");
                 bool resultThumb = blockBlobThumb.DeleteIfExists(DeleteSnapshotsOption.IncludeSnapshots);
 
-                var attachment = unitOfWork.AttachmentRepository.FirstOrDefault(a => a.OriginalUrl.Contains(fileName));
+                var attachment = unitOfWork.AttachmentRepository.FirstOrDefault(a => a.OriginalUrl.Contains(fileName) && a.BatchAttId == batchDboId);
                 bool dboDeleted = false;
 
                 if (attachment != null)
@@ -209,7 +211,7 @@ namespace eBado.BusinessObjects
                 throw new ArgumentNullException(nameof(batchId));
             }
 
-            var batchDbo = unitOfWork.BatchAttachmentRepository.FindWhere(ba => ba.GuId == batchId).Include(ba => ba.Attachments).FirstOrDefault();
+            var batchDbo = unitOfWork.BatchAttachmentRepository.FindWhere(ba => ba.GuId == batchId).FirstOrDefault();
 
             if (batchDbo == null)
             {

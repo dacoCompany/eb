@@ -119,11 +119,11 @@ namespace Web.eBado.Controllers
         }
 
         [HttpPost]
-        public JsonResult DeleteBatch(string batchId)
+        public ActionResult DeleteBatch(string batchId)
         {
-            bool deleted = true;
+            bool deleted = filesBo.DeleteBatch(batchId);
 
-            return deleted ? Json("Deleted", JsonRequestBehavior.AllowGet) : Json("Error", JsonRequestBehavior.AllowGet);
+            return deleted ? new HttpStatusCodeResult(HttpStatusCode.OK) : new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "The gallery cannot be deleted. Please try again later.");
         }
 
         [HttpGet]
