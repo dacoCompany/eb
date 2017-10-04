@@ -5,9 +5,17 @@
 }
 
 @Styles.Render("~/Content/settings")
-@Styles.Render("~/Content/jquery_ui")
 @Scripts.Render("~/bundles/jquery_autocomplete")
-
+<script>
+    $(function () {
+        $('.accordion-toggle').on('click', function () {
+            if ($(this).next().is(':hidden')) {
+                $('.accordion-toggle').next().hide(100);
+                $(this).next().show();
+            }
+        });
+    })
+</script>
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -16,54 +24,104 @@
             @AccountHelper.SettingsMenu(Url, ViewContext.RouteData.Values["Action"].ToString())
             <div class="tabcontent push_top_20">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="col-sm-12 reg-font">Kontaktná osoba</div>
-                <div class="form-group">
-                    <div class="col-md-3">
-                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Titul" } })
-                        <div class="val-message">@Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })</div>
+                    <div class="accordion-toggle">
+                        <div class="accordion-main">Zmenit heslo</div>
                     </div>
-                </div>
+                    <div id="changePswDIV" class="accordion-content">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Dic, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Stare heslo* " } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.Dic, "", new { @class = "text-danger" })</div>
+                            </div>
+                        </div>
 
-                <div class="form-group">
-                    <div class="col-md-4">
-                        @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Meno" } })
-                        <div class="val-message">@Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })</div>
-                    </div>
-                </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Dic, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Nove heslo* " } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.Dic, "", new { @class = "text-danger" })</div>
+                            </div>
+                        </div>
 
-                <div class="form-group">
-                    <div class="col-md-5">
-                        @Html.EditorFor(model => model.Surname, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Priezvisko" } })
-                        <div class="val-message">@Html.ValidationMessageFor(model => model.Surname, "", new { @class = "text-danger" })</div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Dic, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Nove heslo* " } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.Dic, "", new { @class = "text-danger" })</div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-12 reg-font">Kontaktné údaje spoločnosti</div>
-                <div class="form-group">
-                    <div class="col-md-4">
-                        <input type="text" class="form-control txt-lg" id="txtPostalCode" placeholder="PSC" />
-                        @Html.HiddenFor(model => model.PostalCode, new { @id = "hiddenPostalCode" })
-                        <div class="val-message">@Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })</div>
+                    <div class="accordion-toggle">
+                        <div class="accordion-main">Zmenit profil</div>
                     </div>
-                </div>
+                    <div id="profileInfoDIV" class="hidden-toggle accordion-content">
+                        <div class="row">
+                            <div class="col-sm-12 reg-font">Kontaktne udaje</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Titul" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })</div>
+                            </div>
 
-                <div class="form-group">
-                    <div class="col-md-5">
-                        @Html.EditorFor(model => model.Street, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Ulica" } })
-                        <div class="val-message">@Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })</div>
-                    </div>
-                </div>
+                            <div class="col-lg-4">
+                                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Meno" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })</div>
+                            </div>
 
-                <div class="form-group">
-                    <div class="col-md-3">
-                        @Html.EditorFor(model => model.StreetNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Cislo" } })
-                        <div class="val-message">@Html.ValidationMessageFor(model => model.Surname, "", new { @class = "text-danger" })</div>
+                            <div class="col-lg-4">
+                                @Html.EditorFor(model => model.Surname, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Priezvisko" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.Surname, "", new { @class = "text-danger" })</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 reg-font">Meno</div>
+                            </div>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Titul" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })</div>
+                            </div>
+
+                            <div class="col-lg-4">
+                                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Meno" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })</div>
+                            </div>
+
+                            <div class="col-lg-5">
+                                @Html.EditorFor(model => model.Surname, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Priezvisko" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.Surname, "", new { @class = "text-danger" })</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 reg-font">Bydlisko</div>
+                            </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <input type="text" class="form-control txt-lg" id="txtPostalCode" placeholder="PSC" />
+                                @Html.HiddenFor(model => model.PostalCode, new { @id = "hiddenPostalCode" })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })</div>
+                            </div>
+
+                            <div class="col-md-5">
+                                @Html.EditorFor(model => model.Street, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Ulica" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })</div>
+                            </div>
+
+                            <div class="col-md-3">
+                                @Html.EditorFor(model => model.StreetNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Cislo" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.Surname, "", new { @class = "text-danger" })</div>
+                            </div>
+                        </div>
+
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-10">
-                        <input type="submit" value="ZMENIT" class="form-btn" style="width:200px" />
+                    <div class="accordion-toggle">
+                        <div class="accordion-main">Daco</div>
                     </div>
-                </div>
+                    <div id="profileInfoDIV" class="hidden-toggle accordion-content">
+                        
+                    </div>
+                    <div class="col-lg-12 push_top_20" style="float:left">
+                        <input type="submit" value="ZMENIT" class="form-btn-transparent" style="width:200px" />
+                    </div>
             </div>
         </div>
     </div>

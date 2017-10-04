@@ -45,10 +45,13 @@
                                     <a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Companies.Where(c => c.IsActive).Select(c => c.Name)<div id="down-triangle"></div></a>
                                 }
                                 <ul>
-                                    <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Name<div class="circle"></div></a></li>
-                                    @foreach (var comapny in session.Companies)
+                                    @if (!session.IsActive)
                                     {
-                                        <li><a href="#">&nbsp;@comapny.Name<div class="circle"></div></a></li>
+                                        <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Name<div class="circle"></div></a></li>
+                                    }
+                                    @foreach (var company in session.Companies.Where(c=>!c.IsActive))
+                                    {
+                                        <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;@company.Name<div class="circle"></div></a></li>
                                     }
                                     <li><a href="#">Moje dopyty<div class="circle"></div></a></li>
                                     <li><a href="@Url.Action("ChangePassword","Account")">Nastavenie<div class="circle"></div></a></li>

@@ -663,6 +663,7 @@ nav-account {
     font-weight: 300;
     margin: 0 auto;
     text-align: left;
+    z-index:-1;
 }
 
 @media(max-width:750px) {
@@ -691,6 +692,10 @@ hr.transparent {
     margin-right: 5px;
 }
 
+.push_left_5 {
+    margin-left: 5px;
+}
+
 .push_left_10{
     margin-left:10px;
 }
@@ -699,6 +704,9 @@ hr.transparent {
     margin: 0 auto !important;
 }
 
+.hidden-toggle{
+    display:none;
+}
 /*************Custom radio button************/
 input[type='radio'] {
     -webkit-appearance: none;

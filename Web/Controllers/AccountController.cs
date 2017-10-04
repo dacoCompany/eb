@@ -182,7 +182,7 @@ namespace Web.eBado.Controllers
                 SessionModel session = new SessionModel()
                 {
                     Id = userDetail.Id,
-                    IsActive = true,
+                    IsActive = userDetail.IsActive,
                     Email = userDetail.Email,
                     Name = userDetail.DisplayName,
                     UserRole = userRole.Name,
@@ -196,6 +196,7 @@ namespace Web.eBado.Controllers
                     CompanySessionModel companySession = new CompanySessionModel()
                     {
                         Id = companyDetail.Id,
+                        IsActive = companyDetail.IsActive,
                         Name = companyDetail.Name,
                         CompanyRole = companyRole.Name,
                         CompanyPermissions = companyRole.CompanyRole2CompanyPermission.Select(cr => cr.CompanyPermission.Name)
