@@ -13,13 +13,43 @@
 
 	PRINT 'Insert CompanyRole data'
 	INSERT INTO CompanyRole(Name,Code) VALUES ('Owner','1')
-	INSERT INTO CompanyRole(Name,Code) VALUES ('Member','2')
+	INSERT INTO CompanyRole(Name,Code) VALUES ('Admin','2')
+	INSERT INTO CompanyRole(Name,Code) VALUES ('Member','3')
 	PRINT'Insert CompanyRole completed'
 
 	PRINT 'Insert CompanyPermission data'
-	INSERT INTO CompanyPermission(Name,Code) VALUES ('Read','1')
-	INSERT INTO CompanyPermission(Name,Code) VALUES ('Write','2')
+	INSERT INTO CompanyPermission(Name,Code) VALUES ('AddMember','1')
+	INSERT INTO CompanyPermission(Name,Code) VALUES ('RemoveMember','2')
+	INSERT INTO CompanyPermission(Name,Code) VALUES ('AddGallery','3')
+	INSERT INTO CompanyPermission(Name,Code) VALUES ('RemoveGallery','4')
+	INSERT INTO CompanyPermission(Name,Code) VALUES ('AddAttachments','5')
+	INSERT INTO CompanyPermission(Name,Code) VALUES ('RemoveAttachments','6')
+	INSERT INTO CompanyPermission(Name,Code) VALUES ('Comment','7')
+	INSERT INTO CompanyPermission(Name,Code) VALUES ('CreateDemand','8')
+	INSERT INTO CompanyPermission(Name,Code) VALUES ('EditDemand','9')
+	INSERT INTO CompanyPermission(Name,Code) VALUES ('DeleteDemand','10')
+	INSERT INTO CompanyPermission(Name,Code) VALUES ('ReadOnly','11')
 	PRINT'Insert CompanyPermission completed'
+
+	PRINT 'Insert CompanyRole2CompanyPermission data'
+	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('1','1')
+	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('1','2')
+	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('1','3')
+	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('1','4')
+	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('1','5')
+	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('1','6')
+	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('1','7')
+	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('1','8')
+	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('1','9')
+	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('1','10')
+	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('2','1')
+	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('2','3')
+	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('2','5')
+	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('2','7')
+	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('2','8')
+	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('2','9')
+	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('3','11')
+	PRINT'Insert CompanyRole2CompanyPermission completed'
 
 	PRINT 'Insert UserPermission data'
 	INSERT INTO UserPermission(Name,Code) VALUES ('Read','1')

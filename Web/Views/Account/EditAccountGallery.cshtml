@@ -46,7 +46,8 @@
 @Html.AntiForgeryToken()
 <div class="container">
     <div class="resp push_top_10">
-        @AccountHelper.SettingsMenu(Url, ViewContext.RouteData.Values["Action"].ToString())
+        @{ var session = (Web.eBado.Models.Shared.SessionModel)Session["User"]; }
+        @AccountHelper.SettingsMenu(Url, ViewContext.RouteData.Values["Action"].ToString(), session)
         <div class="tabcontent-gallery push_top_10">
             <div class="btn-position">
                 <button type="submit" class="form-btn col-lg-2" style="float:left" onclick="location.href='@Url.Action("BatchAccountGallery", "Account")'"><span class="glyphicon glyphicon-arrow-left push_right_5"></span>Naspat</button>

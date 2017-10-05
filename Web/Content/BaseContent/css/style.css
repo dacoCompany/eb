@@ -658,18 +658,25 @@ nav-account {
     color: red;
 }
 
+.set-font {
+    font-size: 20px;
+    font-weight: 300;
+    margin: 0 auto;
+    text-align: left;
+}
+
+@media(max-width:750px) {
+    .set-font {
+        margin-bottom: 10px;
+        z-index: -1;
+    }
+}
+
 .reg-font {
     font-size: 20px;
     font-weight: 300;
     margin: 0 auto;
     text-align: left;
-    z-index:-1;
-}
-
-@media(max-width:750px) {
-    .reg-font {
-        margin-bottom: 10px;
-    }
 }
 
 hr.transparent {
@@ -696,16 +703,36 @@ hr.transparent {
     margin-left: 5px;
 }
 
-.push_left_10{
-    margin-left:10px;
+.push_left_10 {
+    margin-left: 10px;
+}
+
+.resp_push_top_10 {
+    margin: 0 auto;
+}
+
+@media(max-width:750px) {
+    .resp_push_top_10 {
+        margin-top: 10px;
+    }
+}
+
+.resp_push_top_20 {
+    margin: 0 auto;
+}
+
+@media(max-width:750px) {
+    .resp_push_top_20 {
+        margin-top: 20px;
+    }
 }
 
 .no_margin {
     margin: 0 auto !important;
 }
 
-.hidden-toggle{
-    display:none;
+.hidden-toggle {
+    display: none;
 }
 /*************Custom radio button************/
 input[type='radio'] {

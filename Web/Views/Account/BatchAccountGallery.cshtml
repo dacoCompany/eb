@@ -33,7 +33,8 @@
 
 <div class="container">
     <div class="resp push_top_10">
-        @AccountHelper.SettingsMenu(Url, ViewContext.RouteData.Values["Action"].ToString())
+        @{ var session = (Web.eBado.Models.Shared.SessionModel)Session["User"]; }
+        @AccountHelper.SettingsMenu(Url, ViewContext.RouteData.Values["Action"].ToString(), session)
         <div class="tabcontent-gallery push_top_10">
             <div class="btn-position">
                 <button id="addBatch" class="form-btn col-lg-2" style="float:left">Create</button>

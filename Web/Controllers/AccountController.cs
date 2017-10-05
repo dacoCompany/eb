@@ -77,23 +77,6 @@ namespace Web.eBado.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult UserAccountSettings()
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
-        public ActionResult ChangePassword()
-        {
-            var currentUrl = Request.Url.ToString();
-            if (UserNotAuthenticated())
-            {
-                return RedirectToAction("Login", "Account", new { returnUrl = currentUrl });
-            }
-            return View();
-        }
-
-        [AllowAnonymous]
         public ActionResult ChangeSettings()
         {
             var currentUrl = Request.Url.ToString();
@@ -104,6 +87,12 @@ namespace Web.eBado.Controllers
             ChangeSettingsModel model = new ChangeSettingsModel();
             model.Title = "Ing.";
             return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult MyAdvertisements()
+        {
+            return View();
         }
 
         [AllowAnonymous]
@@ -277,16 +266,11 @@ namespace Web.eBado.Controllers
                         }
                         catch
                         {
-                            accountHelper.InitializeAllCategories(model);
                         }
-                    }
-                    else
-                    {
-                        accountHelper.InitializeAllCategories(model);
                     }
                 }
             }
-
+            accountHelper.InitializeAllCategories(model);
             return View(model);
         }
 
@@ -306,14 +290,6 @@ namespace Web.eBado.Controllers
                 //}
                 return View(model);
             }
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public ActionResult ChangePassword(ChangePasswordModel model)
-        {
-            return View(model);
         }
 
         [HttpPost]

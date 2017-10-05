@@ -660,12 +660,11 @@
     <Content Include="Views\Account\RegisterUser.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Account\UserAccountSettings.cshtml" />
-    <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Account\ChangeSettings.cshtml" />
     <Content Include="Views\Shared\_Files.cshtml" />
     <Content Include="Views\Account\EditAccountGallery.cshtml" />
     <Content Include="Views\Account\BatchAccountGallery.cshtml" />
+    <Content Include="Views\Account\MyAdvertisements.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

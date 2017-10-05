@@ -75,15 +75,3 @@ $(function () {
         });
     });
 });
-
-
-
-$(function () {
-    $("#WithoutIco").click(function () {
-        $("#companyDiv").show();
-        $("#AccountTypeDropDown").val('1');
-    });
-    $("#WithIco").click(function () {
-        $("#companyDiv").hide();
-    });
-});
