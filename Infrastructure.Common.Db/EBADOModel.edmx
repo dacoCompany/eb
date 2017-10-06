@@ -87,7 +87,7 @@
           <Property Name="DateCreated" Type="datetime2" Precision="0" />
           <Property Name="DateModified" Type="datetime2" Precision="0" />
           <Property Name="CompanyTypeId" Type="int" Nullable="false" />
-          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="CompanyDetails2UserDetails">
           <Key>
@@ -571,7 +571,6 @@
           <EntitySet Name="AttachmentDboes" EntityType="testDBModel.AttachmentDbo" />
           <EntitySet Name="CategoryDboes" EntityType="testDBModel.CategoryDbo" />
           <EntitySet Name="Category2CompanyDetailsDbo" EntityType="testDBModel.Category2CompanyDetailsDbo" />
-          <EntitySet Name="CompanyDetailDboes" EntityType="testDBModel.CompanyDetailDbo" />
           <EntitySet Name="CompanyDetails2UserDetailsDbo" EntityType="testDBModel.CompanyDetails2UserDetailsDbo" />
           <EntitySet Name="CompanyPermissionDboes" EntityType="testDBModel.CompanyPermissionDbo" />
           <EntitySet Name="CompanyRoleDboes" EntityType="testDBModel.CompanyRoleDbo" />
@@ -584,10 +583,6 @@
           <EntitySet Name="UserPermissionDboes" EntityType="testDBModel.UserPermissionDbo" />
           <EntitySet Name="UserRoleDboes" EntityType="testDBModel.UserRoleDbo" />
           <EntitySet Name="UserRole2UserPermissionDbo" EntityType="testDBModel.UserRole2UserPermissionDbo" />
-          <AssociationSet Name="FKAddressCompanyDetailsId" Association="testDBModel.FKAddressCompanyDetailsId">
-            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
-            <End Role="Address" EntitySet="AddressDboes" />
-          </AssociationSet>
           <AssociationSet Name="FKAddressLocationId" Association="testDBModel.FKAddressLocationId">
             <End Role="Location" EntitySet="LocationDboes" />
             <End Role="Address" EntitySet="AddressDboes" />
@@ -603,22 +598,6 @@
           <AssociationSet Name="FKCategory2CompanyDetailsCategory" Association="testDBModel.FKCategory2CompanyDetailsCategory">
             <End Role="Category" EntitySet="CategoryDboes" />
             <End Role="Category2CompanyDetails" EntitySet="Category2CompanyDetailsDbo" />
-          </AssociationSet>
-          <AssociationSet Name="FKCategory2CompanyDetailsCompanyDetails" Association="testDBModel.FKCategory2CompanyDetailsCompanyDetails">
-            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
-            <End Role="Category2CompanyDetails" EntitySet="Category2CompanyDetailsDbo" />
-          </AssociationSet>
-          <AssociationSet Name="FKCompanyDetails" Association="testDBModel.FKCompanyDetails">
-            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
-            <End Role="CompanyDetails2UserDetails" EntitySet="CompanyDetails2UserDetailsDbo" />
-          </AssociationSet>
-          <AssociationSet Name="FKCompanyType" Association="testDBModel.FKCompanyType">
-            <End Role="CompanyType" EntitySet="CompanyTypeDboes" />
-            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
-          </AssociationSet>
-          <AssociationSet Name="FKSubCategory2CompanyDetailsCompanyDetails" Association="testDBModel.FKSubCategory2CompanyDetailsCompanyDetails">
-            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
-            <End Role="SubCategory2CompanyDetails" EntitySet="SubCategory2CompanyDetailsDbo" />
           </AssociationSet>
           <AssociationSet Name="FKCompanyDetails2UserDetails" Association="testDBModel.FKCompanyDetails2UserDetails">
             <End Role="CompanyRole" EntitySet="CompanyRoleDboes" />
@@ -657,11 +636,32 @@
             <End Role="BatchAttachment" EntitySet="BatchAttachmentDboes" />
             <End Role="AttachmentDbo" EntitySet="AttachmentDboes" />
           </AssociationSet>
-          <AssociationSet Name="FKCompanyDetailsBatchAttachmentId" Association="testDBModel.FKCompanyDetailsBatchAttachmentId">
-            <End Role="CompanyDetailDbo" EntitySet="CompanyDetailDboes" />
-            <End Role="BatchAttachment" EntitySet="BatchAttachmentDboes" />
+          <EntitySet Name="CompanyDetailDboes" EntityType="testDBModel.CompanyDetailDbo" />
+          <AssociationSet Name="FKAddressCompanyDetailsId" Association="testDBModel.FKAddressCompanyDetailsId">
+            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
+            <End Role="AddressDbo" EntitySet="AddressDboes" />
           </AssociationSet>
-        </EntityContainer>
+          <AssociationSet Name="FKCompanyDetailsBatchAttachmentId" Association="testDBModel.FKCompanyDetailsBatchAttachmentId">
+            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
+            <End Role="BatchAttachmentDbo" EntitySet="BatchAttachmentDboes" />
+          </AssociationSet>
+          <AssociationSet Name="FKCategory2CompanyDetailsCompanyDetails" Association="testDBModel.FKCategory2CompanyDetailsCompanyDetails">
+            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
+            <End Role="Category2CompanyDetailsDbo" EntitySet="Category2CompanyDetailsDbo" />
+          </AssociationSet>
+          <AssociationSet Name="FKCompanyDetails" Association="testDBModel.FKCompanyDetails">
+            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
+            <End Role="CompanyDetails2UserDetailsDbo" EntitySet="CompanyDetails2UserDetailsDbo" />
+          </AssociationSet>
+          <AssociationSet Name="FKCompanyType" Association="testDBModel.FKCompanyType">
+            <End Role="CompanyTypeDbo" EntitySet="CompanyTypeDboes" />
+            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
+          </AssociationSet>
+          <AssociationSet Name="FKSubCategory2CompanyDetailsCompanyDetails" Association="testDBModel.FKSubCategory2CompanyDetailsCompanyDetails">
+            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
+            <End Role="SubCategory2CompanyDetailsDbo" EntitySet="SubCategory2CompanyDetailsDbo" />
+          </AssociationSet>
+          </EntityContainer>
         <EntityType Name="AddressDbo">
           <Key>
             <PropertyRef Name="Id" />
@@ -677,9 +677,9 @@
           <Property Name="LocationId" Type="Int32" Nullable="false" />
           <Property Name="UserDetailsId" Type="Int32" />
           <Property Name="CompanyDetailsId" Type="Int32" />
-          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKAddressCompanyDetailsId" FromRole="Address" ToRole="CompanyDetail" />
           <NavigationProperty Name="Location" Relationship="testDBModel.FKAddressLocationId" FromRole="Address" ToRole="Location" />
           <NavigationProperty Name="UserDetail" Relationship="testDBModel.FKAddressUserDetailsId" FromRole="Address" ToRole="UserDetail" />
+          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKAddressCompanyDetailsId" FromRole="AddressDbo" ToRole="CompanyDetail" />
         </EntityType>
         <EntityType Name="AttachmentDbo">
           <Key>
@@ -720,31 +720,7 @@
           <Property Name="DateCreated" Type="DateTime" Precision="0" />
           <Property Name="DateModified" Type="DateTime" Precision="0" />
           <NavigationProperty Name="Category" Relationship="testDBModel.FKCategory2CompanyDetailsCategory" FromRole="Category2CompanyDetails" ToRole="Category" />
-          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKCategory2CompanyDetailsCompanyDetails" FromRole="Category2CompanyDetails" ToRole="CompanyDetail" />
-        </EntityType>
-        <EntityType Name="CompanyDetailDbo">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="AdditionalPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Ico" Type="Int32" />
-          <Property Name="Dic" Type="Int32" />
-          <Property Name="IsCompanyVerified" Type="Boolean" Nullable="false" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="DateCreated" Type="DateTime" Precision="0" />
-          <Property Name="DateModified" Type="DateTime" Precision="0" />
-          <Property Name="CompanyTypeId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Addresses" Relationship="testDBModel.FKAddressCompanyDetailsId" FromRole="CompanyDetail" ToRole="Address" />
-          <NavigationProperty Name="Category2CompanyDetails" Relationship="testDBModel.FKCategory2CompanyDetailsCompanyDetails" FromRole="CompanyDetail" ToRole="Category2CompanyDetails" />
-          <NavigationProperty Name="CompanyDetails2UserDetails" Relationship="testDBModel.FKCompanyDetails" FromRole="CompanyDetail" ToRole="CompanyDetails2UserDetails" />
-          <NavigationProperty Name="CompanyType" Relationship="testDBModel.FKCompanyType" FromRole="CompanyDetail" ToRole="CompanyType" />
-          <NavigationProperty Name="SubCategory2CompanyDetails" Relationship="testDBModel.FKSubCategory2CompanyDetailsCompanyDetails" FromRole="CompanyDetail" ToRole="SubCategory2CompanyDetails" />
-          <NavigationProperty Name="BatchAttachments" Relationship="testDBModel.FKCompanyDetailsBatchAttachmentId" FromRole="CompanyDetailDbo" ToRole="BatchAttachment" />
-          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKCategory2CompanyDetailsCompanyDetails" FromRole="Category2CompanyDetailsDbo" ToRole="CompanyDetail" />
         </EntityType>
         <EntityType Name="CompanyDetails2UserDetailsDbo">
           <Key>
@@ -757,9 +733,9 @@
           <Property Name="CompanyDetailsId" Type="Int32" Nullable="false" />
           <Property Name="UserDetailsId" Type="Int32" Nullable="false" />
           <Property Name="CompanyRoleId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKCompanyDetails" FromRole="CompanyDetails2UserDetails" ToRole="CompanyDetail" />
           <NavigationProperty Name="CompanyRole" Relationship="testDBModel.FKCompanyDetails2UserDetails" FromRole="CompanyDetails2UserDetails" ToRole="CompanyRole" />
           <NavigationProperty Name="UserDetail" Relationship="testDBModel.FKUserDetails" FromRole="CompanyDetails2UserDetails" ToRole="UserDetail" />
+          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKCompanyDetails" FromRole="CompanyDetails2UserDetailsDbo" ToRole="CompanyDetail" />
         </EntityType>
         <EntityType Name="CompanyPermissionDbo">
           <Key>
@@ -810,7 +786,7 @@
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="DateCreated" Type="DateTime" Precision="3" />
           <Property Name="DateModified" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="CompanyDetails" Relationship="testDBModel.FKCompanyType" FromRole="CompanyType" ToRole="CompanyDetail" />
+          <NavigationProperty Name="CompanyDetails" Relationship="testDBModel.FKCompanyType" FromRole="CompanyTypeDbo" ToRole="CompanyDetail" />
         </EntityType>
         <EntityType Name="LocationDbo">
           <Key>
@@ -853,8 +829,8 @@
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="DateCreated" Type="DateTime" Precision="0" />
           <Property Name="DateModified" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKSubCategory2CompanyDetailsCompanyDetails" FromRole="SubCategory2CompanyDetails" ToRole="CompanyDetail" />
           <NavigationProperty Name="SubCategory" Relationship="testDBModel.FKSubCategory2CompanyDetailsSubCategory" FromRole="SubCategory2CompanyDetails" ToRole="SubCategory" />
+          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKSubCategory2CompanyDetailsCompanyDetails" FromRole="SubCategory2CompanyDetailsDbo" ToRole="CompanyDetail" />
         </EntityType>
         <EntityType Name="UserDetailDbo">
           <Key>
@@ -917,18 +893,6 @@
           <NavigationProperty Name="UserPermission" Relationship="testDBModel.FKUserPermission" FromRole="UserRole2UserPermission" ToRole="UserPermission" />
           <NavigationProperty Name="UserRole" Relationship="testDBModel.FKUserRole" FromRole="UserRole2UserPermission" ToRole="UserRole" />
         </EntityType>
-        <Association Name="FKAddressCompanyDetailsId">
-          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="0..1" />
-          <End Type="testDBModel.AddressDbo" Role="Address" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CompanyDetail">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Address">
-              <PropertyRef Name="CompanyDetailsId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FKAddressLocationId">
           <End Type="testDBModel.LocationDbo" Role="Location" Multiplicity="1" />
           <End Type="testDBModel.AddressDbo" Role="Address" Multiplicity="*" />
@@ -974,54 +938,6 @@
             </Principal>
             <Dependent Role="Category2CompanyDetails">
               <PropertyRef Name="CategoryId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FKCategory2CompanyDetailsCompanyDetails">
-          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="0..1" />
-          <End Type="testDBModel.Category2CompanyDetailsDbo" Role="Category2CompanyDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CompanyDetail">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Category2CompanyDetails">
-              <PropertyRef Name="CompanyDetailsId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FKCompanyDetails">
-          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="1" />
-          <End Type="testDBModel.CompanyDetails2UserDetailsDbo" Role="CompanyDetails2UserDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CompanyDetail">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CompanyDetails2UserDetails">
-              <PropertyRef Name="CompanyDetailsId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FKCompanyType">
-          <End Type="testDBModel.CompanyTypeDbo" Role="CompanyType" Multiplicity="1" />
-          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CompanyType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CompanyDetail">
-              <PropertyRef Name="CompanyTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FKSubCategory2CompanyDetailsCompanyDetails">
-          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="0..1" />
-          <End Type="testDBModel.SubCategory2CompanyDetailsDbo" Role="SubCategory2CompanyDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CompanyDetail">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SubCategory2CompanyDetails">
-              <PropertyRef Name="CompanyDetailsId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1135,7 +1051,7 @@
           <Property Name="GuId" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="ThumbnailUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Attachments" Relationship="testDBModel.FKAttachmentBatchAttachmentId" FromRole="BatchAttachment" ToRole="AttachmentDbo" />
-          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKCompanyDetailsBatchAttachmentId" FromRole="BatchAttachment" ToRole="CompanyDetailDbo" />
+          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKCompanyDetailsBatchAttachmentId" FromRole="BatchAttachmentDbo" ToRole="CompanyDetail" />
         </EntityType>
         <Association Name="FKAttachmentBatchAttachmentId">
           <End Type="testDBModel.BatchAttachmentDbo" Role="BatchAttachment" Multiplicity="1" />
@@ -1149,19 +1065,103 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FKCompanyDetailsBatchAttachmentId">
-          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetailDbo" Multiplicity="1" />
-          <End Type="testDBModel.BatchAttachmentDbo" Role="BatchAttachment" Multiplicity="*" />
+        <EntityType Name="CompanyDetailDbo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="AdditionalPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Ico" Type="Int32" />
+          <Property Name="Dic" Type="Int32" />
+          <Property Name="IsCompanyVerified" Type="Boolean" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="0" />
+          <Property Name="DateModified" Type="DateTime" Precision="0" />
+          <Property Name="CompanyTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Addresses" Relationship="testDBModel.FKAddressCompanyDetailsId" FromRole="CompanyDetail" ToRole="AddressDbo" />
+          <NavigationProperty Name="BatchAttachments" Relationship="testDBModel.FKCompanyDetailsBatchAttachmentId" FromRole="CompanyDetail" ToRole="BatchAttachmentDbo" />
+          <NavigationProperty Name="Category2CompanyDetails" Relationship="testDBModel.FKCategory2CompanyDetailsCompanyDetails" FromRole="CompanyDetail" ToRole="Category2CompanyDetailsDbo" />
+          <NavigationProperty Name="CompanyDetails2UserDetails" Relationship="testDBModel.FKCompanyDetails" FromRole="CompanyDetail" ToRole="CompanyDetails2UserDetailsDbo" />
+          <NavigationProperty Name="CompanyType" Relationship="testDBModel.FKCompanyType" FromRole="CompanyDetail" ToRole="CompanyTypeDbo" />
+          <NavigationProperty Name="SubCategory2CompanyDetails" Relationship="testDBModel.FKSubCategory2CompanyDetailsCompanyDetails" FromRole="CompanyDetail" ToRole="SubCategory2CompanyDetailsDbo" />
+        </EntityType>
+        <Association Name="FKAddressCompanyDetailsId">
+          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="0..1" />
+          <End Type="testDBModel.AddressDbo" Role="AddressDbo" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CompanyDetailDbo">
+            <Principal Role="CompanyDetail">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="BatchAttachment">
+            <Dependent Role="AddressDbo">
               <PropertyRef Name="CompanyDetailsId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <Association Name="FKCompanyDetailsBatchAttachmentId">
+          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="1" />
+          <End Type="testDBModel.BatchAttachmentDbo" Role="BatchAttachmentDbo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CompanyDetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BatchAttachmentDbo">
+              <PropertyRef Name="CompanyDetailsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKCategory2CompanyDetailsCompanyDetails">
+          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="0..1" />
+          <End Type="testDBModel.Category2CompanyDetailsDbo" Role="Category2CompanyDetailsDbo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CompanyDetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Category2CompanyDetailsDbo">
+              <PropertyRef Name="CompanyDetailsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKCompanyDetails">
+          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="1" />
+          <End Type="testDBModel.CompanyDetails2UserDetailsDbo" Role="CompanyDetails2UserDetailsDbo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CompanyDetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompanyDetails2UserDetailsDbo">
+              <PropertyRef Name="CompanyDetailsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKCompanyType">
+          <End Type="testDBModel.CompanyTypeDbo" Role="CompanyTypeDbo" Multiplicity="1" />
+          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CompanyTypeDbo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompanyDetail">
+              <PropertyRef Name="CompanyTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKSubCategory2CompanyDetailsCompanyDetails">
+          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="0..1" />
+          <End Type="testDBModel.SubCategory2CompanyDetailsDbo" Role="SubCategory2CompanyDetailsDbo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CompanyDetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SubCategory2CompanyDetailsDbo">
+              <PropertyRef Name="CompanyDetailsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -1219,25 +1219,6 @@
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
                 <ScalarProperty Name="CompanyDetailsId" ColumnName="CompanyDetailsId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CompanyDetailDboes">
-            <EntityTypeMapping TypeName="testDBModel.CompanyDetailDbo">
-              <MappingFragment StoreEntitySet="CompanyDetails">
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="CompanyTypeId" ColumnName="CompanyTypeId" />
-                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
-                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="IsCompanyVerified" ColumnName="IsCompanyVerified" />
-                <ScalarProperty Name="Dic" ColumnName="Dic" />
-                <ScalarProperty Name="Ico" ColumnName="Ico" />
-                <ScalarProperty Name="AdditionalPhoneNumber" ColumnName="AdditionalPhoneNumber" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1412,6 +1393,25 @@
                 <ScalarProperty Name="DateModified" ColumnName="DateModified" />
                 <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CompanyDetailDboes">
+            <EntityTypeMapping TypeName="testDBModel.CompanyDetailDbo">
+              <MappingFragment StoreEntitySet="CompanyDetails">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="CompanyTypeId" ColumnName="CompanyTypeId" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsCompanyVerified" ColumnName="IsCompanyVerified" />
+                <ScalarProperty Name="Dic" ColumnName="Dic" />
+                <ScalarProperty Name="Ico" ColumnName="Ico" />
+                <ScalarProperty Name="AdditionalPhoneNumber" ColumnName="AdditionalPhoneNumber" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

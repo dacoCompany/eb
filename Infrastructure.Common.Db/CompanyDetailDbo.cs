@@ -18,10 +18,10 @@ namespace Infrastructure.Common.DB
         public CompanyDetailDbo()
         {
             this.Addresses = new HashSet<AddressDbo>();
+            this.BatchAttachments = new HashSet<BatchAttachmentDbo>();
             this.Category2CompanyDetails = new HashSet<Category2CompanyDetailsDbo>();
             this.CompanyDetails2UserDetails = new HashSet<CompanyDetails2UserDetailsDbo>();
             this.SubCategory2CompanyDetails = new HashSet<SubCategory2CompanyDetailsDbo>();
-            this.BatchAttachments = new HashSet<BatchAttachmentDbo>();
         }
     
         public int Id { get; set; }
@@ -41,13 +41,13 @@ namespace Infrastructure.Common.DB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AddressDbo> Addresses { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BatchAttachmentDbo> BatchAttachments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Category2CompanyDetailsDbo> Category2CompanyDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CompanyDetails2UserDetailsDbo> CompanyDetails2UserDetails { get; set; }
         public virtual CompanyTypeDbo CompanyType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SubCategory2CompanyDetailsDbo> SubCategory2CompanyDetails { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BatchAttachmentDbo> BatchAttachments { get; set; }
     }
 }

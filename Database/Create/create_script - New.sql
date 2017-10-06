@@ -70,7 +70,7 @@
 			[Description] VARCHAR(250),
 			[PhoneNumber] VARCHAR(20),
 			[AdditionalPhoneNumber] VARCHAR(20),
-			[Email] VARCHAR(50) NOT NULL,
+			[Email] VARCHAR(50),
 			[Ico] INT,
 			[Dic] INT,
 			[IsCompanyVerified] BIT NOT NULL DEFAULT 'false',

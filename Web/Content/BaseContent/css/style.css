@@ -2,10 +2,6 @@ html {
     height: 100%;
 }
 
-.body_dark {
-    background-color: #727272;
-}
-
 body {
     background: #fff;
     text-align: center;
@@ -475,19 +471,23 @@ nav-account {
 
 
 /***** Footer *****/
-#wrap {
+.page-wrap {
     min-height: 100%;
-    height: auto !important;
-    /* Negative indent footer by it's height */
-    margin: 0 auto -80px;
+    /* equal to footer height */
+    margin-bottom: -100px;
 }
 
-#footer {
-    height: 80px;
-}
+    .page-wrap:after {
+        content: "";
+        display: block;
+    }
 
-#footer {
-    background-color: #f5f5f5;
+    .site-footer, .page-wrap:after {
+        height: 100px;
+    }
+
+.site-footer {
+    background: #ccc;
 }
 
 /***** Custom Heplers *****/
@@ -705,6 +705,10 @@ hr.transparent {
 
 .push_left_10 {
     margin-left: 10px;
+}
+
+.push_bottom_20 {
+    margin-bottom: 20px;
 }
 
 .resp_push_top_10 {
