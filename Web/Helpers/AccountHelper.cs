@@ -67,9 +67,9 @@ namespace Web.eBado.Helpers
 
         public void RegisterCompany(RegisterCompanyModel model, IUnitOfWork uow)
         {
-            var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Code == UserRole.StandardUser.ToString());
-            var companyType = uow.CompanyTypeRepository.FirstOrDefault(ct => ct.Code == model.CompanyModel.CompanyType.ToString());
-            var companyRoleId = uow.CompanyRoleRepository.FirstOrDefault(cr => cr.Code == CompanyRole.Owner.ToString()).Id;
+            var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Name == UserRole.StandardUser.ToString());
+            var companyType = uow.CompanyTypeRepository.FirstOrDefault(ct => ct.Name == model.CompanyModel.CompanyType.ToString());
+            var companyRoleId = uow.CompanyRoleRepository.FirstOrDefault(cr => cr.Name == CompanyRole.Owner.ToString()).Id;
             var location = uow.LocationRepository.FirstOrDefault(l => l.PostalCode == model.UserModel.PostalCode);
             var companyLocation = uow.LocationRepository.FirstOrDefault(l => l.PostalCode == model.CompanyModel.CompanyPostalCode);
             string salt = GenerateSalt();
@@ -124,7 +124,7 @@ namespace Web.eBado.Helpers
 
         public void RegisterUser(RegisterUserModel model, IUnitOfWork uow)
         {
-            var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Code == UserRole.StandardUser.ToString());
+            var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Name == UserRole.StandardUser.ToString());
             var location = uow.LocationRepository.FirstOrDefault(l => l.Id.ToString() == model.PostalCode);
             string salt = GenerateSalt();
 

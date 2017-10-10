@@ -23,7 +23,7 @@ namespace Infrastructure.Common.DB
     
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Code { get; set; }
+        public Nullable<int> CreatedByCompId { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
