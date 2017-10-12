@@ -239,6 +239,7 @@
     <Compile Include="Models\Account\RegisterCompanyModel.cs" />
     <Compile Include="Models\Account\RegisterUserModel.cs" />
     <Compile Include="Models\Account\UserAccountSettingsModel.cs" />
+    <Compile Include="Models\Email\RegisterEmailModel.cs" />
     <Compile Include="Models\MvcExtensions\ModelStateExtensions.cs" />
     <Compile Include="Models\Shared\AttachmentGalleryModel.cs" />
     <Compile Include="Models\Shared\AttachmentModel.cs" />
@@ -603,7 +604,7 @@
     <Content Include="Scripts\chosen.jquery.js" />
     <Content Include="Scripts\youtube.js" />
     <Content Include="Scripts\register.js" />
-    <Content Include="Views\Email\ForgotPassword.cshtml">
+    <Content Include="Views\Email\Registration.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Logging.config" />
