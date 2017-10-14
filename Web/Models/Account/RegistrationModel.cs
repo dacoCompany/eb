@@ -3,15 +3,15 @@ using Web.eBado.Validators;
 
 namespace Web.eBado.Models.Account
 {
-    public class RegisterCompanyModel
+    public class RegistrationModel
     {
-        public RegisterCompanyModel()
+        public RegistrationModel()
         {
-            UserModel = new RegisterUserModel();
+            UserModel = new UserModel();
             CompanyModel = new CompanyModel();
         }
 
-        public RegisterUserModel UserModel { get; private set; }
+        public UserModel UserModel { get; private set; }
 
         [CompanyRequired(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         public CompanyModel CompanyModel { get; private set; }

@@ -6,8 +6,8 @@
         {
             collection.Add(new ValidationResult
             {
-                Name = parameter,
-                Description = description,
+                ParameterName = parameter,
+                ErrorMessage = description,
             });
         }
     }

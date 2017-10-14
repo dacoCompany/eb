@@ -5,6 +5,10 @@ namespace Web.eBado.Models.Account
 {
     public class CompanyModel
     {
+        public CompanyModel()
+        {
+            Categories = new CategoriesModel();
+        }
         public CompanyType CompanyType { get; set; }
 
         public Countries CompanyLocation { get; set; }

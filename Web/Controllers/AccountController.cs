@@ -58,18 +58,20 @@ namespace Web.eBado.Controllers
         [AllowAnonymous]
         public ActionResult RegisterUser()
         {
-            return View();
+            RegistrationModel model = new RegistrationModel();
+
+            return View(model);
         }
 
         [AllowAnonymous]
         public ActionResult RegisterCompany()
         {
-            RegisterCompanyModel model = new RegisterCompanyModel();
-            accountHelper.InitializeAllCategories(model);
+            RegistrationModel model = new RegistrationModel();
+            accountHelper.InitializeAllCategories(model.CompanyModel);
             model.CompanyModel.CompanyLocation = accountHelper.GetCountryByIP();
+
             return View(model);
         }
-
 
         [AllowAnonymous]
         public ActionResult ForgotPassword()
@@ -166,7 +168,7 @@ namespace Web.eBado.Controllers
         {
             var validationResult = new ValidationResultCollection();
             AccountValidator.ValidateUserLogin(unitOfWork, validationResult, model);
-            ModelState.AddModelErrors(validationResult);
+            ModelState.AddValidationErrors(validationResult);
 
             if (ModelState.IsValid)
             {
@@ -215,72 +217,65 @@ namespace Web.eBado.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult RegisterUser(RegisterUserModel model)
+        public ActionResult Registration(RegistrationModel model)
         {
             using (var uow = NinjectResolver.GetInstance<IUnitOfWork>())
             {
-                EntlibLogger.LogError("Account", "Register", $"Registration attempt with e-mail address: {model.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register" });
-                EntlibLogger.LogInfo("Account", "Register", $"Registration attempt with e-mail address: {model.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register" });
-                EntlibLogger.LogWarning("Account", "Register", $"Registration attempt with e-mail address: {model.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register" });
-                EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt with e-mail address: {model.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register" });
-                var validationResult = new ValidationResultCollection();
-                AccountValidator.ValidateUserRegistration(uow, validationResult, model);
-                if (AccountHelper.IsValidCaptcha())
+                //EntlibLogger.LogError("Account", "Register", $"Registration attempt with e-mail address: {model.UserModel.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register" });
+                //EntlibLogger.LogInfo("Account", "Register", $"Registration attempt with e-mail address: {model.UserModel.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register" });
+                //EntlibLogger.LogWarning("Account", "Register", $"Registration attempt with e-mail address: {model.UserModel.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register" });
+                //EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt with e-mail address: {model.UserModel.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register" });
+                bool isRegistrationWithCompany = model.CompanyModel.CompanyType != 0;
+
+                if (!ModelState.IsValid)
                 {
-                    if (ModelState.IsValid)
+                    if (isRegistrationWithCompany)
                     {
-                        try
-                        {
-                            accountHelper.RegisterUser(model, uow);
-                        }
-                        catch
-                        {
-
-                        }
-                    }
-                }
-            }
-            return View(model);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public ActionResult RegisterCompany(RegisterCompanyModel model)
-        {
-            using (var uow = NinjectResolver.GetInstance<IUnitOfWork>())
-            {
-                var validationResult = new ValidationResultCollection();
-                AccountValidator.ValidateUserRegistration(uow, validationResult, model.UserModel);
-                if (validationResult.Count > 0)
-                {
-                    ModelState.AddModelErrors(validationResult);
-                }
-
-                if (AccountHelper.IsValidCaptcha())
-                {
-                    if (ModelState.IsValid)
-                    {
-                        try
-                        {
-                            accountHelper.RegisterCompany(model, uow);
-                        }
-                        catch
-                        {
-                            accountHelper.InitializeAllCategories(model);
-                        }
+                        accountHelper.InitializeAllCategories(model.CompanyModel);
+                        return View("RegisterCompany", model);
                     }
                     else
                     {
-                        accountHelper.InitializeAllCategories(model);
+                        return View("RegisterUser", model);
+                    }
+                }
+
+                var validationResult = new ValidationResultCollection();
+
+                AccountValidator.ValidateUserRegistration(uow, validationResult, model.UserModel);
+                if (isRegistrationWithCompany)
+                {
+                    AccountValidator.ValidateCompanyRegistration(uow, validationResult, model.CompanyModel);
+                }
+
+                if (validationResult.Any())
+                {
+                    ModelState.AddValidationErrors(validationResult);
+                }
+
+                if (AccountHelper.IsValidCaptcha())
+                {
+                    if (ModelState.IsValid)
+                    {
+                        accountHelper.Registration(model, uow, isRegistrationWithCompany);
+                    }
+                    else
+                    {
+                        if (isRegistrationWithCompany)
+                        {
+                            accountHelper.InitializeAllCategories(model.CompanyModel);
+                            return View("RegisterCompany", model);
+                        }
+                        else
+                        {
+                            return View("RegisterUser", model);
+                        }
                     }
                 }
             }
 
-            return View(model);
+            return RedirectToAction("Login", "Account");
         }
-
-
 
         [HttpPost]
         [AllowAnonymous]

@@ -3,14 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Web.eBado.Models.Account
 {
-    public class RegisterUserModel
+    public class UserModel
     {
         public string Title { get; set; }
 
-        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         public string FirstName { get; set; }
 
-        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         public string Surname { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
@@ -23,6 +21,7 @@ namespace Web.eBado.Models.Account
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         public string RepeatPassword { get; set; }
 
+        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
 
@@ -33,6 +32,7 @@ namespace Web.eBado.Models.Account
 
         public string StreetNumber { get; set; }
 
+        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         public string PostalCode { get; set; }
     }
 }

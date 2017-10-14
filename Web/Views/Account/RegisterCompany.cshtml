@@ -1,4 +1,4 @@
-﻿@model Web.eBado.Models.Account.RegisterCompanyModel
+﻿@model Web.eBado.Models.Account.RegistrationModel
 @using Infrastructure.Common.Enums
 @using Infrastructure.Resources
 
@@ -22,7 +22,7 @@
     }
 </script>
 
-@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "htmlForm" }))
+@using (Html.BeginForm("Registration", "Account", FormMethod.Post, new { id = "htmlForm" }))
 {
     @Html.AntiForgeryToken()
     <div class="container push_top_30">

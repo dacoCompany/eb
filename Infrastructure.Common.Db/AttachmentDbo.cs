@@ -23,6 +23,7 @@ namespace Infrastructure.Common.DB
         public int BatchAttId { get; set; }
         public string Name { get; set; }
         public int Size { get; set; }
+        public string FileType { get; set; }
     
         public virtual BatchAttachmentDbo BatchAttachment { get; set; }
     }

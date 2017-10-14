@@ -65,13 +65,11 @@ namespace Web.eBado.Helpers
 
         }
 
-        public void RegisterCompany(RegisterCompanyModel model, IUnitOfWork uow)
+        public void Registration(RegistrationModel model, IUnitOfWork uow, bool createCompany = false)
         {
-            var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Code == UserRole.StandardUser.ToString());
-            var companyType = uow.CompanyTypeRepository.FirstOrDefault(ct => ct.Code == model.CompanyModel.CompanyType.ToString());
-            var companyRoleId = uow.CompanyRoleRepository.FirstOrDefault(cr => cr.Code == CompanyRole.Owner.ToString()).Id;
-            var location = uow.LocationRepository.FirstOrDefault(l => l.PostalCode == model.UserModel.PostalCode);
-            var companyLocation = uow.LocationRepository.FirstOrDefault(l => l.PostalCode == model.CompanyModel.CompanyPostalCode);
+            var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Name == UserRole.StandardUser.ToString());
+            int locationId = int.Parse(model.UserModel.PostalCode);
+            var location = uow.LocationRepository.FirstOrDefault(l => l.Id == locationId);
             string salt = GenerateSalt();
 
             var userDetails = new UserDetailDbo
@@ -83,10 +81,11 @@ namespace Web.eBado.Helpers
                 FirstName = model.UserModel.FirstName,
                 Surname = model.UserModel.Surname,
                 PhoneNumber = model.UserModel.PhoneNumber,
-                AdditionalPhoneNumber = model.UserModel.AdditionalPhoneNumber,
+                AdditionalPhoneNumber = string.IsNullOrEmpty(model.UserModel.AdditionalPhoneNumber) ? null : model.UserModel.AdditionalPhoneNumber,
                 DisplayName = $"{model.UserModel.FirstName} {model.UserModel.Surname}",
-                UserRoleId = userRole.Id,
+                UserRole = userRole
             };
+
             userDetails.Addresses.Add(new AddressDbo
             {
                 Street = model.UserModel.Street,
@@ -95,71 +94,56 @@ namespace Web.eBado.Helpers
                 LocationId = location.Id
             });
 
+            uow.UserDetailsRepository.Add(userDetails);
+
+            if (createCompany)
+            {
+                CreateCompany(uow, model.CompanyModel, userDetails.Id);
+            }
+
+            uow.Commit();
+        }
+
+        public void CreateCompany(IUnitOfWork uow, CompanyModel model, int userId)
+        {
+            var companyTypeId = uow.CompanyTypeRepository.FirstOrDefault(ct => ct.Name == model.CompanyType.ToString()).Id;
+            var companyRoleId = uow.CompanyRoleRepository.FirstOrDefault(cr => cr.Name == CompanyRole.Owner.ToString()).Id;
+            int companyLocationId = int.Parse(model.CompanyPostalCode);
+            var companyLocation = uow.LocationRepository.FirstOrDefault(l => l.Id == companyLocationId);
+            var categoriesIds = uow.SubCategoryRepository.FindWhere(a => a.Name.Equals(model.Categories.SelectedCategories));
+
             var companyDetails = new CompanyDetailDbo
             {
-                Name = model.CompanyModel.CompanyName,
-                PhoneNumber = model.CompanyModel.CompanyPhoneNumber,
-                AdditionalPhoneNumber = model.CompanyModel.CompanyAdditionalPhoneNumber,
-                Ico = model.CompanyModel.CompanyIco,
-                Dic = model.CompanyModel.CompanyDic,
-                CompanyTypeId = companyType.Id,
+                Name = string.IsNullOrEmpty(model.CompanyName) ? "test company" : model.CompanyName,
+                PhoneNumber = model.CompanyPhoneNumber,
+                AdditionalPhoneNumber = model.CompanyAdditionalPhoneNumber,
+                Ico = model.CompanyIco,
+                Dic = model.CompanyDic,
+                CompanyTypeId = companyTypeId,
             };
             companyDetails.Addresses.Add(new AddressDbo
             {
-                Street = model.CompanyModel.CompanyStreet,
-                Number = model.CompanyModel.CompanyStreetNumber,
+                Street = model.CompanyStreet,
+                Number = model.CompanyStreetNumber,
                 IsBillingAddress = true,
                 LocationId = companyLocation.Id
             });
-            var company2User = new CompanyDetails2UserDetailsDbo
+            companyDetails.CompanyDetails2UserDetails.Add(new CompanyDetails2UserDetailsDbo
             {
-                CompanyDetail = companyDetails,
-                UserDetail = userDetails,
-                CompanyRoleId = companyRoleId
-            };
-
-            uow.CompanyDetailsRepository.Add(companyDetails);
-            uow.Commit();
-        }
-
-        public void RegisterUser(RegisterUserModel model, IUnitOfWork uow)
-        {
-            var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Code == UserRole.StandardUser.ToString());
-            var location = uow.LocationRepository.FirstOrDefault(l => l.Id.ToString() == model.PostalCode);
-            string salt = GenerateSalt();
-
-            var userDetails = new UserDetailDbo
-            {
-                Email = model.Email,
-                Password = EncodePassword(model.Password, salt),
-                Salt = salt,
-                Title = model.Title,
-                FirstName = model.FirstName,
-                Surname = model.Surname,
-                PhoneNumber = model.PhoneNumber,
-                AdditionalPhoneNumber = string.IsNullOrEmpty(model.AdditionalPhoneNumber) ? null : model.AdditionalPhoneNumber,
-                DisplayName = $"{model.FirstName} {model.Surname}",
-                UserRole = userRole
-            };
-            userDetails.Addresses.Add(new AddressDbo
-            {
-                Street = model.Street,
-                Number = model.StreetNumber,
-                IsBillingAddress = true,
-                LocationId = location.Id
+                CompanyRoleId = companyRoleId,
+                UserDetailsId = userId,
             });
 
-            uow.UserDetailsRepository.Add(userDetails);
-            uow.Commit();
+            companyDetails.SubCategory2CompanyDetails.Add(new SubCategory2CompanyDetailsDbo
+            {
+            });
+
+            uow.CompanyDetailsRepository.Add(companyDetails);
         }
 
-
-
-        public void InitializeAllCategories(RegisterCompanyModel model)
+        public void InitializeAllCategories(CompanyModel model)
         {
-            CategoriesModel cat = new CategoriesModel();
-            cat.AllCategories = GetAllCategories();
-            model.CompanyModel.Categories = cat;
+            model.Categories.AllCategories = GetAllCategories();
         }
 
         public static string EncodePassword(string pass, string salt)
@@ -190,12 +174,6 @@ namespace Web.eBado.Helpers
                 chars[i] = allowedChars[Convert.ToInt32((allowedChars.Length) * randNum.NextDouble())];
             }
             return new string(chars);
-        }
-
-        private bool CheckIfEmailExist(string email, UnitOfWork uow)
-        {
-            var userEmail = uow.UserDetailsRepository.FindWhere(ua => ua.Email == email).FirstOrDefault();
-            return userEmail == null ? true : false;
         }
 
         private IEnumerable<SelectListItem> GetAllCategories()
