@@ -19,7 +19,7 @@
     });
 
     $('#fileupload').addClass('fileupload-processing');
-    
+
     var batchId = @Html.Raw(Json.Encode(Model.Guid));
 
     $.ajax({
@@ -30,86 +30,288 @@
             batchId: batchId
         },
         success: function (data) {
-
-
-                $('#fileupload').fileupload('option', 'done').call($('#fileupload'),
-                    $.Event('done'),
-                    { result: { files: data } });
-                $('#fileupload').removeClass('fileupload-processing');
-        },
-            statusCode : {500 : function() {
-                $('#fileupload').fileupload('option', 'done').call($('#fileupload'),
-                    $.Event('done'),
-                    { result: { files: data } });
-                $('#fileupload').removeClass('fileupload-processing');
+            generateGallery(data);
             }
-        }
     });
+    function generateGallery(response, textStatus, jqXHR) {
+        var index = 1;
+        jQuery.each(response, function (index, item) {
+            jQuery("#imagesContainer").append('<div id="imgContainer' + index + '" class="polaroid zoom over-flow-hidden"><div style="overflow: hidden;"> <a target="_blank" href="' + item.url + '" style="background-image: url(' + item.thumbnailUrl + ');" class="zoomzoom"></a></div><div class="btm"><div class="chBox"><input type="checkbox" onchange="enableDeleteBtn()" id="btn' + index + '" value="btn' + item.name + '" /></div><div style="float:right"><button id="btn' + index + '" onclick="btnClick(\'' + item.name + '\', \'btn' + index + '\')" class="form-btn btn-space-5">Delete</button></div></div></div>');
+            index++;
+        });
+    };
 </script>
 
 
 @Html.AntiForgeryToken()
 <div class="container">
     <div class="resp push_top_10">
-        @AccountHelper.SettingsMenu(Url, ViewContext.RouteData.Values["Action"].ToString())
+        @{ var session = (Web.eBado.Models.Shared.SessionModel)Session["User"]; }
+        @AccountHelper.SettingsMenu(Url, ViewContext.RouteData.Values["Action"].ToString(), session)
         <div class="tabcontent-gallery push_top_10">
-            <div style="float:left; margin-bottom: 50px; width:100%">
-                <button type="submit" class="form-btn col-lg-2" style="float:left" onclick="location.href='@Url.Action("AccountGallery", "Account", new { batchId = @Model.Guid })'">Naspat</button>
+            <div class="btn-position">
+                <button type="submit" class="form-btn col-lg-2" style="float:left" onclick="location.href='@Url.Action("BatchAccountGallery", "Account")'"><span class="glyphicon glyphicon-arrow-left push_right_5"></span>Naspat</button>
             </div>
-            <div class="col-lg-10">
-                <h2>@Model.Name</h2>
-                <h4>@Model.Description</h4>
-            </div>
-            @Html.Partial("_Files")
-            <div class="push_top_20">
-                <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
-                    <div class="slides"></div>
-                    <h3 class="title"></h3>
-                    <a class="prev">‹</a>
-                    <a class="next">›</a>
-                    <a class="close">×</a>
-                    <a class="play-pause"></a>
-                    <ol class="indicator"></ol>
+
+
+            <form id="fileupload" method="POST" enctype="multipart/form-data" data-url="@Url.Action("Upload","FileUpload", new { batchId = @Model.Guid })">
+                <div class="row fileupload-buttonbar" style="text-align:left">
+                    <div class="col-lg-10" style="margin:0 auto">
+                        <span class="btn form-btn-transparent fileinput-button">
+                            <i class="glyphicon glyphicon-picture"></i>
+                            <span>Add images</span>
+                            <input id="addButton" type="file" name="files[]" multiple>
+                        </span>
+                        <button id="addVideo" class="btn form-btn-transparent cancel">
+                            <i class="glyphicon glyphicon-facetime-video"></i>
+                            <span>Add video</span>
+                        </button>
+                        <button type="submit" class="btn form-btn-transparent start">
+                            <i class="glyphicon glyphicon-upload"></i>
+                            <span>Start upload</span>
+                        </button>
+                        <button type="reset" class="btn form-btn-transparent cancel">
+                            <i class="glyphicon glyphicon-ban-circle"></i>
+                            <span>Cancel upload</span>
+                        </button>
+                        <button id="deleteSelected" type="button" class="btn form-btn-transparent delete" disabled>
+                            <i class="glyphicon glyphicon-trash"></i>
+                            <span>Delete</span>
+                        </button>
+                        @*<input type="checkbox" class="toggle">*@
+                        <span class="fileupload-process"></span>
+                    </div>
                 </div>
-                <div id="links" style="float:left; width:100%">
-                    @if (@Model.Attachments != null && @Model.Attachments.Count != 0)
-                    {
-                        foreach (AttachmentModel file in @Model.Attachments)
-                        {
+                <div id="videoArea" class="col-lg-12" style="margin-top:30px; display:none">
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Name" } })
+                            <div class="val-message">@Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-10">
+                            <button id="MyButton" class="form-btn" data-callback="onSubmit">Create</button>
+                            <a href="#" class="push_left_10">Ako tu jebnut link z YouTube?</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 fileupload-progress fade">
+                    <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                    </div>
+                    <div class="progress-extended">&nbsp;</div>
+                </div>
+                <div class="col-lg-5 fileupload-progress fade">
+                    <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                    </div>
+                    <div class="progress-extended">&nbsp;</div>
+                </div>
 
-                            @*if (file.type.Equals("video/mp4"))
-                                {
+                <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+            </form>
+            <br>
+            <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
+                <div class="slides"></div>
+                <h3 class="title"></h3>
+                <a class="prev">‹</a>
+                <a class="next">›</a>
+                <a class="close">×</a>
+                <a class="play-pause"></a>
+                <ol class="indicator"></ol>
+            </div>
+            <script id="template-upload" type="text/x-tmpl">
+                {% for (var i=0, file; file=o.files[i]; i++) { %}
+                <tr class="template-upload fade">
+                    <td>
+                        <span class="preview"></span>
+                    </td>
+                    <td>
+                        <p class="name" style="max-width:350px">{%=file.name%}</p>
+                        <strong class="error text-danger"></strong>
+                    </td>
+                    <td>
+                        <p class="size">Processing...</p>
+                        <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+                    </td>
+                    <td>
+                        {% if (!i && !o.options.autoUpload) { %}
+                        <button class="btn form-btn-transparent start" disabled>
+                            <i class="glyphicon glyphicon-upload"></i>
+                            <span>Start</span>
+                        </button>
+                        {% } %}
+                        {% if (!i) { %}
+                        <button class="btn form-btn-transparent cancel">
+                            <i class="glyphicon glyphicon-trash"></i>
+                            <span>Remove</span>
+                        </button>
+                        {% } %}
+                    </td>
+                </tr>
+                {% } %}
+            </script>
+            <script id="template-download" type="text/x-tmpl">
+                {% for (var i=0, file; file=o.files[i]; i++) { %}
+                <tr class="template-download fade">
+                    <td>
+                        <span class="preview">
+                            {% if (file.thumbnailUrl) { %}
+                            <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
+                            {% } %}
+                        </span>
+                    </td>
+                    <td>
+                        <p class="name" style="max-width:350px; min-width:350px">
+                            {% if (file.url) { %}
+                            <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+                            {% } else { %}
+                            <span>{%=file.name%}</span>
+                            {% } %}
+                        </p>
+                        {% if (file.error) { %}
+                        <div><span class="label label-danger">Error</span> {%=file.error%}</div>
+                        {% } %}
+                    </td>
+                    <td>
+                        <span class="size">{%=file.size%} KB</span>
+                    </td>
+                    <td>
+                        {% if (file.deleteUrl) { %}
+                        <button class="btn form-btn-transparent delete no_margin" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}" {% if (file.deletewithcredentials) { %} data-xhr-fields='{"withCredentials":true}' {% } %}>
+                            <i class="glyphicon glyphicon-trash"></i>
+                            <span>Delete</span>
+                        </button>
+                        <input type="checkbox" name="delete" value="1" class="toggle">
+                        {% } else { %}
+                        <button class="btn btn-warning cancel">
+                            <i class="glyphicon glyphicon-ban-circle"></i>
+                            <span>Cancel</span>
+                        </button>
+                        {% } %}
+                    </td>
+                </tr>
+                {% } %}
+            </script>
 
-                                    <a href="@file.url" title="@file.name" type="video/mp4"><img src="@file.thumbnailUrl" alt="@file.name"></a>
-
-
-                                }
-                                else
-                                {*@
-                            <div class="thumb"><a href="@file.Url" title="@file.Name"><img src="@file.ThumbnailUrl" alt="@file.Name"></a></div>
-                            //}
-
-                        }
-                    }
-                    else
-                    {
-                        <p>No files</p>
-                    }
+            <div id="links" style="float:left; width:auto; margin:0 auto">
+                <div id="imagesContainer">
                 </div>
             </div>
+            @{ int index = 1; }
+            @foreach (var video in Model.Attachments.Where(att => att.AttachmentType == "video"))
+            {
+                <div id="videoContainer_@index" class="polaroid zoom over-flow-hidden">
+                    <div style="overflow: hidden;">
+                        <a onclick="playVideo('video_@index','youtube_@index')" style="background-image: url(@video.ThumbnailUrl);" class="zoomzoom"></a>
+                    </div>
+                    <div class="btm">
+                        <button id="btnVideo_@index" onclick="btnVideoClick('@video.Name','btnVideo_@index')" class="form-btn btn-space-5">Delete</button>
+                    </div>
+                </div>
+
+                <div id="video_@index" class="lightbox" onclick="hideVideo('video_@index','youtube_@index')">
+                    <div class="lightbox-container">
+                        <div class="lightbox-content">
+
+                            <button onclick="hideVideo('video_@index','youtube_@index')" class="lightbox-close">
+                                Close ✕
+                            </button>
+                            <div class="video-container">
+                                <iframe id="youtube_@index" width="960" height="540" src="@video.Url frameborder="0" allowfullscreen></iframe>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                ++index;
+            }
+
         </div>
     </div>
 </div>
 
 @Scripts.Render("~/bundles/jQuery-File-Upload")
 <script>
+    function enableDeleteBtn() {
+        $("#deleteSelected").prop("disabled", !$('input:checked').length);
+    }
+
+    function btnClick(name, id) {
+        $.ajax({
+            url: "/FileUpload/DeleteFiles",
+            type: "POST",
+            data: JSON.stringify({ batchId: '@Model.Guid', file: name }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                var container = $("#" + id).parent().parent().parent().attr('id');
+                $("#" + container).hide(250);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.responseText);
+            }
+        });
+    }
+
+    function btnVideoClick(name, id) {
+        $.ajax({
+            url: "/FileUpload/DeleteVideo",
+            type: "POST",
+            data: JSON.stringify({ batchId: '@Model.Guid', name: name }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                var container = $("#" + id).parent().parent().attr('id');
+                $("#" + container).hide(250);
+            },
+            error: function () {
+                alert("daco v pici!");
+            }
+        });
+    }
+
+    $(function () {
+        $("#addVideo").click(function () {
+            $("#videoArea").slideToggle();
+        });
+    })
+
+    $("#deleteSelected").click(function () {
+        var selectedImg = [];
+        var selectedId = [];
+        $('#imagesContainer input:checked').each(function () {
+            selectedImg.push($(this).attr('value'));
+            selectedId.push($(this).attr('id'));
+        });
+        $.ajax({
+            url: "/FileUpload/DeleteFiles",
+            type: "POST",
+            data: JSON.stringify({ batchId: '@Model.Guid', file: selectedImg }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $.each(selectedId, function (key, value) {
+                    var container = $("#" + selectedId[key]).parent().parent().parent().attr('id');
+                $("#" + container).hide(250);
+                });
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.responseText);
+            }
+        });
+    });
+
     document.getElementById('links').onclick = function (event) {
         event = event || window.event;
         var target = event.target || event.srcElement,
             link = target.src ? target.parentNode : target,
             options = { index: link, event: event },
             links = this.getElementsByTagName('a');
-        blueimp.Gallery(links, options);
+        if (target.nodeName != "DIV" && target.nodeName != "BUTTON" && target.nodeName != "INPUT") {
+            blueimp.Gallery(links, options);
+        }
     };
 </script>
 

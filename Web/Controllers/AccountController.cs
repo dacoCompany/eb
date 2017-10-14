@@ -41,9 +41,8 @@ namespace Web.eBado.Controllers
         #region HTTP GET
 
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
+        public ActionResult Login()
         {
-            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
@@ -80,45 +79,32 @@ namespace Web.eBado.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult UserAccountSettings()
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
-        public ActionResult ChangePassword()
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
         public ActionResult ChangeSettings()
         {
+            var currentUrl = Request.Url.ToString();
+            if (UserNotAuthenticated())
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = currentUrl });
+            }
             ChangeSettingsModel model = new ChangeSettingsModel();
             model.Title = "Ing.";
             return View(model);
         }
 
         [AllowAnonymous]
-        public ActionResult AccountGallery(string batchId)
+        public ActionResult MyAdvertisements()
         {
-            var model = new AttachmentGalleryModel();
-
-            Mapper.Initialize(cfg =>
-            {
-                cfg.CreateMap<AttachmentEntity, AttachmentModel>();
-                cfg.CreateMap<AttachmentGalleryEntity, AttachmentGalleryModel>();
-            });
-
-            var entities = fileBo.GetBatchFiles(batchId);
-            model = Mapper.Map<AttachmentGalleryModel>(entities);
-
-            return View(model);
+            return View();
         }
 
         [AllowAnonymous]
         public ActionResult EditAccountGallery(string batchId)
         {
+            var currentUrl = Request.Url.ToString();
+            if (UserNotAuthenticated())
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = currentUrl });
+            }
             var model = new AttachmentGalleryModel();
 
             Mapper.Initialize(cfg =>
@@ -135,6 +121,11 @@ namespace Web.eBado.Controllers
         [AllowAnonymous]
         public ActionResult BatchAccountGallery()
         {
+            var currentUrl = Request.Url.ToString();
+            if (UserNotAuthenticated())
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = currentUrl });
+            }
             try
             {
                 var model = new BatchGalleryModel();
@@ -154,7 +145,6 @@ namespace Web.eBado.Controllers
                 EntlibLogger.LogError("Account", "FileUpload", e.Message, DiagnosticsLogging.Create("Controller", "Account"), e);
                 throw;
             }
-
         }
 
         #endregion
@@ -172,7 +162,7 @@ namespace Web.eBado.Controllers
 
             if (ModelState.IsValid)
             {
-                var userDetail = unitOfWork.UserDetailsRepository.FindWhere(ud => ud.Email.Equals(model.Email, StringComparison.OrdinalIgnoreCase))
+                var userDetail = unitOfWork.UserDetailsRepository.FindWhere(ud => ud.Email.ToLower().Equals(model.Email.ToLower()))
                     .Include(ud => ud.UserRole.UserRole2UserPermission.Select(ur => ur.UserPermission))
                     .Include(ud => ud.CompanyDetails2UserDetails.Select(cd => cd.CompanyDetail))
                     .Include(ud => ud.CompanyDetails2UserDetails.Select(cd => cd.CompanyRole.CompanyRole2CompanyPermission
@@ -183,7 +173,7 @@ namespace Web.eBado.Controllers
                 SessionModel session = new SessionModel()
                 {
                     Id = userDetail.Id,
-                    IsActive = true,
+                    IsActive = userDetail.IsActive,
                     Email = userDetail.Email,
                     Name = userDetail.DisplayName,
                     UserRole = userRole.Name,
@@ -197,6 +187,7 @@ namespace Web.eBado.Controllers
                     CompanySessionModel companySession = new CompanySessionModel()
                     {
                         Id = companyDetail.Id,
+                        IsActive = companyDetail.IsActive,
                         Name = companyDetail.Name,
                         CompanyRole = companyRole.Name,
                         CompanyPermissions = companyRole.CompanyRole2CompanyPermission.Select(cr => cr.CompanyPermission.Name)
@@ -206,7 +197,15 @@ namespace Web.eBado.Controllers
 
                 FormsAuthentication.SetAuthCookie(session.Email, true);
                 Session["User"] = session;
-                return RedirectToAction("Index", "Home");
+
+                if (returnUrl != null)
+                {
+                    return Redirect(returnUrl);
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
             else
             {
@@ -296,14 +295,6 @@ namespace Web.eBado.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult ChangePassword(ChangePasswordModel model)
-        {
-            return View(model);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         public ActionResult ChangeSettings(ChangeSettingsModel model)
         {
             return View(model);
@@ -325,6 +316,14 @@ namespace Web.eBado.Controllers
             string batchUniqueId = fileBo.CreateBatch(model.Name, model.Description);
             EntlibLogger.LogInfo("File", "Create Batch", $"Created new batch with id: {batchUniqueId}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Account" });
             return RedirectToAction("EditAccountGallery", new { batchId = batchUniqueId });
+        }
+        #endregion
+
+        #region Private methods
+        private bool UserNotAuthenticated()
+        {
+            var session = (SessionModel)Session["User"];
+            return !Request.IsAuthenticated || session == null ? true : false;
         }
         #endregion
     }

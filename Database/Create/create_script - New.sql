@@ -28,7 +28,6 @@
 		(
 			[Id] INT IDENTITY(1,1),
 			[Name] VARCHAR(30) NOT NULL UNIQUE,
-			[Code] VARCHAR(30) NOT NULL UNIQUE,
 			[IsActive] BIT NOT NULL DEFAULT 'true',
 			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
 			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
@@ -41,7 +40,6 @@
 		(
 			[Id] INT IDENTITY(1,1),
 			[Name] VARCHAR(30) NOT NULL UNIQUE,
-			[Code] VARCHAR(30) NOT NULL UNIQUE,
 			[IsActive] BIT NOT NULL DEFAULT 'true',
 			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
 			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
@@ -70,7 +68,7 @@
 			[Description] VARCHAR(250),
 			[PhoneNumber] VARCHAR(20),
 			[AdditionalPhoneNumber] VARCHAR(20),
-			[Email] VARCHAR(50) NOT NULL,
+			[Email] VARCHAR(50),
 			[Ico] INT,
 			[Dic] INT,
 			[IsCompanyVerified] BIT NOT NULL DEFAULT 'false',
@@ -96,7 +94,6 @@
 		(
 			[Id] INT IDENTITY(1,1),
 			[Name] VARCHAR(30) NOT NULL UNIQUE,
-			[Code] VARCHAR(30) NOT NULL UNIQUE,
 			[Description] VARCHAR(100),
 			[IsActive] BIT NOT NULL DEFAULT 'true',
 			[DateCreated] DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -110,7 +107,7 @@
 		(
 			[Id] INT IDENTITY(1,1),
 			[Name] VARCHAR(30) NOT NULL UNIQUE,
-			[Code] VARCHAR(30) NOT NULL UNIQUE,
+			[CreatedByCompId] INT,
 			[IsActive] BIT NOT NULL DEFAULT 'true',
 			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
 			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
@@ -123,7 +120,6 @@
 		(
 			[Id] INT IDENTITY(1,1),
 			[Name] VARCHAR(30) NOT NULL,
-			[Code] VARCHAR(30) NOT NULL,
 			[IsActive] BIT NOT NULL DEFAULT 'true',
 			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
 			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
@@ -226,6 +222,7 @@
 			[Size] INT NOT NULL,
 			[OriginalUrl] VARCHAR(255) NOT NULL,
 			[ThumbnailUrl] VARCHAR(255),			
+			[FileType] VARCHAR(50) NOT NULL,			
 			[IsActive] BIT NOT NULL DEFAULT 'true',
 			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
 			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
@@ -259,6 +256,44 @@
 		)
 		PRINT 'Table created successfully'
 
+		PRINT 'Creating Table [UserSettings]'
+		CREATE TABLE UserSettings
+		(
+			[Id] INT IDENTITY(1,1),
+			[SearchRadius] INT DEFAULT 30,
+			[SearchInSK] BIT NOT NULL DEFAULT 'false',
+			[SearchInCZ] BIT NOT NULL DEFAULT 'false',
+			[SearchInHU] BIT NOT NULL DEFAULT 'false',
+			[NotifyCommentOnContribution] BIT NOT NULL DEFAULT 'false',
+			[NotifyCommentOnAccount] BIT NOT NULL DEFAULT 'false',
+			[Language] VARCHAR(50),
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKUserSettingsId PRIMARY KEY(Id) 
+		)
+		PRINT 'Table created successfully'
+
+		PRINT 'Creating Table [CompanySettings]'
+		CREATE TABLE CompanySettings
+		(
+			[Id] INT IDENTITY(1,1),
+			[SearchRadius] INT DEFAULT 30,
+			[SearchInSK] BIT NOT NULL DEFAULT 'false',
+			[SearchInCZ] BIT NOT NULL DEFAULT 'false',
+			[SearchInHU] BIT NOT NULL DEFAULT 'false',
+			[NotifyCommentOnContribution] BIT NOT NULL DEFAULT 'false',
+			[NotifyCommentOnAccount] BIT NOT NULL DEFAULT 'false',
+			[NotifyAllMember] BIT NOT NULL DEFAULT 'false',
+			[NotificationEmail] VARCHAR(100),
+			[Language] VARCHAR(50),
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKCompanySettingsId PRIMARY KEY(Id) 
+		)
+		PRINT 'Table created successfully'
+
 		/***** Creating foreign keys *****/
 
 		PRINT 'Creating foreign keys for table [CompanyDetails2UserDetails]'
@@ -281,6 +316,13 @@
 		ADD [CompanyTypeId] INT NOT NULL
 		ALTER TABLE [CompanyDetails]
 		ADD	CONSTRAINT FKCompanyType FOREIGN KEY (CompanyTypeId) REFERENCES CompanyType(Id)
+		PRINT 'Foreign keys successfully created'
+
+		PRINT 'Creating foreign keys for table [CompanySettings]'
+		ALTER TABLE [CompanyDetails]
+		ADD [CompanySettingId] INT NOT NULL
+		ALTER TABLE [CompanyDetails]
+		ADD	CONSTRAINT FKCompanySettings FOREIGN KEY (CompanySettingId) REFERENCES CompanySettings(Id)
 		PRINT 'Foreign keys successfully created'
 
 		PRINT 'Creating foreign keys for table [SubCategory]'
@@ -309,6 +351,13 @@
 		ADD [UserRoleId] INT NOT NULL
 		ALTER TABLE [UserDetails]
 		ADD CONSTRAINT FKUserDetailsUserRole FOREIGN KEY (UserRoleId) REFERENCES UserRole(Id)			
+		PRINT 'Foreign keys successfully created'
+
+		PRINT 'Creating foreign keys for table [UserDetails]'
+		ALTER TABLE [UserDetails]
+		ADD [UserSettingId] INT NOT NULL
+		ALTER TABLE [UserDetails]
+		ADD CONSTRAINT FKUserSettings FOREIGN KEY (UserSettingId) REFERENCES UserSettings(Id)			
 		PRINT 'Foreign keys successfully created'
 
 		PRINT 'Creating foreign keys for table [Address]'

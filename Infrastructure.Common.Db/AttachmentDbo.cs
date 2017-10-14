@@ -15,15 +15,15 @@ namespace Infrastructure.Common.DB
     public partial class AttachmentDbo : IEntity
     {
         public int Id { get; set; }
+        public string Name { get; set; }
+        public int Size { get; set; }
         public string OriginalUrl { get; set; }
         public string ThumbnailUrl { get; set; }
+        public string FileType { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
         public int BatchAttId { get; set; }
-        public string Name { get; set; }
-        public int Size { get; set; }
-        public string FileType { get; set; }
     
         public virtual BatchAttachmentDbo BatchAttachment { get; set; }
     }

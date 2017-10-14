@@ -2,7 +2,16 @@
 {
     public enum CompanyPermission
     {
-        Read = 1,
-        Write = 2
+        AddMember = 1,
+        RemoveMember = 2,
+        AddGallery = 3,
+        RemoveGallery = 4,
+        AddAttachments = 5,
+        RemoveAttachments = 6,
+        Comment = 7,
+        CreateDemand = 8,
+        EditDemand = 9,
+        DeleteDemand = 10,
+        ReadOnly = 11
     }
 }

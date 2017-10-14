@@ -114,8 +114,14 @@
                                 </div>
                                 <div class="col-sm-12 reg-font">@Resources.CompanyInfo</div>
                                 <hr class="col-sm-12 transparent" />
-                                <div class="form-group col-sm-8">
+                                <div class="form-group col-sm-6">
                                     @Html.DropDownListFor(model => model.CompanyModel.CompanyLocation, EnumHelper.GetSelectList(typeof(Countries)), new { @class = "form-control txt-lg" })
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    @Html.EditorFor(model => model.CompanyModel.CompanyEmail, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHEmail } })
+                                    <label class="label-form" for="email">
+                                        @Html.ValidationMessageFor(model => model.CompanyModel.CompanyEmail)
+                                    </label>
                                 </div>
                                 <div class="form-group col-sm-12"></div>
 
@@ -162,18 +168,18 @@
                                             @Html.ValidationMessageFor(model => model.CompanyModel.CompanyPostalCode)
                                         </label>
                                     </div>
-                                </div>
-                                <div class="form-group col-sm-8">
-                                    @Html.EditorFor(model => model.CompanyModel.CompanyStreet, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetName } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessageFor(model => model.CompanyModel.CompanyStreet)
-                                    </label>
-                                </div>
-                                <div class="form-group col-sm-4">
-                                    @Html.EditorFor(model => model.CompanyModel.CompanyStreetNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetNumber } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessageFor(model => model.CompanyModel.CompanyStreetNumber)
-                                    </label>
+                                    <div class="form-group col-sm-8">
+                                        @Html.EditorFor(model => model.CompanyModel.CompanyStreet, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetName } })
+                                        <label class="label-form" for="email">
+                                            @Html.ValidationMessageFor(model => model.CompanyModel.CompanyStreet)
+                                        </label>
+                                    </div>
+                                    <div class="form-group col-sm-4">
+                                        @Html.EditorFor(model => model.CompanyModel.CompanyStreetNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetNumber } })
+                                        <label class="label-form" for="email">
+                                            @Html.ValidationMessageFor(model => model.CompanyModel.CompanyStreetNumber)
+                                        </label>
+                                    </div>
                                 </div>
                                 <div class="col-sm-12 reg-font">@Resources.BusinessArea</div>
                                 <hr class="col-sm-12 transparent" />

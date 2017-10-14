@@ -15,72 +15,76 @@
 </head>
 
 <body>
-    @{ var session = (Web.eBado.Models.Shared.SessionModel)Session["User"]; }
-    @{ var language = @Request.Cookies["lang"].Value; }
-    <!-- Top panel -->
-    <div class="container">
-        <div class="lang-panel">
-            <div value="hu-HU" class="lang-div @(language.Contains("hu") ? "hu-active" : "hu")"></div>
-            <div value="cz-CZ" class="lang-div @(language.Contains("cz") ? "cz-active" : "cz")"></div>
-            <div value="sk-SK" class="lang-div @(language.Contains("sk") ? "sk-active" : "sk")"></div>
-            <div value="en-US" class="lang-div @(language.Contains("en") ? "en-active" : "en")"></div>
-        </div>
-    </div>
-    <div class="top-panel">
+    <div class="page-wrap">
+        @{ var session = (Web.eBado.Models.Shared.SessionModel)Session["User"]; }
+        @{ var language = @Request.Cookies["lang"].Value; }
+        <!-- Top panel -->
         <div class="container">
-            <div class="top-panel-img"></div>
-            <div class="top-panel-drop">
+            <div class="lang-panel">
+                <div value="hu-HU" class="lang-div @(language.Contains("hu") ? "hu-active" : "hu")"></div>
+                <div value="cz-CZ" class="lang-div @(language.Contains("cz") ? "cz-active" : "cz")"></div>
+                <div value="sk-SK" class="lang-div @(language.Contains("sk") ? "sk-active" : "sk")"></div>
+                <div value="en-US" class="lang-div @(language.Contains("en") ? "en-active" : "en")"></div>
+            </div>
+        </div>
+        <div class="top-panel">
+            <div class="container">
+                <div class="top-panel-img"></div>
+                <div class="top-panel-drop">
 
-                @if (Request.IsAuthenticated && session != null)
-                {
-                    <nav-account>
-                        <ul>
-                            <li>
-                                @if (session.IsActive == true)
-                                {
-                                    <a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Name<div id="down-triangle"></div></a>
-                                }
-                                else
-                                {
-                                    <a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Companies.Where(c => c.IsActive == true).Select(c => c.Name)<div id="down-triangle"></div></a>
-                                }
-                                <ul>
-                                    <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Name<div class="circle"></div></a></li>
-                                    @foreach (var comapny in session.Companies)
+                    @if (Request.IsAuthenticated && session != null)
+                    {
+                        <nav-account>
+                            <ul>
+                                <li>
+                                    @if (session.IsActive == true)
                                     {
-                                        <li><a href="#">&nbsp;@comapny.Name<div class="circle"></div></a></li>
+                                        <a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Name<div id="down-triangle"></div></a>
                                     }
-                                    <li><a href="#">Moje dopyty<div class="circle"></div></a></li>
-                                    <li><a href="@Url.Action("ChangePassword","Account")">Nastavenie<div class="circle"></div></a></li>
-                                    <li><a href="@Url.Action("Logout","Account")">Odhlásiť sa<div class="circle"></div></a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </nav-account>
-                }
-                else
-                {
-                    <input type="button" name="btn" class="form-btn-transparent" onclick="location.href='@Url.Action("RegisterUser", "Account")'" value="@Resources.Register" />
-                    <input type="button" name="btn" class="form-btn-transparent" onclick="location.href='@Url.Action("Login", "Account")'" value="@Resources.Login" />
-                }
+                                    else
+                                    {
+                                        <a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Companies.Where(c => c.IsActive).Select(c => c.Name)<div id="down-triangle"></div></a>
+                                    }
+                                    <ul>
+                                        @if (!session.IsActive)
+                                        {
+                                            <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Name<div class="circle"></div></a></li>
+                                        }
+                                        @foreach (var company in session.Companies.Where(c => !c.IsActive))
+                                        {
+                                            <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;@company.Name<div class="circle"></div></a></li>
+                                        }
+                                        <li><a href="#">Moje dopyty<div class="circle"></div></a></li>
+                                        <li><a href="@Url.Action("ChangeSettings","Account")">Nastavenie<div class="circle"></div></a></li>
+                                        <li><a href="@Url.Action("Logout","Account")">Odhlásiť sa<div class="circle"></div></a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav-account>
+                    }
+                    else
+                    {
+                        <input type="button" name="btn" class="form-btn-transparent" onclick="location.href='@Url.Action("RegisterUser", "Account")'" value="@Resources.Register" />
+                        <input type="button" name="btn" class="form-btn-transparent" onclick="location.href='@Url.Action("Login", "Account")'" value="@Resources.Login" />
+                    }
+                </div>
             </div>
         </div>
-    </div>
 
-    <!--SubMenu-->
-    <div class="submenu" id="SubMenuId">
-        <div class="container">
-            <div class="position">
-                <a class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active_menu" : "")" href="@Url.Action("Index", "Home")">bazár</a>
-                <a class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index2" ? "active_menu" : "")" href="@Url.Action("Index2", "Home")">dopyt</a>
-                <a href="#contact">faq</a>
-                <a href="#about">cenník</a>
+        <!--SubMenu-->
+        <div class="submenu" id="SubMenuId">
+            <div class="container">
+                <div class="position">
+                    <a class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active_menu" : "")" href="@Url.Action("Index", "Home")">bazár</a>
+                    <a class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index2" ? "active_menu" : "")" href="@Url.Action("Index2", "Home")">dopyt</a>
+                    <a href="#contact">faq</a>
+                    <a href="#about">cenník</a>
+                </div>
+                <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
             </div>
-            <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
         </div>
-    </div>
 
-    <script>
+        <script>
             function myFunction() {
                 var x = document.getElementById("SubMenuId");
                 if (x.className === "submenu") {
@@ -104,23 +108,21 @@
                         }
                     });
                 });
-    </script>
+        </script>
 
-    @*<div class="e-wrapper">
-            @RenderBody()
-            <div class="e-pull-left"></div>
-            <div class="e-footer">
-                <p>&copy; @DateTime.Now.Year - eBado Application</p>
-            </div>
-        </div>*@
+        @*<div class="e-wrapper">
+                @RenderBody()
+                <div class="e-pull-left"></div>
+                <div class="e-footer">
+                    <p>&copy; @DateTime.Now.Year - eBado Application</p>
+                </div>
+            </div>*@
 
-    <div id="wrap">
+
         @RenderBody()
     </div>
-    <footer id="footer">
-        <div class="container">
+    <footer class="site-footer">
             <p>&copy; @DateTime.Now.Year - eBado Application</p>
-        </div>
     </footer>
 
 </body>

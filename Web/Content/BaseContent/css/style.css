@@ -2,10 +2,6 @@ html {
     height: 100%;
 }
 
-.body_dark {
-    background-color: #727272;
-}
-
 body {
     background: #fff;
     text-align: center;
@@ -475,19 +471,23 @@ nav-account {
 
 
 /***** Footer *****/
-#wrap {
+.page-wrap {
     min-height: 100%;
-    height: auto !important;
-    /* Negative indent footer by it's height */
-    margin: 0 auto -80px;
+    /* equal to footer height */
+    margin-bottom: -100px;
 }
 
-#footer {
-    height: 80px;
-}
+    .page-wrap:after {
+        content: "";
+        display: block;
+    }
 
-#footer {
-    background-color: #f5f5f5;
+    .site-footer, .page-wrap:after {
+        height: 100px;
+    }
+
+.site-footer {
+    background: #ccc;
 }
 
 /***** Custom Heplers *****/
@@ -658,7 +658,7 @@ nav-account {
     color: red;
 }
 
-.reg-font {
+.set-font {
     font-size: 20px;
     font-weight: 300;
     margin: 0 auto;
@@ -666,9 +666,17 @@ nav-account {
 }
 
 @media(max-width:750px) {
-    .reg-font {
+    .set-font {
         margin-bottom: 10px;
+        z-index: -1;
     }
+}
+
+.reg-font {
+    font-size: 20px;
+    font-weight: 300;
+    margin: 0 auto;
+    text-align: left;
 }
 
 hr.transparent {
@@ -687,10 +695,49 @@ hr.transparent {
     margin-top: 30px;
 }
 
+.push_right_5 {
+    margin-right: 5px;
+}
+
+.push_left_5 {
+    margin-left: 5px;
+}
+
+.push_left_10 {
+    margin-left: 10px;
+}
+
+.push_bottom_20 {
+    margin-bottom: 20px;
+}
+
+.resp_push_top_10 {
+    margin: 0 auto;
+}
+
+@media(max-width:750px) {
+    .resp_push_top_10 {
+        margin-top: 10px;
+    }
+}
+
+.resp_push_top_20 {
+    margin: 0 auto;
+}
+
+@media(max-width:750px) {
+    .resp_push_top_20 {
+        margin-top: 20px;
+    }
+}
+
 .no_margin {
     margin: 0 auto !important;
 }
 
+.hidden-toggle {
+    display: none;
+}
 /*************Custom radio button************/
 input[type='radio'] {
     -webkit-appearance: none;

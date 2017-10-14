@@ -3,6 +3,7 @@
     public enum CompanyRole
     {
         Owner = 1,
-        Member = 2
+        Admin = 2,
+        Member = 3
     }
 }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Hosting;
@@ -25,24 +26,7 @@ namespace Web.eBado.Controllers
     public class FileUploadController : Controller
     {
         FilesHelper filesHelper;
-        private readonly HashSet<string> supportedImageTypes = new HashSet<string> { "image/jpg", "image/jpeg", "image/png", "image/png", "image/bmp", "image/tiff", "image/tif" };
-        private readonly HashSet<string> supportedFileTypes = new HashSet<string>
-        {
-            "application/msword",
-            "application/vnd.ms-word.document.macroEnabled.12",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            "application/vnd.ms-excel",
-            "application/vnd.ms-excel.sheet.macroEnabled.12",
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            "application/vnd.ms-powerpoint",
-            "application/vnd.ms-powerpoint.presentation.macroenabled.12",
-            "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-            "application/vnd.ms-powerpoint.slideshow.macroenabled.12",
-            "application/vnd.openxmlformats-officedocument.presentationml.slideshow",
-            "application/pdf",
-            "application/x-zip-compressed",
-            "application/x-7z-compressed"
-        };
+        
         private readonly IConfiguration configuration;
         private readonly IUnitOfWork unitOfWork;
         private readonly IFilesBusinessObjects filesBo;
@@ -126,20 +110,36 @@ namespace Web.eBado.Controllers
             return new JsonNetResult(model.Attachments);
         }
 
-        [HttpGet]
-        public JsonResult DeleteFile(string batchIs, string file)
+        [HttpPost]
+        public ActionResult DeleteFiles(string batchId, ICollection<string> file)
         {
-            bool deleted = filesBo.DeleteFile(file);
+            bool deleted = filesBo.DeleteFiles(file, batchId);
+
+            return deleted ? new HttpStatusCodeResult(HttpStatusCode.OK) : new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "Some files cannot be deleted. Please try again later.");
+        }
+
+        [HttpPost]
+        public ActionResult DeleteBatch(string batchId)
+        {
+            bool deleted = filesBo.DeleteBatch(batchId);
+
+            return deleted ? new HttpStatusCodeResult(HttpStatusCode.OK) : new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "The gallery cannot be deleted. Please try again later.");
+        }
+
+        [HttpPost]
+        public JsonResult DeleteVideo(string batchId, string name)
+        {
+            bool deleted = true;
 
             return deleted ? Json("Deleted", JsonRequestBehavior.AllowGet) : Json("Error", JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
-        public JsonResult DeleteFileAzure(string fileName)
+        public ActionResult DeleteFileAzure(string fileName)
         {
             bool deleted = filesBo.DeleteFile(fileName);
 
-            return deleted ? Json("Deleted", JsonRequestBehavior.AllowGet) : Json("Error", JsonRequestBehavior.AllowGet);
+            return deleted ? new HttpStatusCodeResult(HttpStatusCode.OK) : new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
         }
 
         private ICollection<FileModel> MapAttachmentsFromRequest()
@@ -171,34 +171,5 @@ namespace Web.eBado.Controllers
 
             return fileCollection;
         }
-        
-        private string GetExtensionFromMimeType(string mimeType)
-        {
-            switch (mimeType)
-            {
-                case "application/msword":
-                case "application/vnd.ms-word.document.macroEnabled.12":
-                case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-                    return "doc";
-                case "application/vnd.ms-excel":
-                case "application/vnd.ms-excel.sheet.macroEnabled.12":
-                case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-                    return "xls";
-                case "application/vnd.ms-powerpoint":
-                case "application/vnd.ms-powerpoint.presentation.macroenabled.12":
-                case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
-                case "application/vnd.ms-powerpoint.slideshow.macroenabled.12":
-                case "application/vnd.openxmlformats-officedocument.presentationml.slideshow":
-                    return "ppt";
-                case "application/pdf":
-                    return "pdf";
-                case "application/x-zip-compressed":
-                case "application/x-7z-compressed":
-                    return "zip";
-                default:
-                    return "_blank";
-            }
-        }
-
     }
 }

@@ -13,14 +13,32 @@
     }
 </script>
 
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="alert-modal">
+    <div class="modal-dialog" style="max-width:500px;height:200px;margin:0 auto">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title" id="myModalLabel">Vymazat galeriu: <span id="galName" style="font-weight:700"></span>?</h3>
+            </div>
+            <div class="modal-body" style="text-align:left">
+                <h4>zmazes vsetko debil tak citaj az do konca!</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="modalNo">Zrusit</button>
+                <button type="button" class="btn btn-danger" id="modalYes">Vymazat</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <div class="container">
-        <div class="resp push_top_10">
-            @AccountHelper.SettingsMenu(Url, ViewContext.RouteData.Values["Action"].ToString())
-            <div class="tabcontent-gallery push_top_10">
-                <div style="float:left; margin-bottom: 30px; width:100%">
-                    <button id="addBatch" class="form-btn col-lg-2" style="float:left">Create</button>
-                </div>
+<div class="container">
+    <div class="resp push_top_10">
+        @{ var session = (Web.eBado.Models.Shared.SessionModel)Session["User"]; }
+        @AccountHelper.SettingsMenu(Url, ViewContext.RouteData.Values["Action"].ToString(), session)
+        <div class="tabcontent-gallery push_top_10">
+            <div class="btn-position">
+                <button id="addBatch" class="form-btn col-lg-2" style="float:left">Create</button>
+            </div>
             @using (Html.BeginForm("CreateBatch", "Account", new { id = "htmlForm" }))
             {
                 @Html.AntiForgeryToken()
@@ -39,49 +57,79 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-md-10">
-                                <button id="MyButton" class="form-btn col-sm-12" data-callback="onSubmit">Create</button>
+                            <div class="col-lg-10">
+                                <button id="MyButton" class="form-btn" data-callback="onSubmit">Create</button>
                             </div>
                         </div>
                     </div>
                 </form>
             }
-                @if (Model.Batch.Any())
+            @if (Model.Batch.Any())
+            {
+                var index = 1;
+                foreach (var batch in Model.Batch)
                 {
-                    foreach (var batch in Model.Batch)
-                    {
-                        <div class="responsive">
-                            <div class="gallery">
-                                <div class="head">
-                                    <div class="name">@batch.Name</div>
-                                    <div class="att_count"><span class="glyphicon glyphicon-picture"><span style="color:darkolivegreen;font-weight:bold; margin-left:2px">@batch.AttachmentsCount</span></span></div>
-                                </div>
-                                <a target="_blank" href="@Url.Action("AccountGallery", "Account", new { batchId = batch.Guid })">
-                                    @if (batch.BaseThumbUrl != null)
-                                    {<img src="@batch.BaseThumbUrl" width="200" height="200">}
-                                    else
-                                    { <img src="~/Content/BaseContent/img/no_photo.jpg" width="300" height="200">}
-                                </a>
-                                <div class="desc">@batch.Description</div>
-                            </div>
+                    <div id="batchContainer_@index" class="polaroid-batch zoom over-flow-hidden">
+                        <div class="head">
+                            <div class="name">@batch.Name</div>
+                            <div class="att_count"><span class="glyphicon glyphicon-picture"><span style="color:#808080;font-weight:bold; margin-left:2px">@batch.AttachmentsCount</span></span></div>
                         </div>
-                    }
+                        <div style="overflow: hidden;">
+                            <a href="@Url.Action("EditAccountGallery","Account",new { batchId = batch.Guid })"
+                               style="background-image: url(@batch.BaseThumbUrl);" class="zoomzoom"></a>
+                        </div>
+                        <div class="btm-desc">
+                            <p class="desc">@batch.Description</p>
+                        </div>
+                        <div class="btm">
+                            <button id="@index" onclick="btnClick('@batch.Guid', '@index', '@batch.Name')" class="form-btn btn-space-5">Delete</button>
+                        </div>
+                    </div>
+                    index++;
                 }
+            }
 
-            </div>
         </div>
     </div>
+</div>
 
-    <script>
-        $(function () {
-            $("#addBatch").click(function () {
-                $(this).text(function (i, text) {
-                    return text === "Create" ? "Close" : "Create";
-                })
-                $("#batchArea").slideToggle();
+<script>
+    function btnClick(batch, id, name) {
+        $("#galName").text(name);
+        $("#alert-modal").modal('show');
+        $("#modalYes").on("click", function () {
+            $.ajax({
+                url: "/FileUpload/DeleteBatch",
+                type: "POST",
+                data: JSON.stringify({ batchId: batch }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    var container = $("#" + id).parent().parent().attr('id');
+                    $("#" + container).hide(250);
+                },
+                error: function () {
+                    alert("daco v pici!");
+                }
             });
-        })
-    </script>
+            $("#alert-modal").modal('hide');
+        });
+
+        $("#modalNo").on("click", function () {
+            $("#alert-modal").modal('hide');
+        });
+
+    }
+
+    $(function () {
+        $("#addBatch").click(function () {
+            $(this).text(function (i, text) {
+                return text === "Create" ? "Close" : "Create";
+            })
+            $("#batchArea").slideToggle();
+        });
+    })
+</script>
 
 
 

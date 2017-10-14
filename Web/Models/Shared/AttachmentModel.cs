@@ -16,7 +16,9 @@ namespace Web.eBado.Models.Shared
         public string Url { get; set; }
         [JsonProperty(PropertyName = "thumbnailUrl")]
         public string ThumbnailUrl { get; set; }
-        [JsonProperty(PropertyName = "deleteUrl")]
-        public string DeleteUrl { get; set; }
+        [JsonProperty(PropertyName = "batch")]
+        public string Batch { get; set; }
+        [JsonProperty(PropertyName = "attachmentType")]
+        public string AttachmentType { get; set; }
     }
 }
