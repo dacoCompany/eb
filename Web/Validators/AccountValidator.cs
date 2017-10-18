@@ -32,7 +32,7 @@ namespace Web.eBado.Validators
 
         private static void ValidateEmailNotExist(IUnitOfWork uow, ValidationResultCollection collection, string emailAddress, string parameterName)
         {
-            var userDetails = uow.UserDetailsRepository.FirstOrDefault(ud => ud.Email.Equals(emailAddress, StringComparison.OrdinalIgnoreCase));
+            var userDetails = uow.UserDetailsRepository.FindFirstOrDefault(ud => ud.Email.Equals(emailAddress, StringComparison.OrdinalIgnoreCase));
 
             if (userDetails != null)
             {
@@ -50,19 +50,19 @@ namespace Web.eBado.Validators
 
         private static void ValidateUserCredentials(IUnitOfWork uow, ValidationResultCollection collection, LoginModel model)
         {
-            var userDetails = uow.UserDetailsRepository.FirstOrDefault(ud => ud.Email.ToLower().Equals(model.Email.ToLower()));
+            var userDetails = uow.UserDetailsRepository.FindFirstOrDefault(ud => ud.Email.ToLower().Equals(model.Email.ToLower()));
             if (userDetails != null)
             {
                 var encodedPws = AccountHelper.EncodePassword(model.Password, userDetails.Salt);
                 bool isSamePsw = uow.UserDetailsRepository.AnyActive(ud => ud.Password.Equals(encodedPws));
                 if (!isSamePsw)
                 {
-                    ValidationHelpers.AddValidationResult(collection, nameof(LoginModel.ErrorMessage), ValidationErrors.WrongLogin);
+                    ValidationHelpers.AddValidationResult(collection, nameof(model.Password), ValidationErrors.WrongLogin);
                 }
             }
             else
             {
-                ValidationHelpers.AddValidationResult(collection, nameof(LoginModel.ErrorMessage), ValidationErrors.WrongLogin);
+                ValidationHelpers.AddValidationResult(collection, nameof(model.Email), ValidationErrors.WrongLogin);
             }
         }
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Infrastructure.Common.DB;
 using Infrastructure.Common.Validations;
@@ -29,6 +28,7 @@ namespace Web.eBado.Controllers
         private readonly IConfiguration configuration;
         private readonly IUnitOfWork unitOfWork;
         private readonly IFilesBusinessObjects fileBo;
+        private readonly DiagnosticsLogging diagnosticLogConstant;
 
         public AccountController(IConfiguration configuration, IUnitOfWork unitOfWork, IFilesBusinessObjects fileBo)
         {
@@ -36,6 +36,7 @@ namespace Web.eBado.Controllers
             this.configuration = configuration;
             this.unitOfWork = unitOfWork;
             this.fileBo = fileBo;
+            diagnosticLogConstant = new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Account" };
         }
 
         #region HTTP GET
@@ -143,7 +144,7 @@ namespace Web.eBado.Controllers
             }
             catch (Exception e)
             {
-                EntlibLogger.LogError("Account", "FileUpload", e.Message, DiagnosticsLogging.Create("Controller", "Account"), e);
+                EntlibLogger.LogError("Account", "BatchGallery", e.Message, diagnosticLogConstant, e);
                 throw;
             }
         }
@@ -157,6 +158,7 @@ namespace Web.eBado.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel model, string returnUrl)
         {
+            EntlibLogger.LogVerbose("Account", "Login", $"Login attempt with e-mail address: {model.Email}", diagnosticLogConstant);
             var validationResult = new ValidationResultCollection();
             AccountValidator.ValidateUserLogin(unitOfWork, validationResult, model);
             ModelState.AddValidationErrors(validationResult);
@@ -174,7 +176,7 @@ namespace Web.eBado.Controllers
                 SessionModel session = new SessionModel()
                 {
                     Id = userDetail.Id,
-                    IsActive = userDetail.IsActive,
+                    IsActive = true,
                     Email = userDetail.Email,
                     Name = userDetail.DisplayName,
                     UserRole = userRole.Name,
@@ -188,7 +190,7 @@ namespace Web.eBado.Controllers
                     CompanySessionModel companySession = new CompanySessionModel()
                     {
                         Id = companyDetail.Id,
-                        IsActive = companyDetail.IsActive,
+                        IsActive = false,
                         Name = companyDetail.Name,
                         CompanyRole = companyRole.Name,
                         CompanyPermissions = companyRole.CompanyRole2CompanyPermission.Select(cr => cr.CompanyPermission.Name)
@@ -205,11 +207,13 @@ namespace Web.eBado.Controllers
                 }
                 else
                 {
+                    EntlibLogger.LogVerbose("Account", "Login", $"Successful login with e-mail address: {model.Email}", diagnosticLogConstant);
                     return RedirectToAction("Index", "Home");
                 }
             }
             else
             {
+                EntlibLogger.LogInfo("Account", "Login", $"Failed login with e-mail address: {model.Email}", diagnosticLogConstant);
                 return View(model);
             }
         }
@@ -221,10 +225,7 @@ namespace Web.eBado.Controllers
         {
             using (var uow = NinjectResolver.GetInstance<IUnitOfWork>())
             {
-                //EntlibLogger.LogError("Account", "Register", $"Registration attempt with e-mail address: {model.UserModel.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register" });
-                //EntlibLogger.LogInfo("Account", "Register", $"Registration attempt with e-mail address: {model.UserModel.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register" });
-                //EntlibLogger.LogWarning("Account", "Register", $"Registration attempt with e-mail address: {model.UserModel.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register" });
-                //EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt with e-mail address: {model.UserModel.Email}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Register" });
+                EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt with e-mail address: {model.UserModel.Email}", diagnosticLogConstant);
                 bool isRegistrationWithCompany = model.CompanyModel.CompanyType != 0;
 
                 if (!ModelState.IsValid)
@@ -282,6 +283,7 @@ namespace Web.eBado.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ForgotPassword(ForgotPasswordModel model)
         {
+            EntlibLogger.LogInfo("Account", "Forgot Password", $"Password reset requested for e-mail address: {model.Email}", diagnosticLogConstant);
             using (var uow = new UnitOfWork())
             {
                 //if (!accountHelper.CheckIfEmailExist(model.Email, uow))
@@ -316,7 +318,7 @@ namespace Web.eBado.Controllers
         {
             int companyId = GetActiveCompany();
             string batchUniqueId = fileBo.CreateBatch(model.Name, model.Description, companyId);
-            EntlibLogger.LogInfo("File", "Create Batch", $"Created new batch with id: {batchUniqueId}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Account" });
+            EntlibLogger.LogInfo("File", "Create Batch", $"Created new batch with id: {batchUniqueId}", diagnosticLogConstant);
             return RedirectToAction("EditAccountGallery", new { batchId = batchUniqueId });
         }
         #endregion

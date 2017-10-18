@@ -118,9 +118,9 @@ namespace Infrastructure.Common.DB
 
         /// <summary>
         /// Adds the specified entities.
-        public T FirstOrDefault(Expression<Func<T, bool>> predicate)
+        public T FindFirstOrDefault(Expression<Func<T, bool>> predicate)
         {
-            return dataEntity.FirstOrDefault(predicate);
+            return dataEntity.Where(predicate).FirstOrDefault(entity => entity.IsActive == true);
         }
 
         /// </summary>

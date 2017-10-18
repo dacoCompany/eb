@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
@@ -9,7 +8,6 @@ using System.Web.Helpers;
 using System.Web.Hosting;
 using ByteSizeLib;
 using eBado.Entities;
-using Infrastructure.Common;
 using Infrastructure.Common.DB;
 using Microsoft.Practices.EnterpriseLibrary.Common.Utility;
 using Microsoft.WindowsAzure.Storage;
@@ -26,6 +24,7 @@ namespace eBado.BusinessObjects
 
         private readonly IUnitOfWork unitOfWork;
         private readonly IConfiguration configuration;
+        private readonly DiagnosticsLogging diagnosticLogConstant;
         private readonly HashSet<string> supportedImageTypes = new HashSet<string> { "image/jpg", "image/jpeg", "image/png", "image/png", "image/bmp", "image/tiff", "image/tif" };
         private readonly HashSet<string> supportedFileTypes = new HashSet<string>
         {
@@ -49,66 +48,77 @@ namespace eBado.BusinessObjects
         {
             this.unitOfWork = unitOfWork;
             this.configuration = configuration;
+            diagnosticLogConstant = DiagnosticsLogging.Create("BusinessObject", "File");
         }
 
         public int UploadFiles(IEnumerable<FileEntity> files, string batchId, int companyId)
         {
-            var container = GetAzureBlobContainer();
-
-            var batch = unitOfWork.BatchAttachmentRepository.FirstOrDefault(ba => ba.GuId == batchId && ba.CompanyDetailsId == companyId);
-            int fileCount = 0;
-
-            foreach (var file in files)
+            try
             {
-                CloudBlockBlob blockBlob = container.GetBlockBlobReference($"photos/{batchId}/{file.Name}");
-                blockBlob.UploadFromByteArray(file.Content, 0, file.Content.Length);
-                file.Url = blockBlob.Uri.ToString();
+                var container = GetAzureBlobContainer();
 
-                if (!supportedFileTypes.Contains(file.ContentType) && !supportedImageTypes.Contains(file.ContentType))
-                    continue;
+                var batch = unitOfWork.BatchAttachmentRepository.FindFirstOrDefault(ba => ba.GuId == batchId && ba.CompanyDetailsId == companyId);
+                int fileCount = 0;
 
-                string fileThumb = Path.GetFileNameWithoutExtension(file.Name) + "_thumbImg.jpg";
-                if (supportedImageTypes.Contains(file.ContentType))
+                foreach (var file in files)
                 {
-                    using (MemoryStream stream = new MemoryStream(file.Content))
+                    CloudBlockBlob blockBlob = container.GetBlockBlobReference($"photos/{batchId}/{file.Name}");
+                    blockBlob.UploadFromByteArray(file.Content, 0, file.Content.Length);
+                    file.Url = blockBlob.Uri.ToString();
+
+                    if (!supportedFileTypes.Contains(file.ContentType) && !supportedImageTypes.Contains(file.ContentType))
+                        continue;
+
+                    string fileThumb = Path.GetFileNameWithoutExtension(file.Name) + "_thumbImg.jpg";
+                    if (supportedImageTypes.Contains(file.ContentType))
                     {
-                        var thumbnail = new WebImage(stream).Resize(130, 100, true, true);
-                        thumbnail.FileName = fileThumb;
-                        byte[] thumb = thumbnail.GetBytes("image/jpeg");
-                        CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference($"photos/{batchId}/{fileThumb}");
-                        blockBlobThumb.UploadFromByteArray(thumb, 0, thumb.Length);
-                        file.ThumbnailUrl = blockBlobThumb.Uri.ToString();
+                        using (MemoryStream stream = new MemoryStream(file.Content))
+                        {
+                            var thumbnail = new WebImage(stream).Resize(130, 100, true, true);
+                            thumbnail.FileName = fileThumb;
+                            byte[] thumb = thumbnail.GetBytes("image/jpeg");
+                            CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference($"photos/{batchId}/{fileThumb}");
+                            blockBlobThumb.UploadFromByteArray(thumb, 0, thumb.Length);
+                            file.ThumbnailUrl = blockBlobThumb.Uri.ToString();
+                        }
                     }
-                }
-                else
-                {
-                    // get thumbnail for non-image file
-                    string extension = GetExtensionFromMimeType(file.ContentType);
-                    string path = HostingEnvironment.MapPath($@"~/Content/Free-file-icons/48px/{extension}.png");
-                    using (var stream = new FileStream(path, FileMode.Open))
+                    else
                     {
-                        byte[] thumb = new byte[1048576];
-                        stream.ReadAsync(thumb, 0, (int)stream.Length);
-                        CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference($"photos/{batchId}/{fileThumb}");
-                        blockBlobThumb.UploadFromByteArray(thumb, 0, thumb.Length);
-                        file.ThumbnailUrl = blockBlobThumb.Uri.ToString();
+                        // get thumbnail for non-image file
+                        string extension = GetExtensionFromMimeType(file.ContentType);
+                        string path = HostingEnvironment.MapPath($@"~/Content/Free-file-icons/48px/{extension}.png");
+                        using (var stream = new FileStream(path, FileMode.Open))
+                        {
+                            byte[] thumb = new byte[1048576];
+                            stream.ReadAsync(thumb, 0, (int)stream.Length);
+                            CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference($"photos/{batchId}/{fileThumb}");
+                            blockBlobThumb.UploadFromByteArray(thumb, 0, thumb.Length);
+                            file.ThumbnailUrl = blockBlobThumb.Uri.ToString();
+                        }
                     }
+
+                    var attachment = new AttachmentDbo
+                    {
+                        OriginalUrl = file.Url,
+                        ThumbnailUrl = file.ThumbnailUrl,
+                        Name = file.Name,
+                        Size = file.Size
+                    };
+                    batch.Attachments.Add(attachment);
+                    ++fileCount;
                 }
 
-                var attachment = new AttachmentDbo
-                {
-                    OriginalUrl = file.Url,
-                    ThumbnailUrl = file.ThumbnailUrl,
-                    Name = file.Name,
-                    Size = file.Size
-                };
-                batch.Attachments.Add(attachment);
-                ++fileCount;
+                unitOfWork.Commit();
+
+                EntlibLogger.LogVerbose("File", "Upload", $"Uploaded {fileCount} of {files.Count()} files to batch {batchId}.", diagnosticLogConstant);
+                return fileCount;
 
             }
-
-            unitOfWork.Commit();
-            return fileCount;
+            catch (Exception ex)
+            {
+                EntlibLogger.LogError("File", "Upload", $"Upload failed. - {ex.Message}", diagnosticLogConstant, ex);
+                throw;
+            }
         }
 
         public bool DeleteFile(string fileName)
@@ -121,7 +131,7 @@ namespace eBado.BusinessObjects
             CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference("photos/" + thumbName);
             bool resultThumb = blockBlobThumb.DeleteIfExists(DeleteSnapshotsOption.IncludeSnapshots);
 
-            var attachment = unitOfWork.AttachmentRepository.FirstOrDefault(a => a.OriginalUrl.Contains(fileName));
+            var attachment = unitOfWork.AttachmentRepository.FindFirstOrDefault(a => a.OriginalUrl.Contains(fileName));
             bool dboDeleted = false;
 
             if (attachment != null)
@@ -138,8 +148,9 @@ namespace eBado.BusinessObjects
         {
             var container = GetAzureBlobContainer();
             bool deletedAll = true;
+            int deletedCount = 0;
 
-            int batchDboId = unitOfWork.BatchAttachmentRepository.FirstOrDefault(ba => ba.GuId.Equals(batchId)).Id;
+            int batchDboId = unitOfWork.BatchAttachmentRepository.FindFirstOrDefault(ba => ba.GuId.Equals(batchId)).Id;
 
             foreach (string fileName in files)
             {
@@ -150,7 +161,7 @@ namespace eBado.BusinessObjects
                 CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference($"photos/{batchId}/{thumbName}");
                 bool resultThumb = blockBlobThumb.DeleteIfExists(DeleteSnapshotsOption.IncludeSnapshots);
 
-                var attachment = unitOfWork.AttachmentRepository.FirstOrDefault(a => a.OriginalUrl.Contains(fileName) && a.BatchAttId == batchDboId);
+                var attachment = unitOfWork.AttachmentRepository.FindFirstOrDefault(a => a.OriginalUrl.Contains(fileName) && a.BatchAttId == batchDboId);
                 bool dboDeleted = false;
 
                 if (attachment != null)
@@ -161,12 +172,21 @@ namespace eBado.BusinessObjects
 
                 if (!(result && resultThumb && dboDeleted))
                 {
-                    EntlibLogger.LogWarning("File", "Delete Files", $"File '{fileName}' in batch {batchId} cannot be deleted.", DiagnosticsLogging.Create("BusinessObject", "DeleteFiles"));
+                    EntlibLogger.LogWarning("File", "Delete", $"File '{fileName}' in batch {batchId} cannot be deleted.", diagnosticLogConstant);
                     deletedAll = false;
+                }
+                else
+                {
+                    ++deletedCount;
                 }
             }
 
             unitOfWork.Commit();
+
+            if (deletedAll)
+                EntlibLogger.LogVerbose("File", "Delete", $"Deleted {files.Count()} files.", diagnosticLogConstant);
+            else
+                EntlibLogger.LogInfo("File", "Delete", $"Deleted {deletedCount} of {files.Count()} files.", diagnosticLogConstant);
 
             return deletedAll;
         }
@@ -186,7 +206,7 @@ namespace eBado.BusinessObjects
                     }
                 }
 
-                var batch = unitOfWork.BatchAttachmentRepository.FirstOrDefault(ba => ba.GuId == batchId);
+                var batch = unitOfWork.BatchAttachmentRepository.FindFirstOrDefault(ba => ba.GuId == batchId);
                 batch.IsActive = false;
 
                 batch.Attachments.ForEach(b => b.IsActive = false);
@@ -197,7 +217,7 @@ namespace eBado.BusinessObjects
             }
             catch (Exception ex)
             {
-                EntlibLogger.LogWarning("File", "Delete Batch", $"Batch {batchId} cannot be deleted. {ex.Message}", DiagnosticsLogging.Create("BusinessObject", "DeleteBatch"), ex);
+                EntlibLogger.LogError("File", "Delete Batch", $"Batch {batchId} cannot be deleted. {ex.Message}", diagnosticLogConstant, ex);
                 deletedBatch = false;
             }
 
@@ -249,7 +269,7 @@ namespace eBado.BusinessObjects
             unitOfWork.BatchAttachmentRepository.Add(batchDbo);
             unitOfWork.Commit();
 
-            EntlibLogger.LogInfo("File", "Create Batch", $"Created new batch with name '{name}', id: {guid.ToString()}", new DiagnosticsLogging());
+            EntlibLogger.LogInfo("File", "Create Batch", $"Created new batch with name '{name}', id: {guid.ToString()}", diagnosticLogConstant);
 
             return guid.ToString();
         }

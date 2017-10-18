@@ -14,17 +14,22 @@ using System.Web;
 using System.Web.Mvc;
 using System.Xml;
 using Web.eBado.Models.Account;
+using WebAPIFactory.Logging.Core;
+using WebAPIFactory.Logging.Core.Diagnostics;
 
 namespace Web.eBado.Helpers
 {
     public class AccountHelper
     {
         #region Constants
-        const string allowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789";
-        private Uri locationBaseUri = new Uri("http://freegeoip.net/xml/");
+
+        const string AllowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789";
+        private readonly Uri locationBaseUri = new Uri("http://freegeoip.net/xml/");
+
         #endregion
 
         #region Public Methods
+
         public Countries GetCountryByIP()
         {
             string ip = HttpContext.Current.Request.UserHostAddress;
@@ -35,20 +40,16 @@ namespace Web.eBado.Helpers
             string countryName = nodeLstCity[0].InnerText;
             if (!string.IsNullOrEmpty(countryName))
             {
-                return (Countries)System.Enum.Parse(typeof(Countries), countryName);
+                return (Countries)Enum.Parse(typeof(Countries), countryName);
             }
-            else
-            {
-                return Countries.Select;
-            }
+
+            return Countries.Select;
         }
 
         public static bool IsValidCaptcha()
         {
-
             var secret = ConfigurationManager.AppSettings.Get(ConfigurationKeys.ReCaptchaSecretKey);
-            var req =
-                (HttpWebRequest)WebRequest.Create(string.Format(ConfigurationManager.AppSettings.Get(ConfigurationKeys.ReCaptchaUri),
+            var req = (HttpWebRequest)WebRequest.Create(string.Format(ConfigurationManager.AppSettings.Get(ConfigurationKeys.ReCaptchaUri),
                     secret, HttpContext.Current.Request.Form["g-recaptcha-response"]));
 
             using (var wResponse = req.GetResponse())
@@ -63,65 +64,74 @@ namespace Web.eBado.Helpers
             }
 
             return false;
-
         }
 
         public void Registration(RegistrationModel model, IUnitOfWork uow, bool createCompany = false)
         {
-            var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Name == UserRole.User.ToString());
-            int locationId = int.Parse(model.UserModel.PostalCode);
-            var location = uow.LocationRepository.FirstOrDefault(l => l.Id == locationId);
-            string salt = GenerateSalt();
-
-            var userDetails = new UserDetailDbo
+            try
             {
-                Email = model.UserModel.Email,
-                Password = EncodePassword(model.UserModel.Password, salt),
-                Salt = salt,
-                Title = model.UserModel.Title,
-                FirstName = model.UserModel.FirstName,
-                Surname = model.UserModel.Surname,
-                PhoneNumber = model.UserModel.PhoneNumber,
-                AdditionalPhoneNumber = string.IsNullOrEmpty(model.UserModel.AdditionalPhoneNumber) ? null : model.UserModel.AdditionalPhoneNumber,
-                DisplayName = $"{model.UserModel.FirstName} {model.UserModel.Surname}",
-                UserRole = userRole
-            };
+                var userRole = uow.UserRoleRepository.FindFirstOrDefault(r => r.Name == UserRole.User.ToString());
+                int locationId = int.Parse(model.UserModel.PostalCode);
+                var location = uow.LocationRepository.FindFirstOrDefault(l => l.Id == locationId);
+                string salt = GenerateSalt();
 
-            userDetails.Addresses.Add(new AddressDbo
-            {
-                Street = model.UserModel.Street,
-                Number = model.UserModel.StreetNumber,
-                IsBillingAddress = true,
-                LocationId = location.Id
-            });
+                var userDetails = new UserDetailDbo
+                {
+                    Email = model.UserModel.Email,
+                    Password = EncodePassword(model.UserModel.Password, salt),
+                    Salt = salt,
+                    Title = model.UserModel.Title,
+                    FirstName = model.UserModel.FirstName,
+                    Surname = model.UserModel.Surname,
+                    PhoneNumber = model.UserModel.PhoneNumber,
+                    AdditionalPhoneNumber = string.IsNullOrEmpty(model.UserModel.AdditionalPhoneNumber) ? null : model.UserModel.AdditionalPhoneNumber,
+                    DisplayName = $"{model.UserModel.FirstName} {model.UserModel.Surname}",
+                    UserRole = userRole
+                };
 
-            userDetails.UserSetting = new UserSettingDbo
-            {
-                Language = Thread.CurrentThread.CurrentCulture.Name,
-                SearchInCZ = true,
-                SearchInSK = true,
-                SearchInHU = true,
-                SearchRadius = 30,
-                NotifyCommentOnContribution = true,
-                NotifyCommentOnAccount = true
-            };
+                userDetails.Addresses.Add(new AddressDbo
+                {
+                    Street = model.UserModel.Street,
+                    Number = model.UserModel.StreetNumber,
+                    IsBillingAddress = true,
+                    LocationId = location.Id
+                });
 
-            uow.UserDetailsRepository.Add(userDetails);
+                userDetails.UserSetting = new UserSettingDbo
+                {
+                    Language = Thread.CurrentThread.CurrentCulture.Name,
+                    SearchInCZ = true,
+                    SearchInSK = true,
+                    SearchInHU = true,
+                    SearchRadius = 30,
+                    NotifyCommentOnContribution = true,
+                    NotifyCommentOnAccount = true
+                };
 
-            if (createCompany)
-            {
-                CreateCompany(uow, model.CompanyModel, userDetails.Id);
+                uow.UserDetailsRepository.Add(userDetails);
+
+                if (createCompany)
+                {
+                    CreateCompany(uow, model.CompanyModel, userDetails.Id);
+                }
+
+                uow.Commit();
+
+                EntlibLogger.LogInfo("Account", "Register", $"Successful registration with e-mail address: {model.UserModel.Email}", new DiagnosticsLogging { DiagnosticsArea = "Helper", DiagnosticsCategory = "Register" });
             }
-
-            uow.Commit();
+            catch (Exception ex)
+            {
+                EntlibLogger.LogError("Account", "Register", $"Failed registration with e-mail address: {model.UserModel.Email}", new DiagnosticsLogging { DiagnosticsArea = "Helper", DiagnosticsCategory = "Register" }, ex);
+                throw;
+            }
         }
 
         public void CreateCompany(IUnitOfWork uow, CompanyModel model, int userId)
         {
-            var companyTypeId = uow.CompanyTypeRepository.FirstOrDefault(ct => ct.Name == model.CompanyType.ToString()).Id;
-            var companyRoleId = uow.CompanyRoleRepository.FirstOrDefault(cr => cr.Name == CompanyRole.Owner.ToString()).Id;
+            var companyTypeId = uow.CompanyTypeRepository.FindFirstOrDefault(ct => ct.Name == model.CompanyType.ToString()).Id;
+            var companyRoleId = uow.CompanyRoleRepository.FindFirstOrDefault(cr => cr.Name == CompanyRole.Owner.ToString()).Id;
             int companyLocationId = int.Parse(model.CompanyPostalCode);
-            var companyLocation = uow.LocationRepository.FirstOrDefault(l => l.Id == companyLocationId);
+            var companyLocation = uow.LocationRepository.FindFirstOrDefault(l => l.Id == companyLocationId);
             var categoriesIds = uow.SubCategoryRepository.FindWhere(a => a.Name.Equals(model.Categories.SelectedCategories));
 
             var companyDetails = new CompanyDetailDbo
@@ -185,16 +195,16 @@ namespace Web.eBado.Helpers
         #endregion
 
         #region Private Methods
+
         private static string GenerateSalt()
         {
             int length = 10;
 
             var randNum = new Random();
             var chars = new char[length];
-            var allowedCharCount = allowedChars.Length;
             for (var i = 0; i <= length - 1; i++)
             {
-                chars[i] = allowedChars[Convert.ToInt32((allowedChars.Length) * randNum.NextDouble())];
+                chars[i] = AllowedChars[Convert.ToInt32((AllowedChars.Length) * randNum.NextDouble())];
             }
             return new string(chars);
         }

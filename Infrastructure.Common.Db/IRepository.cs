@@ -37,7 +37,7 @@ namespace Infrastructure.Common.DB
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <returns></returns>
-        T FirstOrDefault(Expression<Func<T, bool>> predicate);
+        T FindFirstOrDefault(Expression<Func<T, bool>> predicate);
 
         /// <summary>
         /// Finds the by identifier.
