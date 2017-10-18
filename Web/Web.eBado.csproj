@@ -236,8 +236,8 @@
     <Compile Include="Models\Account\ForgotPasswordModel.cs" />
     <Compile Include="Models\Account\LoginModel.cs" />
     <Compile Include="Models\Account\CompanyModel.cs" />
-    <Compile Include="Models\Account\RegisterCompanyModel.cs" />
-    <Compile Include="Models\Account\RegisterUserModel.cs" />
+    <Compile Include="Models\Account\RegistrationModel.cs" />
+    <Compile Include="Models\Account\UserModel.cs" />
     <Compile Include="Models\Account\UserAccountSettingsModel.cs" />
     <Compile Include="Models\Email\RegisterEmailModel.cs" />
     <Compile Include="Models\MvcExtensions\ModelStateExtensions.cs" />

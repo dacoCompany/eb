@@ -42,6 +42,7 @@ namespace Infrastructure.Common.DB
         public virtual ICollection<AddressDbo> Addresses { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CompanyDetails2UserDetailsDbo> CompanyDetails2UserDetails { get; set; }
+        public virtual UserSettingDbo UserSetting { get; set; }
         public virtual UserRoleDbo UserRole { get; set; }
         public virtual UserSettingDbo UserSetting { get; set; }
     }
