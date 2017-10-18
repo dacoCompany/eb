@@ -44,6 +44,5 @@ namespace Infrastructure.Common.DB
         public virtual ICollection<CompanyDetails2UserDetailsDbo> CompanyDetails2UserDetails { get; set; }
         public virtual UserSettingDbo UserSetting { get; set; }
         public virtual UserRoleDbo UserRole { get; set; }
-        public virtual UserSettingDbo UserSetting { get; set; }
     }
 }

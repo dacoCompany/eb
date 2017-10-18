@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
@@ -94,6 +95,17 @@ namespace Web.eBado.Helpers
                 LocationId = location.Id
             });
 
+            userDetails.UserSetting = new UserSettingDbo
+            {
+                Language = Thread.CurrentThread.CurrentCulture.Name,
+                SearchInCZ = true,
+                SearchInSK = true,
+                SearchInHU = true,
+                SearchRadius = 30,
+                NotifyCommentOnContribution = true,
+                NotifyCommentOnAccount = true
+            };
+
             uow.UserDetailsRepository.Add(userDetails);
 
             if (createCompany)
@@ -137,6 +149,17 @@ namespace Web.eBado.Helpers
             companyDetails.SubCategory2CompanyDetails.Add(new SubCategory2CompanyDetailsDbo
             {
             });
+
+            companyDetails.CompanySetting = new CompanySettingDbo
+            {
+                NotifyCommentOnAccount = true,
+                NotifyCommentOnContribution = true,
+                NotifyAllMember = true,
+                SearchInHU = true,
+                SearchInSK = true,
+                SearchInCZ = true,
+                SearchRadius = 100
+            };
 
             uow.CompanyDetailsRepository.Add(companyDetails);
         }
