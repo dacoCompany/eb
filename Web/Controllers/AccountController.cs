@@ -181,7 +181,7 @@ namespace Web.eBado.Controllers
                     UserPermissions = userRole.UserRole2UserPermission.Select(ur => ur.UserPermission.Name),
                     HasCompany = userDetail.CompanyDetails2UserDetails.Any(cd => cd.IsActive == true)
                 };
-                foreach (var company in userDetail.CompanyDetails2UserDetails.Where(cd => cd.CompanyDetail.IsActive))
+                foreach (var company in userDetail.CompanyDetails2UserDetails.Where(cd => cd.IsActive))
                 {
                     var companyDetail = company.CompanyDetail;
                     var companyRole = company.CompanyRole;
