@@ -51,11 +51,11 @@ namespace eBado.BusinessObjects
             this.configuration = configuration;
         }
 
-        public int UploadFiles(IEnumerable<FileEntity> files, string batchId)
+        public int UploadFiles(IEnumerable<FileEntity> files, string batchId, int companyId)
         {
             var container = GetAzureBlobContainer();
 
-            var batch = unitOfWork.BatchAttachmentRepository.FirstOrDefault(ba => ba.GuId == batchId);
+            var batch = unitOfWork.BatchAttachmentRepository.FirstOrDefault(ba => ba.GuId == batchId && ba.CompanyDetailsId == companyId);
             int fileCount = 0;
 
             foreach (var file in files)
@@ -240,11 +240,11 @@ namespace eBado.BusinessObjects
             return result;
         }
 
-        public string CreateBatch(string name, string description)
+        public string CreateBatch(string name, string description, int companyId)
         {
             var guid = Guid.NewGuid();
 
-            var batchDbo = new BatchAttachmentDbo { Name = name, GuId = guid.ToString(), Description = description, CompanyDetailsId = 2 };
+            var batchDbo = new BatchAttachmentDbo { Name = name, GuId = guid.ToString(), Description = description, CompanyDetailsId = companyId };
 
             unitOfWork.BatchAttachmentRepository.Add(batchDbo);
             unitOfWork.Commit();
@@ -267,6 +267,7 @@ namespace eBado.BusinessObjects
             {
                 throw new ArgumentException("Invalid company identifier.", nameof(companyId));
             }
+
             var resposne = new Collection<BatchEntity>();
 
             foreach (var batch in companyDbo.BatchAttachments)

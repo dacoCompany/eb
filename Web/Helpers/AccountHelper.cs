@@ -67,7 +67,7 @@ namespace Web.eBado.Helpers
 
         public void RegisterCompany(RegisterCompanyModel model, IUnitOfWork uow)
         {
-            var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Name == UserRole.StandardUser.ToString());
+            var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Name == UserRole.User.ToString());
             var companyType = uow.CompanyTypeRepository.FirstOrDefault(ct => ct.Name == model.CompanyModel.CompanyType.ToString());
             var companyRoleId = uow.CompanyRoleRepository.FirstOrDefault(cr => cr.Name == CompanyRole.Owner.ToString()).Id;
             var location = uow.LocationRepository.FirstOrDefault(l => l.PostalCode == model.UserModel.PostalCode);
@@ -124,7 +124,7 @@ namespace Web.eBado.Helpers
 
         public void RegisterUser(RegisterUserModel model, IUnitOfWork uow)
         {
-            var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Name == UserRole.StandardUser.ToString());
+            var userRole = uow.UserRoleRepository.FirstOrDefault(r => r.Name == UserRole.User.ToString());
             var location = uow.LocationRepository.FirstOrDefault(l => l.Id.ToString() == model.PostalCode);
             string salt = GenerateSalt();
 
@@ -148,6 +148,17 @@ namespace Web.eBado.Helpers
                 IsBillingAddress = true,
                 LocationId = location.Id
             });
+
+            userDetails.UserSetting = new UserSettingDbo
+            {
+                Language = "sk-SK",
+                NotifyCommentOnAccount = true,
+                NotifyCommentOnContribution = true,
+                SearchInCZ = true,
+                SearchInHU = true,
+                SearchInSK = true,
+                SearchRadius = 50
+            };
 
             uow.UserDetailsRepository.Add(userDetails);
             uow.Commit();

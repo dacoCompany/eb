@@ -61,8 +61,9 @@ namespace Web.eBado.Controllers
                 });
 
                 var fileEntities = Mapper.Map<ICollection<FileEntity>>(files);
+                int companyId = GetActiveCompany();
 
-                int uploadedCount = filesBo.UploadFiles(fileEntities, batchId);
+                int uploadedCount = filesBo.UploadFiles(fileEntities, batchId, companyId);
 
                 return files.Count == uploadedCount ? Json("Success", JsonRequestBehavior.AllowGet) : Json("Some files are not supported.", JsonRequestBehavior.AllowGet);
             }
@@ -170,6 +171,12 @@ namespace Web.eBado.Controllers
             }
 
             return fileCollection;
+        }
+
+        private int GetActiveCompany()
+        {
+            var session = Session["User"] as SessionModel;
+            return session.Companies.First(c => c.IsActive).Id;
         }
     }
 }

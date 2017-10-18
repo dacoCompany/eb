@@ -5,7 +5,7 @@ namespace eBado.BusinessObjects
 {
     public interface IFilesBusinessObjects
     {
-        int UploadFiles(IEnumerable<FileEntity> files, string batchId);
+        int UploadFiles(IEnumerable<FileEntity> files, string batchId, int companyId);
 
         bool DeleteFile(string fileName);
 
@@ -15,7 +15,7 @@ namespace eBado.BusinessObjects
 
         AttachmentGalleryEntity GetBatchFiles(string batchId);
 
-        string CreateBatch(string name, string description);
+        string CreateBatch(string name, string description, int companyId);
 
         ICollection<BatchEntity> GetBatches(int companyId);
     }

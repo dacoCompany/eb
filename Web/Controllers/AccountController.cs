@@ -127,7 +127,8 @@ namespace Web.eBado.Controllers
             try
             {
                 var model = new BatchGalleryModel();
-                var entities = fileBo.GetBatches(2);
+                int companyId = GetActiveCompany();
+                var entities = fileBo.GetBatches(companyId);
 
                 Mapper.Initialize(cfg =>
                 {
@@ -178,7 +179,7 @@ namespace Web.eBado.Controllers
                     UserPermissions = userRole.UserRole2UserPermission.Select(ur => ur.UserPermission.Name),
                     HasCompany = userDetail.CompanyDetails2UserDetails.Any(cd => cd.IsActive == true)
                 };
-                foreach (var company in userDetail.CompanyDetails2UserDetails)
+                foreach (var company in userDetail.CompanyDetails2UserDetails.Where(cd => cd.CompanyDetail.IsActive))
                 {
                     var companyDetail = company.CompanyDetail;
                     var companyRole = company.CompanyRole;
@@ -232,9 +233,9 @@ namespace Web.eBado.Controllers
                         {
                             accountHelper.RegisterUser(model, uow);
                         }
-                        catch
+                        catch (Exception ex)
                         {
-
+                            throw;
                         }
                     }
                 }
@@ -313,18 +314,27 @@ namespace Web.eBado.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateBatch(BatchGalleryModel model)
         {
-            string batchUniqueId = fileBo.CreateBatch(model.Name, model.Description);
+            int companyId = GetActiveCompany();
+            string batchUniqueId = fileBo.CreateBatch(model.Name, model.Description, companyId);
             EntlibLogger.LogInfo("File", "Create Batch", $"Created new batch with id: {batchUniqueId}", new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Account" });
             return RedirectToAction("EditAccountGallery", new { batchId = batchUniqueId });
         }
         #endregion
 
         #region Private methods
+
         private bool UserNotAuthenticated()
         {
             var session = (SessionModel)Session["User"];
             return !Request.IsAuthenticated || session == null ? true : false;
         }
+
+        private int GetActiveCompany()
+        {
+            var session = Session["User"] as SessionModel;
+            return session.Companies.First(c => c.IsActive).Id;
+        }
+
         #endregion
     }
 }
