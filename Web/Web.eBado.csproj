@@ -232,13 +232,15 @@
     <Compile Include="Models\Account\BatchModel.cs" />
     <Compile Include="Models\Account\CategoriesModel.cs" />
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
-    <Compile Include="Models\Account\ChangeSettingsModel.cs" />
     <Compile Include="Models\Account\ForgotPasswordModel.cs" />
+    <Compile Include="Models\Account\LanguageModel.cs" />
     <Compile Include="Models\Account\LoginModel.cs" />
     <Compile Include="Models\Account\CompanyModel.cs" />
+    <Compile Include="Models\Account\NotificationModel.cs" />
     <Compile Include="Models\Account\RegistrationModel.cs" />
+    <Compile Include="Models\Account\SearchSettingsModel.cs" />
     <Compile Include="Models\Account\UserModel.cs" />
-    <Compile Include="Models\Account\UserAccountSettingsModel.cs" />
+    <Compile Include="Models\Account\AccountSettingsModel.cs" />
     <Compile Include="Models\Email\RegisterEmailModel.cs" />
     <Compile Include="Models\MvcExtensions\ModelStateExtensions.cs" />
     <Compile Include="Models\Shared\AttachmentGalleryModel.cs" />

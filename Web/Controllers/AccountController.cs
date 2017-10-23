@@ -87,9 +87,8 @@ namespace Web.eBado.Controllers
             {
                 return RedirectToAction("Login", "Account", new { returnUrl = currentUrl });
             }
-            ChangeSettingsModel model = new ChangeSettingsModel();
-            model.Title = "Ing.";
-            return View(model);
+           
+            return View();
         }
 
         [AllowAnonymous]
@@ -298,7 +297,7 @@ namespace Web.eBado.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult ChangeSettings(ChangeSettingsModel model)
+        public ActionResult ChangeSettings(AccountSettingsModel model)
         {
             return View(model);
         }
