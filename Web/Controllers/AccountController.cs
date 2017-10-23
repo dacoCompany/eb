@@ -87,7 +87,7 @@ namespace Web.eBado.Controllers
             {
                 return RedirectToAction("Login", "Account", new { returnUrl = currentUrl });
             }
-           
+
             return View();
         }
 
@@ -129,8 +129,14 @@ namespace Web.eBado.Controllers
             try
             {
                 var model = new BatchGalleryModel();
-                int companyId = GetActiveCompany();
-                var entities = fileBo.GetBatches(companyId);
+                int? companyId = GetActiveCompany();
+
+                if (companyId == null)
+                {
+                    return new HttpUnauthorizedResult();
+                }
+
+                var entities = fileBo.GetBatches(companyId.Value);
 
                 Mapper.Initialize(cfg =>
                 {
@@ -220,61 +226,108 @@ namespace Web.eBado.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Registration(RegistrationModel model)
+        public ActionResult RegisterUser(RegistrationModel model)
         {
-            using (var uow = NinjectResolver.GetInstance<IUnitOfWork>())
+            EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt with e-mail address: {model.UserModel.Email}", diagnosticLogConstant);
+
+            if (!ModelState.IsValid)
             {
-                EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt with e-mail address: {model.UserModel.Email}", diagnosticLogConstant);
-                bool isRegistrationWithCompany = model.CompanyModel.CompanyType != 0;
+                return View("RegisterUser", model);
+            }
 
-                if (!ModelState.IsValid)
+            var validationResult = new ValidationResultCollection();
+
+            AccountValidator.ValidateUserRegistration(unitOfWork, validationResult, model.UserModel);
+            if (validationResult.Any())
+            {
+                ModelState.AddValidationErrors(validationResult);
+            }
+
+            if (AccountHelper.IsValidCaptcha())
+            {
+                if (ModelState.IsValid)
                 {
-                    if (isRegistrationWithCompany)
-                    {
-                        accountHelper.InitializeAllCategories(model.CompanyModel);
-                        return View("RegisterCompany", model);
-                    }
-                    else
-                    {
-                        return View("RegisterUser", model);
-                    }
+                    accountHelper.RegisterUser(unitOfWork, model.UserModel, true);
                 }
-
-                var validationResult = new ValidationResultCollection();
-
-                AccountValidator.ValidateUserRegistration(uow, validationResult, model.UserModel);
-                if (isRegistrationWithCompany)
+                else
                 {
-                    AccountValidator.ValidateCompanyRegistration(uow, validationResult, model.CompanyModel);
-                }
-
-                if (validationResult.Any())
-                {
-                    ModelState.AddValidationErrors(validationResult);
-                }
-
-                if (AccountHelper.IsValidCaptcha())
-                {
-                    if (ModelState.IsValid)
-                    {
-                        accountHelper.Registration(model, uow, isRegistrationWithCompany);
-                    }
-                    else
-                    {
-                        if (isRegistrationWithCompany)
-                        {
-                            accountHelper.InitializeAllCategories(model.CompanyModel);
-                            return View("RegisterCompany", model);
-                        }
-                        else
-                        {
-                            return View("RegisterUser", model);
-                        }
-                    }
+                    return View("RegisterUser", model);
                 }
             }
 
             return RedirectToAction("Login", "Account");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult RegisterCompany(RegistrationModel model)
+        {
+            EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt (user & company) with e-mail address: {model.UserModel.Email}", diagnosticLogConstant);
+
+            if (!ModelState.IsValid)
+            {
+                accountHelper.InitializeAllCategories(model.CompanyModel);
+                return View("RegisterCompany", model);
+            }
+
+            var validationResult = new ValidationResultCollection();
+
+            AccountValidator.ValidateUserRegistration(unitOfWork, validationResult, model.UserModel);
+            AccountValidator.ValidateCompanyRegistration(unitOfWork, validationResult, model.CompanyModel);
+            if (validationResult.Any())
+            {
+                ModelState.AddValidationErrors(validationResult);
+                accountHelper.InitializeAllCategories(model.CompanyModel);
+                return View("RegisterCompany", model);
+            }
+
+            if (AccountHelper.IsValidCaptcha())
+            {
+                var userDetail = accountHelper.RegisterUser(unitOfWork, model.UserModel);
+                accountHelper.RegisterCompany(unitOfWork, model.CompanyModel, userDetail);
+            }
+
+            return RedirectToAction("Login", "Account");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult RegisterCompanySolo(CompanyModel model)
+        {
+            var session = Session["User"] as SessionModel;
+            EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt (company) with e-mail address: {session.Email}", diagnosticLogConstant);
+
+            if (!ModelState.IsValid)
+            {
+                //TODO: Create RegisterCompanySolo view
+                ////return View("RegisterCompany", model);
+            }
+
+            var validationResult = new ValidationResultCollection();
+
+            AccountValidator.ValidateCompanyRegistration(unitOfWork, validationResult, model);
+            if (validationResult.Any())
+            {
+                ModelState.AddValidationErrors(validationResult);
+            }
+
+            if (AccountHelper.IsValidCaptcha())
+            {
+                if (ModelState.IsValid)
+                {
+                    var userDetail = unitOfWork.UserDetailsRepository.FindById(session.Id);
+                    accountHelper.RegisterCompany(unitOfWork, model, userDetail);
+                }
+                else
+                {
+                    //TODO: Create RegisterCompanySolo view
+                    ////return View("RegisterCompany", model);
+                }
+            }
+
+            return RedirectToAction("ChangeSettings", "Account");
         }
 
         [HttpPost]
@@ -315,8 +368,14 @@ namespace Web.eBado.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateBatch(BatchGalleryModel model)
         {
-            int companyId = GetActiveCompany();
-            string batchUniqueId = fileBo.CreateBatch(model.Name, model.Description, companyId);
+            int? companyId = GetActiveCompany();
+
+            if (companyId == null)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            string batchUniqueId = fileBo.CreateBatch(model.Name, model.Description, companyId.Value);
             EntlibLogger.LogInfo("File", "Create Batch", $"Created new batch with id: {batchUniqueId}", diagnosticLogConstant);
             return RedirectToAction("EditAccountGallery", new { batchId = batchUniqueId });
         }
@@ -330,10 +389,10 @@ namespace Web.eBado.Controllers
             return !Request.IsAuthenticated || session == null ? true : false;
         }
 
-        private int GetActiveCompany()
+        private int? GetActiveCompany()
         {
             var session = Session["User"] as SessionModel;
-            return session.Companies.First(c => c.IsActive).Id;
+            return session.Companies.First(c => c.IsActive)?.Id;
         }
 
         #endregion

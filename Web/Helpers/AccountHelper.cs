@@ -66,35 +66,33 @@ namespace Web.eBado.Helpers
             return false;
         }
 
-        public void Registration(RegistrationModel model, IUnitOfWork uow, bool createCompany = false)
+        public UserDetailDbo RegisterUser(IUnitOfWork uow, UserModel model, bool canCommit = false)
         {
             try
             {
                 var userRole = uow.UserRoleRepository.FindFirstOrDefault(r => r.Name == UserRole.User.ToString());
-                int locationId = int.Parse(model.UserModel.PostalCode);
-                var location = uow.LocationRepository.FindFirstOrDefault(l => l.Id == locationId);
                 string salt = GenerateSalt();
 
                 var userDetails = new UserDetailDbo
                 {
-                    Email = model.UserModel.Email,
-                    Password = EncodePassword(model.UserModel.Password, salt),
+                    Email = model.Email,
+                    Password = EncodePassword(model.Password, salt),
                     Salt = salt,
-                    Title = model.UserModel.Title,
-                    FirstName = model.UserModel.FirstName,
-                    Surname = model.UserModel.Surname,
-                    PhoneNumber = model.UserModel.PhoneNumber,
-                    AdditionalPhoneNumber = string.IsNullOrEmpty(model.UserModel.AdditionalPhoneNumber) ? null : model.UserModel.AdditionalPhoneNumber,
-                    DisplayName = $"{model.UserModel.FirstName} {model.UserModel.Surname}",
+                    Title = model.Title,
+                    FirstName = model.FirstName,
+                    Surname = model.Surname,
+                    PhoneNumber = model.PhoneNumber,
+                    AdditionalPhoneNumber = string.IsNullOrEmpty(model.AdditionalPhoneNumber) ? null : model.AdditionalPhoneNumber,
+                    DisplayName = GetUserDisplayName(model),
                     UserRole = userRole
                 };
 
                 userDetails.Addresses.Add(new AddressDbo
                 {
-                    Street = model.UserModel.Street,
-                    Number = model.UserModel.StreetNumber,
+                    Street = model.Street,
+                    Number = model.StreetNumber,
                     IsBillingAddress = true,
-                    LocationId = location.Id
+                    LocationId = int.Parse(model.PostalCode)
                 });
 
                 userDetails.UserSetting = new UserSettingDbo
@@ -110,28 +108,24 @@ namespace Web.eBado.Helpers
 
                 uow.UserDetailsRepository.Add(userDetails);
 
-                if (createCompany)
-                {
-                    CreateCompany(uow, model.CompanyModel, userDetails.Id);
-                }
+                if (canCommit)
+                    uow.Commit();
 
-                uow.Commit();
+                EntlibLogger.LogInfo("Account", "Register", $"Successful registration with e-mail address: {model.Email}", new DiagnosticsLogging { DiagnosticsArea = "Helper", DiagnosticsCategory = "Register" });
 
-                EntlibLogger.LogInfo("Account", "Register", $"Successful registration with e-mail address: {model.UserModel.Email}", new DiagnosticsLogging { DiagnosticsArea = "Helper", DiagnosticsCategory = "Register" });
+                return userDetails;
             }
             catch (Exception ex)
             {
-                EntlibLogger.LogError("Account", "Register", $"Failed registration with e-mail address: {model.UserModel.Email}", new DiagnosticsLogging { DiagnosticsArea = "Helper", DiagnosticsCategory = "Register" }, ex);
+                EntlibLogger.LogError("Account", "Register", $"Failed registration with e-mail address: {model.Email}", new DiagnosticsLogging { DiagnosticsArea = "Helper", DiagnosticsCategory = "Register" }, ex);
                 throw;
             }
         }
 
-        public void CreateCompany(IUnitOfWork uow, CompanyModel model, int userId)
+        public void RegisterCompany(IUnitOfWork uow, CompanyModel model, UserDetailDbo userDetail)
         {
             var companyTypeId = uow.CompanyTypeRepository.FindFirstOrDefault(ct => ct.Name == model.CompanyType.ToString()).Id;
             var companyRoleId = uow.CompanyRoleRepository.FindFirstOrDefault(cr => cr.Name == CompanyRole.Owner.ToString()).Id;
-            int companyLocationId = int.Parse(model.CompanyPostalCode);
-            var companyLocation = uow.LocationRepository.FindFirstOrDefault(l => l.Id == companyLocationId);
             var categoriesIds = uow.SubCategoryRepository.FindWhere(a => a.Name.Equals(model.Categories.SelectedCategories));
 
             var companyDetails = new CompanyDetailDbo
@@ -148,12 +142,12 @@ namespace Web.eBado.Helpers
                 Street = model.CompanyStreet,
                 Number = model.CompanyStreetNumber,
                 IsBillingAddress = true,
-                LocationId = companyLocation.Id
+                LocationId = int.Parse(model.CompanyPostalCode)
             });
             companyDetails.CompanyDetails2UserDetails.Add(new CompanyDetails2UserDetailsDbo
             {
                 CompanyRoleId = companyRoleId,
-                UserDetailsId = userId,
+                UserDetail = userDetail
             });
 
             companyDetails.SubCategory2CompanyDetails.Add(new SubCategory2CompanyDetailsDbo
@@ -172,6 +166,8 @@ namespace Web.eBado.Helpers
             };
 
             uow.CompanyDetailsRepository.Add(companyDetails);
+
+            uow.Commit();
         }
 
         public void InitializeAllCategories(CompanyModel model)
@@ -220,6 +216,25 @@ namespace Web.eBado.Helpers
             }
 
             return allCars.AsEnumerable();
+        }
+
+        private string GetUserDisplayName(UserModel model)
+        {
+            if (string.IsNullOrEmpty(model.FirstName) || string.IsNullOrEmpty(model.Surname))
+            {
+                int index = model.Email.LastIndexOf("@");
+
+                if (index > 0)
+                {
+                    return model.Email.Substring(0, index);
+                }
+
+                throw new Exception("Invalid email format.");
+            }
+            else
+            {
+                return $"{model.FirstName} {model.Surname}";
+            }
         }
 
         #endregion

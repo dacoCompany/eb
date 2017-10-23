@@ -13,7 +13,7 @@
     }
 </script>
 
-@using (Html.BeginForm("Registration", "Account", FormMethod.Post, new { id = "htmlForm" }))
+@using (Html.BeginForm("RegisterUser", "Account", FormMethod.Post, new { id = "htmlForm" }))
 {
     @Html.AntiForgeryToken()
 

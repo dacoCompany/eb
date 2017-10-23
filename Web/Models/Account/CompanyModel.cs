@@ -15,6 +15,8 @@ namespace Web.eBado.Models.Account
 
         public string CompanyName { get; set; }
 
+        public string CompanyEmail { get; set; }
+
         public int? CompanyIco { get; set; }
 
         public int? CompanyDic { get; set; }
