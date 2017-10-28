@@ -1,8 +1,8 @@
 ﻿using Infrastructure.Common.DB;
-using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Web;
+using System.Text;
 using System.Web.Mvc;
 using Web.eBado.IoC;
 
@@ -16,12 +16,14 @@ namespace Web.eBado.Controllers
             var location = new object();
             using (var uow = NinjectResolver.GetInstance<IUnitOfWork>())
             {
+
                 location = uow.LocationRepository.FindWhere(x => x.PostalCode.StartsWith(prefix)
-                    || x.PostalCode.Replace(" ", "").StartsWith(prefix.Replace(" ", ""))).Take(10).AsEnumerable()
+                    || x.PostalCode.Replace(" ", "").StartsWith(prefix.Replace(" ", ""))
+                    || x.City.StartsWith(prefix)).Take(10).AsEnumerable()
                     .Select(loc => new
                     {
                         val = loc.Id,
-                        label = $"{loc.PostalCode}-{loc.City}"
+                        label = $"{loc.PostalCode} - {loc.District} - {loc.City}"
                     }).ToList();
             }
 
@@ -42,5 +44,20 @@ namespace Web.eBado.Controllers
             ViewBag.MultiselectCountry = new MultiSelectList(categoriesList);
         }
 
+        private static string RemoveDiacritics(string city)
+        {
+            var normalizedString = city.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder();
+
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
+        }
     }
 }

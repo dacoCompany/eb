@@ -147,6 +147,7 @@
 			[Country] VARCHAR(100),
 			[PostalCode] VARCHAR(100),
 			[City] VARCHAR(100),
+			[CityAlias] VARCHAR(100),
 			[County] VARCHAR(100),
 			[District] VARCHAR(100),
 			[Lat] DECIMAL(10,4),

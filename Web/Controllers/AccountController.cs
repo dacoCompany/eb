@@ -7,7 +7,6 @@ using AutoMapper;
 using eBado.BusinessObjects;
 using eBado.Entities;
 using Web.eBado.Helpers;
-using Web.eBado.IoC;
 using Web.eBado.Models.Account;
 using Web.eBado.Models.MvcExtensions;
 using Web.eBado.Models.Shared;
@@ -18,6 +17,7 @@ using WebAPIFactory.Logging.Core.Diagnostics;
 using System.Linq;
 using System.Data.Entity;
 using System.Web.Security;
+using System.Collections.Generic;
 
 namespace Web.eBado.Controllers
 {
@@ -87,8 +87,54 @@ namespace Web.eBado.Controllers
             {
                 return RedirectToAction("Login", "Account", new { returnUrl = currentUrl });
             }
+            var model = new AccountSettingsModel();
+            model.UserModel = new UserModel
+            {
+                PostalCode = "123456"
+            };
+            model.CompanyModel = new CompanyModel
+            {
+                CompanyPostalCode = "987654",
+                Categories = new CategoriesModel
+                {
+                    SelectedCategories = new string[] {"daco1","daco2"}.ToArray()
+                }
+            };
+            var daco = new SelectListItem            {
+                Value = "1",
+                Text = "daco"
+            };
+            var daco2 = new SelectListItem
+            {
+                Value = "2",
+                Text = "daco2"
+            };
+            Collection<SelectListItem> dacoIne = new Collection<SelectListItem>();
+            var daco3 = new UserRoleModel {
+                UserID = 1,
+                SelectedRoleId=1,
+                UserEmail="mail@email.com"
+            };
+            var daco4 = new UserRoleModel
+            {
+                UserID = 2,
+                SelectedRoleId = 1,
+                UserEmail = "mail2@email.com"
+            };
+            List<UserRoleModel> userRoles = new List<UserRoleModel>();
+            userRoles.Add(daco3);
+            userRoles.Add(daco4);
+            dacoIne.Add(daco);
+            dacoIne.Add(daco2);
+            model.EditMembersAndRolesModel = new EditMembersAndRolesModel
+            {
+                AllRoles = dacoIne,
+                SelectedRoleId = 2,
+                UserRoles = userRoles
+            };
 
-            return View();
+            accountHelper.InitializeAllCategories(model.CompanyModel);
+            return View(model);
         }
 
         [AllowAnonymous]

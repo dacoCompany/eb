@@ -232,8 +232,10 @@
     <Compile Include="Models\Account\BatchModel.cs" />
     <Compile Include="Models\Account\CategoriesModel.cs" />
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
+    <Compile Include="Models\Account\CompanyMemberNotificationModel.cs" />
+    <Compile Include="Models\Account\CompanyPermissionsModel.cs" />
+    <Compile Include="Models\Account\EditMembersAndRolesModel.cs" />
     <Compile Include="Models\Account\ForgotPasswordModel.cs" />
-    <Compile Include="Models\Account\LanguageModel.cs" />
     <Compile Include="Models\Account\LoginModel.cs" />
     <Compile Include="Models\Account\CompanyModel.cs" />
     <Compile Include="Models\Account\NotificationModel.cs" />
@@ -241,6 +243,7 @@
     <Compile Include="Models\Account\SearchSettingsModel.cs" />
     <Compile Include="Models\Account\UserModel.cs" />
     <Compile Include="Models\Account\AccountSettingsModel.cs" />
+    <Compile Include="Models\Account\UserRoleModel.cs" />
     <Compile Include="Models\Email\RegisterEmailModel.cs" />
     <Compile Include="Models\MvcExtensions\ModelStateExtensions.cs" />
     <Compile Include="Models\Shared\AttachmentGalleryModel.cs" />

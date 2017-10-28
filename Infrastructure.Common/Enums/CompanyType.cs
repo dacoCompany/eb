@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using Infrastructure.Resources;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure.Common.Enums
 {

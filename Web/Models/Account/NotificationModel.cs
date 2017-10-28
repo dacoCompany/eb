@@ -10,6 +10,6 @@ namespace Web.eBado.Models.Account
         public bool NotifyCommentOnContribution { get; set; }
         public bool NotifyCommentOnAccount { get; set; }
         public bool NotifyAllMember { get; set; }
-        public string[] SelectedMembers { get; set; }
+        public ICollection<CompanyMemberNotificationModel> MembersNotifications { get; set; }
     }
 }

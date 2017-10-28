@@ -2,8 +2,8 @@
     float: left;
     width: 20%;
     height: 100%;
-    position:relative;
-    z-index:3;
+    position: relative;
+    z-index: 3;
 }
 
     div.tab input {
@@ -65,7 +65,7 @@
 @media(max-width:1200px) {
     .tabcontent-gallery {
         margin-left: 70px;
-        width:70%;
+        width: 70%;
     }
 
     .tabcontent {
@@ -193,8 +193,8 @@ div.btm {
 div.btm-desc {
     width: 100%;
     border-bottom: 1px solid #ccc;
-    text-align:left;
-    height:50px;
+    text-align: left;
+    height: 50px;
 }
 
 .desc {
@@ -203,7 +203,7 @@ div.btm-desc {
 }
 
 .chBox {
-    float:left;
+    float: left;
     margin: 15px 0 0 20px;
 }
 
@@ -281,22 +281,179 @@ input[type=checkbox] {
 
 /************ACCORDION*************/
 .accordion-toggle {
-    text-align:left;
+    text-align: left;
     cursor: pointer;
-    width:100%;
-    font-size:16px;
-    color:#fff;
-    background-color:#00b6ff;
+    width: 100%;
+    font-size: 16px;
+    color: #fff;
+    background-color: #00b6ff;
     margin-bottom: 4px;
-    text-transform:uppercase;
-    float:left;
-    z-index:2;
+    text-transform: uppercase;
+    float: left;
+    z-index: 2;
 }
-.accordion-main{
+
+.accordion-main {
     padding: 9px;
 }
+
 .accordion-content {
-    width:100%;
-    float:left;
-    padding:30px 0 15px 0;
+    width: 100%;
+    float: left;
+    padding: 30px 0 15px 0;
+}
+
+.settings_wrapper {
+    border-bottom: 1px solid #e6e6e6;
+    overflow: hidden;
+    width: 98%;
+    margin-left: 10px;
+}
+
+    .settings_wrapper div {
+        height: 40px;
+    }
+
+.email_settings_wrapper {
+    overflow: hidden;
+    width: 98%;
+    margin-left: 30px;
+}
+
+    .email_settings_wrapper div {
+        height: 25px;
+    }
+
+.role_base {
+    float: left;
+}
+
+.role_settings_wrapper {
+    overflow: hidden;
+    width: 100%;
+}
+
+    .role_settings_wrapper div {
+        height: 25px;
+    }
+
+.text_div {
+    margin-top: 15px;
+    float: left;
+    margin-right: 10px;
+    width: 80%;
+}
+
+.toggle_div {
+    overflow: hidden;
+    margin: 10px;
+    height: 30px;
+}
+
+.role_toggle_div {
+    float: left;
+    overflow: hidden;
+    margin: 0 10px 6px 0;
+    height: 30px;
+}
+
+.role_text_div {
+    margin-top: 1px;
+}
+
+.email_text_div {
+    margin-top: 12px;
+}
+
+.email_toggle_div {
+    float: left;
+    overflow: hidden;
+    margin: 10px;
+    height: 30px;
+}
+
+.box_div {
+    overflow: hidden;
+    height: 40px;
+    margin-top: 10px;
+}
+
+@media screen and (max-width: 400px) {
+    .text_div {
+        float: none;
+        margin-right: 0;
+        width: auto;
+        border: 0;
+    }
+}
+
+.edit_container {
+    float: left;
+    width: 100%;
+    text-align: left;
+}
+
+.member_list_text {
+    min-width: 100%;
+    font-size: 20px;
+    text-align: left;
+    margin: 55px 0 10px 5px;
+}
+
+.member_list_wrapper {
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+    height: 50px;
+}
+
+.member_blocks {
+    display: block;
+    box-sizing: border-box
+}
+
+.member_left {
+    width: 20%;
+    float: left;
+}
+
+.member_middle {
+    margin: 6px 0 0 15px;
+    width: auto;
+    float: left;
+}
+
+.member_right{
+    width:20%;
+    float:right;
+    margin-bottom: 5px;
+}
+
+    .member_list_wrapper:before,
+    .member_list_wrapper:after {
+        content: " "; 
+        display: table;
+    }
+
+    .member_list_wrapper:after {
+        clear: both;
+    }
+
+@media (max-width: 500px) {
+    .member_blocks {
+        width: 100%;
+    }
+
+    .member_list_wrapper {
+        width: 100%;
+        height:auto;
+    }
+    .member_left{
+        margin-bottom:10px;
+    }
+    .member_middle{
+        margin: 0 auto;
+        float:none;
+        text-align:center;
+    }
 }

@@ -188,7 +188,7 @@
                                     @Html.DropDownListFor(m => m.CompanyModel.Categories.SelectedCategories, Model.CompanyModel.Categories.AllCategories, new { @class = "form-control chosen-select", @multiple = "true", data_placeholder = "Choose your business area..." })
 
                                     <label class="label-form" for="email">
-                                        @Html.ValidationMessageFor(model => model.CompanyModel.Categories)
+                                        @Html.ValidationMessageFor(model => model.CompanyModel.Categories.SelectedCategories)
                                     </label>
                                 </div>
 

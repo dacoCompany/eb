@@ -72,7 +72,7 @@ namespace Web.eBado.Helpers
             {
                 var userRole = uow.UserRoleRepository.FindFirstOrDefault(r => r.Name == UserRole.User.ToString());
                 string salt = GenerateSalt();
-
+                int postalCodeId = GetLocation(model.PostalCode, uow);
                 var userDetails = new UserDetailDbo
                 {
                     Email = model.Email,
@@ -92,7 +92,7 @@ namespace Web.eBado.Helpers
                     Street = model.Street,
                     Number = model.StreetNumber,
                     IsBillingAddress = true,
-                    LocationId = int.Parse(model.PostalCode)
+                    LocationId = postalCodeId
                 });
 
                 userDetails.UserSetting = new UserSettingDbo
@@ -127,6 +127,7 @@ namespace Web.eBado.Helpers
             var companyTypeId = uow.CompanyTypeRepository.FindFirstOrDefault(ct => ct.Name == model.CompanyType.ToString()).Id;
             var companyRoleId = uow.CompanyRoleRepository.FindFirstOrDefault(cr => cr.Name == CompanyRole.Owner.ToString()).Id;
             var categoriesIds = uow.SubCategoryRepository.FindWhere(a => a.Name.Equals(model.Categories.SelectedCategories));
+            int postalCodeId = GetLocation(model.CompanyPostalCode, uow);
 
             var companyDetails = new CompanyDetailDbo
             {
@@ -136,13 +137,14 @@ namespace Web.eBado.Helpers
                 Ico = model.CompanyIco,
                 Dic = model.CompanyDic,
                 CompanyTypeId = companyTypeId,
+                Email = model.CompanyEmail
             };
             companyDetails.Addresses.Add(new AddressDbo
             {
                 Street = model.CompanyStreet,
                 Number = model.CompanyStreetNumber,
                 IsBillingAddress = true,
-                LocationId = int.Parse(model.CompanyPostalCode)
+                LocationId = postalCodeId
             });
             companyDetails.CompanyDetails2UserDetails.Add(new CompanyDetails2UserDetailsDbo
             {
@@ -237,6 +239,18 @@ namespace Web.eBado.Helpers
             }
         }
 
+        private int GetLocation(string postalCode, IUnitOfWork uow)
+        {
+            var postalCodeDbo = uow.LocationRepository.FindById(int.Parse(postalCode));
+            if (postalCodeDbo == null)
+            {
+                var location = uow.LocationRepository.FindFirstOrDefault(x => x.PostalCode.StartsWith(postalCode)
+                       || x.PostalCode.Replace(" ", "").StartsWith(postalCode.Replace(" ", ""))
+                       || x.City.Contains(postalCode)).Id;
+                return location;
+            }
+            return postalCodeDbo.Id;
+        }
         #endregion
     }
 }

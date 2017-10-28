@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Enums\Countries.cs" />
+    <Compile Include="Enums\Languages.cs" />
     <Compile Include="Enums\UserPermission.cs" />
     <Compile Include="Enums\CompanyPermission.cs" />
     <Compile Include="Enums\CompanyType.cs" />
