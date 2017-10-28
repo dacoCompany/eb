@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.eBado", "Web\Web.eBado.csproj", "{294EF68E-1610-424D-A1A7-8A7ADB988730}"
 EndProject
@@ -32,6 +32,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eBado.BusinessObjects", "eBado.BusinessObjects\eBado.BusinessObjects.csproj", "{0C9B2CB1-F730-4DE3-A0CD-7E05421C45D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eBado.Entities", "eBado.Entities\eBado.Entities.csproj", "{46C55C67-5CAA-411C-9E44-14C6E63FECD9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D33AE8E5-D30D-4E86-8B6E-1C2F770A0481}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet.config = NuGet.config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
