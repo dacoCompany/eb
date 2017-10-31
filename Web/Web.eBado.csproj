@@ -226,6 +226,7 @@
     <Compile Include="Helpers\AccountHelper.cs" />
     <Compile Include="Helpers\FilesHelper.cs" />
     <Compile Include="Helpers\ImageHandler.cs" />
+    <Compile Include="Helpers\SessionHelper.cs" />
     <Compile Include="IoC\NinjectResolver.cs" />
     <Compile Include="JsonNetResult.cs" />
     <Compile Include="Models\Account\BatchGalleryModel.cs" />

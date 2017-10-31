@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Web.eBado.Models.Account
 {
     public class NotificationModel
     {
+        public NotificationModel()
+        {
+            MembersNotifications = new Collection<CompanyMemberNotificationModel>();
+        }
+
         public bool NotifyCommentOnContribution { get; set; }
         public bool NotifyCommentOnAccount { get; set; }
         public bool NotifyAllMember { get; set; }

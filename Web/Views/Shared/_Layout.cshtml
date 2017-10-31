@@ -39,20 +39,20 @@
                                 <li>
                                     @if (session.IsActive == true)
                                     {
-                                        <a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Name<div id="down-triangle"></div></a>
+                                        <a href="" class="accountLink" id="@session.Name"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Name<div id="down-triangle"></div></a>
                                     }
                                     else
                                     {
-                                        <a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Companies.Where(c => c.IsActive).Select(c => c.Name)<div id="down-triangle"></div></a>
+                                        <a href="" class="accountLink" id="@session.Companies.FirstOrDefault(c => c.IsActive).Name"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Companies.FirstOrDefault(c => c.IsActive).Name<div id="down-triangle"></div></a>
                                     }
                                     <ul>
                                         @if (!session.IsActive)
                                         {
-                                            <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Name<div class="circle"></div></a></li>
+                                            <li><a href="" class="accountLink" id="@session.Name"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Name<div class="circle"></div></a></li>
                                         }
                                         @foreach (var company in session.Companies.Where(c => !c.IsActive))
                                         {
-                                            <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;@company.Name<div class="circle"></div></a></li>
+                                            <li><a href="" class="accountLink" id="@company.Name"><span class="glyphicon glyphicon-user"></span>&nbsp;@company.Name<div class="circle"></div></a></li>
                                         }
                                         <li><a href="#">Moje dopyty<div class="circle"></div></a></li>
                                         <li><a href="@Url.Action("ChangeSettings","Account")">Nastavenie<div class="circle"></div></a></li>
@@ -98,8 +98,24 @@
                     var langValue = $(this).attr('value');
                     $.ajax({
                         type: 'POST',
-                        url: '@Url.Action("SetLanguage", "Home")',
+                        url: '@Url.Action("SetLanguage", "Manage")',
                         data: { language: langValue },
+                        dataType: "text",
+                        statusCode: {
+                            302: setTimeout(function () {
+                                window.location.reload();
+                            }, 100)
+                        }
+                    });
+            });
+
+                $(".accountLink").click(function (event) {
+                 event.preventDefault();
+                 var accountName = $(this).attr('id');
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("SetAccount", "Manage")',
+                        data: { accountName: accountName },
                         dataType: "text",
                         statusCode: {
                             302: setTimeout(function () {
@@ -110,19 +126,11 @@
                 });
         </script>
 
-        @*<div class="e-wrapper">
-                @RenderBody()
-                <div class="e-pull-left"></div>
-                <div class="e-footer">
-                    <p>&copy; @DateTime.Now.Year - eBado Application</p>
-                </div>
-            </div>*@
-
 
         @RenderBody()
     </div>
     <footer class="site-footer">
-            <p>&copy; @DateTime.Now.Year - eBado Application</p>
+        <p>&copy; @DateTime.Now.Year - eBado Application</p>
     </footer>
 
 </body>

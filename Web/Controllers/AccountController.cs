@@ -25,6 +25,7 @@ namespace Web.eBado.Controllers
     public class AccountController : Controller
     {
         AccountHelper accountHelper;
+        SessionHelper sessionHelper;
         private readonly IConfiguration configuration;
         private readonly IUnitOfWork unitOfWork;
         private readonly IFilesBusinessObjects fileBo;
@@ -32,7 +33,8 @@ namespace Web.eBado.Controllers
 
         public AccountController(IConfiguration configuration, IUnitOfWork unitOfWork, IFilesBusinessObjects fileBo)
         {
-            this.accountHelper = new AccountHelper();
+            accountHelper = new AccountHelper();
+            sessionHelper = new SessionHelper();
             this.configuration = configuration;
             this.unitOfWork = unitOfWork;
             this.fileBo = fileBo;
@@ -87,51 +89,18 @@ namespace Web.eBado.Controllers
             {
                 return RedirectToAction("Login", "Account", new { returnUrl = currentUrl });
             }
-            var model = new AccountSettingsModel();
-            model.UserModel = new UserModel
+            AccountSettingsModel model = new AccountSettingsModel();
+            var session = Session["User"] as SessionModel;
+
+            if (session.IsActive)
             {
-                PostalCode = "123456"
-            };
-            model.CompanyModel = new CompanyModel
+                model = accountHelper.GetUserSettings(unitOfWork, session);
+            }
+            else
             {
-                CompanyPostalCode = "987654",
-                Categories = new CategoriesModel
-                {
-                    SelectedCategories = new string[] {"daco1","daco2"}.ToArray()
-                }
-            };
-            var daco = new SelectListItem            {
-                Value = "1",
-                Text = "daco"
-            };
-            var daco2 = new SelectListItem
-            {
-                Value = "2",
-                Text = "daco2"
-            };
-            Collection<SelectListItem> dacoIne = new Collection<SelectListItem>();
-            var daco3 = new UserRoleModel {
-                UserID = 1,
-                SelectedRoleId=1,
-                UserEmail="mail@email.com"
-            };
-            var daco4 = new UserRoleModel
-            {
-                UserID = 2,
-                SelectedRoleId = 1,
-                UserEmail = "mail2@email.com"
-            };
-            List<UserRoleModel> userRoles = new List<UserRoleModel>();
-            userRoles.Add(daco3);
-            userRoles.Add(daco4);
-            dacoIne.Add(daco);
-            dacoIne.Add(daco2);
-            model.EditMembersAndRolesModel = new EditMembersAndRolesModel
-            {
-                AllRoles = dacoIne,
-                SelectedRoleId = 2,
-                UserRoles = userRoles
-            };
+                model = accountHelper.GetCompanySettings(unitOfWork, session);
+            }
+
 
             accountHelper.InitializeAllCategories(model.CompanyModel);
             return View(model);
@@ -216,38 +185,8 @@ namespace Web.eBado.Controllers
 
             if (ModelState.IsValid)
             {
-                var userDetail = unitOfWork.UserDetailsRepository.FindWhere(ud => ud.Email.ToLower().Equals(model.Email.ToLower()))
-                    .Include(ud => ud.UserRole.UserRole2UserPermission.Select(ur => ur.UserPermission))
-                    .Include(ud => ud.CompanyDetails2UserDetails.Select(cd => cd.CompanyDetail))
-                    .Include(ud => ud.CompanyDetails2UserDetails.Select(cd => cd.CompanyRole.CompanyRole2CompanyPermission
-                      .Select(cr => cr.CompanyPermission))).FirstOrDefault();
-
-                var userRole = userDetail.UserRole;
-
-                SessionModel session = new SessionModel()
-                {
-                    Id = userDetail.Id,
-                    IsActive = true,
-                    Email = userDetail.Email,
-                    Name = userDetail.DisplayName,
-                    UserRole = userRole.Name,
-                    UserPermissions = userRole.UserRole2UserPermission.Select(ur => ur.UserPermission.Name),
-                    HasCompany = userDetail.CompanyDetails2UserDetails.Any(cd => cd.IsActive == true)
-                };
-                foreach (var company in userDetail.CompanyDetails2UserDetails.Where(cd => cd.IsActive))
-                {
-                    var companyDetail = company.CompanyDetail;
-                    var companyRole = company.CompanyRole;
-                    CompanySessionModel companySession = new CompanySessionModel()
-                    {
-                        Id = companyDetail.Id,
-                        IsActive = false,
-                        Name = companyDetail.Name,
-                        CompanyRole = companyRole.Name,
-                        CompanyPermissions = companyRole.CompanyRole2CompanyPermission.Select(cr => cr.CompanyPermission.Name)
-                    };
-                    session.Companies.Add(companySession);
-                }
+                int userDetailId = unitOfWork.UserDetailsRepository.FindFirstOrDefault(ud => ud.Email.ToLower().Equals(model.Email.ToLower())).Id;
+                var session = sessionHelper.SetUserSession(userDetailId, unitOfWork);
 
                 FormsAuthentication.SetAuthCookie(session.Email, true);
                 Session["User"] = session;

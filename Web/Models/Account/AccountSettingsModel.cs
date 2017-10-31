@@ -4,6 +4,16 @@ namespace Web.eBado.Models.Account
 {
     public class AccountSettingsModel
     {
+        public AccountSettingsModel()
+        {
+            PasswordModel = new ChangePasswordModel();
+            UserModel = new UserModel();
+            CompanyModel = new CompanyModel();
+            SearchModel = new SearchSettingsModel();
+            NotificationModel = new NotificationModel();
+            EditMembersAndRolesModel = new EditMembersAndRolesModel();
+        }
+
         public bool IsFacebookLogin { get; set; }
         public string SelectedLanguage { get; set; }
         public IEnumerable<string> CurrentCategories { get; set; }        

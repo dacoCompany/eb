@@ -2,6 +2,7 @@
 using Infrastructure.Common.Enums;
 using Infrastructure.Configuration;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -14,6 +15,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Xml;
 using Web.eBado.Models.Account;
+using Web.eBado.Models.Shared;
 using WebAPIFactory.Logging.Core;
 using WebAPIFactory.Logging.Core.Diagnostics;
 
@@ -172,6 +174,100 @@ namespace Web.eBado.Helpers
             uow.Commit();
         }
 
+        public AccountSettingsModel GetUserSettings(IUnitOfWork uow, SessionModel session)
+        {
+            AccountSettingsModel model = new AccountSettingsModel();
+
+            int userId = session.Id;
+            UserDetailDbo userDetails = uow.UserDetailsRepository.FindFirstOrDefault(ud => ud.Id == userId);
+            AddressDbo address = userDetails.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value);
+            UserSettingDbo userSettings = userDetails.UserSetting;
+            model.UserModel = new UserModel
+            {
+                AdditionalPhoneNumber = userDetails.AdditionalPhoneNumber,
+                Email = userDetails.Email,
+                FirstName = userDetails.FirstName,
+                PhoneNumber = userDetails.PhoneNumber,
+                PostalCode = address.Location.PostalCode,
+                Street = address.Street,
+                StreetNumber = address.Number,
+                Surname = userDetails.Surname,
+                Title = userDetails.Title
+            };
+            model.SearchModel = new SearchSettingsModel
+            {
+                SearchInCZ = userSettings.SearchInCZ,
+                SearchInHU = userSettings.SearchInHU,
+                SearchInSK = userSettings.SearchInSK,
+                SearchRadius = userSettings.SearchRadius.Value
+            };
+            model.SelectedLanguage = userSettings.Language;
+            model.EditMembersAndRolesModel.AllRoles = GetAllRoles();
+
+            return model;
+        }
+        public AccountSettingsModel GetCompanySettings(IUnitOfWork uow, SessionModel session)
+        {
+            AccountSettingsModel model = new AccountSettingsModel();
+            int companyId = session.Companies.FirstOrDefault(c => c.IsActive).Id;
+            CompanyDetailDbo companyDetails = uow.CompanyDetailsRepository.FindFirstOrDefault(cd => cd.Id == companyId);
+            AddressDbo address = companyDetails.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value);
+            CompanySettingDbo companySettings = companyDetails.CompanySetting;
+            model.CompanyModel = new CompanyModel
+            {
+                CompanyAdditionalPhoneNumber = companyDetails.AdditionalPhoneNumber,
+                CompanyDic = companyDetails.Dic,
+                CompanyEmail = companyDetails.Email,
+                CompanyIco = companyDetails.Ico,
+                CompanyName = companyDetails.Name,
+                CompanyPhoneNumber = companyDetails.PhoneNumber,
+                CompanyStreet = address.Street,
+                CompanyStreetNumber = address.Number,
+                CompanyPostalCode = address.Location.PostalCode,
+                Categories = new CategoriesModel
+                {
+                    SelectedCategories = new string[] { "daco1", "daco2" }.ToArray()
+                }
+            };
+            var allRoles = companyDetails.CompanyDetails2UserDetails.Select(cd => cd.CompanyRole)
+                .Select(x => new SelectListItem
+                {
+                    Value = x.Id.ToString(),
+                    Text = x.Name
+                });
+
+            var memberRoles = companyDetails.CompanyDetails2UserDetails.Select(cd => new UserRoleModel
+            {
+                UserID = cd.UserDetailsId,
+                UserEmail = cd.UserDetail.Email,
+                SelectedRoleId = cd.CompanyRoleId
+            }).ToList();
+
+            model.EditMembersAndRolesModel = new EditMembersAndRolesModel
+
+            {
+                AllRoles = GetAllRoles(companyDetails),
+                UserRoles = memberRoles,
+                Permissions = new CompanyPermissionsModel()
+            };
+            model.NotificationModel = new NotificationModel
+            {
+                NotifyCommentOnAccount = companySettings.NotifyCommentOnAccount,
+                NotifyCommentOnContribution = companySettings.NotifyCommentOnContribution,
+                NotifyAllMember = companySettings.NotifyAllMember
+            };
+            model.SearchModel = new SearchSettingsModel
+            {
+                SearchInCZ = companySettings.SearchInCZ,
+                SearchInHU = companySettings.SearchInHU,
+                SearchInSK = companySettings.SearchInSK,
+                SearchRadius = companySettings.SearchRadius.Value
+            };
+            model.SelectedLanguage = companySettings.Language;
+
+            return model;
+        }
+
         public void InitializeAllCategories(CompanyModel model)
         {
             model.Categories.AllCategories = GetAllCategories();
@@ -251,6 +347,28 @@ namespace Web.eBado.Helpers
             }
             return postalCodeDbo.Id;
         }
-        #endregion
+
+        private IEnumerable<SelectListItem> GetAllRoles(CompanyDetailDbo companyDetail = null)
+        {
+            List<SelectListItem> allRoles = new List<SelectListItem>();
+            if (companyDetail != null)
+            {
+                var companyRoles = companyDetail.CompanyDetails2UserDetails.Select(cd => cd.CompanyRole)
+                    .Where(cr=>cr.Name != CompanyRole.Owner.ToString())
+                    .Select(x => new SelectListItem
+                    {
+                        Value = x.Id.ToString(),
+                        Text = x.Name
+                    });
+                allRoles.AddRange(companyRoles);
+            }
+            else
+            {
+                allRoles.Add(new SelectListItem { Value = "", Text = "" });
+            }
+
+            return allRoles;
+            #endregion
+        }
     }
 }
