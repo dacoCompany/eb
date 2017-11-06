@@ -112,10 +112,10 @@ namespace Web.eBado.Validators
                 memberNames.Add(nameof(model.CompanyDic));
             }
 
-            if (string.IsNullOrWhiteSpace(model.CompanyPhoneNumber))
-            {
-                memberNames.Add(nameof(model.CompanyPhoneNumber));
-            }
+            //if (string.IsNullOrWhiteSpace(model.CompanyPhoneNumber))
+            //{
+            //    memberNames.Add(nameof(model.CompanyPhoneNumber));
+            //}
 
             if (string.IsNullOrWhiteSpace(model.CompanyStreet))
             {

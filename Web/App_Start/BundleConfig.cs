@@ -16,6 +16,9 @@ namespace Web.eBado
             bundles.Add(new ScriptBundle("~/bundles/jquery_autocomplete")
                .Include("~/Scripts/autocomplete.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/postalCode")
+              .Include("~/Scripts/setPostalCode.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/chosen")
                .Include("~/Scripts/chosen.jquery.js"));
 

@@ -33,12 +33,12 @@
                             <span class="singtext">Sign in</span>
                         </div>
                         <div class="col-lg-12 col-md-12 col-sm-12">
-                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @placeholder = "Please enter your username" } })
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @placeholder = "Please enter your username", @autofocus = "autofocus" } })
                         </div>
                         <div class="col-lg-12  col-md-12 col-sm-12">
                             @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @placeholder = "Please enter your password" } })
                             <label class="label-form" for="email">
-                                @Html.ValidationMessageFor(model => model.ErrorMessage)
+                                @Html.ValidationMessageFor(model => model.Password)
                             </label>
                         </div>
                         <div class="col-lg-12  col-md-12 col-sm-12">

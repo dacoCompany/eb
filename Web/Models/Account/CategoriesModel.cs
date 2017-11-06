@@ -6,7 +6,6 @@ namespace Web.eBado.Models.Account
 {
     public class CategoriesModel
     {
-        [Required]
         public string[] SelectedCategories { get; set; }
         public IEnumerable<SelectListItem> AllCategories { get; set; }
     }

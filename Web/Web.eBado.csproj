@@ -566,6 +566,7 @@
     <Content Include="Content\jQuery.FileUpload\img\progressbar.gif" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\setPostalCode.js" />
     <Content Include="Scripts\blueimp-gallery2\js\blueimp-gallery-fullscreen.js" />
     <Content Include="Scripts\blueimp-gallery2\js\blueimp-gallery-fullscreen.min.js" />
     <Content Include="Scripts\blueimp-gallery2\js\blueimp-gallery-indicator.js" />

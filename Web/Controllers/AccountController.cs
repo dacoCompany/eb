@@ -18,6 +18,7 @@ using System.Linq;
 using System.Data.Entity;
 using System.Web.Security;
 using System.Collections.Generic;
+using Infrastructure.Common.Enums;
 
 namespace Web.eBado.Controllers
 {
@@ -249,7 +250,6 @@ namespace Web.eBado.Controllers
         public ActionResult RegisterCompany(RegistrationModel model)
         {
             EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt (user & company) with e-mail address: {model.UserModel.Email}", diagnosticLogConstant);
-
             if (!ModelState.IsValid)
             {
                 accountHelper.InitializeAllCategories(model.CompanyModel);
@@ -337,6 +337,32 @@ namespace Web.eBado.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangeSettings(AccountSettingsModel model)
         {
+            var session = Session["User"] as SessionModel;
+            ChangePasswordModel passwordModel = model.PasswordModel;
+            bool changePsw = false;
+
+            if (passwordModel.OldPassword != null && passwordModel.NewPassword != null)
+            {
+                var validationResult = new ValidationResultCollection();
+                AccountValidator.ValidateChangeSettings(unitOfWork, validationResult, passwordModel, session.Id);
+                ModelState.AddValidationErrors(validationResult);
+                changePsw = true;
+            }
+
+            // TODO: entlib validation before modelState check
+            //if (ModelState.IsValid)
+            //{
+                if (session.IsActive)
+                {
+                    model = accountHelper.UpdateUserSettings(unitOfWork, model, changePsw, session);
+                }
+                else
+                {
+                    model = accountHelper.UpdateCompanySettings(unitOfWork, model, session);
+                }
+            //}
+
+            accountHelper.InitializeAllCategories(model.CompanyModel);
             return View(model);
         }
 

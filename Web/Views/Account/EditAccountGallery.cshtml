@@ -266,8 +266,8 @@
                 var container = $("#" + id).parent().parent().attr('id');
                 $("#" + container).hide(250);
             },
-            error: function () {
-                alert("daco v pici!");
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.responseText);
             }
         });
     }
