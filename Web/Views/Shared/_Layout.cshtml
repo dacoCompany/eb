@@ -17,7 +17,14 @@
 <body>
     <div class="page-wrap">
         @{ var session = (Web.eBado.Models.Shared.SessionModel)Session["User"]; }
-        @{ var language = @Request.Cookies["lang"].Value; }
+        @{
+            var language = Request.Cookies["lang"]?.Value;
+            string token = Request.Cookies["tokenCookie"]?.Value;
+            if (!string.IsNullOrEmpty(token))
+            {
+                HttpContext.Current.Request.Headers.Add("Authorization", $"Bearer {token}");
+            }
+        }
         <!-- Top panel -->
         <div class="container">
             <div class="lang-panel">
@@ -32,7 +39,7 @@
                 <div class="top-panel-img"></div>
                 <div class="top-panel-drop">
 
-                    @if (Request.IsAuthenticated && session != null)
+                    @if (!string.IsNullOrEmpty(token) && session != null)
                     {
                         <nav-account>
                             <ul>
