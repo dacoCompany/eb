@@ -10,6 +10,14 @@
 @Styles.Render("~/Content/chosen")
 @Scripts.Render("~/bundles/jquery_autocomplete")
 <script>
+    $(document).ready(function () {
+
+        if (localStorage.getItem("isEditMember")) {
+            $('#companyProfileDiv').addClass('hidden-toggle');
+            $('#editMemberDiv').removeClass('hidden-toggle');
+            localStorage.removeItem("isEditMember");
+        }
+    });
     $(function () {
         jQuery('.accordion-toggle').on('click', function () {
             if (jQuery(this).next().is(':hidden')) {
@@ -62,7 +70,7 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-4">
-                                @Html.EditorFor(model => model.UserModel.Email, new { htmlAttributes = new { @class = "form-control txt-lg", disabled = "disabled" } })
+                                @Html.EditorFor(model => model.UserModel.Email, new { htmlAttributes = new { @class = "form-control txt-lg", @readonly = "readonly" } })
                                 <div class="val-message"></div>
                             </div>
 
@@ -168,9 +176,9 @@
                 }
                 else
                 {
-                <div class="accordion-toggle">
-                    <div class="accordion-main">zmenit profil firmy</div>
-                </div>
+                    <div class="accordion-toggle">
+                        <div class="accordion-main">zmenit profil firmy</div>
+                    </div>
                     string hiddenClass = "";
                     if (session.HasCompany)
                     {
@@ -181,189 +189,218 @@
                         hiddenClass = "hidden-toggle";
                     }
 
-                            <div class="@hiddenClass accordion-content">
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        @Html.EditorFor(model => model.CompanyModel.CompanyName, new { htmlAttributes = new { @class = "form-control txt-lg", disabled = "disabled" } })
-                                        <div class="val-message"></div>
-                                    </div>
-
-                                    <div class="col-lg-3">
-                                        @Html.EditorFor(model => model.CompanyModel.CompanyIco, new { htmlAttributes = new { @class = "form-control txt-lg", disabled = "disabled" } })
-                                        <div class="val-message"></div>
-                                    </div>
-
-                                    <div class="col-lg-3">
-                                        @Html.EditorFor(model => model.CompanyModel.CompanyDic, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Dic", disabled = "disabled" } })
-                                        <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyDic, "", new { @class = "text-danger" })</div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12 set-font">Adresa</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <input type="text" class="form-control txt-lg" id="txtCompanyPostalCode" placeholder="PSC" value="@Model.CompanyModel.CompanyPostalCode" />
-                                        @Html.HiddenFor(model => model.CompanyModel.CompanyPostalCode, new { @id = "hiddenCompanyPostalCode" })
-                                        <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyPostalCode, "", new { @class = "text-danger" })</div>
-                                    </div>
-
-                                    <div class="col-lg-6">
-                                        @Html.EditorFor(model => model.CompanyModel.CompanyStreet, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Ulica" } })
-                                        <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyStreet, "", new { @class = "text-danger" })</div>
-                                    </div>
-
-                                    <div class="col-lg-3">
-                                        @Html.EditorFor(model => model.CompanyModel.CompanyStreetNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Cislo" } })
-                                        <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyStreetNumber, "", new { @class = "text-danger" })</div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12 set-font">Kontaktne udaje</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        @Html.EditorFor(model => model.CompanyModel.CompanyPhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Mobil" } })
-                                        <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyPhoneNumber, "", new { @class = "text-danger" })</div>
-                                    </div>
-
-                                    <div class="col-md-4">
-                                        @Html.EditorFor(model => model.CompanyModel.CompanyAdditionalPhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Pevna linka" } })
-                                        <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyAdditionalPhoneNumber, "", new { @class = "text-danger" })</div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12 set-font">Oblast podnikania</div>
-                                </div>
-                                <div class="form-group">
-                                    @Html.DropDownListFor(m => m.CompanyModel.Categories.SelectedCategories, Model.CompanyModel.Categories.AllCategories, new { @class = "form-control chosen-select", @multiple = "true" })
-                                    <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.Categories.SelectedCategories, "", new { @class = "text-danger" })</div>
-                                </div>
+                    <div id ="companyProfileDiv" class="@hiddenClass accordion-content">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                @Html.EditorFor(model => model.CompanyModel.CompanyName, new { htmlAttributes = new { @class = "form-control txt-lg", @readonly = "readonly" } })
+                                <div class="val-message"></div>
                             </div>
 
-                            <div class="accordion-toggle">
-                                <div class="accordion-main">nastavenia firemneho uctu</div>
+                            <div class="col-lg-3">
+                                @Html.EditorFor(model => model.CompanyModel.CompanyIco, new { htmlAttributes = new { @class = "form-control txt-lg", @readonly = "readonly" } })
+                                <div class="val-message"></div>
                             </div>
-                            <div class="hidden-toggle accordion-content">
-                                <div class="settings_wrapper">
-                                    <div class="text_div font_16">Predvoleny jazyk uctu:</div>
-                                    <div class="box_div">
-                                        @Html.DropDownListFor(model => model.SelectedLanguage, EnumHelper.GetSelectList(typeof(Languages)), new { @class = "form-control" })
-                                        <div class="val-message"></div>
-                                    </div>
-                                </div>
-                                <div class="settings_wrapper">
-                                    <div class="text_div font_16">Radius vyhladavania (km):</div>
-                                    <div class="box_div">
-                                        @Html.EditorFor(model => model.SearchModel.SearchRadius, new { htmlAttributes = new { @class = "form-control" } })
-                                        <div class="val-message">@Html.ValidationMessageFor(model => model.SearchModel.SearchRadius, "", new { @class = "text-danger" })</div>
-                                    </div>
-                                </div>
-                                <div class="settings_wrapper">
-                                    <div class="text_div font_16">Povolit vyhladavanie inzeratov a dopytov na uzemi Slovenska</div>
-                                    <div class="toggle_div">
-                                        <label class="switch">
-                                            @Html.CheckBoxFor(m => m.SearchModel.SearchInSK, new { @class = "form-control" })
-                                            <span class="slider"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="settings_wrapper">
-                                    <div class="text_div font_16">Povolit vyhladavanie inzeratov a dopytov na uzemi Ceska</div>
-                                    <div class="toggle_div">
-                                        <label class="switch">
-                                            @Html.CheckBoxFor(m => m.SearchModel.SearchInCZ, new { @class = "form-control" })
-                                            <span class="slider"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="settings_wrapper">
-                                    <div class="text_div font_16">Povolit vyhladavanie inzeratov a dopytov na uzemi Madarska</div>
-                                    <div class="toggle_div">
-                                        <label class="switch">
-                                            @Html.CheckBoxFor(m => m.SearchModel.SearchInHU, new { @class = "form-control" })
-                                            <span class="slider"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="settings_wrapper">
-                                    <div class="text_div font_16">Povolit notifikacie pre ucet</div>
-                                    <div class="toggle_div">
-                                        <label class="switch">
-                                            @Html.CheckBoxFor(m => m.NotificationModel.NotifyCommentOnAccount, new { @class = "form-control" })
-                                            <span class="slider"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="settings_wrapper">
-                                    <div class="text_div font_16">Povolit notifikacie pre prispevky</div>
-                                    <div class="toggle_div">
-                                        <label class="switch">
-                                            @Html.CheckBoxFor(m => m.NotificationModel.NotifyCommentOnContribution, new { @class = "form-control" })
-                                            <span class="slider"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="settings_wrapper">
-                                    <div class="text_div font_16">Posielat notifikacie vsetky clenom</div>
-                                    <div class="toggle_div">
-                                        <label class="switch">
-                                            @Html.CheckBoxFor(m => m.NotificationModel.NotifyAllMember, new { @class = "form-control" })
-                                            <span class="slider"></span>
-                                        </label>
-                                    </div>
-                                </div>
 
-                                <div class="email_settings_wrapper">
-                                    <div class="email_toggle_div">
-                                        <label class="switch_small">
-                                            @Html.CheckBoxFor(m => m.NotificationModel.NotifyAllMember, new { @class = "form-control" })
-                                            <span class="slider_small "></span>
-                                        </label>
-                                    </div>
-                                    <div class="email_text_div font_14">daco@email.com</div>
-                                </div>
-                                <div class="email_settings_wrapper">
-                                    <div class="email_toggle_div">
-                                        <label class="switch_small">
-                                            @Html.CheckBoxFor(m => m.NotificationModel.NotifyAllMember, new { @class = "form-control" })
-                                            <span class="slider_small"></span>
-                                        </label>
-                                    </div>
-                                    <div class="email_text_div font_14">daco@email.com</div>
-                                </div>
+                            <div class="col-lg-3">
+                                @Html.EditorFor(model => model.CompanyModel.CompanyDic, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Dic", @readonly = "readonly" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyDic, "", new { @class = "text-danger" })</div>
                             </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 set-font">Adresa</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <input type="text" class="form-control txt-lg" id="txtCompanyPostalCode" placeholder="PSC" value="@Model.CompanyModel.CompanyPostalCode" />
+                                @Html.HiddenFor(model => model.CompanyModel.CompanyPostalCode, new { @id = "hiddenCompanyPostalCode" })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyPostalCode, "", new { @class = "text-danger" })</div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                @Html.EditorFor(model => model.CompanyModel.CompanyStreet, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Ulica" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyStreet, "", new { @class = "text-danger" })</div>
+                            </div>
+
+                            <div class="col-lg-3">
+                                @Html.EditorFor(model => model.CompanyModel.CompanyStreetNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Cislo" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyStreetNumber, "", new { @class = "text-danger" })</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 set-font">Kontaktne udaje</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                @Html.EditorFor(model => model.CompanyModel.CompanyEmail, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Email" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyEmail, "", new { @class = "text-danger" })</div>
+                            </div>
+                            <div class="col-md-4">
+                                @Html.EditorFor(model => model.CompanyModel.CompanyPhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Mobil" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyPhoneNumber, "", new { @class = "text-danger" })</div>
+                            </div>
+
+                            <div class="col-md-4">
+                                @Html.EditorFor(model => model.CompanyModel.CompanyAdditionalPhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Pevna linka" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyAdditionalPhoneNumber, "", new { @class = "text-danger" })</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 set-font">Oblast podnikania</div>
+                        </div>
+                        <div class="col-lg-12 resp_push_bottom_10">
+                            <div class="tags_text">Vasa oblast podnikania:</div>
+                            @*@foreach (var category in Model.CurrentCategories)
+                                {
+                                    <div id="div_@category" class="tags_blocks">
+                                        <div class="tags_block-text">@category</div>
+                                        <div id="@category" class="tags_block-symbol">&#10006;</div>
+                                    </div>
+                                }*@
+                            <div id="div_abc" class="tags_blocks">
+                                <div class="tags_block-text">abc</div>
+                                <div id="abc" class="tags_block-symbol">&#10006;</div>
+                            </div>
+                            <div id="div_asd" class="tags_blocks">
+                                <div class="tags_block-text">asd</div>
+                                <div id="asd" class="tags_block-symbol">&#10006;</div>
+                            </div>
+                        </div>
+                        <div class="edit_container push_bottom_20">
+                            <input type="button" id="newCategoryBtn" value="Pridat oblast podnikania" class="form-btn-transparent" />
+                        </div>
+                        <div class="edit_container">
+                            <div id="categoryDiv" class="col-md-8 hidden_div">
+                                @Html.DropDownListFor(m => m.CompanyModel.Categories.SelectedCategories, Model.CompanyModel.Categories.AllCategories, new { @class = "form-control chosen-select", @multiple = "true" })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.Categories.SelectedCategories, "", new { @class = "text-danger" })</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-toggle">
+                        <div class="accordion-main">nastavenia firemneho uctu</div>
+                    </div>
+                    <div class="hidden-toggle accordion-content">
+                        <div class="settings_wrapper">
+                            <div class="text_div font_16">Predvoleny jazyk uctu:</div>
+                            <div class="box_div">
+                                @Html.DropDownListFor(model => model.SelectedLanguage, EnumHelper.GetSelectList(typeof(Languages)), new { @class = "form-control" })
+                                <div class="val-message"></div>
+                            </div>
+                        </div>
+                        <div class="settings_wrapper">
+                            <div class="text_div font_16">Radius vyhladavania (km):</div>
+                            <div class="box_div">
+                                @Html.EditorFor(model => model.SearchModel.SearchRadius, new { htmlAttributes = new { @class = "form-control" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.SearchModel.SearchRadius, "", new { @class = "text-danger" })</div>
+                            </div>
+                        </div>
+                        <div class="settings_wrapper">
+                            <div class="text_div font_16">Povolit vyhladavanie inzeratov a dopytov na uzemi Slovenska</div>
+                            <div class="toggle_div">
+                                <label class="switch">
+                                    @Html.CheckBoxFor(m => m.SearchModel.SearchInSK, new { @class = "form-control" })
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="settings_wrapper">
+                            <div class="text_div font_16">Povolit vyhladavanie inzeratov a dopytov na uzemi Ceska</div>
+                            <div class="toggle_div">
+                                <label class="switch">
+                                    @Html.CheckBoxFor(m => m.SearchModel.SearchInCZ, new { @class = "form-control" })
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="settings_wrapper">
+                            <div class="text_div font_16">Povolit vyhladavanie inzeratov a dopytov na uzemi Madarska</div>
+                            <div class="toggle_div">
+                                <label class="switch">
+                                    @Html.CheckBoxFor(m => m.SearchModel.SearchInHU, new { @class = "form-control" })
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="settings_wrapper">
+                            <div class="text_div font_16">Povolit notifikacie pre ucet</div>
+                            <div class="toggle_div">
+                                <label class="switch">
+                                    @Html.CheckBoxFor(m => m.NotificationModel.NotifyCommentOnAccount, new { @class = "form-control" })
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="settings_wrapper">
+                            <div class="text_div font_16">Povolit notifikacie pre prispevky</div>
+                            <div class="toggle_div">
+                                <label class="switch">
+                                    @Html.CheckBoxFor(m => m.NotificationModel.NotifyCommentOnContribution, new { @class = "form-control" })
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="settings_wrapper">
+                            <div class="text_div font_16">Posielat notifikacie vsetky clenom</div>
+                            <div class="toggle_div">
+                                <label class="switch">
+                                    @Html.CheckBoxFor(m => m.NotificationModel.NotifyAllMember, new { @class = "form-control" })
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        @*TODO: PROFI UCET: pridanie vlastnej kolecie clenov ktorych budeme notifikovat*@
+                        @*<div class="email_settings_wrapper">
+                                <div class="email_toggle_div">
+                                    <label class="switch_small">
+                                        @Html.CheckBoxFor(m => m.NotificationModel.NotifyAllMember, new { @class = "form-control" })
+                                        <span class="slider_small "></span>
+                                    </label>
+                                </div>
+                                <div class="email_text_div font_14">daco@email.com</div>
+                            </div>
+                            <div class="email_settings_wrapper">
+                                <div class="email_toggle_div">
+                                    <label class="switch_small">
+                                        @Html.CheckBoxFor(m => m.NotificationModel.NotifyAllMember, new { @class = "form-control" })
+                                        <span class="slider_small"></span>
+                                    </label>
+                                </div>
+                                <div class="email_text_div font_14">daco@email.com</div>
+                            </div>*@
+
+                    </div>
                             <div class="accordion-toggle">
                                 <div class="accordion-main">Editovat clenov firemneho uctu</div>
                             </div>
-                            <div class="hidden-toggle accordion-content">
+                            <div id="editMemberDiv" class="hidden-toggle accordion-content">
                                 <div class="edit_container">
                                     <input type="button" id="newMemberBtn" value="Pridat clena" class="form-btn-transparent" />
                                     <input type="button" id="newRoleBtn" value="Pridat rolu" class="form-btn-transparent" />
                                 </div>
                                 <div id="newMember" class="edit_container hidden_div push_top_20 push_bottom_20">
                                     <div class="col-md-4">
-                                        @Html.EditorFor(model => model.EditMembersAndRolesModel.MemberEmail, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Mobil" } })
-                                        <div class="val-message">@Html.ValidationMessageFor(model => model.EditMembersAndRolesModel.MemberEmail, "", new { @class = "text-danger" })</div>
+                                        @Html.EditorFor(model => model.EditMembersAndRolesModel.MemberEmail, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "newMemberText", @placeholder = "Email pouzivatela" } })
+                                        <div class="val-message text-danger" id="memberValidation"></div>
                                     </div>
                                     <div class="col-md-4">
-                                        @Html.DropDownListFor(m => m.EditMembersAndRolesModel.SelectedRoleId, Model.EditMembersAndRolesModel.AllRoles, new { @class = "form-control txt-lg" })
+                                        @Html.DropDownListFor(m => m.EditMembersAndRolesModel.SelectedRoleId, Model.EditMembersAndRolesModel.AllRoles, new { @class = "form-control txt-lg", @id = "newMemberDrop" })
                                         <div class="val-message"></div>
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="submit" value="Pridat" class="form-btn" />
+                                        <input type="button" value="Pridat" onclick="AddNewMember()" class="form-btn" />
                                     </div>
                                 </div>
                                 <div id="newRole" class="edit_container hidden_div push_top_20 push_bottom_20">
                                     <div class="col-md-4">
-                                        @Html.EditorFor(model => model.EditMembersAndRolesModel.RoleName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Mobil" } })
+                                        @Html.EditorFor(model => model.EditMembersAndRolesModel.RoleName, new { htmlAttributes = new { @class = "form-control txt-lg", @id="newRoleName", @placeholder = "Nazov role" } })
                                         <div class="val-message">@Html.ValidationMessageFor(model => model.EditMembersAndRolesModel.RoleName, "", new { @class = "text-danger" })</div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="role_settings_wrapper">
                                             <div class="role_toggle_div">
                                                 <label class="switch_small">
-                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.AddAttachments, new { @class = "form-control" })
+                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.AddAttachments, new { @class = "form-control", @id="AddAttachments" })
                                                     <span class="slider_small"></span>
                                                 </label>
                                             </div>
@@ -372,7 +409,7 @@
                                         <div class="role_settings_wrapper">
                                             <div class="role_toggle_div">
                                                 <label class="switch_small">
-                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.AddGallery, new { @class = "form-control" })
+                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.AddGallery, new { @class = "form-control", @id = "AddGallery" })
                                                     <span class="slider_small"></span>
                                                 </label>
                                             </div>
@@ -381,7 +418,7 @@
                                         <div class="role_settings_wrapper">
                                             <div class="role_toggle_div">
                                                 <label class="switch_small">
-                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.AddMember, new { @class = "form-control" })
+                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.AddMember, new { @class = "form-control", @id = "AddMember" })
                                                     <span class="slider_small"></span>
                                                 </label>
                                             </div>
@@ -390,7 +427,7 @@
                                         <div class="role_settings_wrapper">
                                             <div class="role_toggle_div">
                                                 <label class="switch_small">
-                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.Comment, new { @class = "form-control" })
+                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.Comment, new { @class = "form-control", @id = "Comment" })
                                                     <span class="slider_small"></span>
                                                 </label>
                                             </div>
@@ -399,7 +436,7 @@
                                         <div class="role_settings_wrapper">
                                             <div class="role_toggle_div">
                                                 <label class="switch_small">
-                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.CreateDemand, new { @class = "form-control" })
+                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.CreateDemand, new { @class = "form-control", @id = "CreateDemand" })
                                                     <span class="slider_small"></span>
                                                 </label>
                                             </div>
@@ -410,7 +447,7 @@
                                         <div class="role_settings_wrapper">
                                             <div class="role_toggle_div">
                                                 <label class="switch_small">
-                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.DeleteDemand, new { @class = "form-control" })
+                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.DeleteDemand, new { @class = "form-control", @id = "DeleteDemand" })
                                                     <span class="slider_small"></span>
                                                 </label>
                                             </div>
@@ -419,7 +456,7 @@
                                         <div class="role_settings_wrapper">
                                             <div class="role_toggle_div">
                                                 <label class="switch_small">
-                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.EditDemand, new { @class = "form-control" })
+                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.EditDemand, new { @class = "form-control", @id = "EditDemand" })
                                                     <span class="slider_small"></span>
                                                 </label>
                                             </div>
@@ -428,7 +465,7 @@
                                         <div class="role_settings_wrapper">
                                             <div class="role_toggle_div">
                                                 <label class="switch_small">
-                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.RemoveAttachments, new { @class = "form-control" })
+                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.RemoveAttachments, new { @class = "form-control", @id = "RemoveAttachments" })
                                                     <span class="slider_small"></span>
                                                 </label>
                                             </div>
@@ -437,7 +474,7 @@
                                         <div class="role_settings_wrapper">
                                             <div class="role_toggle_div">
                                                 <label class="switch_small">
-                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.RemoveGallery, new { @class = "form-control" })
+                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.RemoveGallery, new { @class = "form-control", @id = "RemoveGallery" })
                                                     <span class="slider_small"></span>
                                                 </label>
                                             </div>
@@ -446,7 +483,7 @@
                                         <div class="role_settings_wrapper">
                                             <div class="role_toggle_div">
                                                 <label class="switch_small">
-                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.RemoveMember, new { @class = "form-control" })
+                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.RemoveMember, new { @class = "form-control", @id = "RemoveMember" })
                                                     <span class="slider_small"></span>
                                                 </label>
                                             </div>
@@ -454,32 +491,39 @@
                                         </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <input type="submit" value="Pridat" class="form-btn" />
+                                        <input type="button" onclick="AddNewRole()" value="Pridat" class="form-btn" />
                                     </div>
                                 </div>
                                 <div class="member_list_text">
                                     Zoznam clenov:
                                 </div>
-                                @for (int i = 0; i < Model.EditMembersAndRolesModel.UserRoles.Count(); i++)
+                                @if (Model.EditMembersAndRolesModel.UserRoles.Count() > 0)
                                 {
-                                    <div class="member_list_wrapper">
-                                        <div class="member_blocks member_left">
-                                            @Html.DropDownListFor(m => m.EditMembersAndRolesModel.UserRoles[i].SelectedRoleId, Model.EditMembersAndRolesModel.AllRoles, new { @class = "form-control txt-lg" })
+                                    for (int i = 0; i < Model.EditMembersAndRolesModel.UserRoles.Count(); i++)
+                                    {
+                                        <div class="member_list_wrapper">
+                                            <div id="@Model.EditMembersAndRolesModel.UserRoles[i].UserEmail" class="member_blocks member_left">
+                                                @Html.DropDownListFor(m => m.EditMembersAndRolesModel.UserRoles[i].SelectedRoleId, new SelectList(Model.EditMembersAndRolesModel.AllRoles,"Value","Text", Model.EditMembersAndRolesModel.UserRoles[i].SelectedRoleId), new { @class = "form-control txt-lg", @id = "memberRole" })
+                                            </div>
+                                            <div class="member_blocks member_middle">
+                                                <div class="role_text_div font_16">@Model.EditMembersAndRolesModel.UserRoles[i].UserEmail</div>
+                                            </div>
+                                            <div class="member_blocks member_right">
+                                                <input type="button" onclick="DeleteMember('@Model.EditMembersAndRolesModel.UserRoles[i].UserEmail')" value="Zmazat" class="form-btn" />
+                                            </div>
                                         </div>
-                                        <div class="member_blocks member_middle">
-                                            <div class="role_text_div font_16">@Model.EditMembersAndRolesModel.UserRoles[i].UserEmail</div>
-                                        </div>
-                                        <div class="member_blocks member_right">
-                                            <input type="submit" value="Zmazat @Model.EditMembersAndRolesModel.UserRoles[i].UserID" class="form-btn" />
-                                        </div>
-                                    </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <h4>Momentalne nemate ziadnych clenov</h4>
                                 }
                             </div>
-                            }
-                            <div class="col-lg-12 push_top_20 push_bottom_20" style="float:left">
-                                <input type="submit" value="ZMENIT" class="form-btn-transparent" style="width:200px" />
-                            </div>
-                        </div>
+                }
+                <div class="col-lg-12 push_top_20 push_bottom_20" style="float:left">
+                    <input type="submit" value="ZMENIT" class="form-btn-transparent" style="width:200px" />
+                </div>
+            </div>
         </div>
     </div>
     <script>
@@ -492,5 +536,118 @@
             jQuery('#newRole').toggle(400);
             jQuery('#newMember').hide(400);
         });
+        jQuery('#newCategoryBtn').on('click', function (event) {
+            jQuery('#categoryDiv').toggle(400);
+        });
+
+        $('.tags_block-symbol').on('click', function () {
+            var id = $(this).attr('id');
+            $.ajax({
+                url: "/Manage/DeleteCategory",
+                type: "POST",
+                data: JSON.stringify({ category: id }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function () {
+                    var container = $("#" + id).parent().attr('id');
+                    $("#" + container).hide(250);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.responseText);
+                }
+            });
+        });
+
+        function DeleteMember(email) {
+             $.ajax({
+                type: 'POST',
+                url: '@Url.Action("DeleteMember", "Manage")',
+                data: JSON.stringify({ email: email}),
+                contentType: 'application/json',
+                success: function (data) {
+                    localStorage.setItem("isEditMember", true);
+                    if (data === "OK") {
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 100)
+                    }
+                }
+            });
+        }
+
+        $("#memberRole").change(function () {
+            var selectedRole = $('#memberRole :selected').text();
+            var user = $("#memberRole").parent().attr('id')
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("ChangeMemberRole", "Manage")',
+                    data: JSON.stringify({ user: user, role: selectedRole}),
+                    contentType: 'application/json',
+                    success: function (data) {
+                        localStorage.setItem("isEditMember", true);
+                        if (data === "OK") {
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 100)
+                        }
+                    }
+                });
+            });
+
+        function AddNewMember() {
+            var email = $("#newMemberText").val();
+            var role = $("#newMemberDrop").val();
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("AddMemberToCompany", "Manage")',
+                contentType: "application/json; charset=utf-8",
+                data: { email: email, selectedRole: role},
+                success: function (data) {
+                    localStorage.setItem("isEditMember", true);
+                    if (data === "OK") {
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 100)
+                    }
+                    else {
+                            $('#memberValidation').text(data);
+                    }
+                }
+            });
+        }
+         function AddNewRole() {
+             var role = $("#newRoleName").val();
+             var permissions = GetPermissions();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddCustomRoleToCompany", "Manage")',
+                data: JSON.stringify({ roleName: role, permissions: permissions }),
+                contentType: 'application/json',
+                success: function (data) {
+                    localStorage.setItem("isEditMember", true);
+                    if (data === "OK") {
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 100)
+                    }
+                }
+            });
+        }
+
+         function GetPermissions() {
+             return [
+                 $("#AddMember").is(":checked") ? "AddMember" : "",
+                 $("#RemoveMember").is(":checked") ? "RemoveMember" : "",
+                 $("#AddGallery").is(":checked") ? "AddGallery" : "",
+                 $("#RemoveGallery").is(":checked") ? "RemoveGallery" : "",
+                 $("#AddAttachments").is(":checked") ? "AddAttachments" : "",
+                 $("#RemoveAttachments").is(":checked") ? "RemoveAttachments" : "",
+                 $("#Comment").is(":checked") ? "Comment" : "",
+                 $("#CreateDemand").is(":checked") ? "CreateDemand" : "",
+                 $("#EditDemand").is(":checked") ? "EditDemand" : "",
+                 $("#DeleteDemand").is(":checked") ? "DeleteDemand" : "",
+             ];
+         }
     </script>
+    @Scripts.Render("~/bundles/postalCode")
                 }

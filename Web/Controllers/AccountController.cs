@@ -16,6 +16,8 @@ using WebAPIFactory.Logging.Core;
 using WebAPIFactory.Logging.Core.Diagnostics;
 using System.Linq;
 using System.Web.Security;
+using System.Collections.Generic;
+using Infrastructure.Common.Enums;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -281,7 +283,6 @@ namespace Web.eBado.Controllers
         public ActionResult RegisterCompany(RegistrationModel model)
         {
             EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt (user & company) with e-mail address: {model.UserModel.Email}", diagnosticLogConstant);
-
             if (!ModelState.IsValid)
             {
                 accountHelper.InitializeAllCategories(model.CompanyModel);
@@ -371,6 +372,32 @@ namespace Web.eBado.Controllers
         [System.Web.Http.Authorize(Roles = "ChangeSettings, Read, Write")]
         public ActionResult ChangeSettings(AccountSettingsModel model)
         {
+            var session = Session["User"] as SessionModel;
+            ChangePasswordModel passwordModel = model.PasswordModel;
+            bool changePsw = false;
+
+            if (passwordModel.OldPassword != null && passwordModel.NewPassword != null)
+            {
+                var validationResult = new ValidationResultCollection();
+                AccountValidator.ValidateChangeSettings(unitOfWork, validationResult, passwordModel, session.Id);
+                ModelState.AddValidationErrors(validationResult);
+                changePsw = true;
+            }
+
+            // TODO: entlib validation before modelState check
+            //if (ModelState.IsValid)
+            //{
+                if (session.IsActive)
+                {
+                    model = accountHelper.UpdateUserSettings(unitOfWork, model, changePsw, session);
+                }
+                else
+                {
+                    model = accountHelper.UpdateCompanySettings(unitOfWork, model, session);
+                }
+            //}
+
+            accountHelper.InitializeAllCategories(model.CompanyModel);
             return View(model);
         }
 

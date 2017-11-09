@@ -439,6 +439,44 @@ input[type=checkbox] {
         clear: both;
     }
 
+.tags_list_wrapper {
+    min-width: 100% !important;
+    margin-top:5px;
+}
+
+.tags_blocks {
+    display: inline-block;
+    height:30px;
+    box-sizing: border-box;
+    float: left;
+    margin:0 5px 5px 0;
+    padding-left: 5px;
+    border: 1px solid #00b6ff;
+}
+
+.tags_text {
+    float: left;
+    font-size: 15px;
+    margin: 4px 10px 0 0;
+    text-align: left;
+}
+
+.tags_block-text {
+    float: left;
+    color: #00b6ff;
+    font-size: 15px;
+    margin: 3px 10px 0 0;
+    text-align: left;
+}
+
+.tags_block-symbol {
+    float: right;
+    margin-top: 3px;
+    padding-right: 5px;
+    font-size: 15px;
+    cursor:pointer;
+}
+
 @media (max-width: 500px) {
     .member_blocks {
         width: 100%;

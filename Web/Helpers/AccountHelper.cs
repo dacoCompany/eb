@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Common.DB;
 using Infrastructure.Common.Enums;
+using Infrastructure.Common.Validations;
 using Infrastructure.Configuration;
 using System;
 using System.Collections;
@@ -16,6 +17,7 @@ using System.Web.Mvc;
 using System.Xml;
 using Web.eBado.Models.Account;
 using Web.eBado.Models.Shared;
+using Web.eBado.Validators;
 using WebAPIFactory.Logging.Core;
 using WebAPIFactory.Logging.Core.Diagnostics;
 
@@ -174,6 +176,104 @@ namespace Web.eBado.Helpers
             uow.Commit();
         }
 
+        public AccountSettingsModel UpdateUserSettings(IUnitOfWork unitOfWork, AccountSettingsModel model, bool changePsw, SessionModel session)
+        {
+            if (model.UserModel.Email == null)
+            {
+                model = GetUserSettings(unitOfWork, session);
+            }
+
+            UserModel userModel = model.UserModel;
+            SearchSettingsModel searchModel = model.SearchModel;
+            NotificationModel notificationModel = model.NotificationModel;
+            ChangePasswordModel passwordModel = model.PasswordModel;
+
+            var userDetails = unitOfWork.UserDetailsRepository.FindById(session.Id);
+            if (changePsw)
+            {
+                userDetails.Password = EncodePassword(passwordModel.NewPassword, userDetails.Salt);
+            }
+
+            userDetails.AdditionalPhoneNumber = userModel.AdditionalPhoneNumber;
+            userDetails.FirstName = userModel.FirstName;
+            userDetails.PhoneNumber = userModel.PhoneNumber;
+            userDetails.Surname = userModel.Surname;
+            userDetails.Title = userModel.Title;
+
+            var address = userDetails.Addresses.FirstOrDefault(ad => ad.IsBillingAddress.Value);
+            address.Street = userModel.Street;
+            address.Number = userModel.StreetNumber;
+            int locationId = GetLocation(userModel.PostalCode, unitOfWork);
+            address.LocationId = locationId;
+
+            var userSettings = userDetails.UserSetting;
+            userSettings.SearchInCZ = searchModel.SearchInCZ;
+            userSettings.SearchInHU = searchModel.SearchInHU;
+            userSettings.SearchInSK = searchModel.SearchInSK;
+            userSettings.SearchRadius = searchModel.SearchRadius;
+            userSettings.Language = model.SelectedLanguage;
+            userSettings.NotifyCommentOnAccount = notificationModel.NotifyCommentOnAccount;
+            userSettings.NotifyCommentOnContribution = notificationModel.NotifyCommentOnContribution;
+
+            unitOfWork.Commit();
+            return (model);
+        }
+
+        public AccountSettingsModel UpdateCompanySettings(IUnitOfWork unitOfWork, AccountSettingsModel model, SessionModel session)
+        {
+            var companyId = session.Companies.FirstOrDefault(c => c.IsActive).Id;
+
+            if (model.CompanyModel.CompanyName == null)
+            {
+                model = GetCompanySettings(unitOfWork, session);
+            }
+
+            CompanyModel companyModel = model.CompanyModel;
+            SearchSettingsModel searchModel = model.SearchModel;
+            NotificationModel notificationModel = model.NotificationModel;
+
+            var companyDetails = unitOfWork.CompanyDetailsRepository.FindById(companyId);
+
+            companyDetails.AdditionalPhoneNumber = companyModel.CompanyAdditionalPhoneNumber;
+            companyDetails.Email = companyModel.CompanyEmail;
+            companyDetails.PhoneNumber = companyModel.CompanyPhoneNumber;
+
+            var address = companyDetails.Addresses.First(ad => ad.IsBillingAddress.Value);
+            address.Street = companyModel.CompanyStreet;
+            address.Number = companyModel.CompanyStreetNumber;
+
+            int locationId = GetLocation(companyModel.CompanyPostalCode, unitOfWork);
+            address.LocationId = locationId;
+            var companySettings = companyDetails.CompanySetting;
+            companySettings.SearchInCZ = searchModel.SearchInCZ;
+            companySettings.SearchInHU = searchModel.SearchInHU;
+            companySettings.SearchInSK = searchModel.SearchInSK;
+            companySettings.SearchRadius = searchModel.SearchRadius;
+            companySettings.Language = model.SelectedLanguage;
+            companySettings.NotifyCommentOnAccount = notificationModel.NotifyCommentOnAccount;
+            companySettings.NotifyCommentOnContribution = notificationModel.NotifyCommentOnContribution;
+            companySettings.NotifyAllMember = notificationModel.NotifyAllMember;
+
+            var memberRoles = companyDetails.CompanyDetails2UserDetails
+                .Where(cd => cd.CompanyRole.Name != CompanyRole.Owner.ToString() && cd.IsActive)
+                .Select(cd => new UserRoleModel
+                {
+                    UserEmail = cd.UserDetail.Email,
+                    SelectedRoleId = cd.CompanyRoleId.ToString()
+                }).ToList();
+
+            model.EditMembersAndRolesModel = new EditMembersAndRolesModel
+
+            {
+                AllRoles = GetAllRoles(unitOfWork, companyId),
+                UserRoles = memberRoles,
+                Permissions = new CompanyPermissionsModel()
+            };
+
+            unitOfWork.Commit();
+            return (model);
+        }
+
         public AccountSettingsModel GetUserSettings(IUnitOfWork uow, SessionModel session)
         {
             AccountSettingsModel model = new AccountSettingsModel();
@@ -202,7 +302,7 @@ namespace Web.eBado.Helpers
                 SearchRadius = userSettings.SearchRadius.Value
             };
             model.SelectedLanguage = userSettings.Language;
-            model.EditMembersAndRolesModel.AllRoles = GetAllRoles();
+            model.EditMembersAndRolesModel.AllRoles = GetDefaultRoles();
 
             return model;
         }
@@ -224,29 +324,21 @@ namespace Web.eBado.Helpers
                 CompanyStreet = address.Street,
                 CompanyStreetNumber = address.Number,
                 CompanyPostalCode = address.Location.PostalCode,
-                Categories = new CategoriesModel
-                {
-                    SelectedCategories = new string[] { "daco1", "daco2" }.ToArray()
-                }
             };
-            var allRoles = companyDetails.CompanyDetails2UserDetails.Select(cd => cd.CompanyRole)
-                .Select(x => new SelectListItem
-                {
-                    Value = x.Id.ToString(),
-                    Text = x.Name
-                });
 
-            var memberRoles = companyDetails.CompanyDetails2UserDetails.Select(cd => new UserRoleModel
-            {
-                UserID = cd.UserDetailsId,
-                UserEmail = cd.UserDetail.Email,
-                SelectedRoleId = cd.CompanyRoleId
-            }).ToList();
+            model.CurrentCategories = companyDetails.Category2CompanyDetails.Select(c => c.Category.Name);
+            var memberRoles = companyDetails.CompanyDetails2UserDetails
+                .Where(cd => cd.CompanyRole.Name != CompanyRole.Owner.ToString() && cd.IsActive)
+                .Select(cd => new UserRoleModel
+                {
+                    UserEmail = cd.UserDetail.Email,
+                    SelectedRoleId = cd.CompanyRoleId.ToString()
+                }).ToList();
 
             model.EditMembersAndRolesModel = new EditMembersAndRolesModel
 
             {
-                AllRoles = GetAllRoles(companyDetails),
+                AllRoles = GetAllRoles(uow, companyId),
                 UserRoles = memberRoles,
                 Permissions = new CompanyPermissionsModel()
             };
@@ -337,38 +429,33 @@ namespace Web.eBado.Helpers
 
         private int GetLocation(string postalCode, IUnitOfWork uow)
         {
-            var postalCodeDbo = uow.LocationRepository.FindById(int.Parse(postalCode));
-            if (postalCodeDbo == null)
-            {
-                var location = uow.LocationRepository.FindFirstOrDefault(x => x.PostalCode.StartsWith(postalCode)
-                       || x.PostalCode.Replace(" ", "").StartsWith(postalCode.Replace(" ", ""))
-                       || x.City.Contains(postalCode)).Id;
-                return location;
-            }
-            return postalCodeDbo.Id;
+            return uow.LocationRepository.FindFirstOrDefault(x => x.PostalCode.Equals(postalCode)
+                   || x.PostalCode.Replace(" ", "").Equals(postalCode.Replace(" ", ""))
+                   || x.City.Contains(postalCode)).Id;
         }
 
-        private IEnumerable<SelectListItem> GetAllRoles(CompanyDetailDbo companyDetail = null)
+        private IEnumerable<SelectListItem> GetAllRoles(IUnitOfWork uow, int companyId)
         {
             List<SelectListItem> allRoles = new List<SelectListItem>();
-            if (companyDetail != null)
-            {
-                var companyRoles = companyDetail.CompanyDetails2UserDetails.Select(cd => cd.CompanyRole)
-                    .Where(cr=>cr.Name != CompanyRole.Owner.ToString())
-                    .Select(x => new SelectListItem
-                    {
-                        Value = x.Id.ToString(),
-                        Text = x.Name
-                    });
-                allRoles.AddRange(companyRoles);
-            }
-            else
-            {
-                allRoles.Add(new SelectListItem { Value = "", Text = "" });
-            }
+            var companyRoles = uow.CompanyRoleRepository
+                .FindWhere(cr => cr.Name != CompanyRole.Owner.ToString() || cr.CreatedByCompId == companyId)
+                .Select(x => new SelectListItem
+                {
+                    Value = x.Id.ToString(),
+                    Text = x.Name
+                });
+            allRoles.AddRange(companyRoles);
 
             return allRoles;
-            #endregion
         }
+
+        private IEnumerable<SelectListItem> GetDefaultRoles()
+        {
+            List<SelectListItem> roles = new List<SelectListItem>();
+
+            roles.Add(new SelectListItem { Value = "", Text = "" });
+            return roles;
+        }
+        #endregion
     }
 }

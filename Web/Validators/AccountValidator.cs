@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Common.DB;
+using Infrastructure.Common.Enums;
 using Infrastructure.Common.Validations;
 using System;
 using Web.eBado.Helpers;
@@ -14,6 +15,11 @@ namespace Web.eBado.Validators
         {
             ValidateEmailNotExist(uow, collection, model.Email, nameof(model.Email));
             ValidatePasswordEquality(uow, collection, model.Password, model.RepeatPassword, nameof(model.RepeatPassword));
+        }
+
+        public static void ValidateChangeSettings(IUnitOfWork uow, ValidationResultCollection collection, ChangePasswordModel model, int userID)
+        {
+            ValidatePasswords(uow, collection, model, userID);
         }
 
         public static void ValidateUserLogin(IUnitOfWork uow, ValidationResultCollection collection, LoginModel model)
@@ -54,7 +60,7 @@ namespace Web.eBado.Validators
             if (userDetails != null)
             {
                 var encodedPws = AccountHelper.EncodePassword(model.Password, userDetails.Salt);
-                bool isSamePsw = uow.UserDetailsRepository.AnyActive(ud => ud.Password.Equals(encodedPws));
+                bool isSamePsw = userDetails.Password.Equals(encodedPws);
                 if (!isSamePsw)
                 {
                     ValidationHelpers.AddValidationResult(collection, nameof(model.Password), ValidationErrors.WrongLogin);
@@ -62,10 +68,29 @@ namespace Web.eBado.Validators
             }
             else
             {
-                ValidationHelpers.AddValidationResult(collection, nameof(model.Email), ValidationErrors.WrongLogin);
+                ValidationHelpers.AddValidationResult(collection, nameof(model.Password), ValidationErrors.WrongLogin);
             }
         }
 
+        private static void ValidatePasswords(IUnitOfWork uow, ValidationResultCollection collection, ChangePasswordModel model, int userID)
+        {
+            bool isPswEqual = true;
+            if (model.NewPassword != model.RepeatNewPassword)
+            {
+                ValidationHelpers.AddValidationResult(collection, nameof(model.RepeatNewPassword), ValidationErrors.PasswordsAreNotEqual);
+                isPswEqual = false;
+            }
+            if (isPswEqual)
+            {
+                var userDetails = uow.UserDetailsRepository.FindFirstOrDefault(ud => ud.Id == userID);
+                var encodedPws = AccountHelper.EncodePassword(model.OldPassword, userDetails.Salt);
+                bool isSamePsw = userDetails.Password.Equals(encodedPws);
+                if (!isSamePsw)
+                {
+                    ValidationHelpers.AddValidationResult(collection, nameof(model.OldPassword), ValidationErrors.WrongPassword);
+                }
+            }
+        }
         #endregion
     }
 }
