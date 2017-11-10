@@ -683,6 +683,10 @@ hr.transparent {
     border: 1px solid #ffffff;
 }
 
+.push_top_5 {
+    margin-top: 5px;
+}
+
 .push_top_10 {
     margin-top: 10px;
 }

@@ -17,6 +17,7 @@ namespace Web.eBado.Models.Account
         public bool CreateDemand { get; set; }
         public bool EditDemand { get; set; }
         public bool DeleteDemand { get; set; }
+        public bool ChangeSettings { get; set; }
         public bool ReadOnly { get; set; }
     }
 }

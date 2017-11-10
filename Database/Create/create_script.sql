@@ -2,146 +2,147 @@
 	BEGIN TRANSACTION
 
 		/***** Creating tables *****/
-		PRINT 'Creating Table [User_Details]'
-		CREATE TABLE [User_Details]
+		PRINT 'Creating Table [UserDetails]'
+		CREATE TABLE [UserDetails]
 		(
 			[Id] INT IDENTITY(1,1),
 			[Title] VARCHAR(20),
-			[First_Name] VARCHAR(50) NOT NULL,
-			[Second_Name] VARCHAR(50),
-			[Surname] VARCHAR(50) NOT NULL,
-			[Display_Name] VARCHAR(50) NOT NULL,
-			[Phone_Number] INT,
-			[Additional_Phone_Number] INT,
-			[Email] VARCHAR(50) UNIQUE NOT NULL,
-			[Salt] VARCHAR (25) NOT NULL,
+			[FirstName] VARCHAR(50),
+			[Surname] VARCHAR(50),
+			[DisplayName] VARCHAR(50),
+			[PhoneNumber] VARCHAR(20),
+			[AdditionalPhoneNumber] VARCHAR(20),
+			[Email] VARCHAR(100) UNIQUE NOT NULL,
+			[Salt] VARCHAR (255) NOT NULL,
 			[Password] VARCHAR(255) NOT NULL,
-			[Is_Active] BIT NOT NULL DEFAULT 'true',
-			[Date_Created] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			[Date_Modified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			CONSTRAINT PK_USER_DETAILS_ID PRIMARY KEY(Id) 
+			[LastLogin] DATETIME2(0),
+			[ExternalLoginId] VARCHAR(100),
+			[IsExternalLogin] BIT NOT NULL DEFAULT 'false',
+			[IsValidated] BIT NOT NULL DEFAULT 'false',
+			[ProfilePictureUrl] VARCHAR(100),
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKUserDetailsId PRIMARY KEY(Id) 
 		)
 		PRINT 'Table created successfully'
 
-		PRINT 'Creating Table [User_Role]'
-		CREATE TABLE [User_Role]
+		PRINT 'Creating Table [UserRole]'
+		CREATE TABLE [UserRole]
 		(
 			[Id] INT IDENTITY(1,1),
 			[Name] VARCHAR(30) NOT NULL UNIQUE,
-			[Code] VARCHAR(30) NOT NULL UNIQUE,
-			[Description] VARCHAR(100),
-			[Is_Active] BIT NOT NULL DEFAULT 'true',
-			[Date_Created] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			[Date_Modified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			CONSTRAINT PK_User_Role_Id PRIMARY KEY(Id) 
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKUserRoleId PRIMARY KEY(Id) 
 		)
 		PRINT 'Table created successfully'
 
-		PRINT 'Creating Table [User_Permission]'
-		CREATE TABLE [User_Permission]
+		PRINT 'Creating Table [UserPermission]'
+		CREATE TABLE [UserPermission]
 		(
 			[Id] INT IDENTITY(1,1),
 			[Name] VARCHAR(30) NOT NULL UNIQUE,
-			[Code] VARCHAR(30) NOT NULL UNIQUE,
-			[Description] VARCHAR(100),
-			[Is_Active] BIT NOT NULL DEFAULT 'true',
-			[Date_Created] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			[Date_Modified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			CONSTRAINT PK_User_Permission_Id PRIMARY KEY(Id) 
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKUserPermissionId PRIMARY KEY(Id) 
 		)
 		PRINT 'Table created successfully'
 
-		PRINT 'Creating Table [User_Role_2_User_Permission]'
-		CREATE TABLE [User_Role_2_User_Permission]
+		PRINT 'Creating Table [UserRole2UserPermission]'
+		CREATE TABLE [UserRole2UserPermission]
 		(
 			[Id] INT IDENTITY(1,1),
-			[User_Role_Id] INT,
-			[User_Permission_Id] INT,
-			[Is_Active] BIT NOT NULL DEFAULT 'true',
-			[Date_Created] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			[Date_Modified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			CONSTRAINT PK_User_Role_2_User_Permission_Id PRIMARY KEY(Id) 
+			[UserRoleId] INT,
+			[UserPermissionId] INT,
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKUserRole2UserPermissionId PRIMARY KEY(Id) 
 		)
 		PRINT 'Table created successfully'
 
-		PRINT 'Creating Table [Company_Details]'
-		CREATE TABLE [Company_Details]
+		PRINT 'Creating Table [CompanyDetails]'
+		CREATE TABLE [CompanyDetails]
 		(
 			[Id] INT IDENTITY(1,1),
 			[Name] VARCHAR(100) NOT NULL,
 			[Description] VARCHAR(250),
-			[Phone_Number] INT,
-			[Additional_Phone_Number] INT,
-			[Is_Active] BIT NOT NULL DEFAULT 'true',
-			[Date_Created] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			[Date_Modified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			CONSTRAINT PK_COMPANY_DETAILS_ID PRIMARY KEY(Id) 
+			[PhoneNumber] VARCHAR(20),
+			[AdditionalPhoneNumber] VARCHAR(20),
+			[Email] VARCHAR(50),
+			[Ico] INT,
+			[Dic] INT,
+			[IsCompanyVerified] BIT NOT NULL DEFAULT 'false',
+			[ProfilePictureUrl] VARCHAR(100),
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKCompanyDetailsId PRIMARY KEY(Id) 
 		)
 		PRINT 'Table created successfully'
 
-		PRINT 'Creating Table [Company_Details_2_User_Details]'
-		CREATE TABLE [Company_Details_2_User_Details]
+		PRINT 'Creating Table [CompanyDetails2UserDetails]'
+		CREATE TABLE [CompanyDetails2UserDetails]
 		(
 			[Id] INT IDENTITY(1,1),
-			[Is_Active] BIT NOT NULL DEFAULT 'true',
-			[Date_Created] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			[Date_Modified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			CONSTRAINT PK_COMPANY_DETAILS_2_USER_DETAILS PRIMARY KEY(Id)
+			[EnableNotification] BIT NOT NULL DEFAULT 'false',
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKCompanyDetails2UserDetails PRIMARY KEY(Id)
 		)
 
-		PRINT 'Creating Table [Company_Type]'
-		CREATE TABLE [Company_Type]
-		(
-			[Id] INT IDENTITY(1,1),
-			[Name] VARCHAR(30) NOT NULL UNIQUE,
-			[Code] VARCHAR(30) NOT NULL UNIQUE,
-			[Description] VARCHAR(100),
-			[Is_Active] BIT NOT NULL DEFAULT 'true',
-			[Date_Created] DATETIME DEFAULT CURRENT_TIMESTAMP,
-			[Date_Modified] DATETIME DEFAULT CURRENT_TIMESTAMP,
-			CONSTRAINT PK_Company_Type_Id PRIMARY KEY(Id) 
-		)
-		PRINT 'Table created successfully'
-
-		PRINT 'Creating Table [Company_Role]'
-		CREATE TABLE [Company_Role]
+		PRINT 'Creating Table [CompanyType]'
+		CREATE TABLE [CompanyType]
 		(
 			[Id] INT IDENTITY(1,1),
 			[Name] VARCHAR(30) NOT NULL UNIQUE,
-			[Code] VARCHAR(30) NOT NULL UNIQUE,
 			[Description] VARCHAR(100),
-			[Is_Custom] BIT NOT NULL DEFAULT 'false',
-			[Is_Active] BIT NOT NULL DEFAULT 'true',
-			[Date_Created] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			[Date_Modified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			CONSTRAINT PK_Company_Role_Id PRIMARY KEY(Id) 
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKCompanyTypeId PRIMARY KEY(Id) 
 		)
 		PRINT 'Table created successfully'
 
-		PRINT 'Creating Table [Company_Permission]'
-		CREATE TABLE [Company_Permission]
+		PRINT 'Creating Table [CompanyRole]'
+		CREATE TABLE [CompanyRole]
+		(
+			[Id] INT IDENTITY(1,1),
+			[Name] VARCHAR(30) NOT NULL UNIQUE,
+			[CreatedByCompId] INT,
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKCompanyRoleId PRIMARY KEY(Id) 
+		)
+		PRINT 'Table created successfully'
+
+		PRINT 'Creating Table [CompanyPermission]'
+		CREATE TABLE [CompanyPermission]
 		(
 			[Id] INT IDENTITY(1,1),
 			[Name] VARCHAR(30) NOT NULL,
-			[Code] VARCHAR(30) NOT NULL,
-			[Description] VARCHAR(100),
-			[Is_Active] BIT NOT NULL DEFAULT 'true',
-			[Date_Created] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			[Date_Modified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			CONSTRAINT PK_Company_Permission_Id PRIMARY KEY(Id) 
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKCompanyPermissionId PRIMARY KEY(Id) 
 		)
 		PRINT 'Table created successfully'
 
-		PRINT 'Creating Table [Company_Role_2_Company_Permission]'
-		CREATE TABLE [Company_Role_2_Company_Permission]
+		PRINT 'Creating Table [CompanyRole2CompanyPermission]'
+		CREATE TABLE [CompanyRole2CompanyPermission]
 		(
 			[Id] INT IDENTITY(1,1),
-			[Company_Role_Id] INT,
-			[Company_Permission_Id] INT,
-			[Is_Active] BIT NOT NULL DEFAULT 'true',
-			[Date_Created] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			[Date_Modified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			CONSTRAINT PK_Company_Role_2_Company_Permission_Id PRIMARY KEY(Id) 
+			[CompanyRoleId] INT,
+			[CompanyPermissionId] INT,
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKCompanyRole2CompanyPermissionId PRIMARY KEY(Id) 
 		)
 		PRINT 'Table created successfully'
 
@@ -152,14 +153,15 @@
 			[Country] VARCHAR(100),
 			[PostalCode] VARCHAR(100),
 			[City] VARCHAR(100),
+			[CityAlias] VARCHAR(100),
 			[County] VARCHAR(100),
 			[District] VARCHAR(100),
 			[Lat] DECIMAL(10,4),
 			[Lon] DECIMAL(10,4),
-			[Is_Active] BIT NOT NULL DEFAULT 'true',
-			[Date_Created] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			[Date_Modified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			CONSTRAINT PK_Location_Id PRIMARY KEY(Id) 
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKLocationId PRIMARY KEY(Id) 
 		)
 		PRINT 'Table created successfully'
 
@@ -169,12 +171,12 @@
 			[Id] INT IDENTITY(1,1),
 			[Street] VARCHAR(100),
 			[Number] VARCHAR(10),
-			[Is_DeliveryAddress] BIT DEFAULT 'false',
-			[Is_BillingAddress] BIT DEFAULT 'false',
-			[Is_Active] BIT NOT NULL DEFAULT 'true',
-			[Date_Created] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			[Date_Modified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			CONSTRAINT PK_Address_Id PRIMARY KEY(Id),
+			[IsDeliveryAddress] BIT DEFAULT 'false',
+			[IsBillingAddress] BIT DEFAULT 'false',
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKAddressId PRIMARY KEY(Id),
 		)
 		PRINT 'Table created successfully'
 
@@ -184,36 +186,38 @@
 			[Id] INT IDENTITY(1,1),
 			[Name] VARCHAR(50) NOT NULL,
 			[Description] VARCHAR(100),
-			[Is_Active] BIT NOT NULL DEFAULT 'true',
-			[Date_Created] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			[Date_Modified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			CONSTRAINT PK_Category_Id PRIMARY KEY (Id),
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKCategoryId PRIMARY KEY (Id),
 		)
 		PRINT 'Table created successfully'
 
-		PRINT 'Creating Table [Sub_Category]'
-		CREATE TABLE [Sub_Category]
+		PRINT 'Creating Table [SubCategory]'
+		CREATE TABLE [SubCategory]
 		(
 			[Id] INT IDENTITY(1,1),
-			[Name] VARCHAR(50) NOT NULL,
+			[Name] VARCHAR(100) NOT NULL,
 			[Description] VARCHAR(100),
-			[Is_Active] BIT NOT NULL DEFAULT 'true',
-			[Date_Created] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			[Date_Modified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			CONSTRAINT PK_Sub_Category_Id PRIMARY KEY (Id),
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKSubCategoryId PRIMARY KEY (Id),
 		)
 		PRINT 'Table created successfully'
 
-		PRINT 'Creating Table [Batch_Attachment]'
-		CREATE TABLE [Batch_Attachment]
+		PRINT 'Creating Table [BatchAttachment]'
+		CREATE TABLE [BatchAttachment]
 		(
 			[Id] INT IDENTITY(1,1),
+			[GuId] VARCHAR(36) NOT NULL,
 			[Name] VARCHAR(50) NOT NULL,
 			[Description] VARCHAR(100),
-			[Is_Active] BIT NOT NULL DEFAULT 'true',
-			[Date_Created] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			[Date_Modified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			CONSTRAINT PK_Batch_Attachment_Id PRIMARY KEY (Id),
+			[ThumbnailUrl] VARCHAR(255),			
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKBatchAttachmentId PRIMARY KEY (Id),
 		)
 		PRINT 'Table created successfully'
 		
@@ -221,136 +225,204 @@
 		CREATE TABLE [Attachment]
 		(
 			[Id] INT IDENTITY(1,1),
-			[Original_Url] VARCHAR(255) NOT NULL,
-			[Thumbnail_Url] VARCHAR(255),			
-			[Is_Active] BIT NOT NULL DEFAULT 'true',
-			[Date_Created] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			[Date_Modified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			CONSTRAINT PK_Attachment_Id PRIMARY KEY (Id),
+			[Name] VARCHAR(100) NOT NULL,
+			[Size] INT NOT NULL,
+			[OriginalUrl] VARCHAR(255) NOT NULL,
+			[ThumbnailUrl] VARCHAR(255),			
+			[FileType] VARCHAR(50) NOT NULL,			
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKAttachmentId PRIMARY KEY (Id),
 		)
 		PRINT 'Table created successfully'
 
-		PRINT 'Creating Table [Category_2_Company_Details]'
-		CREATE TABLE [Category_2_Company_Details]
+		PRINT 'Creating Table [Category2CompanyDetails]'
+		CREATE TABLE [Category2CompanyDetails]
 		(
 			[Id] INT IDENTITY(1,1),
-			[Company_Details_Id] INT,
-			[Category_Id] INT,
-			[Is_Active] BIT NOT NULL DEFAULT 'true',
-			[Date_Created] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			[Date_Modified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			CONSTRAINT PK_Category_2_Company_Details_Id PRIMARY KEY(Id) 
+			[CompanyDetailsId] INT,
+			[CategoryId] INT,
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKCategory2CompanyDetailsId PRIMARY KEY(Id) 
 		)
 		PRINT 'Table created successfully'
 
-		PRINT 'Creating Table [Sub_Category_2_Company_Details]'
-		CREATE TABLE [Sub_Category_2_Company_Details]
+		PRINT 'Creating Table [SubCategory2CompanyDetails]'
+		CREATE TABLE [SubCategory2CompanyDetails]
 		(
 			[Id] INT IDENTITY(1,1),
-			[Company_Details_Id] INT,
-			[Sub_Category_Id] INT,
-			[Is_Active] BIT NOT NULL DEFAULT 'true',
-			[Date_Created] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			[Date_Modified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
-			CONSTRAINT PK_Sub_Category_2_Company_Details_Id PRIMARY KEY(Id) 
+			[CompanyDetailsId] INT,
+			[SubCategoryId] INT,
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKSubCategory2CompanyDetailsId PRIMARY KEY(Id) 
+		)
+		PRINT 'Table created successfully'
+
+		PRINT 'Creating Table [UserSettings]'
+		CREATE TABLE UserSettings
+		(
+			[Id] INT IDENTITY(1,1),
+			[SearchRadius] INT DEFAULT 30,
+			[SearchInSK] BIT NOT NULL DEFAULT 'false',
+			[SearchInCZ] BIT NOT NULL DEFAULT 'false',
+			[SearchInHU] BIT NOT NULL DEFAULT 'false',
+			[NotifyCommentOnContribution] BIT NOT NULL DEFAULT 'false',
+			[NotifyCommentOnAccount] BIT NOT NULL DEFAULT 'false',
+			[Language] VARCHAR(50),
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKUserSettingsId PRIMARY KEY(Id) 
+		)
+		PRINT 'Table created successfully'
+
+		PRINT 'Creating Table [CompanySettings]'
+		CREATE TABLE CompanySettings
+		(
+			[Id] INT IDENTITY(1,1),
+			[SearchRadius] INT DEFAULT 30,
+			[SearchInSK] BIT NOT NULL DEFAULT 'false',
+			[SearchInCZ] BIT NOT NULL DEFAULT 'false',
+			[SearchInHU] BIT NOT NULL DEFAULT 'false',
+			[NotifyCommentOnContribution] BIT NOT NULL DEFAULT 'false',
+			[NotifyCommentOnAccount] BIT NOT NULL DEFAULT 'false',
+			[NotifyAllMember] BIT NOT NULL DEFAULT 'false',
+			[NotificationEmail] VARCHAR(100),
+			[Language] VARCHAR(50),
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKCompanySettingsId PRIMARY KEY(Id) 
+		)
+		PRINT 'Table created successfully'
+
+		PRINT 'Creating Table [AllDevices]'
+		CREATE TABLE AllDevices
+		(
+			[Id] INT IDENTITY(1,1),
+			[DeviceId] VARCHAR(36),
+			[AudienceKey] VARCHAR(100),
+			[SecretKey] VARCHAR(100),
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
 		)
 		PRINT 'Table created successfully'
 
 		/***** Creating foreign keys *****/
 
-		PRINT 'Creating foreign keys for table [Company_Details_2_User_Details]'
-		ALTER TABLE [Company_Details_2_User_Details]
-		ADD [Company_Details_Id] INT NOT NULL
-		ALTER TABLE [Company_Details_2_User_Details]
-		ADD	[User_Details_Id] INT NOT NULL
-		ALTER TABLE [Company_Details_2_User_Details]
-		ADD	CONSTRAINT FK_Company_Details FOREIGN KEY (Company_Details_Id) REFERENCES Company_Details(Id)
-		ALTER TABLE [Company_Details_2_User_Details]
-		ADD	CONSTRAINT FK_User_Details FOREIGN KEY (User_Details_Id) REFERENCES User_Details(Id)
+		PRINT 'Creating foreign keys for table [CompanyDetails2UserDetails]'
+		ALTER TABLE [CompanyDetails2UserDetails]
+		ADD [CompanyDetailsId] INT NOT NULL
+		ALTER TABLE [CompanyDetails2UserDetails]
+		ADD	[UserDetailsId] INT NOT NULL
+		ALTER TABLE [CompanyDetails2UserDetails]
+		ADD	CONSTRAINT FKCompanyDetails FOREIGN KEY (CompanyDetailsId) REFERENCES CompanyDetails(Id)
+		ALTER TABLE [CompanyDetails2UserDetails]
+		ADD	CONSTRAINT FKUserDetails FOREIGN KEY (UserDetailsId) REFERENCES UserDetails(Id)
+		ALTER TABLE [CompanyDetails2UserDetails]
+		ADD [CompanyRoleId] INT NOT NULL
+		ALTER TABLE [CompanyDetails2UserDetails]
+		ADD CONSTRAINT FKCompanyDetails2UserDetails FOREIGN KEY (CompanyRoleId) REFERENCES CompanyRole(Id)
 		PRINT 'Foreign keys successfully created'
 
-		PRINT 'Creating foreign keys for table [Company_Details]'
-		ALTER TABLE [Company_Details]
-		ADD [Company_Type_Id] INT NOT NULL
-		ALTER TABLE [Company_Details]
-		ADD	CONSTRAINT FK_Company_Type FOREIGN KEY (Company_Type_Id) REFERENCES Company_Type(Id)
+		PRINT 'Creating foreign keys for table [CompanyDetails]'
+		ALTER TABLE [CompanyDetails]
+		ADD [CompanyTypeId] INT NOT NULL
+		ALTER TABLE [CompanyDetails]
+		ADD	CONSTRAINT FKCompanyType FOREIGN KEY (CompanyTypeId) REFERENCES CompanyType(Id)
 		PRINT 'Foreign keys successfully created'
 
-		PRINT 'Creating foreign keys for table [Sub_Category]'
-		ALTER TABLE [Sub_Category]
-		ADD [Category_Id] INT NOT NULL
-		ALTER TABLE [Sub_Category]
-		ADD CONSTRAINT FK_Category FOREIGN KEY (Category_Id) REFERENCES Category(Id)
+		PRINT 'Creating foreign keys for table [CompanySettings]'
+		ALTER TABLE [CompanyDetails]
+		ADD [CompanySettingId] INT NOT NULL
+		ALTER TABLE [CompanyDetails]
+		ADD	CONSTRAINT FKCompanySettings FOREIGN KEY (CompanySettingId) REFERENCES CompanySettings(Id)
 		PRINT 'Foreign keys successfully created'
 
-		PRINT 'Creating foreign keys for table [Company_Role_2_Company_Permission]'
-		ALTER TABLE [Company_Role_2_Company_Permission]
-		ADD CONSTRAINT FK_Company_Role FOREIGN KEY (Company_Role_Id) REFERENCES Company_Role(Id)
-		ALTER TABLE [Company_Role_2_Company_Permission]
-		ADD CONSTRAINT FK_Company_Permission FOREIGN KEY (Company_Permission_Id) REFERENCES Company_Permission(Id)
+		PRINT 'Creating foreign keys for table [SubCategory]'
+		ALTER TABLE [SubCategory]
+		ADD [CategoryId] INT NOT NULL
+		ALTER TABLE [SubCategory]
+		ADD CONSTRAINT FKCategory FOREIGN KEY (CategoryId) REFERENCES Category(Id)
 		PRINT 'Foreign keys successfully created'
 
-		PRINT 'Creating foreign keys for table [User_Role_2_User_Permission]'
-		ALTER TABLE [User_Role_2_User_Permission]
-		ADD CONSTRAINT FK_User_Role FOREIGN KEY (User_Role_Id) REFERENCES User_Role(Id)
-		ALTER TABLE [User_Role_2_User_Permission]
-		ADD CONSTRAINT FK_User_Permission FOREIGN KEY (User_Permission_Id) REFERENCES User_Permission(Id)
+		PRINT 'Creating foreign keys for table [CompanyRole2CompanyPermission]'
+		ALTER TABLE [CompanyRole2CompanyPermission]
+		ADD CONSTRAINT FKCompanyRole FOREIGN KEY (CompanyRoleId) REFERENCES CompanyRole(Id)
+		ALTER TABLE [CompanyRole2CompanyPermission]
+		ADD CONSTRAINT FKCompanyPermission FOREIGN KEY (CompanyPermissionId) REFERENCES CompanyPermission(Id)
 		PRINT 'Foreign keys successfully created'
 
-		PRINT 'Creating foreign keys for table [User_Details]'
-		ALTER TABLE [User_Details]
-		ADD [User_Role_Id] INT NOT NULL
-		ALTER TABLE [User_Details]
-		ADD CONSTRAINT FK_User_Details_User_Role FOREIGN KEY (User_Role_Id) REFERENCES User_Role(Id)
-		ALTER TABLE [User_Details]
-		ADD [Company_Role_Id] INT
-		ALTER TABLE [User_Details]
-		ADD CONSTRAINT FK_User_Details_Company_Role FOREIGN KEY (Company_Role_Id) REFERENCES Company_Role(Id)	
+		PRINT 'Creating foreign keys for table [UserRole2UserPermission]'
+		ALTER TABLE [UserRole2UserPermission]
+		ADD CONSTRAINT FKUserRole FOREIGN KEY (UserRoleId) REFERENCES UserRole(Id)
+		ALTER TABLE [UserRole2UserPermission]
+		ADD CONSTRAINT FKUserPermission FOREIGN KEY (UserPermissionId) REFERENCES UserPermission(Id)
+		PRINT 'Foreign keys successfully created'
+
+		PRINT 'Creating foreign keys for table [UserDetails]'
+		ALTER TABLE [UserDetails]
+		ADD [UserRoleId] INT NOT NULL
+		ALTER TABLE [UserDetails]
+		ADD CONSTRAINT FKUserDetailsUserRole FOREIGN KEY (UserRoleId) REFERENCES UserRole(Id)			
+		PRINT 'Foreign keys successfully created'
+
+		PRINT 'Creating foreign keys for table [UserDetails]'
+		ALTER TABLE [UserDetails]
+		ADD [UserSettingId] INT NOT NULL
+		ALTER TABLE [UserDetails]
+		ADD CONSTRAINT FKUserSettings FOREIGN KEY (UserSettingId) REFERENCES UserSettings(Id)			
 		PRINT 'Foreign keys successfully created'
 
 		PRINT 'Creating foreign keys for table [Address]'
 		ALTER TABLE [Address]
-		ADD [Location_Id] INT NOT NULL
+		ADD [LocationId] INT NOT NULL
 		ALTER TABLE [Address]
-		ADD CONSTRAINT FK_Address_Location_Id FOREIGN KEY (Location_Id) REFERENCES Location(Id)
+		ADD CONSTRAINT FKAddressLocationId FOREIGN KEY (LocationId) REFERENCES Location(Id)
 		ALTER TABLE [Address]
-		ADD [User_Details_Id] INT
+		ADD [UserDetailsId] INT
 		ALTER TABLE [Address]
-		ADD CONSTRAINT FK_Address_User_Details_Id FOREIGN KEY (User_Details_Id) REFERENCES User_Details(Id)
+		ADD CONSTRAINT FKAddressUserDetailsId FOREIGN KEY (UserDetailsId) REFERENCES UserDetails(Id)
 		ALTER TABLE [Address]
-		ADD [Company_Details_Id] INT
+		ADD [CompanyDetailsId] INT
 		ALTER TABLE [Address]
-		ADD CONSTRAINT FK_Address_Company_Details_Id FOREIGN KEY (Company_Details_Id) REFERENCES Company_Details(Id)
+		ADD CONSTRAINT FKAddressCompanyDetailsId FOREIGN KEY (CompanyDetailsId) REFERENCES CompanyDetails(Id)
 		PRINT 'Foreign keys successfully created'
 
 		PRINT 'Creating foreign keys for table [Attachment]'
 		ALTER TABLE [Attachment]
-		ADD [Batch_Att_Id] INT NOT NULL
+		ADD [BatchAttId] INT NOT NULL
 		ALTER TABLE [Attachment]
-		ADD CONSTRAINT FK_Attachment_Batch_Attachment_Id FOREIGN KEY (Batch_Att_Id) REFERENCES Batch_Attachment(Id)
+		ADD CONSTRAINT FKAttachmentBatchAttachmentId FOREIGN KEY (BatchAttId) REFERENCES BatchAttachment(Id)
 		PRINT 'Foreign keys successfully created'
 
-		PRINT 'Creating foreign keys for table [Batch_Attachment]'
-		ALTER TABLE [Batch_Attachment]
-		ADD [Company_Details_Id] INT NOT NULL
-		ALTER TABLE [Batch_Attachment]
-		ADD CONSTRAINT FK_Company_Details_Batch_Attachment_Id FOREIGN KEY (Company_Details_Id) REFERENCES Company_Details(Id)
+		PRINT 'Creating foreign keys for table [BatchAttachment]'
+		ALTER TABLE [BatchAttachment]
+		ADD [CompanyDetailsId] INT NOT NULL
+		ALTER TABLE [BatchAttachment]
+		ADD CONSTRAINT FKCompanyDetailsBatchAttachmentId FOREIGN KEY (CompanyDetailsId) REFERENCES CompanyDetails(Id)
 		PRINT 'Foreign key successfully created'
 
-		PRINT 'Creating foreign keys for table [Category_2_Company_Details]'
-		ALTER TABLE [Category_2_Company_Details]
-		ADD	CONSTRAINT FK_Category_2_Company_Details_Company_Details FOREIGN KEY (Company_Details_Id) REFERENCES Company_Details(Id)
-		ALTER TABLE [Category_2_Company_Details]
-		ADD	CONSTRAINT FK_Category_2_Company_Details_Category FOREIGN KEY (Category_Id) REFERENCES Category(Id)
+		PRINT 'Creating foreign keys for table [Category2CompanyDetails]'
+		ALTER TABLE [Category2CompanyDetails]
+		ADD	CONSTRAINT FKCategory2CompanyDetailsCompanyDetails FOREIGN KEY (CompanyDetailsId) REFERENCES CompanyDetails(Id)
+		ALTER TABLE [Category2CompanyDetails]
+		ADD	CONSTRAINT FKCategory2CompanyDetailsCategory FOREIGN KEY (CategoryId) REFERENCES Category(Id)
 		PRINT 'Foreign keys successfully created'
 
-		PRINT 'Creating foreign keys for table [Sub_Category_2_Company_Details]'
-		ALTER TABLE [Sub_Category_2_Company_Details]
-		ADD	CONSTRAINT FK_Sub_Category_2_Company_Details_Company_Details FOREIGN KEY (Company_Details_Id) REFERENCES Company_Details(Id)
-		ALTER TABLE [Sub_Category_2_Company_Details]
-		ADD	CONSTRAINT FK_Sub_Category_2_Company_Details_Sub_Category FOREIGN KEY (Sub_Category_Id) REFERENCES Sub_Category(Id)
+		PRINT 'Creating foreign keys for table [SubCategory2CompanyDetails]'
+		ALTER TABLE [SubCategory2CompanyDetails]
+		ADD	CONSTRAINT FKSubCategory2CompanyDetailsCompanyDetails FOREIGN KEY (CompanyDetailsId) REFERENCES CompanyDetails(Id)
+		ALTER TABLE [SubCategory2CompanyDetails]
+		ADD	CONSTRAINT FKSubCategory2CompanyDetailsSubCategory FOREIGN KEY (SubCategoryId) REFERENCES SubCategory(Id)
 		PRINT 'Foreign keys successfully created'
 
-		PRINT 'Create script finished succesfully'
+		PRINT 'Create script finished successfully'
 				
 	COMMIT TRANSACTION

@@ -1,9 +1,7 @@
 ﻿using Infrastructure.Common.DB;
 using Infrastructure.Common.Enums;
-using Infrastructure.Common.Validations;
 using Infrastructure.Configuration;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -15,9 +13,10 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
+using Web.eBado.IoC;
 using Web.eBado.Models.Account;
 using Web.eBado.Models.Shared;
-using Web.eBado.Validators;
+using WebAPIFactory.Caching.Core;
 using WebAPIFactory.Logging.Core;
 using WebAPIFactory.Logging.Core.Diagnostics;
 
@@ -88,7 +87,8 @@ namespace Web.eBado.Helpers
                     PhoneNumber = model.PhoneNumber,
                     AdditionalPhoneNumber = string.IsNullOrEmpty(model.AdditionalPhoneNumber) ? null : model.AdditionalPhoneNumber,
                     DisplayName = GetUserDisplayName(model),
-                    UserRole = userRole
+                    UserRole = userRole,
+                    IsValidated = true
                 };
 
                 userDetails.Addresses.Add(new AddressDbo
@@ -153,12 +153,15 @@ namespace Web.eBado.Helpers
             companyDetails.CompanyDetails2UserDetails.Add(new CompanyDetails2UserDetailsDbo
             {
                 CompanyRoleId = companyRoleId,
-                UserDetail = userDetail
+                UserDetail = userDetail,
+                EnableNotification = true
             });
 
-            companyDetails.SubCategory2CompanyDetails.Add(new SubCategory2CompanyDetailsDbo
+            var selectedCategories = model.Categories.SelectedCategories.ToList();
+            if (selectedCategories.Any())
             {
-            });
+                SetSelectedCategories(uow, selectedCategories, companyDetails);
+            }
 
             companyDetails.CompanySetting = new CompanySettingDbo
             {
@@ -254,19 +257,13 @@ namespace Web.eBado.Helpers
             companySettings.NotifyCommentOnContribution = notificationModel.NotifyCommentOnContribution;
             companySettings.NotifyAllMember = notificationModel.NotifyAllMember;
 
-            var memberRoles = companyDetails.CompanyDetails2UserDetails
-                .Where(cd => cd.CompanyRole.Name != CompanyRole.Owner.ToString() && cd.IsActive)
-                .Select(cd => new UserRoleModel
-                {
-                    UserEmail = cd.UserDetail.Email,
-                    SelectedRoleId = cd.CompanyRoleId.ToString()
-                }).ToList();
+            SetMembersNotification(notificationModel, companyDetails);
 
             model.EditMembersAndRolesModel = new EditMembersAndRolesModel
 
             {
                 AllRoles = GetAllRoles(unitOfWork, companyId),
-                UserRoles = memberRoles,
+                UserRoles = GetUserRoles(companyDetails),
                 Permissions = new CompanyPermissionsModel()
             };
 
@@ -326,13 +323,13 @@ namespace Web.eBado.Helpers
                 CompanyPostalCode = address.Location.PostalCode,
             };
 
-            model.CurrentCategories = companyDetails.Category2CompanyDetails.Select(c => c.Category.Name);
+            model.CurrentCategories = GetCurrentCategories(companyDetails);
             var memberRoles = companyDetails.CompanyDetails2UserDetails
                 .Where(cd => cd.CompanyRole.Name != CompanyRole.Owner.ToString() && cd.IsActive)
                 .Select(cd => new UserRoleModel
                 {
                     UserEmail = cd.UserDetail.Email,
-                    SelectedRoleId = cd.CompanyRoleId.ToString()
+                    SelectedRoleId = cd.CompanyRole.Name
                 }).ToList();
 
             model.EditMembersAndRolesModel = new EditMembersAndRolesModel
@@ -360,9 +357,9 @@ namespace Web.eBado.Helpers
             return model;
         }
 
-        public void InitializeAllCategories(CompanyModel model)
+        public void InitializeAllCategories(CompanyModel model, IUnitOfWork unitOfWork)
         {
-            model.Categories.AllCategories = GetAllCategories();
+            model.Categories.AllCategories = GetAllCategories(unitOfWork);
         }
 
         public static string EncodePassword(string pass, string salt)
@@ -395,17 +392,17 @@ namespace Web.eBado.Helpers
             return new string(chars);
         }
 
-        private IEnumerable<SelectListItem> GetAllCategories()
+        private IEnumerable<SelectListItem> GetAllCategories(IUnitOfWork unitOfWork)
         {
-            List<SelectListItem> allCars = new List<SelectListItem>();
-            //Add a few cars to make a list of cars
-            for (var i = 0; i < 50; i++)
-            {
-                allCars.Add(new SelectListItem { Value = $"Tag Text{i}", Text = $"tag Text{i}" });
+            List<SelectListItem> allCategories = new List<SelectListItem>();
+            var categories = unitOfWork.CategoryRepository.FindAll()
+                .Select(category => new SelectListItem { Value = category.Name, Text = category.Name });
 
-            }
+            var subCategories = unitOfWork.SubCategoryRepository.FindAll()
+                .Select(category => new SelectListItem { Value = category.Name, Text = category.Name });
+            allCategories.AddRange(categories.Concat(subCategories));
 
-            return allCars.AsEnumerable();
+            return allCategories.AsEnumerable();
         }
 
         private string GetUserDisplayName(UserModel model)
@@ -441,7 +438,7 @@ namespace Web.eBado.Helpers
                 .FindWhere(cr => cr.Name != CompanyRole.Owner.ToString() || cr.CreatedByCompId == companyId)
                 .Select(x => new SelectListItem
                 {
-                    Value = x.Id.ToString(),
+                    Value = x.Name,
                     Text = x.Name
                 });
             allRoles.AddRange(companyRoles);
@@ -455,6 +452,72 @@ namespace Web.eBado.Helpers
 
             roles.Add(new SelectListItem { Value = "", Text = "" });
             return roles;
+        }
+
+        private static void SetMembersNotification(NotificationModel notificationModel, CompanyDetailDbo companyDetails)
+        {
+            if (notificationModel.NotifyAllMember)
+            {
+                foreach (var user2company in companyDetails.CompanyDetails2UserDetails.Where(cd => !cd.EnableNotification))
+                {
+                    user2company.EnableNotification = true;
+                    companyDetails.CompanyDetails2UserDetails.Add(user2company);
+                }
+            }
+            else
+            {
+                foreach (var user2company in companyDetails.CompanyDetails2UserDetails.Where(cd => cd.CompanyRole.Name != CompanyRole.Owner.ToString()))
+                {
+                    user2company.EnableNotification = false;
+                    companyDetails.CompanyDetails2UserDetails.Add(user2company);
+                }
+            }
+        }
+
+        private List<UserRoleModel> GetUserRoles(CompanyDetailDbo companyDetails)
+        {
+            return companyDetails.CompanyDetails2UserDetails
+            .Where(cd => cd.CompanyRole.Name != CompanyRole.Owner.ToString() && cd.IsActive)
+            .Select(cd => new UserRoleModel
+            {
+                UserEmail = cd.UserDetail.Email,
+                SelectedRoleId = cd.CompanyRole.Name
+            }).ToList();
+        }
+
+        private IEnumerable<string> GetCurrentCategories(CompanyDetailDbo companyDetails)
+        {
+            var allCategories = new List<string>();
+            var categories = companyDetails.Category2CompanyDetails.Where(c => c.IsActive).Select(c => c.Category.Name);
+            var subCategories = companyDetails.SubCategory2CompanyDetails.Where(c => c.IsActive).Select(c => c.SubCategory.Name);
+            allCategories.AddRange(categories.Concat(subCategories));
+            return allCategories;
+        }
+
+        private void SetSelectedCategories(IUnitOfWork uow, List<string> selectedCategories, CompanyDetailDbo companyDetails)
+        {
+            var categoryIds = uow.CategoryRepository.FindWhere(c => selectedCategories.Contains(c.Name)).Select(c => c.Id);
+            var subCategoryIds = uow.SubCategoryRepository.FindWhere(sc => selectedCategories.Contains(sc.Name)).Select(sc => sc.Id);
+
+            foreach (var categoryId in categoryIds)
+            {
+                var category2company = new Category2CompanyDetailsDbo
+                {
+                    CategoryId = categoryId,
+                    CompanyDetailsId = companyDetails.Id
+                };
+                companyDetails.Category2CompanyDetails.Add(category2company);
+            }
+
+            foreach (var subCategoryId in subCategoryIds)
+            {
+                var subCategory2company = new SubCategory2CompanyDetailsDbo
+                {
+                    SubCategoryId = subCategoryId,
+                    CompanyDetailsId = companyDetails.Id
+                };
+                companyDetails.SubCategory2CompanyDetails.Add(subCategory2company);
+            }
         }
         #endregion
     }

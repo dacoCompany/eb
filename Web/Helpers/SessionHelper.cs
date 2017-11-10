@@ -15,7 +15,7 @@ namespace Web.eBado.Helpers
             SessionModel newSession;
             int companyId = currentSession.Companies.FirstOrDefault(c => c.Name == accountName).Id;
             var companyDetailDbo = unitOfWork.CompanyDetailsRepository.FindById(companyId);
-            var userDetailDbo = companyDetailDbo.CompanyDetails2UserDetails.FirstOrDefault().UserDetail;
+            var userDetailDbo = companyDetailDbo.CompanyDetails2UserDetails.FirstOrDefault(cd=>cd.UserDetailsId == currentSession.Id).UserDetail;
 
             newSession = new SessionModel
             {
@@ -40,7 +40,8 @@ namespace Web.eBado.Helpers
                 };
                 newSession.Companies.Add(companySession);
             }
-            var companyRoleDbo = companyDetailDbo.CompanyDetails2UserDetails.FirstOrDefault().CompanyRole;
+            var companyRoleDbo = companyDetailDbo.CompanyDetails2UserDetails
+                .FirstOrDefault(cd => cd.IsActive && cd.UserDetail == userDetailDbo && cd.CompanyDetail == companyDetailDbo).CompanyRole;
 
             companySession = new CompanySessionModel()
             {

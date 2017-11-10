@@ -39,11 +39,11 @@
                                 <li>
                                     @if (session.IsActive == true)
                                     {
-                                        <a href="" class="accountLink" id="@session.Name"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Name<div id="down-triangle"></div></a>
+                                        <a href="" onclick="return false" id="@session.Name"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Name<div id="down-triangle"></div></a>
                                     }
                                     else
                                     {
-                                        <a href="" class="accountLink" id="@session.Companies.FirstOrDefault(c => c.IsActive).Name"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Companies.FirstOrDefault(c => c.IsActive).Name<div id="down-triangle"></div></a>
+                                        <a href="" onclick="return false" id="@session.Companies.FirstOrDefault(c => c.IsActive).Name"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Companies.FirstOrDefault(c => c.IsActive).Name<div id="down-triangle"></div></a>
                                     }
                                     <ul>
                                         @if (!session.IsActive)

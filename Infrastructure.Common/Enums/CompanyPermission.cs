@@ -12,6 +12,7 @@
         CreateDemand = 8,
         EditDemand = 9,
         DeleteDemand = 10,
-        ReadOnly = 11
+        ChangeSettings = 11,
+        ReadOnly = 12
     }
 }

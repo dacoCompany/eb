@@ -33,6 +33,7 @@ namespace Infrastructure.Common.DB
         public Nullable<int> Ico { get; set; }
         public Nullable<int> Dic { get; set; }
         public bool IsCompanyVerified { get; set; }
+        public string ProfilePictureUrl { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }

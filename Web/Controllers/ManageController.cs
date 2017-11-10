@@ -71,10 +71,30 @@ namespace Web.eBado.Controllers
         [HttpPost]
         public JsonResult DeleteCategory(string category)
         {
+            string response = successResponse;
             var session = Session["User"] as SessionModel;
-            bool deleted = false;
+            int companyId = session.Companies.FirstOrDefault(c => c.IsActive).Id;
+            var companyDetails = unitOfWork.CompanyDetailsRepository.FindFirstOrDefault(cd => cd.Id == companyId);
+            var categoryDbo = companyDetails.Category2CompanyDetails.FirstOrDefault(c => c.Category.Name == category);
 
-            return deleted ? Json("Deleted", JsonRequestBehavior.AllowGet) : Json("Error", JsonRequestBehavior.AllowGet);
+            if (categoryDbo != null)
+            {
+                categoryDbo.IsActive = false;
+            }
+            else
+            {
+                var subCategoryDbo = companyDetails.SubCategory2CompanyDetails.FirstOrDefault(c => c.SubCategory.Name == category);
+                if (subCategoryDbo == null)
+                {
+                    response = "Kategoria neexistuje!";
+                }
+                else
+                {
+                    subCategoryDbo.IsActive = false;
+                }
+            }
+            unitOfWork.Commit();
+            return new JsonNetResult(response);
         }
 
         [HttpGet]
@@ -96,7 +116,7 @@ namespace Web.eBado.Controllers
                 else
                 {
                     var roleId = GetRoleIdByName(selectedRole, companyId);
-                    if(roleId == null)
+                    if (roleId == null)
                     {
                         // TODO: add custom jsonResulType
                     }
@@ -137,7 +157,7 @@ namespace Web.eBado.Controllers
             return new JsonNetResult(response);
         }
 
-       
+
 
         [HttpPost]
         public JsonResult ChangeMemberRole(string user, string role)
@@ -182,14 +202,15 @@ namespace Web.eBado.Controllers
                 unitOfWork.CompanyRoleRepository.Add(newCompanyRole);
 
                 var allPermissions = unitOfWork.CompanyPermissionsRepository.FindAll().ToList();
-                foreach(var permission in permissions.Where(p=> !string.IsNullOrEmpty(p)))
+                foreach (var permission in permissions.Where(p => !string.IsNullOrEmpty(p)))
                 {
                     var permissionDbo = allPermissions.FirstOrDefault(ap => ap.Name == permission);
-                    if(permissionDbo == null)
+                    if (permissionDbo == null)
                     {
                         // TODO: add custom jsonResulType
                     }
-                    var role2PermissionDbo = new CompanyRole2CompanyPermissionDbo {
+                    var role2PermissionDbo = new CompanyRole2CompanyPermissionDbo
+                    {
                         CompanyPermission = permissionDbo,
                         CompanyRole = newCompanyRole
                     };
@@ -205,18 +226,14 @@ namespace Web.eBado.Controllers
         [HttpGet]
         public JsonResult GetPostalCodes(string prefix)
         {
-            var location = new object();
-            using (var uow = NinjectResolver.GetInstance<IUnitOfWork>())
-            {
-                location = uow.LocationRepository.FindWhere(x => x.PostalCode.StartsWith(prefix)
-                    || x.PostalCode.Replace(" ", "").StartsWith(prefix.Replace(" ", ""))
-                    || x.City.StartsWith(prefix)).Take(10).AsEnumerable()
-                    .Select(loc => new
-                    {
-                        val = loc.PostalCode,
-                        label = $"{loc.PostalCode} - {loc.District} - {loc.City}"
-                    }).ToList();
-            }
+            var location = unitOfWork.LocationRepository.FindWhere(x => x.PostalCode.StartsWith(prefix)
+                || x.PostalCode.Replace(" ", "").StartsWith(prefix.Replace(" ", ""))
+                || x.City.StartsWith(prefix)).Take(10).AsEnumerable()
+                .Select(loc => new
+                {
+                    val = loc.PostalCode,
+                    label = $"{loc.PostalCode} - {loc.District} - {loc.City}"
+                }).ToList();
 
             return Json(location, JsonRequestBehavior.AllowGet);
         }
@@ -259,7 +276,7 @@ namespace Web.eBado.Controllers
         private int? GetRoleIdByName(string role, int companyId)
         {
             return unitOfWork.CompanyRoleRepository
-                .FindFirstOrDefault(cr => cr.Name == role.ToString() && ( cr.CreatedByCompId == null || cr.CreatedByCompId == companyId))?.Id;
+                .FindFirstOrDefault(cr => cr.Name == role.ToString() && (cr.CreatedByCompId == null || cr.CreatedByCompId == companyId))?.Id;
         }
 
         private int GetCompanyId()

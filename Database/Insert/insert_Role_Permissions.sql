@@ -30,6 +30,7 @@
 	INSERT INTO CompanyPermission(Name) VALUES ('DeleteDemand')
 	INSERT INTO CompanyPermission(Name) VALUES ('ChangeSettings')
 	INSERT INTO CompanyPermission(Name) VALUES ('ReadOnly')
+	INSERT INTO CompanyPermission(Name) VALUES ('ChangeAccountSettings')
 	PRINT'Insert CompanyPermission completed'
 
 	PRINT 'Insert CompanyRole2CompanyPermission data'
@@ -43,7 +44,7 @@
 	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('1','8')
 	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('1','9')
 	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('1','10')
-	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('1','10')
+	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('1','11')
 	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('2','1')
 	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('2','3')
 	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('2','5')
@@ -54,8 +55,8 @@
 	PRINT'Insert CompanyRole2CompanyPermission completed'
 
 	PRINT 'Insert UserPermission data'
-	INSERT INTO UserPermission(Name,Code) VALUES ('Read','1')
-	INSERT INTO UserPermission(Name,Code) VALUES ('Write','2')
+	INSERT INTO UserPermission(Name) VALUES ('Read')
+	INSERT INTO UserPermission(Name) VALUES ('Write')
 	PRINT'Insert UserPermission completed'
 
 	COMMIT TRANSACTION

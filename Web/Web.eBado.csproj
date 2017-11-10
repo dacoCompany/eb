@@ -170,6 +170,9 @@
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
       <HintPath>..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
     </Reference>
+    <Reference Include="WebAPIFactory.Caching.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd862fe01ec0cfe0, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebAPIFactory.Caching.Core.1.1.0\lib\net451\WebAPIFactory.Caching.Core.dll</HintPath>
+    </Reference>
     <Reference Include="WebAPIFactory.Configuration.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WebAPIFactory.Configuration.Core.1.0.0.0\lib\net46\WebAPIFactory.Configuration.Core.dll</HintPath>
     </Reference>

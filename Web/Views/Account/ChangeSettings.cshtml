@@ -32,13 +32,16 @@
     @Html.AntiForgeryToken()
     <div class="container">
         <div class="responsive push_top_10">
-            @{ var session = (Web.eBado.Models.Shared.SessionModel)Session["User"]; }
+            @{
+                var session = (Web.eBado.Models.Shared.SessionModel)Session["User"];
+                var companySession = session.Companies.FirstOrDefault(c => c.IsActive);
+            }
             @AccountHelper.SettingsMenu(Url, ViewContext.RouteData.Values["Action"].ToString(), session)
-            <div class="tabcontent push_top_20">
+            <div class="tabcontent">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 @if (session.IsActive)
                 {
-                    <div class="accordion-toggle resp_push_top_20">
+                    <div class="accordion-toggle push_top_5">
                         <div class="accordion-main">Zmenit heslo</div>
                     </div>
                     <div class="accordion-content">
@@ -176,20 +179,21 @@
                 }
                 else
                 {
-                    <div class="accordion-toggle">
-                        <div class="accordion-main">zmenit profil firmy</div>
-                    </div>
                     string hiddenClass = "";
+                    string push = "";
                     if (session.HasCompany)
                     {
-                        hiddenClass = "";
+                        push = "push_top_5";
                     }
                     else
                     {
                         hiddenClass = "hidden-toggle";
                     }
 
-                    <div id ="companyProfileDiv" class="@hiddenClass accordion-content">
+                    <div class="accordion-toggle @push">
+                        <div class="accordion-main">zmenit profil firmy</div>
+                    </div>
+                    <div id="companyProfileDiv" class="@hiddenClass accordion-content">
                         <div class="row">
                             <div class="col-lg-6">
                                 @Html.EditorFor(model => model.CompanyModel.CompanyName, new { htmlAttributes = new { @class = "form-control txt-lg", @readonly = "readonly" } })
@@ -249,21 +253,13 @@
                         </div>
                         <div class="col-lg-12 resp_push_bottom_10">
                             <div class="tags_text">Vasa oblast podnikania:</div>
-                            @*@foreach (var category in Model.CurrentCategories)
-                                {
-                                    <div id="div_@category" class="tags_blocks">
-                                        <div class="tags_block-text">@category</div>
-                                        <div id="@category" class="tags_block-symbol">&#10006;</div>
-                                    </div>
-                                }*@
-                            <div id="div_abc" class="tags_blocks">
-                                <div class="tags_block-text">abc</div>
-                                <div id="abc" class="tags_block-symbol">&#10006;</div>
-                            </div>
-                            <div id="div_asd" class="tags_blocks">
-                                <div class="tags_block-text">asd</div>
-                                <div id="asd" class="tags_block-symbol">&#10006;</div>
-                            </div>
+                            @foreach (var category in Model.CurrentCategories)
+                            {
+                                <div id="div_@category" class="tags_blocks">
+                                    <div class="tags_block-text">@category</div>
+                                    <div id="@category" class="tags_block-symbol">&#10006;</div>
+                                </div>
+                            }
                         </div>
                         <div class="edit_container push_bottom_20">
                             <input type="button" id="newCategoryBtn" value="Pridat oblast podnikania" class="form-btn-transparent" />
@@ -370,157 +366,184 @@
                             </div>*@
 
                     </div>
-                            <div class="accordion-toggle">
-                                <div class="accordion-main">Editovat clenov firemneho uctu</div>
+                    if (@companySession.CompanyPermissions.Contains(CompanyPermission.AddMember.ToString()))
+                    {
+                        <div class="accordion-toggle">
+                            <div class="accordion-main">Editovat clenov firemneho uctu</div>
+                        </div>
+
+                        <div id="editMemberDiv" class="hidden-toggle accordion-content">
+                            <div class="edit_container">
+                                <input type="button" id="newMemberBtn" value="Pridat clena" class="form-btn-transparent" />
+                                <input type="button" id="newRoleBtn" value="Pridat rolu" class="form-btn-transparent" />
                             </div>
-                            <div id="editMemberDiv" class="hidden-toggle accordion-content">
-                                <div class="edit_container">
-                                    <input type="button" id="newMemberBtn" value="Pridat clena" class="form-btn-transparent" />
-                                    <input type="button" id="newRoleBtn" value="Pridat rolu" class="form-btn-transparent" />
+                            <div id="newMember" class="edit_container hidden_div push_top_20 push_bottom_20">
+                                <div class="col-md-4">
+                                    @Html.EditorFor(model => model.EditMembersAndRolesModel.MemberEmail, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "newMemberText", @placeholder = "Email pouzivatela" } })
+                                    <div class="val-message text-danger" id="memberValidation"></div>
                                 </div>
-                                <div id="newMember" class="edit_container hidden_div push_top_20 push_bottom_20">
-                                    <div class="col-md-4">
-                                        @Html.EditorFor(model => model.EditMembersAndRolesModel.MemberEmail, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "newMemberText", @placeholder = "Email pouzivatela" } })
-                                        <div class="val-message text-danger" id="memberValidation"></div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        @Html.DropDownListFor(m => m.EditMembersAndRolesModel.SelectedRoleId, Model.EditMembersAndRolesModel.AllRoles, new { @class = "form-control txt-lg", @id = "newMemberDrop" })
-                                        <div class="val-message"></div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="button" value="Pridat" onclick="AddNewMember()" class="form-btn" />
-                                    </div>
+                                <div class="col-md-4">
+                                    @Html.DropDownListFor(m => m.EditMembersAndRolesModel.SelectedRoleId, Model.EditMembersAndRolesModel.AllRoles, new { @class = "form-control txt-lg", @id = "newMemberDrop" })
+                                    <div class="val-message"></div>
                                 </div>
-                                <div id="newRole" class="edit_container hidden_div push_top_20 push_bottom_20">
-                                    <div class="col-md-4">
-                                        @Html.EditorFor(model => model.EditMembersAndRolesModel.RoleName, new { htmlAttributes = new { @class = "form-control txt-lg", @id="newRoleName", @placeholder = "Nazov role" } })
-                                        <div class="val-message">@Html.ValidationMessageFor(model => model.EditMembersAndRolesModel.RoleName, "", new { @class = "text-danger" })</div>
+                                <div class="col-md-4">
+                                    <input type="button" value="Pridat" onclick="AddNewMember()" class="form-btn" />
+                                </div>
+                            </div>
+
+                            <div id="newRole" class="edit_container hidden_div push_top_20 push_bottom_20">
+                                <div class="col-md-4">
+                                    @Html.EditorFor(model => model.EditMembersAndRolesModel.RoleName, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "newRoleName", @placeholder = "Nazov role" } })
+                                    <div class="val-message">@Html.ValidationMessageFor(model => model.EditMembersAndRolesModel.RoleName, "", new { @class = "text-danger" })</div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="role_settings_wrapper">
+                                        <div class="role_toggle_div">
+                                            <label class="switch_small">
+                                                @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.AddAttachments, new { @class = "form-control", @id = "AddAttachments" })
+                                                <span class="slider_small"></span>
+                                            </label>
+                                        </div>
+                                        <div class="role_text_div font_14">Add attachments</div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <div class="role_settings_wrapper">
-                                            <div class="role_toggle_div">
-                                                <label class="switch_small">
-                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.AddAttachments, new { @class = "form-control", @id="AddAttachments" })
-                                                    <span class="slider_small"></span>
-                                                </label>
-                                            </div>
-                                            <div class="role_text_div font_14">Add attachments</div>
+                                    <div class="role_settings_wrapper">
+                                        <div class="role_toggle_div">
+                                            <label class="switch_small">
+                                                @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.AddGallery, new { @class = "form-control", @id = "AddGallery" })
+                                                <span class="slider_small"></span>
+                                            </label>
                                         </div>
-                                        <div class="role_settings_wrapper">
-                                            <div class="role_toggle_div">
-                                                <label class="switch_small">
-                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.AddGallery, new { @class = "form-control", @id = "AddGallery" })
-                                                    <span class="slider_small"></span>
-                                                </label>
-                                            </div>
-                                            <div class="role_text_div font_14">Add gallery</div>
-                                        </div>
-                                        <div class="role_settings_wrapper">
-                                            <div class="role_toggle_div">
-                                                <label class="switch_small">
-                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.AddMember, new { @class = "form-control", @id = "AddMember" })
-                                                    <span class="slider_small"></span>
-                                                </label>
-                                            </div>
-                                            <div class="role_text_div font_14">Add member</div>
-                                        </div>
-                                        <div class="role_settings_wrapper">
-                                            <div class="role_toggle_div">
-                                                <label class="switch_small">
-                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.Comment, new { @class = "form-control", @id = "Comment" })
-                                                    <span class="slider_small"></span>
-                                                </label>
-                                            </div>
-                                            <div class="role_text_div font_14">Comment</div>
-                                        </div>
-                                        <div class="role_settings_wrapper">
-                                            <div class="role_toggle_div">
-                                                <label class="switch_small">
-                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.CreateDemand, new { @class = "form-control", @id = "CreateDemand" })
-                                                    <span class="slider_small"></span>
-                                                </label>
-                                            </div>
-                                            <div class="role_text_div font_14">Create demand</div>
-                                        </div>
+                                        <div class="role_text_div font_14">Add gallery</div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <div class="role_settings_wrapper">
-                                            <div class="role_toggle_div">
-                                                <label class="switch_small">
-                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.DeleteDemand, new { @class = "form-control", @id = "DeleteDemand" })
-                                                    <span class="slider_small"></span>
-                                                </label>
-                                            </div>
-                                            <div class="role_text_div font_14">Delete demand</div>
+                                    <div class="role_settings_wrapper">
+                                        <div class="role_toggle_div">
+                                            <label class="switch_small">
+                                                @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.AddMember, new { @class = "form-control", @id = "AddMember" })
+                                                <span class="slider_small"></span>
+                                            </label>
                                         </div>
-                                        <div class="role_settings_wrapper">
-                                            <div class="role_toggle_div">
-                                                <label class="switch_small">
-                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.EditDemand, new { @class = "form-control", @id = "EditDemand" })
-                                                    <span class="slider_small"></span>
-                                                </label>
-                                            </div>
-                                            <div class="role_text_div font_14">Edit demand</div>
-                                        </div>
-                                        <div class="role_settings_wrapper">
-                                            <div class="role_toggle_div">
-                                                <label class="switch_small">
-                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.RemoveAttachments, new { @class = "form-control", @id = "RemoveAttachments" })
-                                                    <span class="slider_small"></span>
-                                                </label>
-                                            </div>
-                                            <div class="role_text_div font_14">Remove attachments</div>
-                                        </div>
-                                        <div class="role_settings_wrapper">
-                                            <div class="role_toggle_div">
-                                                <label class="switch_small">
-                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.RemoveGallery, new { @class = "form-control", @id = "RemoveGallery" })
-                                                    <span class="slider_small"></span>
-                                                </label>
-                                            </div>
-                                            <div class="role_text_div font_14">Remove gallery</div>
-                                        </div>
-                                        <div class="role_settings_wrapper">
-                                            <div class="role_toggle_div">
-                                                <label class="switch_small">
-                                                    @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.RemoveMember, new { @class = "form-control", @id = "RemoveMember" })
-                                                    <span class="slider_small"></span>
-                                                </label>
-                                            </div>
-                                            <div class="role_text_div font_14">Remove member</div>
-                                        </div>
+                                        <div class="role_text_div font_14">Add member</div>
                                     </div>
-                                    <div class="col-md-2">
-                                        <input type="button" onclick="AddNewRole()" value="Pridat" class="form-btn" />
+                                    <div class="role_settings_wrapper">
+                                        <div class="role_toggle_div">
+                                            <label class="switch_small">
+                                                @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.Comment, new { @class = "form-control", @id = "Comment" })
+                                                <span class="slider_small"></span>
+                                            </label>
+                                        </div>
+                                        <div class="role_text_div font_14">Comment</div>
+                                    </div>
+                                    <div class="role_settings_wrapper">
+                                        <div class="role_toggle_div">
+                                            <label class="switch_small">
+                                                @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.CreateDemand, new { @class = "form-control", @id = "CreateDemand" })
+                                                <span class="slider_small"></span>
+                                            </label>
+                                        </div>
+                                        <div class="role_text_div font_14">Create demand</div>
+                                    </div>
+                                    <div class="role_settings_wrapper">
+                                        <div class="role_toggle_div">
+                                            <label class="switch_small">
+                                                @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.ChangeSettings, new { @class = "form-control", @id = "ChangeSettings" })
+                                                <span class="slider_small"></span>
+                                            </label>
+                                        </div>
+                                        <div class="role_text_div font_14">Change settings</div>
                                     </div>
                                 </div>
-                                <div class="member_list_text">
-                                    Zoznam clenov:
+                                <div class="col-md-3">
+                                    <div class="role_settings_wrapper">
+                                        <div class="role_toggle_div">
+                                            <label class="switch_small">
+                                                @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.DeleteDemand, new { @class = "form-control", @id = "DeleteDemand" })
+                                                <span class="slider_small"></span>
+                                            </label>
+                                        </div>
+                                        <div class="role_text_div font_14">Delete demand</div>
+                                    </div>
+                                    <div class="role_settings_wrapper">
+                                        <div class="role_toggle_div">
+                                            <label class="switch_small">
+                                                @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.EditDemand, new { @class = "form-control", @id = "EditDemand" })
+                                                <span class="slider_small"></span>
+                                            </label>
+                                        </div>
+                                        <div class="role_text_div font_14">Edit demand</div>
+                                    </div>
+                                    <div class="role_settings_wrapper">
+                                        <div class="role_toggle_div">
+                                            <label class="switch_small">
+                                                @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.RemoveAttachments, new { @class = "form-control", @id = "RemoveAttachments" })
+                                                <span class="slider_small"></span>
+                                            </label>
+                                        </div>
+                                        <div class="role_text_div font_14">Remove attachments</div>
+                                    </div>
+                                    <div class="role_settings_wrapper">
+                                        <div class="role_toggle_div">
+                                            <label class="switch_small">
+                                                @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.RemoveGallery, new { @class = "form-control", @id = "RemoveGallery" })
+                                                <span class="slider_small"></span>
+                                            </label>
+                                        </div>
+                                        <div class="role_text_div font_14">Remove gallery</div>
+                                    </div>
+                                    <div class="role_settings_wrapper">
+                                        <div class="role_toggle_div">
+                                            <label class="switch_small">
+                                                @Html.CheckBoxFor(m => m.EditMembersAndRolesModel.Permissions.RemoveMember, new { @class = "form-control", @id = "RemoveMember" })
+                                                <span class="slider_small"></span>
+                                            </label>
+                                        </div>
+                                        <div class="role_text_div font_14">Remove member</div>
+                                    </div>
                                 </div>
-                                @if (Model.EditMembersAndRolesModel.UserRoles.Count() > 0)
+                                <div class="col-md-2">
+                                    <input type="button" onclick="AddNewRole()" value="Pridat" class="form-btn" />
+                                </div>
+                            </div>
+                            <div class="member_list_text">
+                                Zoznam clenov:
+                            </div>
+                            @if (Model.EditMembersAndRolesModel.UserRoles.Count() > 0)
+                            {
+                                for (int i = 0; i < Model.EditMembersAndRolesModel.UserRoles.Count(); i++)
                                 {
-                                    for (int i = 0; i < Model.EditMembersAndRolesModel.UserRoles.Count(); i++)
+                                    if (Model.EditMembersAndRolesModel.UserRoles[i].UserEmail != session.Email)
                                     {
                                         <div class="member_list_wrapper">
                                             <div id="@Model.EditMembersAndRolesModel.UserRoles[i].UserEmail" class="member_blocks member_left">
-                                                @Html.DropDownListFor(m => m.EditMembersAndRolesModel.UserRoles[i].SelectedRoleId, new SelectList(Model.EditMembersAndRolesModel.AllRoles,"Value","Text", Model.EditMembersAndRolesModel.UserRoles[i].SelectedRoleId), new { @class = "form-control txt-lg", @id = "memberRole" })
+                                                @Html.DropDownListFor(m => m.EditMembersAndRolesModel.UserRoles[i].SelectedRoleId, new SelectList(Model.EditMembersAndRolesModel.AllRoles, "Value", "Text", Model.EditMembersAndRolesModel.UserRoles[i].SelectedRoleId), new { @class = "form-control txt-lg", @id = "memberRole" + i })
                                             </div>
                                             <div class="member_blocks member_middle">
                                                 <div class="role_text_div font_16">@Model.EditMembersAndRolesModel.UserRoles[i].UserEmail</div>
                                             </div>
-                                            <div class="member_blocks member_right">
-                                                <input type="button" onclick="DeleteMember('@Model.EditMembersAndRolesModel.UserRoles[i].UserEmail')" value="Zmazat" class="form-btn" />
-                                            </div>
+                                            @if (@companySession.CompanyPermissions.Contains(CompanyPermission.RemoveMember.ToString()))
+                                            {
+                                                <div class="member_blocks member_right">
+                                                    <input type="button" onclick="DeleteMember('@Model.EditMembersAndRolesModel.UserRoles[i].UserEmail')" value="Zmazat" class="form-btn" />
+                                                </div>
+                                            }
                                         </div>
                                     }
+                                    else
+                                    {
+                                        if (Model.EditMembersAndRolesModel.UserRoles.Count() == 1)
+                                        {
+                                            <h4>Momentalne ste jediny clen</h4>
+                                        }
+                                    }
                                 }
-                                else
-                                {
-                                    <h4>Momentalne nemate ziadnych clenov</h4>
-                                }
-                            </div>
+                            }
+                            else
+                            {
+                                <h4>Momentalne nemate ziadnych clenov</h4>
+                            }
+                        </div>
+                    }
                 }
-                <div class="col-lg-12 push_top_20 push_bottom_20" style="float:left">
+                <div class="accordion-content push_top_20 push_bottom_20">
                     <input type="submit" value="ZMENIT" class="form-btn-transparent" style="width:200px" />
                 </div>
             </div>
@@ -548,9 +571,11 @@
                 data: JSON.stringify({ category: id }),
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
-                success: function () {
-                    var container = $("#" + id).parent().attr('id');
-                    $("#" + container).hide(250);
+                success: function (data) {
+                    if (data === "OK") {
+                        var container = $("#" + id).parent().attr('id');
+                        $("#" + container).hide(250);
+                    }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     alert(xhr.responseText);
@@ -575,9 +600,10 @@
             });
         }
 
-        $("#memberRole").change(function () {
-            var selectedRole = $('#memberRole :selected').text();
-            var user = $("#memberRole").parent().attr('id')
+        $('[id^=memberRole]').change(function () {
+            var divId = this.id;
+            var user = $("#" + divId).parent().attr('id')
+            var selectedRole = $("#" + divId).find('option:selected').text();
                 $.ajax({
                     type: 'POST',
                     url: '@Url.Action("ChangeMemberRole", "Manage")',
@@ -646,6 +672,7 @@
                  $("#CreateDemand").is(":checked") ? "CreateDemand" : "",
                  $("#EditDemand").is(":checked") ? "EditDemand" : "",
                  $("#DeleteDemand").is(":checked") ? "DeleteDemand" : "",
+                 $("#ChangeSettings").is(":checked") ? "ChangeSettings" : "",
              ];
          }
     </script>
