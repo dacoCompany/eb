@@ -23,6 +23,7 @@ using WebAPIFactory.Logging.Core.Diagnostics;
 
 namespace Web.eBado.Controllers
 {
+    [RoutePrefix("FileUpload")]
     public class FileUploadController : Controller
     {
         FilesHelper filesHelper;
@@ -50,6 +51,8 @@ namespace Web.eBado.Controllers
         }
 
         [HttpPost]
+        [Route("Upload")]
+        [Authorize(Roles = "AddAttachments")]
         public JsonResult Upload(string batchId)
         {
             try
@@ -75,6 +78,8 @@ namespace Web.eBado.Controllers
         }
 
         [HttpPost]
+        [Route("Upload2")]
+        [Authorize(Roles = "AddAttachments")]
         public JsonResult Upload2()
         {
             var resultList = new List<ViewDataUploadFilesResult>();
@@ -96,6 +101,8 @@ namespace Web.eBado.Controllers
             }
         }
 
+        [Route("GetFileList")]
+        [Authorize(Roles = "AddAttachments")]
         public JsonResult GetFileList(string batchId)
         {
             var model = new AttachmentGalleryModel();
@@ -112,6 +119,8 @@ namespace Web.eBado.Controllers
         }
 
         [HttpPost]
+        [Route("DeleteFiles")]
+        [Authorize(Roles = "RemoveAttachments")]
         public ActionResult DeleteFiles(string batchId, ICollection<string> file)
         {
             bool deleted = filesBo.DeleteFiles(file, batchId);
@@ -120,6 +129,8 @@ namespace Web.eBado.Controllers
         }
 
         [HttpPost]
+        [Route("DeleteBatch")]
+        [Authorize(Roles = "RemoveGallery")]
         public ActionResult DeleteBatch(string batchId)
         {
             bool deleted = filesBo.DeleteBatch(batchId);
@@ -128,6 +139,8 @@ namespace Web.eBado.Controllers
         }
 
         [HttpPost]
+        [Route("DeleteVideo")]
+        [Authorize(Roles = "RemoveAttachments")]
         public JsonResult DeleteVideo(string batchId, string name)
         {
             bool deleted = true;
@@ -136,6 +149,8 @@ namespace Web.eBado.Controllers
         }
 
         [HttpGet]
+        [Route("DeleteFileAzure")]
+        [Authorize(Roles = "RemoveAttachments")]
         public ActionResult DeleteFileAzure(string fileName)
         {
             bool deleted = filesBo.DeleteFile(fileName);

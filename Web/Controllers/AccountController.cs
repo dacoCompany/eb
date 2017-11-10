@@ -15,14 +15,17 @@ using WebAPIFactory.Configuration.Core;
 using WebAPIFactory.Logging.Core;
 using WebAPIFactory.Logging.Core.Diagnostics;
 using System.Linq;
-using System.Data.Entity;
 using System.Web.Security;
 using System.Collections.Generic;
 using Infrastructure.Common.Enums;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web;
 
 namespace Web.eBado.Controllers
 {
-    [Authorize]
+    [RoutePrefix("Account")]
     public class AccountController : Controller
     {
         AccountHelper accountHelper;
@@ -45,12 +48,14 @@ namespace Web.eBado.Controllers
         #region HTTP GET
 
         [AllowAnonymous]
+        [Route("Login")]
         public ActionResult Login()
         {
             return View();
         }
 
         [AllowAnonymous]
+        [Route("Logout")]
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
@@ -59,6 +64,7 @@ namespace Web.eBado.Controllers
         }
 
         [AllowAnonymous]
+        [Route("RegisterUser")]
         public ActionResult RegisterUser()
         {
             RegistrationModel model = new RegistrationModel();
@@ -67,6 +73,7 @@ namespace Web.eBado.Controllers
         }
 
         [AllowAnonymous]
+        [Route("RegisterCompany")]
         public ActionResult RegisterCompany()
         {
             RegistrationModel model = new RegistrationModel();
@@ -77,12 +84,14 @@ namespace Web.eBado.Controllers
         }
 
         [AllowAnonymous]
+        [Route("ForgotPassword")]
         public ActionResult ForgotPassword()
         {
             return View();
         }
 
-        [AllowAnonymous]
+        [System.Web.Http.Authorize(Roles = "ChangeSettings, Read, Write")]
+        [Route("ChangeSettings")]
         public ActionResult ChangeSettings()
         {
             var currentUrl = Request.Url.ToString();
@@ -113,7 +122,8 @@ namespace Web.eBado.Controllers
             return View();
         }
 
-        [AllowAnonymous]
+        [Authorize]
+        [Route("EditAccountGallery")]
         public ActionResult EditAccountGallery(string batchId)
         {
             var currentUrl = Request.Url.ToString();
@@ -134,7 +144,8 @@ namespace Web.eBado.Controllers
             return View(model);
         }
 
-        [AllowAnonymous]
+        [Authorize]
+        [Route("BatchAccountGallery")]
         public ActionResult BatchAccountGallery()
         {
             var currentUrl = Request.Url.ToString();
@@ -177,7 +188,8 @@ namespace Web.eBado.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginModel model, string returnUrl)
+        [Route("Login")]
+        public async Task<ActionResult> Login(LoginModel model, string returnUrl)
         {
             EntlibLogger.LogVerbose("Account", "Login", $"Login attempt with e-mail address: {model.Email}", diagnosticLogConstant);
             var validationResult = new ValidationResultCollection();
@@ -186,11 +198,30 @@ namespace Web.eBado.Controllers
 
             if (ModelState.IsValid)
             {
-                int userDetailId = unitOfWork.UserDetailsRepository.FindFirstOrDefault(ud => ud.Email.ToLower().Equals(model.Email.ToLower())).Id;
-                var session = sessionHelper.SetUserSession(userDetailId, unitOfWork);
-
-                FormsAuthentication.SetAuthCookie(session.Email, true);
+                var userDetail = unitOfWork.UserDetailsRepository.FindFirstOrDefault(ud => ud.Email.ToLower().Equals(model.Email.ToLower()));
+                var session = sessionHelper.SetUserSession(userDetail.Id, unitOfWork);
+                
+                //FormsAuthentication.SetAuthCookie(session.Email, true);
                 Session["User"] = session;
+
+                var client = new HttpClient();
+                client.BaseAddress = new Uri("http://localhost:52708/");
+
+                var response = await client.GetAsync($"api/OAuth/GetLoginToken?appId=123&userRoleId={userDetail.UserRoleId}&companyRoleId=0");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    var authCookie = new HttpCookie("tokenCookie", content.Replace("\"", string.Empty)) {HttpOnly = true};
+                    HttpContext.Response.AppendCookie(authCookie);
+                }
+                else
+                {
+                    model.ErrorMessage = "Authentication failed";
+                    EntlibLogger.LogInfo("Account", "Login", $"Failed login with e-mail address: {model.Email}. Authentication token cannot be issued.", diagnosticLogConstant);
+                    return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+                }
 
                 if (returnUrl != null)
                 {
@@ -212,6 +243,7 @@ namespace Web.eBado.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("RegisterUser")]
         public ActionResult RegisterUser(RegistrationModel model)
         {
             EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt with e-mail address: {model.UserModel.Email}", diagnosticLogConstant);
@@ -247,6 +279,7 @@ namespace Web.eBado.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("RegisterCompany")]
         public ActionResult RegisterCompany(RegistrationModel model)
         {
             EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt (user & company) with e-mail address: {model.UserModel.Email}", diagnosticLogConstant);
@@ -279,6 +312,7 @@ namespace Web.eBado.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("RegisterCompanySolo")]
         public ActionResult RegisterCompanySolo(CompanyModel model)
         {
             var session = Session["User"] as SessionModel;
@@ -318,6 +352,7 @@ namespace Web.eBado.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("ForgotPassword")]
         public ActionResult ForgotPassword(ForgotPasswordModel model)
         {
             EntlibLogger.LogInfo("Account", "Forgot Password", $"Password reset requested for e-mail address: {model.Email}", diagnosticLogConstant);
@@ -333,8 +368,8 @@ namespace Web.eBado.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [System.Web.Http.Authorize(Roles = "ChangeSettings, Read, Write")]
         public ActionResult ChangeSettings(AccountSettingsModel model)
         {
             var session = Session["User"] as SessionModel;
@@ -369,6 +404,7 @@ namespace Web.eBado.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("BatchAccountGallery")]
         public ActionResult BatchAccountGallery(BatchGalleryModel model)
         {
             return View(model);
@@ -377,6 +413,7 @@ namespace Web.eBado.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("CreateBatch")]
         public ActionResult CreateBatch(BatchGalleryModel model)
         {
             int? companyId = GetActiveCompany();
@@ -397,7 +434,7 @@ namespace Web.eBado.Controllers
         private bool UserNotAuthenticated()
         {
             var session = (SessionModel)Session["User"];
-            return !Request.IsAuthenticated || session == null ? true : false;
+            return session == null;
         }
 
         private int? GetActiveCompany()

@@ -1,37 +1,36 @@
-﻿using System;
-using System.Globalization;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using Infrastructure.Common.Models;
-using Newtonsoft.Json;
-using Infrastructure.Configuration;
-using System.Configuration;
-using System.Net;
-using Web.eBado.Models.Shared;
+﻿using System.Web.Mvc;
 
 namespace Web.eBado.Controllers
 {
+    [RoutePrefix("Home")]
+    [AllowAnonymous]
     public class HomeController : Controller
     {
-      
-        public async Task<ActionResult> Index()
+        [Route("~/")]
+        [Route("Index")]
+        [AllowAnonymous]
+        public ActionResult Index()
         {
             return View();
         }
 
+        [Route("Index2")]
+        [AllowAnonymous]
         public ActionResult Index2()
         {
             return View();
         }
 
+        [Route("Index3")]
+        [AllowAnonymous]
         public ActionResult Index3()
         {
             return View();
         }
 
         [HttpGet]
+        [Route("Index4")]
+        [AllowAnonymous]
         public string Index4()
         {
             return "Welcome";
