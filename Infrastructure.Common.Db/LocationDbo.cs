@@ -24,6 +24,7 @@ namespace Infrastructure.Common.DB
         public string Country { get; set; }
         public string PostalCode { get; set; }
         public string City { get; set; }
+        public string CityAlias { get; set; }
         public string County { get; set; }
         public string District { get; set; }
         public Nullable<decimal> Lat { get; set; }

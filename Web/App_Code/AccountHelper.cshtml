@@ -3,7 +3,7 @@
 @using Web.eBado
 @helper SettingsMenu(UrlHelper Url, string viewType, Web.eBado.Models.Shared.SessionModel session)
 {
-    <div class="tab">
+    <div class="tab push_bottom_10">
         <input type="button" name="btn" class="@(viewType == "MyAdvertisements" ? "active" : "")" onclick="location.href='@Url.Action("MyAdvertisements", "Account")'" value="MOJE INZERATY" />
         <input type="button" name="btn" class="@(viewType == "MyAdvertisements" ? "active" : "")" onclick="location.href='@Url.Action("MyAdvertisements", "Account")'" value="MOJE DOPYTY" />
         @if (session.Companies.Any())

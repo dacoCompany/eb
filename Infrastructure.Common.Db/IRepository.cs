@@ -26,6 +26,12 @@ namespace Infrastructure.Common.DB
         IQueryable<T> FindAll();
 
         /// <summary>
+        /// Finds all active.
+        /// </summary>
+        /// <returns></returns>
+        IQueryable<T> FindAllActive();
+
+        /// <summary>
         /// Any active result.
         /// </summary>
         /// <param name="predicate">The predicate.</param>

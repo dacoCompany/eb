@@ -24,7 +24,6 @@ namespace Infrastructure.Common.DB
         public int Id { get; set; }
         public string Title { get; set; }
         public string FirstName { get; set; }
-        public string SecondName { get; set; }
         public string Surname { get; set; }
         public string DisplayName { get; set; }
         public string PhoneNumber { get; set; }
@@ -32,6 +31,11 @@ namespace Infrastructure.Common.DB
         public string Email { get; set; }
         public string Salt { get; set; }
         public string Password { get; set; }
+        public Nullable<System.DateTime> LastLogin { get; set; }
+        public string ExternalLoginId { get; set; }
+        public bool IsExternalLogin { get; set; }
+        public bool IsValidated { get; set; }
+        public string ProfilePictureUrl { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
@@ -42,7 +46,7 @@ namespace Infrastructure.Common.DB
         public virtual ICollection<AddressDbo> Addresses { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CompanyDetails2UserDetailsDbo> CompanyDetails2UserDetails { get; set; }
-        public virtual UserSettingDbo UserSetting { get; set; }
         public virtual UserRoleDbo UserRole { get; set; }
+        public virtual UserSettingDbo UserSetting { get; set; }
     }
 }

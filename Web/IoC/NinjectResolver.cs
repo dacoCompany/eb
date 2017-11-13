@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using eBado.BusinessObjects;
 using WebAPIFactory.Configuration.Core;
+using WebAPIFactory.Caching.Core;
 
 namespace Web.eBado.IoC
 {
@@ -51,9 +52,9 @@ namespace Web.eBado.IoC
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns>
-        /// Sepecific instance based on requested interface
+        /// Specific instance based on requested interface
         /// </returns>
-        public static T GetInstance<T>() where T : IDisposable
+        public static T GetInstance<T>()
         {
             return DependencyResolver.Current.GetService<T>();
         }
@@ -67,6 +68,7 @@ namespace Web.eBado.IoC
             kernel.Bind<IUnitOfWork>().To<UnitOfWork>();
             kernel.Bind<IConfiguration>().To<Configuration>();
             kernel.Bind<IFilesBusinessObjects>().To<FilesBusinessObjects>();
+            kernel.Bind<ICache>().To<HttpCacheHelper>();
         }
     }
 }

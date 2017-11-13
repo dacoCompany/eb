@@ -77,7 +77,7 @@ namespace Web.eBado.Controllers
         public ActionResult RegisterCompany()
         {
             RegistrationModel model = new RegistrationModel();
-            accountHelper.InitializeAllCategories(model.CompanyModel);
+            accountHelper.InitializeAllCategories(model.CompanyModel, unitOfWork);
             model.CompanyModel.CompanyLocation = accountHelper.GetCountryByIP();
 
             return View(model);
@@ -112,7 +112,7 @@ namespace Web.eBado.Controllers
             }
 
 
-            accountHelper.InitializeAllCategories(model.CompanyModel);
+            accountHelper.InitializeAllCategories(model.CompanyModel, unitOfWork);
             return View(model);
         }
 
@@ -285,7 +285,7 @@ namespace Web.eBado.Controllers
             EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt (user & company) with e-mail address: {model.UserModel.Email}", diagnosticLogConstant);
             if (!ModelState.IsValid)
             {
-                accountHelper.InitializeAllCategories(model.CompanyModel);
+                accountHelper.InitializeAllCategories(model.CompanyModel, unitOfWork);
                 return View("RegisterCompany", model);
             }
 
@@ -296,7 +296,7 @@ namespace Web.eBado.Controllers
             if (validationResult.Any())
             {
                 ModelState.AddValidationErrors(validationResult);
-                accountHelper.InitializeAllCategories(model.CompanyModel);
+                accountHelper.InitializeAllCategories(model.CompanyModel, unitOfWork);
                 return View("RegisterCompany", model);
             }
 
@@ -397,7 +397,7 @@ namespace Web.eBado.Controllers
                 }
             //}
 
-            accountHelper.InitializeAllCategories(model.CompanyModel);
+            accountHelper.InitializeAllCategories(model.CompanyModel, unitOfWork);
             return View(model);
         }
 

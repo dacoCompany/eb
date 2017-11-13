@@ -12,19 +12,14 @@ namespace Infrastructure.Common.DB
     using System;
     using System.Collections.Generic;
     
-    public partial class CompanyDetails2UserDetailsDbo : IEntity
+    public partial class AllDeviceDbo : IEntity
     {
         public int Id { get; set; }
-        public bool EnableNotification { get; set; }
+        public string DeviceId { get; set; }
+        public string AudienceKey { get; set; }
+        public string SecretKey { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
-        public int CompanyDetailsId { get; set; }
-        public int UserDetailsId { get; set; }
-        public int CompanyRoleId { get; set; }
-    
-        public virtual CompanyDetailDbo CompanyDetail { get; set; }
-        public virtual CompanyRoleDbo CompanyRole { get; set; }
-        public virtual UserDetailDbo UserDetail { get; set; }
     }
 }

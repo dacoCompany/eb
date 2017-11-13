@@ -334,7 +334,7 @@ input[type=checkbox] {
 }
 
     .role_settings_wrapper div {
-        height: 25px;
+        min-height: 25px;
     }
 
 .text_div {
@@ -354,7 +354,7 @@ input[type=checkbox] {
     float: left;
     overflow: hidden;
     margin: 0 10px 6px 0;
-    height: 30px;
+    min-height: 30px;
 }
 
 .role_text_div {

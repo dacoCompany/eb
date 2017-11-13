@@ -53,13 +53,22 @@ namespace Infrastructure.Common.DB
         }
 
         /// <summary>
+        /// Finds all active.
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<T> FindAllActive()
+        {
+            return dataEntity.Where(entity => entity.IsActive);
+        }
+
+        /// <summary>
         /// Finds the active entity by identifier.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>Active entity</returns>
         public T FindById(int id)
         {
-            return dataEntity.Where(entity => entity.Id == id).FirstOrDefault(entity => entity.IsActive == true);
+            return dataEntity.Where(entity => entity.Id == id).FirstOrDefault(entity => entity.IsActive);
         }
         
         /// <summary>
@@ -103,7 +112,7 @@ namespace Infrastructure.Common.DB
         /// <returns>Collection of active entities</returns>
         public virtual IQueryable<T> FindWhere(Expression<Func<T, bool>> predicate)
         {
-            return dataEntity.Where(predicate).Where(entity => entity.IsActive == true);
+            return dataEntity.Where(predicate).Where(entity => entity.IsActive);
         }
 
         /// <summary>
@@ -120,7 +129,7 @@ namespace Infrastructure.Common.DB
         /// Adds the specified entities.
         public T FindFirstOrDefault(Expression<Func<T, bool>> predicate)
         {
-            return dataEntity.Where(predicate).FirstOrDefault(entity => entity.IsActive == true);
+            return dataEntity.Where(predicate).FirstOrDefault(entity => entity.IsActive);
         }
 
         /// </summary>
@@ -147,7 +156,7 @@ namespace Infrastructure.Common.DB
         /// <returns></returns>
         public bool AnyActive(Expression<Func<T, bool>> predicate)
         {
-            return dataEntity.Where(predicate).Any(de => de.IsActive == true);
+            return dataEntity.Where(predicate).Any(de => de.IsActive);
         }
 
         #endregion
