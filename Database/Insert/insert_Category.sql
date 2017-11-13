@@ -13,7 +13,7 @@ VALUES
 /* INSERT QUERY */
 INSERT INTO Category(Name, IsActive) 
 VALUES 
-  ('Arts & Culture', 1);
+  ('Arts and Culture', 1);
 /* INSERT QUERY */
 INSERT INTO Category(Name, IsActive) 
 VALUES 
@@ -53,14 +53,14 @@ VALUES
 INSERT INTO Category(Name, IsActive) 
 VALUES 
   (
-    'Education, Science & Research', 
+    'Education, Science and Research', 
     0
   );
 /* INSERT QUERY */
 INSERT INTO Category(Name, IsActive) 
 VALUES 
   (
-    'Electrical & Power Engineering', 
+    'Electrical and Power Engineering', 
     1
   );
 /* INSERT QUERY */
@@ -83,13 +83,13 @@ VALUES
 INSERT INTO Category(Name, IsActive) 
 VALUES 
   (
-    'Journalism, Printing Arts & Media', 
+    'Journalism, Printing Arts and Media', 
     1
   );
 /* INSERT QUERY */
 INSERT INTO Category(Name, IsActive) 
 VALUES 
-  ('Law & Legislation', 1);
+  ('Law and Legislation', 1);
 /* INSERT QUERY */
 INSERT INTO Category(Name, IsActive) 
 VALUES 
@@ -109,7 +109,7 @@ VALUES
 /* INSERT QUERY */
 INSERT INTO Category(Name, IsActive) 
 VALUES 
-  ('Medicine & Social Care', 1);
+  ('Medicine and Social Care', 1);
 /* INSERT QUERY */
 INSERT INTO Category(Name, IsActive) 
 VALUES 
@@ -140,7 +140,7 @@ VALUES
 /* INSERT QUERY */
 INSERT INTO Category(Name, IsActive) 
 VALUES 
-  ('Security & Protection', 1);
+  ('Security and Protection', 1);
 /* INSERT QUERY */
 INSERT INTO Category(Name, IsActive) 
 VALUES 

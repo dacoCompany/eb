@@ -156,6 +156,7 @@
 			[CityAlias] VARCHAR(100),
 			[County] VARCHAR(100),
 			[District] VARCHAR(100),
+			[DistrictAlias] VARCHAR(100),
 			[Lat] DECIMAL(10,4),
 			[Lon] DECIMAL(10,4),
 			[IsActive] BIT NOT NULL DEFAULT 'true',

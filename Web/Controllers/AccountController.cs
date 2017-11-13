@@ -370,6 +370,7 @@ namespace Web.eBado.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [System.Web.Http.Authorize(Roles = "ChangeSettings, Read, Write")]
+        [Route("ChangeSettings")]
         public ActionResult ChangeSettings(AccountSettingsModel model)
         {
             var session = Session["User"] as SessionModel;
@@ -396,7 +397,6 @@ namespace Web.eBado.Controllers
                     model = accountHelper.UpdateCompanySettings(unitOfWork, model, session);
                 }
             //}
-
             accountHelper.InitializeAllCategories(model.CompanyModel, unitOfWork);
             return View(model);
         }

@@ -17,7 +17,6 @@
         <EntityTypeShape EntityType="testDBModel.CompanyRole2CompanyPermissionDbo" Width="1.5" PointX="8.25" PointY="16.5" />
         <EntityTypeShape EntityType="testDBModel.CompanySettingDbo" Width="1.5" PointX="0.75" PointY="7.375" />
         <EntityTypeShape EntityType="testDBModel.CompanyTypeDbo" Width="1.5" PointX="0.75" PointY="12" />
-        <EntityTypeShape EntityType="testDBModel.LocationDbo" Width="1.5" PointX="3" PointY="25.5" />
         <EntityTypeShape EntityType="testDBModel.SubCategoryDbo" Width="1.5" PointX="3" PointY="21.875" />
         <EntityTypeShape EntityType="testDBModel.SubCategory2CompanyDetailsDbo" Width="1.5" PointX="5.25" PointY="8" />
         <EntityTypeShape EntityType="testDBModel.UserDetailDbo" Width="1.5" PointX="6" PointY="0.75" />
@@ -27,7 +26,6 @@
         <EntityTypeShape EntityType="testDBModel.UserSettingDbo" Width="1.5" PointX="3.75" PointY="16.75" />
         <EntityTypeShape EntityType="testDBModel.AllDeviceDbo" Width="1.5" PointX="0.75" PointY="3.25" />
         <AssociationConnector Association="testDBModel.FKAddressCompanyDetailsId" />
-        <AssociationConnector Association="testDBModel.FKAddressLocationId" />
         <AssociationConnector Association="testDBModel.FKAddressUserDetailsId" />
         <AssociationConnector Association="testDBModel.FKAttachmentBatchAttachmentId" />
         <AssociationConnector Association="testDBModel.FKCompanyDetailsBatchAttachmentId" />
@@ -47,6 +45,8 @@
         <AssociationConnector Association="testDBModel.FKUserSettings" />
         <AssociationConnector Association="testDBModel.FKUserPermission" />
         <AssociationConnector Association="testDBModel.FKUserRole" />
+        <EntityTypeShape EntityType="testDBModel.LocationDbo" Width="1.5" PointX="10.375" PointY="8" />
+        <AssociationConnector Association="testDBModel.FKAddressLocationId" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

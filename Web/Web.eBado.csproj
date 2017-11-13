@@ -267,6 +267,7 @@
     <Compile Include="Models\MvcExtensions\ModelStateExtensions.cs" />
     <Compile Include="Models\Shared\AttachmentGalleryModel.cs" />
     <Compile Include="Models\Shared\AttachmentModel.cs" />
+    <Compile Include="Models\Shared\AllCategoriesModel.cs" />
     <Compile Include="Models\Shared\CompanySessionModel.cs" />
     <Compile Include="Models\Shared\FileModel.cs" />
     <Compile Include="Models\Shared\FilesViewModel.cs" />

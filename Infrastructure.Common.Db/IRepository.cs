@@ -29,7 +29,7 @@ namespace Infrastructure.Common.DB
         /// Finds all active.
         /// </summary>
         /// <returns></returns>
-        IQueryable<T> FindAllActive();
+        IQueryable<T> FindAllInactive();
 
         /// <summary>
         /// Any active result.

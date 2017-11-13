@@ -18,6 +18,8 @@ using Web.eBado.Helpers;
 using Web.eBado.IoC;
 using Web.eBado.Models.Account;
 using Web.eBado.Models.Shared;
+using WebAPIFactory.Caching.Core;
+using Infrastructure.Common;
 
 namespace Web.eBado.Controllers
 {
@@ -69,10 +71,7 @@ namespace Web.eBado.Controllers
 
                 int userRoleId = 0;
 
-                using (var uow = NinjectResolver.GetInstance<IUnitOfWork>())
-                {
-                    userRoleId = uow.UserDetailsRepository.FindById(newSession.Id).UserRoleId;
-                }
+                userRoleId = unitOfWork.UserDetailsRepository.FindById(newSession.Id).UserRoleId;
 
                 bool result = await GetToken(userRoleId, 0);
 
@@ -88,11 +87,8 @@ namespace Web.eBado.Controllers
 
                 int companyRoleId = 0;
 
-                using (var uow = NinjectResolver.GetInstance<IUnitOfWork>())
-                {
-                    string companyRole = newSession.Companies.First(c => c.IsActive).CompanyRole;
-                    companyRoleId = uow.CompanyRoleRepository.FindFirstOrDefault(cr => cr.Name == companyRole).Id;
-                }
+                string companyRole = newSession.Companies.First(c => c.IsActive).CompanyRole;
+                companyRoleId = unitOfWork.CompanyRoleRepository.FindFirstOrDefault(cr => cr.Name == companyRole).Id;
 
                 bool result = await GetToken(0, companyRoleId);
 
@@ -108,13 +104,16 @@ namespace Web.eBado.Controllers
         }
 
         [HttpPost]
+        [System.Web.Http.Authorize]
+        [Route("DeleteCategory")]
         public JsonResult DeleteCategory(string category)
         {
+            category = category.Replace("_", " ");
             string response = successResponse;
             var session = Session["User"] as SessionModel;
             int companyId = session.Companies.FirstOrDefault(c => c.IsActive).Id;
             var companyDetails = unitOfWork.CompanyDetailsRepository.FindFirstOrDefault(cd => cd.Id == companyId);
-            var categoryDbo = companyDetails.Category2CompanyDetails.FirstOrDefault(c => c.Category.Name == category);
+            var categoryDbo = companyDetails.Category2CompanyDetails.FirstOrDefault(c => c.IsActive && c.Category.Name == category);
 
             if (categoryDbo != null)
             {
@@ -137,6 +136,8 @@ namespace Web.eBado.Controllers
         }
 
         [HttpGet]
+        [System.Web.Http.Authorize]
+        [Route("AddMemberToCompany")]
         public JsonResult AddMemberToCompany(string email, string selectedRole)
         {
             int companyId = GetCompanyId();
@@ -176,6 +177,8 @@ namespace Web.eBado.Controllers
         }
 
         [HttpPost]
+        [System.Web.Http.Authorize]
+        [Route("DeleteMember")]
         public JsonResult DeleteMember(string email)
         {
             int companyId = GetCompanyId();
@@ -199,6 +202,8 @@ namespace Web.eBado.Controllers
 
 
         [HttpPost]
+        [System.Web.Http.Authorize]
+        [Route("ChangeMemberRole")]
         public JsonResult ChangeMemberRole(string user, string role)
         {
             int companyId = GetCompanyId();
@@ -219,6 +224,8 @@ namespace Web.eBado.Controllers
         }
 
         [HttpPost]
+        [System.Web.Http.Authorize]
+        [Route("AddCustomRoleToCompany")]
         public JsonResult AddCustomRoleToCompany(string roleName, List<string> permissions)
         {
             int companyId = GetCompanyId();
@@ -267,9 +274,20 @@ namespace Web.eBado.Controllers
         [Route("GetPostalCodes")]
         public JsonResult GetPostalCodes(string prefix)
         {
-            var location = unitOfWork.LocationRepository.FindWhere(x => x.PostalCode.StartsWith(prefix)
-                || x.PostalCode.Replace(" ", "").StartsWith(prefix.Replace(" ", ""))
-                || x.City.StartsWith(prefix)).Take(10).AsEnumerable()
+            var cache = NinjectResolver.GetInstance<ICache>();
+            var cachedPostalCodes = cache.GetData<List<LocationDbo>>(CacheKeys.PostalCodeKey);
+
+            if (cachedPostalCodes == null)
+            {
+                var cacheSettings = new CacheSettings("cacheDurationKey", "cacheExpirationKey");
+                cachedPostalCodes = unitOfWork.LocationRepository.FindAll().ToList();
+                cache.Insert(CacheKeys.PostalCodeKey, cachedPostalCodes, null, cacheSettings);
+            }
+
+            var location = cachedPostalCodes.Where(x => x.PostalCode.StartsWith(prefix)
+                || x.PostalCode.Replace(" ", "").StartsWith(prefix.Replace(" ", "")) || x.City.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)
+                || x.CityAlias.StartsWith(prefix, StringComparison.OrdinalIgnoreCase) || x.DistrictAlias.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                .Take(10).AsEnumerable()
                 .Select(loc => new
                 {
                     val = loc.PostalCode,

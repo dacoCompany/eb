@@ -1,4 +1,5 @@
-﻿using Infrastructure.Common.DB;
+﻿using Infrastructure.Common;
+using Infrastructure.Common.DB;
 using Infrastructure.Common.Enums;
 using Infrastructure.Configuration;
 using System;
@@ -259,6 +260,13 @@ namespace Web.eBado.Helpers
 
             SetMembersNotification(notificationModel, companyDetails);
 
+            var selectedCategories = model.CompanyModel.Categories.SelectedCategories?.ToList();
+
+            if (selectedCategories != null)
+            {
+                SetSelectedCategories(unitOfWork, selectedCategories, companyDetails);
+            }
+
             model.EditMembersAndRolesModel = new EditMembersAndRolesModel
 
             {
@@ -266,6 +274,7 @@ namespace Web.eBado.Helpers
                 UserRoles = GetUserRoles(companyDetails),
                 Permissions = new CompanyPermissionsModel()
             };
+            model.CurrentCategories = GetCurrentCategories(companyDetails, selectedCategories);
 
             unitOfWork.Commit();
             return (model);
@@ -323,20 +332,11 @@ namespace Web.eBado.Helpers
                 CompanyPostalCode = address.Location.PostalCode,
             };
 
-            model.CurrentCategories = GetCurrentCategories(companyDetails);
-            var memberRoles = companyDetails.CompanyDetails2UserDetails
-                .Where(cd => cd.CompanyRole.Name != CompanyRole.Owner.ToString() && cd.IsActive)
-                .Select(cd => new UserRoleModel
-                {
-                    UserEmail = cd.UserDetail.Email,
-                    SelectedRoleId = cd.CompanyRole.Name
-                }).ToList();
-
             model.EditMembersAndRolesModel = new EditMembersAndRolesModel
 
             {
                 AllRoles = GetAllRoles(uow, companyId),
-                UserRoles = memberRoles,
+                UserRoles = GetUserRoles(companyDetails),
                 Permissions = new CompanyPermissionsModel()
             };
             model.NotificationModel = new NotificationModel
@@ -353,6 +353,7 @@ namespace Web.eBado.Helpers
                 SearchRadius = companySettings.SearchRadius.Value
             };
             model.SelectedLanguage = companySettings.Language;
+            model.CurrentCategories = GetCurrentCategories(companyDetails);
 
             return model;
         }
@@ -395,13 +396,18 @@ namespace Web.eBado.Helpers
         private IEnumerable<SelectListItem> GetAllCategories(IUnitOfWork unitOfWork)
         {
             List<SelectListItem> allCategories = new List<SelectListItem>();
-            var categories = unitOfWork.CategoryRepository.FindAll()
-                .Select(category => new SelectListItem { Value = category.Name, Text = category.Name });
+            var cache = NinjectResolver.GetInstance<ICache>();
+            var cachedCategories = cache.GetData<List<AllCategoriesModel>>(CacheKeys.CategoryKey);
 
-            var subCategories = unitOfWork.SubCategoryRepository.FindAll()
-                .Select(category => new SelectListItem { Value = category.Name, Text = category.Name });
+            if (cachedCategories == null)
+            {
+                cachedCategories = SetCategoriesCache(cachedCategories, cache, unitOfWork);
+            }
+
+            var categories = cachedCategories.Select(category => new SelectListItem { Value = category.Name, Text = category.Name });
+            var subCategories = cachedCategories.Select(category => new SelectListItem { Value = category.Name, Text = category.Name });
+
             allCategories.AddRange(categories.Concat(subCategories));
-
             return allCategories.AsEnumerable();
         }
 
@@ -426,9 +432,20 @@ namespace Web.eBado.Helpers
 
         private int GetLocation(string postalCode, IUnitOfWork uow)
         {
-            return uow.LocationRepository.FindFirstOrDefault(x => x.PostalCode.Equals(postalCode)
+            var cache = NinjectResolver.GetInstance<ICache>();
+            var cachedPostalCodes = cache.GetData<List<LocationDbo>>(CacheKeys.PostalCodeKey);
+
+            if (cachedPostalCodes == null)
+            {
+                var cacheSettings = new CacheSettings("cacheDurationKey", "cacheExpirationKey");
+                cachedPostalCodes = uow.LocationRepository.FindAll().ToList();
+                cache.Insert(CacheKeys.PostalCodeKey, cachedPostalCodes, null, cacheSettings);
+            }
+
+            return cachedPostalCodes.FirstOrDefault(x => x.PostalCode.Equals(postalCode)
                    || x.PostalCode.Replace(" ", "").Equals(postalCode.Replace(" ", ""))
-                   || x.City.Contains(postalCode)).Id;
+                   || x.City.StartsWith(postalCode, StringComparison.OrdinalIgnoreCase) || x.CityAlias.StartsWith(postalCode, StringComparison.OrdinalIgnoreCase)
+                   || x.DistrictAlias.StartsWith(postalCode, StringComparison.OrdinalIgnoreCase)).Id;
         }
 
         private IEnumerable<SelectListItem> GetAllRoles(IUnitOfWork uow, int companyId)
@@ -485,39 +502,85 @@ namespace Web.eBado.Helpers
             }).ToList();
         }
 
-        private IEnumerable<string> GetCurrentCategories(CompanyDetailDbo companyDetails)
+        private IEnumerable<string> GetCurrentCategories(CompanyDetailDbo companyDetails, List<string> selectedCategories = null)
         {
             var allCategories = new List<string>();
             var categories = companyDetails.Category2CompanyDetails.Where(c => c.IsActive).Select(c => c.Category.Name);
             var subCategories = companyDetails.SubCategory2CompanyDetails.Where(c => c.IsActive).Select(c => c.SubCategory.Name);
             allCategories.AddRange(categories.Concat(subCategories));
+            if (selectedCategories != null)
+            {
+                allCategories.AddRange(selectedCategories);
+            }
             return allCategories;
         }
 
         private void SetSelectedCategories(IUnitOfWork uow, List<string> selectedCategories, CompanyDetailDbo companyDetails)
         {
-            var categoryIds = uow.CategoryRepository.FindWhere(c => selectedCategories.Contains(c.Name)).Select(c => c.Id);
-            var subCategoryIds = uow.SubCategoryRepository.FindWhere(sc => selectedCategories.Contains(sc.Name)).Select(sc => sc.Id);
+            var cache = NinjectResolver.GetInstance<ICache>();
+            var cachedCategories = cache.GetData<List<AllCategoriesModel>>(CacheKeys.CategoryKey);
+
+            if (cachedCategories == null)
+            {
+                cachedCategories = SetCategoriesCache(cachedCategories, cache, uow);
+            }
+
+            var allcategories = cachedCategories.Where(c => selectedCategories.Contains(c.Name));
+            var categoryIds = allcategories.Where(ac => ac.IsMain).Select(ac => ac.Id);
+            var subCategoryIds = allcategories.Where(ac => !ac.IsMain).Select(ac => ac.Id);
+            var currentCategoriesId = companyDetails.Category2CompanyDetails.Where(c => c.IsActive).Select(c => c.CategoryId);
+            var currentSubCategoriesId = companyDetails.SubCategory2CompanyDetails.Where(c => c.IsActive).Select(c => c.SubCategoryId);
 
             foreach (var categoryId in categoryIds)
             {
-                var category2company = new Category2CompanyDetailsDbo
+                if (!currentCategoriesId.Contains(categoryId))
                 {
-                    CategoryId = categoryId,
-                    CompanyDetailsId = companyDetails.Id
-                };
-                companyDetails.Category2CompanyDetails.Add(category2company);
+                    var category2company = new Category2CompanyDetailsDbo
+                    {
+                        CategoryId = categoryId,
+                        CompanyDetailsId = companyDetails.Id
+                    };
+                    companyDetails.Category2CompanyDetails.Add(category2company);
+                }
             }
 
             foreach (var subCategoryId in subCategoryIds)
             {
-                var subCategory2company = new SubCategory2CompanyDetailsDbo
+                if (!currentSubCategoriesId.Contains(subCategoryId))
                 {
-                    SubCategoryId = subCategoryId,
-                    CompanyDetailsId = companyDetails.Id
-                };
-                companyDetails.SubCategory2CompanyDetails.Add(subCategory2company);
+                    var subCategory2company = new SubCategory2CompanyDetailsDbo
+                    {
+                        SubCategoryId = subCategoryId,
+                        CompanyDetailsId = companyDetails.Id
+                    };
+                    companyDetails.SubCategory2CompanyDetails.Add(subCategory2company);
+                }
             }
+        }
+
+        private List<AllCategoriesModel> SetCategoriesCache(List<AllCategoriesModel> cachedCategories, ICache cache, IUnitOfWork unitOfWork)
+        {
+            var cacheSettings = new CacheSettings("cacheDurationKey", "cacheExpirationKey");
+
+            var categoryList = unitOfWork.CategoryRepository.FindAll().Select(category => new AllCategoriesModel
+            {
+                Id = category.Id,
+                Name = category.Name,
+                IsMain = true
+            }).ToList();
+
+            var subCategoryList = unitOfWork.SubCategoryRepository.FindAll().Select(subCategory => new AllCategoriesModel
+            {
+                Id = subCategory.Id,
+                Name = subCategory.Name,
+                IsMain = false
+            }).ToList();
+
+            cachedCategories = new List<AllCategoriesModel>();
+            cachedCategories.AddRange(categoryList.Concat(subCategoryList));
+
+            cache.Insert(CacheKeys.CategoryKey, cachedCategories, null, cacheSettings);
+            return cachedCategories;
         }
         #endregion
     }

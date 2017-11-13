@@ -59,6 +59,12 @@
 	INSERT INTO UserPermission(Name) VALUES ('Write')
 	PRINT'Insert UserPermission completed'
 
+	PRINT 'Insert UserRole2UserPermission data'
+	INSERT INTO UserRole2UserPermission(UserRoleId, UserPermissionId) VALUES ('1','2')
+	INSERT INTO UserRole2UserPermission(UserRoleId, UserPermissionId) VALUES ('2','1')
+	INSERT INTO UserRole2UserPermission(UserRoleId, UserPermissionId) VALUES ('2','2')
+	PRINT'Insert UserRole2UserPermission completed'
+
 	COMMIT TRANSACTION
 
 

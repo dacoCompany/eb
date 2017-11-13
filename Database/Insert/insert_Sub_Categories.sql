@@ -454,14 +454,14 @@ VALUES
 INSERT INTO SubCategory(Name, IsActive, CategoryId) 
 VALUES 
   (
-   'Design Engineer (Construction & Real Estate)', 
+   'Design Engineer (Construction and Real Estate)', 
     1, 9
   );
 /* INSERT QUERY */
 INSERT INTO SubCategory(Name, IsActive, CategoryId) 
 VALUES 
   (
-   'Design Technician (Construction & Real Estate)', 
+   'Design Technician (Construction and Real Estate)', 
     1, 9
   );
 /* INSERT QUERY */
@@ -476,7 +476,7 @@ VALUES
 INSERT INTO SubCategory(Name, IsActive, CategoryId) 
 VALUES 
   (
-   'Fitter/Assembler (Construction & Real Estate)', 
+   'Fitter/Assembler (Construction and Real Estate)', 
     1, 9
   );
 /* INSERT QUERY */
@@ -522,7 +522,7 @@ VALUES
 INSERT INTO SubCategory(Name, IsActive, CategoryId) 
 VALUES 
   (
-   'Project Manager (Construction & Real Estate)', 
+   'Project Manager (Construction and Real Estate)', 
     0, 9
   );
 /* INSERT QUERY */
@@ -557,7 +557,7 @@ VALUES
 INSERT INTO SubCategory(Name, IsActive, CategoryId) 
 VALUES 
   (
-   'Welder (Construction & Real Estate)', 
+   'Welder (Construction and Real Estate)', 
     1, 9
   );
 /* INSERT QUERY */
@@ -744,14 +744,14 @@ VALUES
 INSERT INTO SubCategory(Name, IsActive, CategoryId) 
 VALUES 
   (
-   'Design Engineer (Electrical & Power Engineering)', 
+   'Design Engineer (Electrical and Power Engineering)', 
     0, 14
   );
 /* INSERT QUERY */
 INSERT INTO SubCategory(Name, IsActive, CategoryId) 
 VALUES 
   (
-   'Design Technician (Electrical & Power Engineering)', 
+   'Design Technician (Electrical and Power Engineering)', 
     1, 14
   );
 /* INSERT QUERY */
@@ -791,7 +791,7 @@ VALUES
 INSERT INTO SubCategory(Name, IsActive, CategoryId) 
 VALUES 
   (
-   'Maintenance Engineer (Electrical & Power Engineering)', 
+   'Maintenance Engineer (Electrical and Power Engineering)', 
     0, 14
   );
 /* INSERT QUERY */
@@ -813,7 +813,7 @@ VALUES
 INSERT INTO SubCategory(Name, IsActive, CategoryId) 
 VALUES 
   (
-   'Process Engineer (Electrical & Power Engineering)', 
+   'Process Engineer (Electrical and Power Engineering)', 
     0, 14
   );
 /* INSERT QUERY */
@@ -824,28 +824,28 @@ VALUES
 INSERT INTO SubCategory(Name, IsActive, CategoryId) 
 VALUES 
   (
-   'Service Engineer (Electrical & Power Engineering)', 
+   'Service Engineer (Electrical and Power Engineering)', 
     1, 14
   );
 /* INSERT QUERY */
 INSERT INTO SubCategory(Name, IsActive, CategoryId) 
 VALUES 
   (
-   'Service Technician (Electrical & Power Engineering)', 
+   'Service Technician (Electrical and Power Engineering)', 
     1, 14
   );
 /* INSERT QUERY */
 INSERT INTO SubCategory(Name, IsActive, CategoryId) 
 VALUES 
   (
-   'Technician (Electrical & Power Engineering)', 
+   'Technician (Electrical and Power Engineering)', 
     1, 14
   );
 /* INSERT QUERY */
 INSERT INTO SubCategory(Name, IsActive, CategoryId) 
 VALUES 
   (
-   'Technologist (Electrical & Power Engineering)', 
+   'Technologist (Electrical and Power Engineering)', 
     1, 14
   );
 /* INSERT QUERY */
@@ -888,7 +888,7 @@ VALUES
 INSERT INTO SubCategory(Name, IsActive, CategoryId) 
 VALUES 
   (
-   'Compensation & Benefit Specialist', 
+   'Compensation and Benefit Specialist', 
     0, 16
   );
 /* INSERT QUERY */
@@ -1242,7 +1242,7 @@ VALUES
 INSERT INTO SubCategory(Name, IsActive, CategoryId) 
 VALUES 
   (
-   'Proofreader (Journalism, Printing Arts & Media)', 
+   'Proofreader (Journalism, Printing Arts and Media)', 
     1, 19
   );
 /* INSERT QUERY */
@@ -1374,8 +1374,8 @@ INSERT INTO SubCategory(Name, IsActive, CategoryId) VALUES ('Paralegal - law stu
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Professional Parent',1,25);
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Public Health Administrator',0,25);
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Radiology Assistant',0,25);
-/* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Regulatory Affairs Manager (Medicine & Social Care)',0,25);
-/* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Regulatory Affairs Specialist (Medicine & Social Care)',0,25);
+/* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Regulatory Affairs Manager (Medicine and Social Care)',0,25);
+/* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Regulatory Affairs Specialist (Medicine and Social Care)',0,25);
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Veterinarian',0,25);
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Founder',1,26);
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Metallurgist',1,26);
@@ -1471,7 +1471,7 @@ INSERT INTO SubCategory(Name, IsActive, CategoryId) VALUES ('Paralegal - law stu
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Telecommunications Network Designer',1,35);
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Telecommunications Product Development Specialist',1,35);
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Telecommunications Service Development Specialist',1,35);
-/* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Transmission Netw.Analysis & Development Specialist',1,35);
+/* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Transmission Netw.Analysis and Development Specialist',1,35);
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Cobbler',1,36);
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Fabric Cutter',1,36);
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Fashion Designer, 
@@ -1499,7 +1499,7 @@ INSERT INTO SubCategory(Name, IsActive, CategoryId) VALUES ('Paralegal - law stu
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Technical Director',0,37);
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Accommodation Manager',0,38);
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Activity Instructor',1,39);
-/* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Air Ticket & Package Holiday Vendor',1,39);
+/* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Air Ticket and Package Holiday Vendor',1,39);
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Assistant Cook',1,40);
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Bartender',1,40);
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Bosun',0,39);
@@ -1508,7 +1508,7 @@ INSERT INTO SubCategory(Name, IsActive, CategoryId) VALUES ('Paralegal - law stu
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Concierge',0,39);
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Cook',1,40);
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Croupier',1,38);
-/* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('F & B manager',0,38);
+/* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('F and B manager',0,38);
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Fast food worker',0,40);
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Flight Attendant',0,39);
 /* INSERT QUERY */INSERT INTO SubCategory(Name,IsActive,CategoryId) VALUES('Hotel Porter',0,38);

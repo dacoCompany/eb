@@ -44,21 +44,21 @@ namespace Infrastructure.Common.DB
         #region Interface methods
 
         /// <summary>
-        /// Finds all (active and inactive entities)
+        /// Finds all active
         /// </summary>
-        /// <returns>Collection of entites</returns>
+        /// <returns>Collection of active entities</returns>
         public IQueryable<T> FindAll()
         {
-            return dataEntity;
+            return dataEntity.Where(entity => entity.IsActive);
         }
 
         /// <summary>
-        /// Finds all active.
+        /// Finds all (active and inactive entities)
         /// </summary>
-        /// <returns></returns>
-        public IQueryable<T> FindAllActive()
+        /// <returns>Collection of all entities</returns>
+        public IQueryable<T> FindAllInactive()
         {
-            return dataEntity.Where(entity => entity.IsActive);
+            return dataEntity;
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace Infrastructure.Common.DB
         }
 
         /// <summary>
-        /// Finds the active entites by predicate.
+        /// Finds the active entities by predicate.
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <returns>Collection of active entities</returns>
@@ -134,7 +134,7 @@ namespace Infrastructure.Common.DB
 
         /// </summary>
         /// <param name="objCollection">The object collection.</param>
-        /// <returns>Collection of added entites</returns>
+        /// <returns>Collection of added entities</returns>
         public IEnumerable<T> AddRange(IEnumerable<T> objCollection)
         {
             return dataEntity.AddRange(objCollection);

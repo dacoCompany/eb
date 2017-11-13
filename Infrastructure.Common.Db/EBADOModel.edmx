@@ -197,6 +197,7 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="DateCreated" Type="datetime2" Precision="0" />
           <Property Name="DateModified" Type="datetime2" Precision="0" />
+          <Property Name="DistrictAlias" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="SubCategory">
           <Key>
@@ -679,7 +680,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <EntitySet Name="CompanyRole2CompanyPermissionDbo" EntityType="testDBModel.CompanyRole2CompanyPermissionDbo" />
           <EntitySet Name="CompanySettingDboes" EntityType="testDBModel.CompanySettingDbo" />
           <EntitySet Name="CompanyTypeDboes" EntityType="testDBModel.CompanyTypeDbo" />
-          <EntitySet Name="LocationDboes" EntityType="testDBModel.LocationDbo" />
           <EntitySet Name="SubCategoryDboes" EntityType="testDBModel.SubCategoryDbo" />
           <EntitySet Name="SubCategory2CompanyDetailsDbo" EntityType="testDBModel.SubCategory2CompanyDetailsDbo" />
           <EntitySet Name="UserDetailDboes" EntityType="testDBModel.UserDetailDbo" />
@@ -690,10 +690,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <EntitySet Name="AllDeviceDboes" EntityType="testDBModel.AllDeviceDbo" />
           <AssociationSet Name="FKAddressCompanyDetailsId" Association="testDBModel.FKAddressCompanyDetailsId">
             <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
-            <End Role="Address" EntitySet="AddressDboes" />
-          </AssociationSet>
-          <AssociationSet Name="FKAddressLocationId" Association="testDBModel.FKAddressLocationId">
-            <End Role="Location" EntitySet="LocationDboes" />
             <End Role="Address" EntitySet="AddressDboes" />
           </AssociationSet>
           <AssociationSet Name="FKAddressUserDetailsId" Association="testDBModel.FKAddressUserDetailsId">
@@ -772,6 +768,11 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             <End Role="UserRole" EntitySet="UserRoleDboes" />
             <End Role="UserRole2UserPermission" EntitySet="UserRole2UserPermissionDbo" />
           </AssociationSet>
+          <EntitySet Name="LocationDboes" EntityType="testDBModel.LocationDbo" />
+          <AssociationSet Name="FKAddressLocationId" Association="testDBModel.FKAddressLocationId">
+            <End Role="Location" EntitySet="LocationDboes" />
+            <End Role="AddressDbo" EntitySet="AddressDboes" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="AddressDbo">
           <Key>
@@ -789,8 +790,8 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="UserDetailsId" Type="Int32" />
           <Property Name="CompanyDetailsId" Type="Int32" />
           <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKAddressCompanyDetailsId" FromRole="Address" ToRole="CompanyDetail" />
-          <NavigationProperty Name="Location" Relationship="testDBModel.FKAddressLocationId" FromRole="Address" ToRole="Location" />
           <NavigationProperty Name="UserDetail" Relationship="testDBModel.FKAddressUserDetailsId" FromRole="Address" ToRole="UserDetail" />
+          <NavigationProperty Name="Location" Relationship="testDBModel.FKAddressLocationId" FromRole="AddressDbo" ToRole="Location" />
         </EntityType>
         <EntityType Name="AttachmentDbo">
           <Key>
@@ -961,24 +962,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="DateModified" Type="DateTime" Precision="3" />
           <NavigationProperty Name="CompanyDetails" Relationship="testDBModel.FKCompanyType" FromRole="CompanyType" ToRole="CompanyDetail" />
         </EntityType>
-        <EntityType Name="LocationDbo">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Country" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="PostalCode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="CityAlias" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="County" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="District" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Lat" Type="Decimal" Precision="10" Scale="4" />
-          <Property Name="Lon" Type="Decimal" Precision="10" Scale="4" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="DateCreated" Type="DateTime" Precision="0" />
-          <Property Name="DateModified" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="Addresses" Relationship="testDBModel.FKAddressLocationId" FromRole="Location" ToRole="Address" />
-        </EntityType>
         <EntityType Name="SubCategoryDbo">
           <Key>
             <PropertyRef Name="Id" />
@@ -1110,18 +1093,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             </Principal>
             <Dependent Role="Address">
               <PropertyRef Name="CompanyDetailsId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FKAddressLocationId">
-          <End Type="testDBModel.LocationDbo" Role="Location" Multiplicity="1" />
-          <End Type="testDBModel.AddressDbo" Role="Address" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Location">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Address">
-              <PropertyRef Name="LocationId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1353,6 +1324,37 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="LocationDbo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Country" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CityAlias" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="County" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="District" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Lat" Type="Decimal" Precision="10" Scale="4" />
+          <Property Name="Lon" Type="Decimal" Precision="10" Scale="4" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="0" />
+          <Property Name="DateModified" Type="DateTime" Precision="0" />
+          <Property Name="DistrictAlias" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Addresses" Relationship="testDBModel.FKAddressLocationId" FromRole="Location" ToRole="AddressDbo" />
+        </EntityType>
+        <Association Name="FKAddressLocationId">
+          <End Type="testDBModel.LocationDbo" Role="Location" Multiplicity="1" />
+          <End Type="testDBModel.AddressDbo" Role="AddressDbo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AddressDbo">
+              <PropertyRef Name="LocationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1532,24 +1534,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="LocationDboes">
-            <EntityTypeMapping TypeName="testDBModel.LocationDbo">
-              <MappingFragment StoreEntitySet="Location">
-                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
-                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Lon" ColumnName="Lon" />
-                <ScalarProperty Name="Lat" ColumnName="Lat" />
-                <ScalarProperty Name="District" ColumnName="District" />
-                <ScalarProperty Name="County" ColumnName="County" />
-                <ScalarProperty Name="CityAlias" ColumnName="CityAlias" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
-                <ScalarProperty Name="Country" ColumnName="Country" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="SubCategoryDboes">
             <EntityTypeMapping TypeName="testDBModel.SubCategoryDbo">
               <MappingFragment StoreEntitySet="SubCategory">
@@ -1661,6 +1645,25 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
                 <ScalarProperty Name="SecretKey" ColumnName="SecretKey" />
                 <ScalarProperty Name="AudienceKey" ColumnName="AudienceKey" />
                 <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LocationDboes">
+            <EntityTypeMapping TypeName="testDBModel.LocationDbo">
+              <MappingFragment StoreEntitySet="Location">
+                <ScalarProperty Name="DistrictAlias" ColumnName="DistrictAlias" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Lon" ColumnName="Lon" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="County" ColumnName="County" />
+                <ScalarProperty Name="CityAlias" ColumnName="CityAlias" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
