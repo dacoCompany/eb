@@ -205,7 +205,8 @@ namespace Web.eBado.Controllers
                 Session["User"] = session;
 
                 var client = new HttpClient();
-                client.BaseAddress = new Uri("http://localhost:52708/");
+                string authServerBaseUri = configuration.GetValueByKey("AuthServerBaseUri");
+                client.BaseAddress = new Uri(authServerBaseUri);
 
                 var response = await client.GetAsync($"api/OAuth/GetLoginToken?appId=123&userRoleId={userDetail.UserRoleId}&companyRoleId=0");
 

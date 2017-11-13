@@ -32,7 +32,7 @@ namespace Web.eBado
             DatabaseFactory.ClearDatabaseProviderFactory();
             DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory());
 
-            string issuer = "http://ebadoauthserver.net/";
+            string issuer = "http://ebadoauthorization.azurewebsites.net/";
             string audience = "eBado";
             string secret = "VGhpcyBpcyBhIHRva2VuIHNlY3JldCBmb3IgZWJhZG8gYXV0aGVudGljYXRpb24u";
 

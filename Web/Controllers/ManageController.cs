@@ -18,6 +18,7 @@ using Web.eBado.Helpers;
 using Web.eBado.IoC;
 using Web.eBado.Models.Account;
 using Web.eBado.Models.Shared;
+using WebAPIFactory.Configuration.Core;
 
 namespace Web.eBado.Controllers
 {
@@ -26,11 +27,13 @@ namespace Web.eBado.Controllers
     {
         private const string successResponse = "OK";
         private readonly IUnitOfWork unitOfWork;
+        private readonly IConfiguration configuration;
         SessionHelper sessionHelper;
 
-        public ManageController(IUnitOfWork unitOfWork)
+        public ManageController(IUnitOfWork unitOfWork, IConfiguration configuration)
         {
             this.unitOfWork = unitOfWork;
+            this.configuration = configuration;
             sessionHelper = new SessionHelper();
         }
 
@@ -324,7 +327,8 @@ namespace Web.eBado.Controllers
         private async Task<bool> GetToken(int userRoleId = 0, int companyRoleId = 0)
         {
             var client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:52708/");
+            string authServerBaseUri = configuration.GetValueByKey("AuthServerBaseUri");
+            client.BaseAddress = new Uri(authServerBaseUri);
 
             var response = await client.GetAsync($"api/OAuth/GetLoginToken?appId=123&userRoleId={userRoleId}&companyRoleId={companyRoleId}");
 
