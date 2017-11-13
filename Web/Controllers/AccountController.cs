@@ -122,7 +122,7 @@ namespace Web.eBado.Controllers
             return View();
         }
 
-        [Authorize]
+        [System.Web.Http.Authorize]
         [Route("EditAccountGallery")]
         public ActionResult EditAccountGallery(string batchId)
         {
@@ -144,7 +144,7 @@ namespace Web.eBado.Controllers
             return View(model);
         }
 
-        [Authorize]
+        [System.Web.Http.Authorize]
         [Route("BatchAccountGallery")]
         public ActionResult BatchAccountGallery()
         {

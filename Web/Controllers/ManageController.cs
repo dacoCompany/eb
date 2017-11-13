@@ -108,6 +108,8 @@ namespace Web.eBado.Controllers
         }
 
         [HttpPost]
+        [System.Web.Http.Authorize(Roles = "ChangeSettings")]
+        [Route("DeleteCategory")]
         public JsonResult DeleteCategory(string category)
         {
             var session = Session["User"] as SessionModel;
@@ -117,6 +119,8 @@ namespace Web.eBado.Controllers
         }
 
         [HttpGet]
+        [System.Web.Http.Authorize(Roles = "AddMember")]
+        [Route("AddMemberToCompany")]
         public JsonResult AddMemberToCompany(string email, string selectedRole)
         {
             int companyId = GetCompanyId();
@@ -156,6 +160,8 @@ namespace Web.eBado.Controllers
         }
 
         [HttpPost]
+        [System.Web.Http.Authorize(Roles = "RemoveMember")]
+        [Route("DeleteMember")]
         public JsonResult DeleteMember(string email)
         {
             int companyId = GetCompanyId();
@@ -179,6 +185,8 @@ namespace Web.eBado.Controllers
        
 
         [HttpPost]
+        [System.Web.Http.Authorize(Roles = "AddMember, RemoveMember")]
+        [Route("ChangeMemberRole")]
         public JsonResult ChangeMemberRole(string user, string role)
         {
             int companyId = GetCompanyId();
@@ -199,6 +207,8 @@ namespace Web.eBado.Controllers
         }
 
         [HttpPost]
+        [System.Web.Http.Authorize(Roles = "AddMember, RemoveMember")]
+        [Route("AddCustomRoleToCompany")]
         public JsonResult AddCustomRoleToCompany(string roleName, List<string> permissions)
         {
             int companyId = GetCompanyId();
