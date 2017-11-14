@@ -102,7 +102,6 @@ namespace Web.eBado.Helpers
 
                 userDetails.UserSetting = new UserSettingDbo
                 {
-                    Language = Thread.CurrentThread.CurrentCulture.Name,
                     SearchInCZ = true,
                     SearchInSK = true,
                     SearchInHU = true,
@@ -215,7 +214,6 @@ namespace Web.eBado.Helpers
             userSettings.SearchInHU = searchModel.SearchInHU;
             userSettings.SearchInSK = searchModel.SearchInSK;
             userSettings.SearchRadius = searchModel.SearchRadius;
-            userSettings.Language = model.SelectedLanguage;
             userSettings.NotifyCommentOnAccount = notificationModel.NotifyCommentOnAccount;
             userSettings.NotifyCommentOnContribution = notificationModel.NotifyCommentOnContribution;
 
@@ -253,7 +251,6 @@ namespace Web.eBado.Helpers
             companySettings.SearchInHU = searchModel.SearchInHU;
             companySettings.SearchInSK = searchModel.SearchInSK;
             companySettings.SearchRadius = searchModel.SearchRadius;
-            companySettings.Language = model.SelectedLanguage;
             companySettings.NotifyCommentOnAccount = notificationModel.NotifyCommentOnAccount;
             companySettings.NotifyCommentOnContribution = notificationModel.NotifyCommentOnContribution;
             companySettings.NotifyAllMember = notificationModel.NotifyAllMember;
@@ -307,7 +304,6 @@ namespace Web.eBado.Helpers
                 SearchInSK = userSettings.SearchInSK,
                 SearchRadius = userSettings.SearchRadius.Value
             };
-            model.SelectedLanguage = userSettings.Language;
             model.EditMembersAndRolesModel.AllRoles = GetDefaultRoles();
 
             return model;
@@ -352,7 +348,6 @@ namespace Web.eBado.Helpers
                 SearchInSK = companySettings.SearchInSK,
                 SearchRadius = companySettings.SearchRadius.Value
             };
-            model.SelectedLanguage = companySettings.Language;
             model.CurrentCategories = GetCurrentCategories(companyDetails);
 
             return model;
@@ -444,7 +439,8 @@ namespace Web.eBado.Helpers
 
             return cachedPostalCodes.FirstOrDefault(x => x.PostalCode.Equals(postalCode)
                    || x.PostalCode.Replace(" ", "").Equals(postalCode.Replace(" ", ""))
-                   || x.City.StartsWith(postalCode, StringComparison.OrdinalIgnoreCase) || x.CityAlias.StartsWith(postalCode, StringComparison.OrdinalIgnoreCase)
+                   || x.City.StartsWith(postalCode, StringComparison.OrdinalIgnoreCase)
+                   || x.CityAlias.StartsWith(postalCode, StringComparison.OrdinalIgnoreCase)
                    || x.DistrictAlias.StartsWith(postalCode, StringComparison.OrdinalIgnoreCase)).Id;
         }
 

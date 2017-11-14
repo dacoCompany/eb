@@ -27,7 +27,7 @@ namespace Infrastructure.Common.DB
         public Nullable<int> CompanyDetailsId { get; set; }
     
         public virtual CompanyDetailDbo CompanyDetail { get; set; }
-        public virtual LocationDbo Location { get; set; }
         public virtual UserDetailDbo UserDetail { get; set; }
+        public virtual LocationDbo Location { get; set; }
     }
 }

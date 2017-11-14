@@ -133,13 +133,6 @@
                     </div>
                     <div class="hidden-toggle accordion-content">
                         <div class="settings_wrapper">
-                            <div class="text_div font_16">Predvoleny jazyk uctu:</div>
-                            <div class="box_div">
-                                @Html.DropDownListFor(model => model.SelectedLanguage, EnumHelper.GetSelectList(typeof(Languages)), new { @class = "form-control" })
-                                <div class="val-message"></div>
-                            </div>
-                        </div>
-                        <div class="settings_wrapper">
                             <div class="text_div font_16">Radius vyhladavania (km):</div>
                             <div class="box_div">
                                 @Html.EditorFor(model => model.SearchModel.SearchRadius, new { htmlAttributes = new { @class = "form-control" } })
@@ -279,13 +272,6 @@
                         <div class="accordion-main">nastavenia firemneho uctu</div>
                     </div>
                     <div class="hidden-toggle accordion-content">
-                        <div class="settings_wrapper">
-                            <div class="text_div font_16">Predvoleny jazyk uctu:</div>
-                            <div class="box_div">
-                                @Html.DropDownListFor(model => model.SelectedLanguage, EnumHelper.GetSelectList(typeof(Languages)), new { @class = "form-control" })
-                                <div class="val-message"></div>
-                            </div>
-                        </div>
                         <div class="settings_wrapper">
                             <div class="text_div font_16">Radius vyhladavania (km):</div>
                             <div class="box_div">

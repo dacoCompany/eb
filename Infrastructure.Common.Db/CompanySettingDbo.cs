@@ -29,7 +29,6 @@ namespace Infrastructure.Common.DB
         public bool NotifyCommentOnAccount { get; set; }
         public bool NotifyAllMember { get; set; }
         public string NotificationEmail { get; set; }
-        public string Language { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }

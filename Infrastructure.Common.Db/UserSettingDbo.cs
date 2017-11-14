@@ -27,7 +27,6 @@ namespace Infrastructure.Common.DB
         public bool SearchInHU { get; set; }
         public bool NotifyCommentOnContribution { get; set; }
         public bool NotifyCommentOnAccount { get; set; }
-        public string Language { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }

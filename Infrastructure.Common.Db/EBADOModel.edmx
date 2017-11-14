@@ -165,7 +165,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="NotifyCommentOnAccount" Type="bit" Nullable="false" />
           <Property Name="NotifyAllMember" Type="bit" Nullable="false" />
           <Property Name="NotificationEmail" Type="varchar" MaxLength="100" />
-          <Property Name="Language" Type="varchar" MaxLength="50" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="DateCreated" Type="datetime2" Precision="0" />
           <Property Name="DateModified" Type="datetime2" Precision="0" />
@@ -289,7 +288,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="SearchInHU" Type="bit" Nullable="false" />
           <Property Name="NotifyCommentOnContribution" Type="bit" Nullable="false" />
           <Property Name="NotifyCommentOnAccount" Type="bit" Nullable="false" />
-          <Property Name="Language" Type="varchar" MaxLength="50" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="DateCreated" Type="datetime2" Precision="0" />
           <Property Name="DateModified" Type="datetime2" Precision="0" />
@@ -678,7 +676,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <EntitySet Name="CompanyPermissionDboes" EntityType="testDBModel.CompanyPermissionDbo" />
           <EntitySet Name="CompanyRoleDboes" EntityType="testDBModel.CompanyRoleDbo" />
           <EntitySet Name="CompanyRole2CompanyPermissionDbo" EntityType="testDBModel.CompanyRole2CompanyPermissionDbo" />
-          <EntitySet Name="CompanySettingDboes" EntityType="testDBModel.CompanySettingDbo" />
           <EntitySet Name="CompanyTypeDboes" EntityType="testDBModel.CompanyTypeDbo" />
           <EntitySet Name="SubCategoryDboes" EntityType="testDBModel.SubCategoryDbo" />
           <EntitySet Name="SubCategory2CompanyDetailsDbo" EntityType="testDBModel.SubCategory2CompanyDetailsDbo" />
@@ -686,7 +683,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <EntitySet Name="UserPermissionDboes" EntityType="testDBModel.UserPermissionDbo" />
           <EntitySet Name="UserRoleDboes" EntityType="testDBModel.UserRoleDbo" />
           <EntitySet Name="UserRole2UserPermissionDbo" EntityType="testDBModel.UserRole2UserPermissionDbo" />
-          <EntitySet Name="UserSettingDboes" EntityType="testDBModel.UserSettingDbo" />
           <EntitySet Name="AllDeviceDboes" EntityType="testDBModel.AllDeviceDbo" />
           <AssociationSet Name="FKAddressCompanyDetailsId" Association="testDBModel.FKAddressCompanyDetailsId">
             <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
@@ -720,10 +716,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
             <End Role="CompanyDetails2UserDetails" EntitySet="CompanyDetails2UserDetailsDbo" />
           </AssociationSet>
-          <AssociationSet Name="FKCompanySettings" Association="testDBModel.FKCompanySettings">
-            <End Role="CompanySetting" EntitySet="CompanySettingDboes" />
-            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
-          </AssociationSet>
           <AssociationSet Name="FKCompanyType" Association="testDBModel.FKCompanyType">
             <End Role="CompanyType" EntitySet="CompanyTypeDboes" />
             <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
@@ -756,10 +748,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             <End Role="UserRole" EntitySet="UserRoleDboes" />
             <End Role="UserDetail" EntitySet="UserDetailDboes" />
           </AssociationSet>
-          <AssociationSet Name="FKUserSettings" Association="testDBModel.FKUserSettings">
-            <End Role="UserSetting" EntitySet="UserSettingDboes" />
-            <End Role="UserDetail" EntitySet="UserDetailDboes" />
-          </AssociationSet>
           <AssociationSet Name="FKUserPermission" Association="testDBModel.FKUserPermission">
             <End Role="UserPermission" EntitySet="UserPermissionDboes" />
             <End Role="UserRole2UserPermission" EntitySet="UserRole2UserPermissionDbo" />
@@ -772,6 +760,16 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <AssociationSet Name="FKAddressLocationId" Association="testDBModel.FKAddressLocationId">
             <End Role="Location" EntitySet="LocationDboes" />
             <End Role="AddressDbo" EntitySet="AddressDboes" />
+          </AssociationSet>
+          <EntitySet Name="CompanySettingDboes" EntityType="testDBModel.CompanySettingDbo" />
+          <AssociationSet Name="FKCompanySettings" Association="testDBModel.FKCompanySettings">
+            <End Role="CompanySetting" EntitySet="CompanySettingDboes" />
+            <End Role="CompanyDetailDbo" EntitySet="CompanyDetailDboes" />
+          </AssociationSet>
+          <EntitySet Name="UserSettingDboes" EntityType="testDBModel.UserSettingDbo" />
+          <AssociationSet Name="FKUserSettings" Association="testDBModel.FKUserSettings">
+            <End Role="UserSetting" EntitySet="UserSettingDboes" />
+            <End Role="UserDetailDbo" EntitySet="UserDetailDboes" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="AddressDbo">
@@ -874,9 +872,9 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <NavigationProperty Name="BatchAttachments" Relationship="testDBModel.FKCompanyDetailsBatchAttachmentId" FromRole="CompanyDetail" ToRole="BatchAttachment" />
           <NavigationProperty Name="Category2CompanyDetails" Relationship="testDBModel.FKCategory2CompanyDetailsCompanyDetails" FromRole="CompanyDetail" ToRole="Category2CompanyDetails" />
           <NavigationProperty Name="CompanyDetails2UserDetails" Relationship="testDBModel.FKCompanyDetails" FromRole="CompanyDetail" ToRole="CompanyDetails2UserDetails" />
-          <NavigationProperty Name="CompanySetting" Relationship="testDBModel.FKCompanySettings" FromRole="CompanyDetail" ToRole="CompanySetting" />
           <NavigationProperty Name="CompanyType" Relationship="testDBModel.FKCompanyType" FromRole="CompanyDetail" ToRole="CompanyType" />
           <NavigationProperty Name="SubCategory2CompanyDetails" Relationship="testDBModel.FKSubCategory2CompanyDetailsCompanyDetails" FromRole="CompanyDetail" ToRole="SubCategory2CompanyDetails" />
+          <NavigationProperty Name="CompanySetting" Relationship="testDBModel.FKCompanySettings" FromRole="CompanyDetailDbo" ToRole="CompanySetting" />
         </EntityType>
         <EntityType Name="CompanyDetails2UserDetailsDbo">
           <Key>
@@ -930,25 +928,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="DateModified" Type="DateTime" Precision="0" />
           <NavigationProperty Name="CompanyPermission" Relationship="testDBModel.FKCompanyPermission" FromRole="CompanyRole2CompanyPermission" ToRole="CompanyPermission" />
           <NavigationProperty Name="CompanyRole" Relationship="testDBModel.FKCompanyRole" FromRole="CompanyRole2CompanyPermission" ToRole="CompanyRole" />
-        </EntityType>
-        <EntityType Name="CompanySettingDbo">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SearchRadius" Type="Int32" />
-          <Property Name="SearchInSK" Type="Boolean" Nullable="false" />
-          <Property Name="SearchInCZ" Type="Boolean" Nullable="false" />
-          <Property Name="SearchInHU" Type="Boolean" Nullable="false" />
-          <Property Name="NotifyCommentOnContribution" Type="Boolean" Nullable="false" />
-          <Property Name="NotifyCommentOnAccount" Type="Boolean" Nullable="false" />
-          <Property Name="NotifyAllMember" Type="Boolean" Nullable="false" />
-          <Property Name="NotificationEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Language" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="DateCreated" Type="DateTime" Precision="0" />
-          <Property Name="DateModified" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="CompanyDetails" Relationship="testDBModel.FKCompanySettings" FromRole="CompanySetting" ToRole="CompanyDetail" />
         </EntityType>
         <EntityType Name="CompanyTypeDbo">
           <Key>
@@ -1016,7 +995,7 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <NavigationProperty Name="Addresses" Relationship="testDBModel.FKAddressUserDetailsId" FromRole="UserDetail" ToRole="Address" />
           <NavigationProperty Name="CompanyDetails2UserDetails" Relationship="testDBModel.FKUserDetails" FromRole="UserDetail" ToRole="CompanyDetails2UserDetails" />
           <NavigationProperty Name="UserRole" Relationship="testDBModel.FKUserDetailsUserRole" FromRole="UserDetail" ToRole="UserRole" />
-          <NavigationProperty Name="UserSetting" Relationship="testDBModel.FKUserSettings" FromRole="UserDetail" ToRole="UserSetting" />
+          <NavigationProperty Name="UserSetting" Relationship="testDBModel.FKUserSettings" FromRole="UserDetailDbo" ToRole="UserSetting" />
         </EntityType>
         <EntityType Name="UserPermissionDbo">
           <Key>
@@ -1053,23 +1032,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="DateModified" Type="DateTime" Precision="0" />
           <NavigationProperty Name="UserPermission" Relationship="testDBModel.FKUserPermission" FromRole="UserRole2UserPermission" ToRole="UserPermission" />
           <NavigationProperty Name="UserRole" Relationship="testDBModel.FKUserRole" FromRole="UserRole2UserPermission" ToRole="UserRole" />
-        </EntityType>
-        <EntityType Name="UserSettingDbo">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SearchRadius" Type="Int32" />
-          <Property Name="SearchInSK" Type="Boolean" Nullable="false" />
-          <Property Name="SearchInCZ" Type="Boolean" Nullable="false" />
-          <Property Name="SearchInHU" Type="Boolean" Nullable="false" />
-          <Property Name="NotifyCommentOnContribution" Type="Boolean" Nullable="false" />
-          <Property Name="NotifyCommentOnAccount" Type="Boolean" Nullable="false" />
-          <Property Name="Language" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="DateCreated" Type="DateTime" Precision="0" />
-          <Property Name="DateModified" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="UserDetails" Relationship="testDBModel.FKUserSettings" FromRole="UserSetting" ToRole="UserDetail" />
         </EntityType>
         <EntityType Name="AllDeviceDbo">
           <Key>
@@ -1180,18 +1142,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FKCompanySettings">
-          <End Type="testDBModel.CompanySettingDbo" Role="CompanySetting" Multiplicity="1" />
-          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CompanySetting">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CompanyDetail">
-              <PropertyRef Name="CompanySettingId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FKCompanyType">
           <End Type="testDBModel.CompanyTypeDbo" Role="CompanyType" Multiplicity="1" />
           <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="*" />
@@ -1288,18 +1238,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FKUserSettings">
-          <End Type="testDBModel.UserSettingDbo" Role="UserSetting" Multiplicity="1" />
-          <End Type="testDBModel.UserDetailDbo" Role="UserDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserSetting">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="UserDetail">
-              <PropertyRef Name="UserSettingId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FKUserPermission">
           <End Type="testDBModel.UserPermissionDbo" Role="UserPermission" Multiplicity="0..1" />
           <End Type="testDBModel.UserRole2UserPermissionDbo" Role="UserRole2UserPermission" Multiplicity="*" />
@@ -1352,6 +1290,64 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             </Principal>
             <Dependent Role="AddressDbo">
               <PropertyRef Name="LocationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CompanySettingDbo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SearchRadius" Type="Int32" />
+          <Property Name="SearchInSK" Type="Boolean" Nullable="false" />
+          <Property Name="SearchInCZ" Type="Boolean" Nullable="false" />
+          <Property Name="SearchInHU" Type="Boolean" Nullable="false" />
+          <Property Name="NotifyCommentOnContribution" Type="Boolean" Nullable="false" />
+          <Property Name="NotifyCommentOnAccount" Type="Boolean" Nullable="false" />
+          <Property Name="NotifyAllMember" Type="Boolean" Nullable="false" />
+          <Property Name="NotificationEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="0" />
+          <Property Name="DateModified" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="CompanyDetails" Relationship="testDBModel.FKCompanySettings" FromRole="CompanySetting" ToRole="CompanyDetailDbo" />
+        </EntityType>
+        <Association Name="FKCompanySettings">
+          <End Type="testDBModel.CompanySettingDbo" Role="CompanySetting" Multiplicity="1" />
+          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetailDbo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CompanySetting">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompanyDetailDbo">
+              <PropertyRef Name="CompanySettingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="UserSettingDbo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SearchRadius" Type="Int32" />
+          <Property Name="SearchInSK" Type="Boolean" Nullable="false" />
+          <Property Name="SearchInCZ" Type="Boolean" Nullable="false" />
+          <Property Name="SearchInHU" Type="Boolean" Nullable="false" />
+          <Property Name="NotifyCommentOnContribution" Type="Boolean" Nullable="false" />
+          <Property Name="NotifyCommentOnAccount" Type="Boolean" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="0" />
+          <Property Name="DateModified" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="UserDetails" Relationship="testDBModel.FKUserSettings" FromRole="UserSetting" ToRole="UserDetailDbo" />
+        </EntityType>
+        <Association Name="FKUserSettings">
+          <End Type="testDBModel.UserSettingDbo" Role="UserSetting" Multiplicity="1" />
+          <End Type="testDBModel.UserDetailDbo" Role="UserDetailDbo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserSetting">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserDetailDbo">
+              <PropertyRef Name="UserSettingId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1503,25 +1499,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="CompanySettingDboes">
-            <EntityTypeMapping TypeName="testDBModel.CompanySettingDbo">
-              <MappingFragment StoreEntitySet="CompanySettings">
-                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
-                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Language" ColumnName="Language" />
-                <ScalarProperty Name="NotificationEmail" ColumnName="NotificationEmail" />
-                <ScalarProperty Name="NotifyAllMember" ColumnName="NotifyAllMember" />
-                <ScalarProperty Name="NotifyCommentOnAccount" ColumnName="NotifyCommentOnAccount" />
-                <ScalarProperty Name="NotifyCommentOnContribution" ColumnName="NotifyCommentOnContribution" />
-                <ScalarProperty Name="SearchInHU" ColumnName="SearchInHU" />
-                <ScalarProperty Name="SearchInCZ" ColumnName="SearchInCZ" />
-                <ScalarProperty Name="SearchInSK" ColumnName="SearchInSK" />
-                <ScalarProperty Name="SearchRadius" ColumnName="SearchRadius" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="CompanyTypeDboes">
             <EntityTypeMapping TypeName="testDBModel.CompanyTypeDbo">
               <MappingFragment StoreEntitySet="CompanyType">
@@ -1619,23 +1596,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="UserSettingDboes">
-            <EntityTypeMapping TypeName="testDBModel.UserSettingDbo">
-              <MappingFragment StoreEntitySet="UserSettings">
-                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
-                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Language" ColumnName="Language" />
-                <ScalarProperty Name="NotifyCommentOnAccount" ColumnName="NotifyCommentOnAccount" />
-                <ScalarProperty Name="NotifyCommentOnContribution" ColumnName="NotifyCommentOnContribution" />
-                <ScalarProperty Name="SearchInHU" ColumnName="SearchInHU" />
-                <ScalarProperty Name="SearchInCZ" ColumnName="SearchInCZ" />
-                <ScalarProperty Name="SearchInSK" ColumnName="SearchInSK" />
-                <ScalarProperty Name="SearchRadius" ColumnName="SearchRadius" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="AllDeviceDboes">
             <EntityTypeMapping TypeName="testDBModel.AllDeviceDbo">
               <MappingFragment StoreEntitySet="AllDevices">
@@ -1664,6 +1624,40 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
                 <ScalarProperty Name="City" ColumnName="City" />
                 <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
                 <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CompanySettingDboes">
+            <EntityTypeMapping TypeName="testDBModel.CompanySettingDbo">
+              <MappingFragment StoreEntitySet="CompanySettings">
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="NotificationEmail" ColumnName="NotificationEmail" />
+                <ScalarProperty Name="NotifyAllMember" ColumnName="NotifyAllMember" />
+                <ScalarProperty Name="NotifyCommentOnAccount" ColumnName="NotifyCommentOnAccount" />
+                <ScalarProperty Name="NotifyCommentOnContribution" ColumnName="NotifyCommentOnContribution" />
+                <ScalarProperty Name="SearchInHU" ColumnName="SearchInHU" />
+                <ScalarProperty Name="SearchInCZ" ColumnName="SearchInCZ" />
+                <ScalarProperty Name="SearchInSK" ColumnName="SearchInSK" />
+                <ScalarProperty Name="SearchRadius" ColumnName="SearchRadius" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserSettingDboes">
+            <EntityTypeMapping TypeName="testDBModel.UserSettingDbo">
+              <MappingFragment StoreEntitySet="UserSettings">
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="NotifyCommentOnAccount" ColumnName="NotifyCommentOnAccount" />
+                <ScalarProperty Name="NotifyCommentOnContribution" ColumnName="NotifyCommentOnContribution" />
+                <ScalarProperty Name="SearchInHU" ColumnName="SearchInHU" />
+                <ScalarProperty Name="SearchInCZ" ColumnName="SearchInCZ" />
+                <ScalarProperty Name="SearchInSK" ColumnName="SearchInSK" />
+                <ScalarProperty Name="SearchRadius" ColumnName="SearchRadius" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

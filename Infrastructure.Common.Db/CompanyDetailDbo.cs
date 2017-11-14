@@ -48,9 +48,9 @@ namespace Infrastructure.Common.DB
         public virtual ICollection<Category2CompanyDetailsDbo> Category2CompanyDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CompanyDetails2UserDetailsDbo> CompanyDetails2UserDetails { get; set; }
-        public virtual CompanySettingDbo CompanySetting { get; set; }
         public virtual CompanyTypeDbo CompanyType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SubCategory2CompanyDetailsDbo> SubCategory2CompanyDetails { get; set; }
+        public virtual CompanySettingDbo CompanySetting { get; set; }
     }
 }
