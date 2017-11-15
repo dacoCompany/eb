@@ -8,6 +8,7 @@ namespace Web.eBado.Models.Account
         public CompanyModel()
         {
             Categories = new CategoriesModel();
+            Languages = new LanguagesModel();
         }
         public CompanyType CompanyType { get; set; }
 

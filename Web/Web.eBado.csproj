@@ -637,7 +637,9 @@
     <Content Include="Views\Email\Registration.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Logging.config" />
+    <Content Include="Logging.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="CodeMetrics.targets" />
     <None Include="Properties\PublishProfiles\ebadoweb - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />

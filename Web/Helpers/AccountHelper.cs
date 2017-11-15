@@ -282,7 +282,7 @@ namespace Web.eBado.Helpers
 
             unitOfWork.Commit();
 
-            model.CurrentLanguages = GetCurrentLanguages(companyDetails);
+            model.CurrentLanguages = GetCurrentLanguages(companyDetails, unitOfWork);
             return (model);
         }
 
@@ -358,7 +358,7 @@ namespace Web.eBado.Helpers
                 SearchRadius = companySettings.SearchRadius.Value
             };
             model.CurrentCategories = GetCurrentCategories(companyDetails);
-            model.CurrentLanguages = GetCurrentLanguages(companyDetails);
+            model.CurrentLanguages = GetCurrentLanguages(companyDetails, uow);
 
             return model;
         }
@@ -539,9 +539,9 @@ namespace Web.eBado.Helpers
             return allCategories;
         }
 
-        private IEnumerable<CurrentLanguagesModel> GetCurrentLanguages(CompanyDetailDbo companyDetails)
+        private IEnumerable<CurrentLanguagesModel> GetCurrentLanguages(CompanyDetailDbo companyDetails, IUnitOfWork unitOfWork)
         {
-            return companyDetails.CompanyDetails2Languages.Where(c => c.IsActive).Select(c => new CurrentLanguagesModel
+            return unitOfWork.CompanyDetails2LanguagesRepository.FindWhere(c => c.CompanyDetailsId == companyDetails.Id).Select(c => new CurrentLanguagesModel
             {
                 Code = c.Language.Code,
                 LanguageName = c.Language.Name
