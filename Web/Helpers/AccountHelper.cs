@@ -264,6 +264,13 @@ namespace Web.eBado.Helpers
                 SetSelectedCategories(unitOfWork, selectedCategories, companyDetails);
             }
 
+            var selectedLanguages = model.CompanyModel.Languages.SelectedLanguages?.ToList();
+
+            if (selectedLanguages != null)
+            {
+                SetSelectedLanguages(unitOfWork, selectedLanguages, companyDetails);
+            }
+
             model.EditMembersAndRolesModel = new EditMembersAndRolesModel
 
             {
@@ -274,6 +281,8 @@ namespace Web.eBado.Helpers
             model.CurrentCategories = GetCurrentCategories(companyDetails, selectedCategories);
 
             unitOfWork.Commit();
+
+            model.CurrentLanguages = GetCurrentLanguages(companyDetails);
             return (model);
         }
 
@@ -349,13 +358,15 @@ namespace Web.eBado.Helpers
                 SearchRadius = companySettings.SearchRadius.Value
             };
             model.CurrentCategories = GetCurrentCategories(companyDetails);
+            model.CurrentLanguages = GetCurrentLanguages(companyDetails);
 
             return model;
         }
 
-        public void InitializeAllCategories(CompanyModel model, IUnitOfWork unitOfWork)
+        public void InitializeData(CompanyModel model, IUnitOfWork unitOfWork)
         {
             model.Categories.AllCategories = GetAllCategories(unitOfWork);
+            model.Languages.AllLanguages = GetAllLanguages(unitOfWork);
         }
 
         public static string EncodePassword(string pass, string salt)
@@ -404,6 +415,23 @@ namespace Web.eBado.Helpers
 
             allCategories.AddRange(categories.Concat(subCategories));
             return allCategories.AsEnumerable();
+        }
+
+        private IEnumerable<SelectListItem> GetAllLanguages(IUnitOfWork unitOfWork)
+        {
+            List<SelectListItem> allLanguages = new List<SelectListItem>();
+            var cache = NinjectResolver.GetInstance<ICache>();
+            var cachedLanguages = cache.GetData<List<AllLanguagesModel>>(CacheKeys.LanguageKey);
+
+            if (cachedLanguages == null)
+            {
+                cachedLanguages = SetLanguagesCache(cachedLanguages, cache, unitOfWork);
+            }
+
+            var languages = cachedLanguages.Select(language => new SelectListItem { Value = language.Code, Text = $"({language.Code}) {language.LanguageName}" });
+
+            allLanguages.AddRange(languages);
+            return allLanguages.AsEnumerable();
         }
 
         private string GetUserDisplayName(UserModel model)
@@ -511,6 +539,16 @@ namespace Web.eBado.Helpers
             return allCategories;
         }
 
+        private IEnumerable<CurrentLanguagesModel> GetCurrentLanguages(CompanyDetailDbo companyDetails)
+        {
+            return companyDetails.CompanyDetails2Languages.Where(c => c.IsActive).Select(c => new CurrentLanguagesModel
+            {
+                Code = c.Language.Code,
+                LanguageName = c.Language.Name
+            });
+        }
+
+
         private void SetSelectedCategories(IUnitOfWork uow, List<string> selectedCategories, CompanyDetailDbo companyDetails)
         {
             var cache = NinjectResolver.GetInstance<ICache>();
@@ -554,6 +592,33 @@ namespace Web.eBado.Helpers
             }
         }
 
+        private void SetSelectedLanguages(IUnitOfWork uow, List<string> selecteLanguages, CompanyDetailDbo companyDetails)
+        {
+            var cache = NinjectResolver.GetInstance<ICache>();
+            var cachedLanguages = cache.GetData<List<AllLanguagesModel>>(CacheKeys.LanguageKey);
+
+            if (cachedLanguages == null)
+            {
+                cachedLanguages = SetLanguagesCache(cachedLanguages, cache, uow);
+            }
+
+            var alLanguagesIds = cachedLanguages.Where(c => selecteLanguages.Contains(c.Code)).Select(c => c.Id);
+            var currentLanguagesId = companyDetails.CompanyDetails2Languages.Where(c => c.IsActive).Select(c => c.LanguageId);
+
+            foreach (var languageId in alLanguagesIds)
+            {
+                if (!currentLanguagesId.Contains(languageId))
+                {
+                    var company2language = new CompanyDetails2LanguagesDbo
+                    {
+                        LanguageId = languageId,
+                        CompanyDetailsId = companyDetails.Id
+                    };
+                    companyDetails.CompanyDetails2Languages.Add(company2language);
+                }
+            }
+        }
+
         private List<AllCategoriesModel> SetCategoriesCache(List<AllCategoriesModel> cachedCategories, ICache cache, IUnitOfWork unitOfWork)
         {
             var cacheSettings = new CacheSettings("cacheDurationKey", "cacheExpirationKey");
@@ -577,6 +642,24 @@ namespace Web.eBado.Helpers
 
             cache.Insert(CacheKeys.CategoryKey, cachedCategories, null, cacheSettings);
             return cachedCategories;
+        }
+
+        private List<AllLanguagesModel> SetLanguagesCache(List<AllLanguagesModel> cachedLanguages, ICache cache, IUnitOfWork unitOfWork)
+        {
+            var cacheSettings = new CacheSettings("cacheDurationKey", "cacheExpirationKey");
+            cachedLanguages = new List<AllLanguagesModel>();
+
+            var languageList = unitOfWork.LanguageRepository.FindAll().Select(language => new AllLanguagesModel
+            {
+                Id = language.Id,
+                Code = language.Code,
+                LanguageName = language.Name
+            }).ToList();
+
+            cachedLanguages.AddRange(languageList);
+
+            cache.Insert(CacheKeys.LanguageKey, cachedLanguages, null, cacheSettings);
+            return cachedLanguages;
         }
         #endregion
     }

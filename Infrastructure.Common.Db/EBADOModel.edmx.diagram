@@ -47,6 +47,10 @@
         <AssociationConnector Association="testDBModel.FKCompanySettings" />
         <EntityTypeShape EntityType="testDBModel.UserSettingDbo" Width="1.5" PointX="11.375" PointY="1" />
         <AssociationConnector Association="testDBModel.FKUserSettings" />
+        <EntityTypeShape EntityType="testDBModel.CompanyDetails2LanguagesDbo" Width="1.5" PointX="11.25" PointY="13.125" />
+        <EntityTypeShape EntityType="testDBModel.LanguageDbo" Width="1.5" PointX="9" PointY="20.125" />
+        <AssociationConnector Association="testDBModel.FKCompanyDetails2LanguagesCompanyDetail" />
+        <AssociationConnector Association="testDBModel.FKLanguageCompanyDetails2Languages" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

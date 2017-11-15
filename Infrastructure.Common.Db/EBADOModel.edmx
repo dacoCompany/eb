@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="testDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="testDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Address">
           <Key>
             <PropertyRef Name="Id" />
@@ -22,7 +22,7 @@
           <Property Name="CompanyDetailsId" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'testDB.dbo.AllDevices' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="AllDevices">
           <Key>
             <PropertyRef Name="Id" />
@@ -107,6 +107,17 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="CompanyTypeId" Type="int" Nullable="false" />
           <Property Name="CompanySettingId" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="CompanyDetails2Languages">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime2" Precision="0" />
+          <Property Name="DateModified" Type="datetime2" Precision="0" />
+          <Property Name="CompanyDetailsId" Type="int" Nullable="false" />
+          <Property Name="LanguageId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="CompanyDetails2UserDetails">
           <Key>
             <PropertyRef Name="Id" />
@@ -180,6 +191,17 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="DateCreated" Type="datetime" />
           <Property Name="DateModified" Type="datetime" />
         </EntityType>
+        <EntityType Name="Languages">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="varchar" MaxLength="10" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime2" Precision="0" />
+          <Property Name="DateModified" Type="datetime2" Precision="0" />
+        </EntityType>
         <EntityType Name="Location">
           <Key>
             <PropertyRef Name="Id" />
@@ -191,12 +213,12 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="CityAlias" Type="varchar" MaxLength="100" />
           <Property Name="County" Type="varchar" MaxLength="100" />
           <Property Name="District" Type="varchar" MaxLength="100" />
+          <Property Name="DistrictAlias" Type="varchar" MaxLength="100" />
           <Property Name="Lat" Type="decimal" Precision="10" Scale="4" />
           <Property Name="Lon" Type="decimal" Precision="10" Scale="4" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="DateCreated" Type="datetime2" Precision="0" />
           <Property Name="DateModified" Type="datetime2" Precision="0" />
-          <Property Name="DistrictAlias" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="SubCategory">
           <Key>
@@ -388,6 +410,18 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FKCompanyDetails2LanguagesCompanyDetail">
+          <End Role="CompanyDetails" Type="Self.CompanyDetails" Multiplicity="1" />
+          <End Role="CompanyDetails2Languages" Type="Self.CompanyDetails2Languages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CompanyDetails">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompanyDetails2Languages">
+              <PropertyRef Name="CompanyDetailsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FKCompanyDetails2UserDetails">
           <End Role="CompanyRole" Type="Self.CompanyRole" Multiplicity="1" />
           <End Role="CompanyDetails2UserDetails" Type="Self.CompanyDetails2UserDetails" Multiplicity="*" />
@@ -457,6 +491,18 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             </Principal>
             <Dependent Role="CompanyDetails">
               <PropertyRef Name="CompanyTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKLanguageCompanyDetails2Languages">
+          <End Role="Languages" Type="Self.Languages" Multiplicity="1" />
+          <End Role="CompanyDetails2Languages" Type="Self.CompanyDetails2Languages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Languages">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompanyDetails2Languages">
+              <PropertyRef Name="LanguageId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -551,12 +597,14 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category2CompanyDetails" EntityType="Self.Category2CompanyDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CompanyDetails" EntityType="Self.CompanyDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CompanyDetails2Languages" EntityType="Self.CompanyDetails2Languages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CompanyDetails2UserDetails" EntityType="Self.CompanyDetails2UserDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CompanyPermission" EntityType="Self.CompanyPermission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CompanyRole" EntityType="Self.CompanyRole" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CompanyRole2CompanyPermission" EntityType="Self.CompanyRole2CompanyPermission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CompanySettings" EntityType="Self.CompanySettings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CompanyType" EntityType="Self.CompanyType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Languages" EntityType="Self.Languages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Location" EntityType="Self.Location" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubCategory" EntityType="Self.SubCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubCategory2CompanyDetails" EntityType="Self.SubCategory2CompanyDetails" Schema="dbo" store:Type="Tables" />
@@ -608,6 +656,10 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             <End Role="CompanyDetails" EntitySet="CompanyDetails" />
             <End Role="CompanyDetails2UserDetails" EntitySet="CompanyDetails2UserDetails" />
           </AssociationSet>
+          <AssociationSet Name="FKCompanyDetails2LanguagesCompanyDetail" Association="Self.FKCompanyDetails2LanguagesCompanyDetail">
+            <End Role="CompanyDetails" EntitySet="CompanyDetails" />
+            <End Role="CompanyDetails2Languages" EntitySet="CompanyDetails2Languages" />
+          </AssociationSet>
           <AssociationSet Name="FKCompanyDetails2UserDetails" Association="Self.FKCompanyDetails2UserDetails">
             <End Role="CompanyRole" EntitySet="CompanyRole" />
             <End Role="CompanyDetails2UserDetails" EntitySet="CompanyDetails2UserDetails" />
@@ -631,6 +683,10 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <AssociationSet Name="FKCompanyType" Association="Self.FKCompanyType">
             <End Role="CompanyType" EntitySet="CompanyType" />
             <End Role="CompanyDetails" EntitySet="CompanyDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FKLanguageCompanyDetails2Languages" Association="Self.FKLanguageCompanyDetails2Languages">
+            <End Role="Languages" EntitySet="Languages" />
+            <End Role="CompanyDetails2Languages" EntitySet="CompanyDetails2Languages" />
           </AssociationSet>
           <AssociationSet Name="FKSubCategory2CompanyDetailsCompanyDetails" Association="Self.FKSubCategory2CompanyDetailsCompanyDetails">
             <End Role="CompanyDetails" EntitySet="CompanyDetails" />
@@ -771,6 +827,16 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             <End Role="UserSetting" EntitySet="UserSettingDboes" />
             <End Role="UserDetailDbo" EntitySet="UserDetailDboes" />
           </AssociationSet>
+          <EntitySet Name="CompanyDetails2LanguagesDbo" EntityType="testDBModel.CompanyDetails2LanguagesDbo" />
+          <EntitySet Name="LanguageDboes" EntityType="testDBModel.LanguageDbo" />
+          <AssociationSet Name="FKCompanyDetails2LanguagesCompanyDetail" Association="testDBModel.FKCompanyDetails2LanguagesCompanyDetail">
+            <End Role="CompanyDetailDbo" EntitySet="CompanyDetailDboes" />
+            <End Role="CompanyDetails2Languages" EntitySet="CompanyDetails2LanguagesDbo" />
+          </AssociationSet>
+          <AssociationSet Name="FKLanguageCompanyDetails2Languages" Association="testDBModel.FKLanguageCompanyDetails2Languages">
+            <End Role="Language" EntitySet="LanguageDboes" />
+            <End Role="CompanyDetails2Languages" EntitySet="CompanyDetails2LanguagesDbo" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="AddressDbo">
           <Key>
@@ -875,6 +941,7 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <NavigationProperty Name="CompanyType" Relationship="testDBModel.FKCompanyType" FromRole="CompanyDetail" ToRole="CompanyType" />
           <NavigationProperty Name="SubCategory2CompanyDetails" Relationship="testDBModel.FKSubCategory2CompanyDetailsCompanyDetails" FromRole="CompanyDetail" ToRole="SubCategory2CompanyDetails" />
           <NavigationProperty Name="CompanySetting" Relationship="testDBModel.FKCompanySettings" FromRole="CompanyDetailDbo" ToRole="CompanySetting" />
+          <NavigationProperty Name="CompanyDetails2Languages" Relationship="testDBModel.FKCompanyDetails2LanguagesCompanyDetail" FromRole="CompanyDetailDbo" ToRole="CompanyDetails2Languages" />
         </EntityType>
         <EntityType Name="CompanyDetails2UserDetailsDbo">
           <Key>
@@ -1351,6 +1418,55 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="CompanyDetails2LanguagesDbo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="0" />
+          <Property Name="DateModified" Type="DateTime" Precision="0" />
+          <Property Name="CompanyDetailsId" Type="Int32" Nullable="false" />
+          <Property Name="LanguageId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKCompanyDetails2LanguagesCompanyDetail" FromRole="CompanyDetails2Languages" ToRole="CompanyDetailDbo" />
+          <NavigationProperty Name="Language" Relationship="testDBModel.FKLanguageCompanyDetails2Languages" FromRole="CompanyDetails2Languages" ToRole="Language" />
+        </EntityType>
+        <EntityType Name="LanguageDbo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="0" />
+          <Property Name="DateModified" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="CompanyDetails2Languages" Relationship="testDBModel.FKLanguageCompanyDetails2Languages" FromRole="Language" ToRole="CompanyDetails2Languages" />
+        </EntityType>
+        <Association Name="FKCompanyDetails2LanguagesCompanyDetail">
+          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetailDbo" Multiplicity="1" />
+          <End Type="testDBModel.CompanyDetails2LanguagesDbo" Role="CompanyDetails2Languages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CompanyDetailDbo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompanyDetails2Languages">
+              <PropertyRef Name="CompanyDetailsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKLanguageCompanyDetails2Languages">
+          <End Type="testDBModel.LanguageDbo" Role="Language" Multiplicity="1" />
+          <End Type="testDBModel.CompanyDetails2LanguagesDbo" Role="CompanyDetails2Languages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Language">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompanyDetails2Languages">
+              <PropertyRef Name="LanguageId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1658,6 +1774,30 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
                 <ScalarProperty Name="SearchInCZ" ColumnName="SearchInCZ" />
                 <ScalarProperty Name="SearchInSK" ColumnName="SearchInSK" />
                 <ScalarProperty Name="SearchRadius" ColumnName="SearchRadius" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CompanyDetails2LanguagesDbo">
+            <EntityTypeMapping TypeName="testDBModel.CompanyDetails2LanguagesDbo">
+              <MappingFragment StoreEntitySet="CompanyDetails2Languages">
+                <ScalarProperty Name="LanguageId" ColumnName="LanguageId" />
+                <ScalarProperty Name="CompanyDetailsId" ColumnName="CompanyDetailsId" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LanguageDboes">
+            <EntityTypeMapping TypeName="testDBModel.LanguageDbo">
+              <MappingFragment StoreEntitySet="Languages">
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

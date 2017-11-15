@@ -45,5 +45,7 @@ namespace Infrastructure.Common.DB
         public virtual DbSet<LocationDbo> LocationDboes { get; set; }
         public virtual DbSet<CompanySettingDbo> CompanySettingDboes { get; set; }
         public virtual DbSet<UserSettingDbo> UserSettingDboes { get; set; }
+        public virtual DbSet<CompanyDetails2LanguagesDbo> CompanyDetails2LanguagesDbo { get; set; }
+        public virtual DbSet<LanguageDbo> LanguageDboes { get; set; }
     }
 }

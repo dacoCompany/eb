@@ -16,6 +16,7 @@ namespace Web.eBado.Models.Account
 
         public bool IsFacebookLogin { get; set; }
         public IEnumerable<string> CurrentCategories { get; set; }        
+        public IEnumerable<CurrentLanguagesModel> CurrentLanguages { get; set; }        
         public ChangePasswordModel PasswordModel { get; set; }
         public UserModel UserModel { get; set; }
         public CompanyModel CompanyModel { get; set; }
