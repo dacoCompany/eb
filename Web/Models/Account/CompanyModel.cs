@@ -33,5 +33,7 @@ namespace Web.eBado.Models.Account
         public string CompanyPostalCode { get; set; }
 
         public CategoriesModel Categories { get; set; }
+
+        public LanguagesModel Languages { get; set; }
     }
 }

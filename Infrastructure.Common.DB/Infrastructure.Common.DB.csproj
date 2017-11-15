@@ -87,6 +87,9 @@
     <Compile Include="CompanyDetailDbo.cs">
       <DependentUpon>EBADOModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="CompanyDetails2LanguagesDbo.cs">
+      <DependentUpon>EBADOModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="CompanyDetails2UserDetailsDbo.cs">
       <DependentUpon>EBADOModel.tt</DependentUpon>
     </Compile>
@@ -123,6 +126,9 @@
     <Compile Include="IEntity.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="IUnitOfWork.cs" />
+    <Compile Include="LanguageDbo.cs">
+      <DependentUpon>EBADOModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="LocationDbo.cs">
       <DependentUpon>EBADOModel.tt</DependentUpon>
     </Compile>

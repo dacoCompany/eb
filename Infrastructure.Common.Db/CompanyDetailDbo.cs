@@ -22,6 +22,7 @@ namespace Infrastructure.Common.DB
             this.Category2CompanyDetails = new HashSet<Category2CompanyDetailsDbo>();
             this.CompanyDetails2UserDetails = new HashSet<CompanyDetails2UserDetailsDbo>();
             this.SubCategory2CompanyDetails = new HashSet<SubCategory2CompanyDetailsDbo>();
+            this.CompanyDetails2Languages = new HashSet<CompanyDetails2LanguagesDbo>();
         }
     
         public int Id { get; set; }
@@ -48,9 +49,11 @@ namespace Infrastructure.Common.DB
         public virtual ICollection<Category2CompanyDetailsDbo> Category2CompanyDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CompanyDetails2UserDetailsDbo> CompanyDetails2UserDetails { get; set; }
-        public virtual CompanySettingDbo CompanySetting { get; set; }
         public virtual CompanyTypeDbo CompanyType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SubCategory2CompanyDetailsDbo> SubCategory2CompanyDetails { get; set; }
+        public virtual CompanySettingDbo CompanySetting { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CompanyDetails2LanguagesDbo> CompanyDetails2Languages { get; set; }
     }
 }

@@ -12,26 +12,22 @@ namespace Infrastructure.Common.DB
     using System;
     using System.Collections.Generic;
     
-    public partial class UserSettingDbo : IEntity
+    public partial class LanguageDbo : IEntity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public UserSettingDbo()
+        public LanguageDbo()
         {
-            this.UserDetails = new HashSet<UserDetailDbo>();
+            this.CompanyDetails2Languages = new HashSet<CompanyDetails2LanguagesDbo>();
         }
     
         public int Id { get; set; }
-        public Nullable<int> SearchRadius { get; set; }
-        public bool SearchInSK { get; set; }
-        public bool SearchInCZ { get; set; }
-        public bool SearchInHU { get; set; }
-        public bool NotifyCommentOnContribution { get; set; }
-        public bool NotifyCommentOnAccount { get; set; }
+        public string Code { get; set; }
+        public string Name { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserDetailDbo> UserDetails { get; set; }
+        public virtual ICollection<CompanyDetails2LanguagesDbo> CompanyDetails2Languages { get; set; }
     }
 }

@@ -94,6 +94,7 @@
 			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
 			CONSTRAINT PKCompanyDetails2UserDetails PRIMARY KEY(Id)
 		)
+		PRINT 'Table created successfully'
 
 		PRINT 'Creating Table [CompanyType]'
 		CREATE TABLE [CompanyType]
@@ -274,7 +275,6 @@
 			[SearchInHU] BIT NOT NULL DEFAULT 'false',
 			[NotifyCommentOnContribution] BIT NOT NULL DEFAULT 'false',
 			[NotifyCommentOnAccount] BIT NOT NULL DEFAULT 'false',
-			[Language] VARCHAR(50),
 			[IsActive] BIT NOT NULL DEFAULT 'true',
 			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
 			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
@@ -294,7 +294,6 @@
 			[NotifyCommentOnAccount] BIT NOT NULL DEFAULT 'false',
 			[NotifyAllMember] BIT NOT NULL DEFAULT 'false',
 			[NotificationEmail] VARCHAR(100),
-			[Language] VARCHAR(50),
 			[IsActive] BIT NOT NULL DEFAULT 'true',
 			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
 			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
@@ -312,6 +311,30 @@
 			[IsActive] BIT NOT NULL DEFAULT 'true',
 			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
 			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+		)
+		PRINT 'Table created successfully'
+		
+		PRINT 'Creating Table [Languages]'
+		CREATE TABLE Languages
+		(
+			[Id] INT IDENTITY(1,1),
+			[Code] VARCHAR(10),
+			[Name] NVARCHAR(100),
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKLanguagesId PRIMARY KEY(Id) 
+		)
+		PRINT 'Table created successfully'
+
+		PRINT 'Creating Table [CompanyDetails2Languages]'
+		CREATE TABLE CompanyDetails2Languages
+		(
+			[Id] INT IDENTITY(1,1),
+			[IsActive] BIT NOT NULL DEFAULT 'true',
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKCompanyDetails2Languages PRIMARY KEY(Id)
 		)
 		PRINT 'Table created successfully'
 
@@ -422,6 +445,17 @@
 		ADD	CONSTRAINT FKSubCategory2CompanyDetailsCompanyDetails FOREIGN KEY (CompanyDetailsId) REFERENCES CompanyDetails(Id)
 		ALTER TABLE [SubCategory2CompanyDetails]
 		ADD	CONSTRAINT FKSubCategory2CompanyDetailsSubCategory FOREIGN KEY (SubCategoryId) REFERENCES SubCategory(Id)
+		PRINT 'Foreign keys successfully created'
+
+		PRINT 'Creating foreign keys for table [CompanyDetails2Languages]'
+		ALTER TABLE CompanyDetails2Languages
+		ADD [CompanyDetailsId] INT NOT NULL
+		ALTER TABLE CompanyDetails2Languages
+		ADD	CONSTRAINT FKCompanyDetails2LanguagesCompanyDetail FOREIGN KEY ([CompanyDetailsId]) REFERENCES CompanyDetails(Id)
+		ALTER TABLE CompanyDetails2Languages
+		ADD [LanguageId] INT NOT NULL
+		ALTER TABLE CompanyDetails2Languages
+		ADD	CONSTRAINT FKLanguageCompanyDetails2Languages FOREIGN KEY ([LanguageId]) REFERENCES Languages(Id)
 		PRINT 'Foreign keys successfully created'
 
 		PRINT 'Create script finished successfully'

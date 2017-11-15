@@ -10,5 +10,6 @@ namespace Infrastructure.Common
     {
         public const string CategoryKey = "Category";
         public const string PostalCodeKey = "PostalCode";
+        public const string LanguageKey = "Language";
     }
 }

@@ -133,13 +133,6 @@
                     </div>
                     <div class="hidden-toggle accordion-content">
                         <div class="settings_wrapper">
-                            <div class="text_div font_16">Predvoleny jazyk uctu:</div>
-                            <div class="box_div">
-                                @Html.DropDownListFor(model => model.SelectedLanguage, EnumHelper.GetSelectList(typeof(Languages)), new { @class = "form-control" })
-                                <div class="val-message"></div>
-                            </div>
-                        </div>
-                        <div class="settings_wrapper">
                             <div class="text_div font_16">Radius vyhladavania (km):</div>
                             <div class="box_div">
                                 @Html.EditorFor(model => model.SearchModel.SearchRadius, new { htmlAttributes = new { @class = "form-control" } })
@@ -270,7 +263,32 @@
                         <div class="edit_container">
                             <div id="categoryDiv" class="col-md-8 hidden_div">
                                 @Html.DropDownListFor(m => m.CompanyModel.Categories.SelectedCategories, Model.CompanyModel.Categories.AllCategories, new { @class = "form-control chosen-select", @multiple = "true" })
-                                <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.Categories.SelectedCategories, "", new { @class = "text-danger" })</div>
+                                <div class="val-message"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12 set-font">Jazyky</div>
+                        </div>
+                        <div class="col-lg-12 resp_push_bottom_10">
+                            <div class="tags_text">Vase jazyky:</div>
+                            @{ int languageId = 1;}
+                            @foreach (var language in Model.CurrentLanguages)
+                            {
+                                <div id="div_@language.Code" class="tags_blocks">
+                                    <div id="name_@language.Code" class="tags_block-text">(@language.Code) @language.LanguageName</div>
+                                    <div id="@language.Code" class="tags_block-symbol">&#10006;</div>
+                                </div>
+                                languageId++;
+                            }
+                        </div>
+                        <div class="edit_container push_bottom_20">
+                            <input type="button" id="newLanguageBtn" value="Pridat jazyky" class="form-btn-transparent" />
+                        </div>
+                        <div class="edit_container">
+                            <div id="languageDiv" class="col-md-8 hidden_div">
+                                @Html.DropDownListFor(m => m.CompanyModel.Languages.SelectedLanguages, Model.CompanyModel.Languages.AllLanguages, new { @class = "form-control chosen-select", @multiple = "true" })
+                                <div class="val-message"></div>
                             </div>
                         </div>
                     </div>
@@ -279,13 +297,6 @@
                         <div class="accordion-main">nastavenia firemneho uctu</div>
                     </div>
                     <div class="hidden-toggle accordion-content">
-                        <div class="settings_wrapper">
-                            <div class="text_div font_16">Predvoleny jazyk uctu:</div>
-                            <div class="box_div">
-                                @Html.DropDownListFor(model => model.SelectedLanguage, EnumHelper.GetSelectList(typeof(Languages)), new { @class = "form-control" })
-                                <div class="val-message"></div>
-                            </div>
-                        </div>
                         <div class="settings_wrapper">
                             <div class="text_div font_16">Radius vyhladavania (km):</div>
                             <div class="box_div">
@@ -564,6 +575,9 @@
         });
         jQuery('#newCategoryBtn').on('click', function (event) {
             jQuery('#categoryDiv').toggle(400);
+        });
+        jQuery('#newLanguageBtn').on('click', function (event) {
+            jQuery('#languageDiv').toggle(400);
         });
 
         window.globalVar = @Html.Raw(Json.Encode(Model.CurrentCategories?.Count()));

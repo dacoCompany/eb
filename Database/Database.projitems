@@ -14,6 +14,7 @@
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Create\create_script.sql" />
     <None Include="$(MSBuildThisFileDirectory)Insert\insert_Category.sql" />
+    <None Include="$(MSBuildThisFileDirectory)Insert\insert_Languages.sql" />
     <None Include="$(MSBuildThisFileDirectory)Insert\insert_Sub_Categories.sql" />
     <None Include="$(MSBuildThisFileDirectory)Insert\insert_SK_PostalCodes.sql" />
     <None Include="$(MSBuildThisFileDirectory)Insert\insert_Role_Permissions.sql" />

@@ -249,6 +249,8 @@
     <Compile Include="JsonNetResult.cs" />
     <Compile Include="Models\Account\BatchGalleryModel.cs" />
     <Compile Include="Models\Account\BatchModel.cs" />
+    <Compile Include="Models\Account\CurrentLanguagesModel.cs" />
+    <Compile Include="Models\Account\LanguagesModel.cs" />
     <Compile Include="Models\Account\CategoriesModel.cs" />
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
     <Compile Include="Models\Account\CompanyMemberNotificationModel.cs" />
@@ -265,6 +267,7 @@
     <Compile Include="Models\Account\UserRoleModel.cs" />
     <Compile Include="Models\Email\RegisterEmailModel.cs" />
     <Compile Include="Models\MvcExtensions\ModelStateExtensions.cs" />
+    <Compile Include="Models\Shared\AllLanguagesModel.cs" />
     <Compile Include="Models\Shared\AttachmentGalleryModel.cs" />
     <Compile Include="Models\Shared\AttachmentModel.cs" />
     <Compile Include="Models\Shared\AllCategoriesModel.cs" />
