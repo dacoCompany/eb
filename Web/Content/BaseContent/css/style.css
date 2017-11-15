@@ -902,3 +902,7 @@ input[type="checkbox"]:checked + input[type="hidden"] + .slider_small:before,
 input[type="checkbox"]:checked + .slider_small:before {
     transform: translateX(21px);
 }
+
+span.field-validation-error {
+    white-space: pre-wrap;
+}

@@ -627,7 +627,7 @@
                     contentType: "application/json; charset=utf-8",
                     success: function (data) {
                         if (data === "OK") {
-                            var container = $("#" + id).parent().attr('id');
+                            var container = $("#" + code).parent().attr('id');
                             $("#" + container).hide(250);
                         }
                         else {

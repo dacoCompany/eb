@@ -1,4 +1,6 @@
-﻿using Infrastructure.Resources;
+﻿using System;
+using Infrastructure.Resources;
+using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
 using Web.eBado.Validators;
 
 namespace Web.eBado.Models.Account
@@ -11,6 +13,7 @@ namespace Web.eBado.Models.Account
             CompanyModel = new CompanyModel();
         }
 
+        [ObjectValidator("RegisterUser", Ruleset = "RegisterUser")]
         public UserModel UserModel { get; private set; }
 
         [CompanyRequired(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]

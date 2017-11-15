@@ -22,6 +22,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.Practices.EnterpriseLibrary.Validation;
 
 namespace Web.eBado.Controllers
 {
@@ -200,7 +201,7 @@ namespace Web.eBado.Controllers
             {
                 var userDetail = unitOfWork.UserDetailsRepository.FindFirstOrDefault(ud => ud.Email.ToLower().Equals(model.Email.ToLower()));
                 var session = sessionHelper.SetUserSession(userDetail.Id, unitOfWork);
-                
+
                 //FormsAuthentication.SetAuthCookie(session.Email, true);
                 Session["User"] = session;
 
@@ -214,7 +215,7 @@ namespace Web.eBado.Controllers
                 {
                     string content = await response.Content.ReadAsStringAsync();
 
-                    var authCookie = new HttpCookie("tokenCookie", content.Replace("\"", string.Empty)) {HttpOnly = true};
+                    var authCookie = new HttpCookie("tokenCookie", content.Replace("\"", string.Empty)) { HttpOnly = true };
                     HttpContext.Response.AppendCookie(authCookie);
                 }
                 else
@@ -249,11 +250,15 @@ namespace Web.eBado.Controllers
         {
             EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt with e-mail address: {model.UserModel.Email}", diagnosticLogConstant);
 
-            if (!ModelState.IsValid)
+            var entlibValidationResult = Validation.Validate(model, "RegisterUser");
+
+            if (!entlibValidationResult.IsValid)
             {
+                this.ModelState.AddValidationErrors(entlibValidationResult);
+
                 return View("RegisterUser", model);
             }
-
+            
             var validationResult = new ValidationResultCollection();
 
             AccountValidator.ValidateUserRegistration(unitOfWork, validationResult, model.UserModel);
@@ -389,14 +394,14 @@ namespace Web.eBado.Controllers
             // TODO: entlib validation before modelState check
             //if (ModelState.IsValid)
             //{
-                if (session.IsActive)
-                {
-                    model = accountHelper.UpdateUserSettings(unitOfWork, model, changePsw, session);
-                }
-                else
-                {
-                    model = accountHelper.UpdateCompanySettings(unitOfWork, model, session);
-                }
+            if (session.IsActive)
+            {
+                model = accountHelper.UpdateUserSettings(unitOfWork, model, changePsw, session);
+            }
+            else
+            {
+                model = accountHelper.UpdateCompanySettings(unitOfWork, model, session);
+            }
             //}
             accountHelper.InitializeData(model.CompanyModel, unitOfWork);
             return View(model);
