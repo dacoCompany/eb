@@ -138,6 +138,29 @@ namespace Web.eBado.Controllers
             return new JsonNetResult(response);
         }
 
+        [HttpPost]
+        [System.Web.Http.Authorize(Roles = "ChangeSettings")]
+        [Route("DeleteLanguage")]
+        public JsonResult DeleteLanguage(string code)
+        {
+            string response = successResponse;
+            var session = Session["User"] as SessionModel;
+            int companyId = session.Companies.FirstOrDefault(c => c.IsActive).Id;
+            var companyDetails = unitOfWork.CompanyDetailsRepository.FindFirstOrDefault(cd => cd.Id == companyId);
+            var languageDbo = companyDetails.CompanyDetails2Languages.FirstOrDefault(c => c.IsActive && c.Language.Code == code);
+
+            if (languageDbo != null)
+            {
+                languageDbo.IsActive = false;
+            }
+            else
+            {
+                response = "Kategoria neexistuje!";
+            }
+            unitOfWork.Commit();
+            return new JsonNetResult(response);
+        }
+
         [HttpGet]
         [System.Web.Http.Authorize(Roles = "AddMember")]
         [Route("AddMemberToCompany")]

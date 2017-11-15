@@ -277,7 +277,7 @@
                             {
                                 <div id="div_@language.Code" class="tags_blocks">
                                     <div id="name_@language.Code" class="tags_block-text">(@language.Code) @language.LanguageName</div>
-                                    <div id="@language.Code" class="tags_block-symbol">&#10006;</div>
+                                    <div id="@language.Code" class="language_tags_block-symbol">&#10006;</div>
                                 </div>
                                 languageId++;
                             }
@@ -615,6 +615,30 @@
                         $('#categoryValidation').hide(250);
                     }, 3000);
             }
+        });
+
+        $('.language_tags_block-symbol').on('click', function () {
+            var code = $(this).attr('id');
+                $.ajax({
+                    url: "/Manage/DeleteLanguage",
+                    type: "POST",
+                    data: JSON.stringify({ code: code }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data === "OK") {
+                            var container = $("#" + id).parent().attr('id');
+                            $("#" + container).hide(250);
+                        }
+                        else {
+                            $('#categoryValidation').text(data);
+
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert(xhr.responseText);
+                    }
+                });
         });
 
         function DeleteMember(email) {
