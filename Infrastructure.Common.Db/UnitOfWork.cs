@@ -12,7 +12,8 @@ namespace Infrastructure.Common.DB
     public class UnitOfWork : IUnitOfWork
     {
         
-        private DbContext context = new EBADOEntitiesTest(@"metadata=res://*/EBADOModel.csdl|res://*/EBADOModel.ssdl|res://*/EBADOModel.msl;provider=System.Data.SqlClient;provider connection string='data source=ebadodbsrvbackup.database.windows.net;initial catalog=testDB;persist security info=True;user id=ebadoadmin;password=ebado.159;MultipleActiveResultSets=True;App=EntityFramework'");
+        //private DbContext context = new EBADOEntitiesTest(@"metadata=res://*/EBADOModel.csdl|res://*/EBADOModel.ssdl|res://*/EBADOModel.msl;provider=System.Data.SqlClient;provider connection string='data source=ebadodbsrvbackup.database.windows.net;initial catalog=testDB;persist security info=True;user id=ebadoadmin;password=ebado.159;MultipleActiveResultSets=True;App=EntityFramework'");
+        private DbContext context = new EBADOEntitiesTest(@"metadata=res://*/EBADOModel.csdl|res://*/EBADOModel.ssdl|res://*/EBADOModel.msl;provider=System.Data.SqlClient;provider connection string='data source=.;initial catalog=testDB;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework'");
         private bool disposed = false;
         private Repository<CompanyTypeDbo> companyTypeRepository;
         private Repository<AddressDbo> addressRepository;
