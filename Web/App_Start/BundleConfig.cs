@@ -19,6 +19,9 @@ namespace Web.eBado
             bundles.Add(new ScriptBundle("~/bundles/postalCode")
               .Include("~/Scripts/setPostalCode.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/changeSettings")
+             .Include("~/Scripts/changeSettings.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/chosen")
                .Include("~/Scripts/chosen.jquery.js"));
 
@@ -38,31 +41,31 @@ namespace Web.eBado
                .Include("~/Scripts/bootstrap-hover-dropdown.js"));
 
             bundles.Add(new StyleBundle("~/Content/css")
-                .Include("~/Content/BaseContent/css/bootstrap.css")
-                .Include("~/Content/BaseContent/css/bootstrap-theme.css")
-                .Include("~/Content/BaseContent/css/button.css")
-                .Include("~/Content/BaseContent/css/jquery-ui.css")
-                .Include("~/Content/BaseContent/css/reset.css")
-                .Include("~/Content/BaseContent/css/font-awesome.min.css")
-                .Include("~/Content/BaseContent/css/media-queries.css"));
+                .Include("~/Content/BaseContent/css/bootstrap.css", new CssRewriteUrlTransform())
+                .Include("~/Content/BaseContent/css/bootstrap-theme.css", new CssRewriteUrlTransform())
+                .Include("~/Content/BaseContent/css/button.css", new CssRewriteUrlTransform())
+                .Include("~/Content/BaseContent/css/jquery-ui.css", new CssRewriteUrlTransform())
+                .Include("~/Content/BaseContent/css/reset.css", new CssRewriteUrlTransform())
+                .Include("~/Content/BaseContent/css/font-awesome.min.css", new CssRewriteUrlTransform())
+                .Include("~/Content/BaseContent/css/media-queries.css", new CssRewriteUrlTransform()));
 
             bundles.Add(new StyleBundle("~/Content/main_style")
-                .Include("~/Content/BaseContent/css/style.css"));
+                .Include("~/Content/BaseContent/css/style.css", new CssRewriteUrlTransform()));
 
             bundles.Add(new StyleBundle("~/Content/login")
-                .Include("~/Content/BaseContent/css/login.css"));
+                .Include("~/Content/BaseContent/css/login.css", new CssRewriteUrlTransform()));
 
             bundles.Add(new StyleBundle("~/Content/batch")
-               .Include("~/Content/BaseContent/css/batch-gallery.css"));
+               .Include("~/Content/BaseContent/css/batch-gallery.css", new CssRewriteUrlTransform()));
 
             bundles.Add(new StyleBundle("~/Content/check-radio")
-                .Include("~/Content/BaseContent/css/check_radio.css"));
+                .Include("~/Content/BaseContent/css/check_radio.css", new CssRewriteUrlTransform()));
 
             bundles.Add(new StyleBundle("~/Content/chosen")
-                .Include("~/Content/BaseContent/css/chosen.css"));
+                .Include("~/Content/BaseContent/css/chosen.css", new CssRewriteUrlTransform()));
 
             bundles.Add(new StyleBundle("~/Content/settings")
-               .Include("~/Content/BaseContent/css/user-settings.css"));
+               .Include("~/Content/BaseContent/css/user-settings.css", new CssRewriteUrlTransform()));
 
             bundles.Add(new StyleBundle("~/Content/jQuery-File-Upload").Include(
                    "~/Content/jQuery.FileUpload/css/jquery.fileupload.css",

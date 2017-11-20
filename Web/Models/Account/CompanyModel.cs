@@ -22,6 +22,9 @@ namespace Web.eBado.Models.Account
         [StringLengthValidator(1, RangeBoundaryType.Inclusive, 100, RangeBoundaryType.Inclusive, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "RequiredField", Ruleset = "RegisterCompany")]
         public string CompanyName { get; set; }
 
+        [DataType(DataType.MultilineText)]
+        public string CompanyDescription { get; set; }
+
         [IgnoreNulls(Ruleset = "RegisterCompany")]
         [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Inclusive, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "RequiredField", Ruleset = "RegisterCompany")]
         public string CompanyEmail { get; set; }
@@ -51,6 +54,8 @@ namespace Web.eBado.Models.Account
 
         public LanguagesModel Languages { get; set; }
 
+        public string ProfileUrl { get; set; }
+
         /// <summary>
         /// Validation of whether the company address is filled.
         /// </summary>
@@ -74,5 +79,6 @@ namespace Web.eBado.Models.Account
                 }
             }
         }
+
     }
 }

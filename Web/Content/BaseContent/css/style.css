@@ -711,6 +711,10 @@ hr.transparent {
     margin-left: 10px;
 }
 
+.push_bottom_10 {
+    margin-bottom: 10px;
+}
+
 .push_bottom_20 {
     margin-bottom: 20px;
 }
@@ -739,6 +743,10 @@ hr.transparent {
 
 .hidden_div {
     display: none;
+}
+
+.eb_blue {
+    color: #00b6ff;
 }
 
 @media(max-width:750px) {

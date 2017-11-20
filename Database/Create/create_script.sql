@@ -69,7 +69,7 @@
 		(
 			[Id] INT IDENTITY(1,1),
 			[Name] VARCHAR(100) NOT NULL,
-			[Description] VARCHAR(250),
+			[Description] TEXT,
 			[PhoneNumber] VARCHAR(20),
 			[AdditionalPhoneNumber] VARCHAR(20),
 			[Email] VARCHAR(50),
@@ -338,6 +338,18 @@
 		)
 		PRINT 'Table created successfully'
 
+		PRINT 'Creating Table [ScriptAudit]'
+		CREATE TABLE ScriptAudit
+		(
+			[Id] INT IDENTITY(1,1),
+			[ScriptName] VARCHAR(20),
+			[ScriptStatus] VARCHAR(10),
+			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			[DateModified] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
+			CONSTRAINT PKScriptAudit PRIMARY KEY(Id)
+		)
+		PRINT 'Table created successfully'
+
 		/***** Creating foreign keys *****/
 
 		PRINT 'Creating foreign keys for table [CompanyDetails2UserDetails]'
@@ -458,6 +470,14 @@
 		ADD	CONSTRAINT FKLanguageCompanyDetails2Languages FOREIGN KEY ([LanguageId]) REFERENCES Languages(Id)
 		PRINT 'Foreign keys successfully created'
 
+		/***** Creating indexes *****/
+
+		PRINT 'Create indexes'
+		CREATE INDEX IXEmail ON UserDetails (Email);
+		CREATE INDEX IXCompanyName ON CompanyDetails(Name);
+		CREATE INDEX IXBatchGuId ON BatchAttachment(GuId);
+		PRINT 'Create indexes finished successfully'
+
 		PRINT 'Create script finished successfully'
-				
+
 	COMMIT TRANSACTION

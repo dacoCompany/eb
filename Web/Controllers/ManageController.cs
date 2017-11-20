@@ -26,8 +26,7 @@ namespace Web.eBado.Controllers
 {
     [RoutePrefix("Manage")]
     public class ManageController : Controller
-    {
-        private const string successResponse = "OK";
+    {        
         private readonly IUnitOfWork unitOfWork;
         private readonly IConfiguration configuration;
         SessionHelper sessionHelper;
@@ -112,7 +111,7 @@ namespace Web.eBado.Controllers
         public JsonResult DeleteCategory(string category)
         {
             category = category.Replace("_", " ");
-            string response = successResponse;
+            string response = ErrorMessages.SuccessResponse;
             var session = Session["User"] as SessionModel;
             int companyId = session.Companies.FirstOrDefault(c => c.IsActive).Id;
             var companyDetails = unitOfWork.CompanyDetailsRepository.FindFirstOrDefault(cd => cd.Id == companyId);
@@ -127,7 +126,7 @@ namespace Web.eBado.Controllers
                 var subCategoryDbo = companyDetails.SubCategory2CompanyDetails.FirstOrDefault(c => c.SubCategory.Name == category);
                 if (subCategoryDbo == null)
                 {
-                    response = "Kategoria neexistuje!";
+                    response = ErrorMessages.CategoryNotExists;
                 }
                 else
                 {
@@ -143,7 +142,7 @@ namespace Web.eBado.Controllers
         [Route("DeleteLanguage")]
         public JsonResult DeleteLanguage(string code)
         {
-            string response = successResponse;
+            string response = ErrorMessages.SuccessResponse;
             var session = Session["User"] as SessionModel;
             int companyId = session.Companies.FirstOrDefault(c => c.IsActive).Id;
             var companyDetails = unitOfWork.CompanyDetailsRepository.FindFirstOrDefault(cd => cd.Id == companyId);
@@ -155,7 +154,7 @@ namespace Web.eBado.Controllers
             }
             else
             {
-                response = "Kategoria neexistuje!";
+                response = ErrorMessages.SomethingWrong;
             }
             unitOfWork.Commit();
             return new JsonNetResult(response);
@@ -167,7 +166,7 @@ namespace Web.eBado.Controllers
         public JsonResult AddMemberToCompany(string email, string selectedRole)
         {
             int companyId = GetCompanyId();
-            string response = successResponse;
+            string response = ErrorMessages.SuccessResponse;
             var userDetails = GetUserByEmail(email);
             if (userDetails != null)
             {
@@ -177,7 +176,7 @@ namespace Web.eBado.Controllers
                     .AnyActive(cd => cd.UserDetailsId == userDetails.Id && cd.CompanyDetailsId == companyId);
                 if (userExistInCompany)
                 {
-                    response = "User already exist!";
+                    response = ErrorMessages.UserExists;
                 }
                 else
                 {
@@ -197,7 +196,7 @@ namespace Web.eBado.Controllers
             }
             else
             {
-                response = "Wrong email!";
+                response = ErrorMessages.WrongEmail;
             }
             return new JsonNetResult(response);
         }
@@ -208,7 +207,7 @@ namespace Web.eBado.Controllers
         public JsonResult DeleteMember(string email)
         {
             int companyId = GetCompanyId();
-            string response = successResponse;
+            string response = ErrorMessages.SuccessResponse;
 
             var company2UserDbo = unitOfWork.CompanyDetails2UserDetailsRepository
                 .FindFirstOrDefault(cd => cd.CompanyDetailsId == companyId && cd.UserDetail.Email == email);
@@ -233,7 +232,7 @@ namespace Web.eBado.Controllers
         public JsonResult ChangeMemberRole(string user, string role)
         {
             int companyId = GetCompanyId();
-            string response = successResponse;
+            string response = ErrorMessages.SuccessResponse;
 
             var companyRole = unitOfWork.CompanyRoleRepository.FindFirstOrDefault(cr => cr.Name == role);
             var user2Company = unitOfWork.CompanyDetails2UserDetailsRepository
@@ -255,13 +254,13 @@ namespace Web.eBado.Controllers
         public JsonResult AddCustomRoleToCompany(string roleName, List<string> permissions)
         {
             int companyId = GetCompanyId();
-            string response = successResponse;
+            string response = ErrorMessages.SuccessResponse;
 
             var companyRole = unitOfWork.CompanyRoleRepository.FindWhere(cr => cr.CreatedByCompId == companyId);
             bool roleNameExist = companyRole.Any(cr => cr.Name == roleName && cr.IsActive);
             if (roleNameExist)
             {
-                response = "Role name already exist!";
+                response = ErrorMessages.RoleNameExists;
             }
             else
             {
@@ -321,38 +320,6 @@ namespace Web.eBado.Controllers
                 }).ToList();
 
             return Json(location, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        [Route("GetCategories")]
-        public void GetCategories()
-        {
-            List<string> categoriesList = new List<string>();
-            for (var i = 0; i < 10; i++)
-            {
-                var text = $"myText{i}";
-                categoriesList.Add(text);
-            }
-
-            // TempData["Categories"] = categoriesList;
-            ViewBag.MultiselectCountry = new MultiSelectList(categoriesList);
-        }
-
-        private static string RemoveDiacritics(string city)
-        {
-            var normalizedString = city.Normalize(NormalizationForm.FormD);
-            var stringBuilder = new StringBuilder();
-
-            foreach (var c in normalizedString)
-            {
-                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
-                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
-                {
-                    stringBuilder.Append(c);
-                }
-            }
-            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
 
         private async Task<bool> GetToken(int userRoleId = 0, int companyRoleId = 0)

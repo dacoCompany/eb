@@ -17,6 +17,20 @@ float:right;
   color: #fff;
 }
 
+.btn-no-border {
+    float: none;
+    background-color: #fff;
+    border: 0px;
+    font-family: Arial;
+    color: #00b6ff;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+    .btn-no-border:hover {
+        font-weight:700;
+    }
+
 /***** Form Button*****/
 
 .form-btn-transparent {

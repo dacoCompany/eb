@@ -2,6 +2,7 @@
 using Infrastructure.Resources;
 using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
 using Web.eBado.Validators;
+using Infrastructure.Common;
 
 namespace Web.eBado.Models.Account
 {
