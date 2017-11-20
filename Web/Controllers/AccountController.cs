@@ -289,9 +289,13 @@ namespace Web.eBado.Controllers
         public ActionResult RegisterCompany(RegistrationModel model)
         {
             EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt (user & company) with e-mail address: {model.UserModel.Email}", diagnosticLogConstant);
-            if (!ModelState.IsValid)
+
+            var entlibValidationResult = Validation.Validate(model, "RegisterCompany");
+
+            if (!entlibValidationResult.IsValid)
             {
-                accountHelper.InitializeData(model.CompanyModel, unitOfWork);
+                this.ModelState.AddValidationErrors(entlibValidationResult);
+
                 return View("RegisterCompany", model);
             }
 
