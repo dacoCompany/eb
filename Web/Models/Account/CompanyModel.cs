@@ -16,6 +16,9 @@ namespace Web.eBado.Models.Account
 
         public string CompanyName { get; set; }
 
+        [DataType(DataType.MultilineText)]
+        public string CompanyDescription { get; set; }
+
         public string CompanyEmail { get; set; }
 
         public int? CompanyIco { get; set; }
@@ -36,5 +39,7 @@ namespace Web.eBado.Models.Account
         public CategoriesModel Categories { get; set; }
 
         public LanguagesModel Languages { get; set; }
+
+        public string ProfileUrl { get; set; }
     }
 }

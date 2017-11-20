@@ -191,6 +191,11 @@ namespace Web.eBado.Helpers
             NotificationModel notificationModel = model.NotificationModel;
             ChangePasswordModel passwordModel = model.PasswordModel;
 
+            if(model.ProfilePicture != null)
+            {
+                //TODO: upload image to blob and save to db
+            }
+
             var userDetails = unitOfWork.UserDetailsRepository.FindById(session.Id);
             if (changePsw)
             {
@@ -234,11 +239,17 @@ namespace Web.eBado.Helpers
             SearchSettingsModel searchModel = model.SearchModel;
             NotificationModel notificationModel = model.NotificationModel;
 
+            if(model.ProfilePicture != null)
+            {
+                //TODO: upload image to blob and save to db
+            }
+
             var companyDetails = unitOfWork.CompanyDetailsRepository.FindById(companyId);
 
             companyDetails.AdditionalPhoneNumber = companyModel.CompanyAdditionalPhoneNumber;
             companyDetails.Email = companyModel.CompanyEmail;
             companyDetails.PhoneNumber = companyModel.CompanyPhoneNumber;
+            companyDetails.Description = companyModel.CompanyDescription;
 
             var address = companyDetails.Addresses.First(ad => ad.IsBillingAddress.Value);
             address.Street = companyModel.CompanyStreet;
@@ -257,18 +268,18 @@ namespace Web.eBado.Helpers
 
             SetMembersNotification(notificationModel, companyDetails);
 
-            var selectedCategories = model.CompanyModel.Categories.SelectedCategories?.ToList();
-
+            var selectedCategories = model.CompanyModel.Categories.SelectedCategories;
             if (selectedCategories != null)
             {
-                SetSelectedCategories(unitOfWork, selectedCategories, companyDetails);
+                SetSelectedCategories(unitOfWork, selectedCategories?.ToList(), companyDetails);                
             }
 
-            var selectedLanguages = model.CompanyModel.Languages.SelectedLanguages?.ToList();
+            var selectedLanguages = model.CompanyModel.Languages.SelectedLanguages;
 
             if (selectedLanguages != null)
             {
-                SetSelectedLanguages(unitOfWork, selectedLanguages, companyDetails);
+                SetSelectedLanguages(unitOfWork, selectedLanguages?.ToList(), companyDetails);
+                Array.Clear(selectedLanguages, 0, selectedLanguages.Length);
             }
 
             model.EditMembersAndRolesModel = new EditMembersAndRolesModel
@@ -278,7 +289,11 @@ namespace Web.eBado.Helpers
                 UserRoles = GetUserRoles(companyDetails),
                 Permissions = new CompanyPermissionsModel()
             };
-            model.CurrentCategories = GetCurrentCategories(companyDetails, selectedCategories);
+            model.CurrentCategories = GetCurrentCategories(companyDetails, selectedCategories?.ToList());
+            if(selectedCategories != null)
+            {
+                Array.Clear(selectedCategories, 0, selectedCategories.Length);
+            }
 
             unitOfWork.Commit();
 
@@ -335,6 +350,7 @@ namespace Web.eBado.Helpers
                 CompanyStreet = address.Street,
                 CompanyStreetNumber = address.Number,
                 CompanyPostalCode = address.Location.PostalCode,
+                CompanyDescription = companyDetails.Description
             };
 
             model.EditMembersAndRolesModel = new EditMembersAndRolesModel

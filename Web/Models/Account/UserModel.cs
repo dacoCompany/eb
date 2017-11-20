@@ -2,37 +2,38 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Practices.EnterpriseLibrary.Validation;
 using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
+using Infrastructure.Common;
 
 namespace Web.eBado.Models.Account
 {
     [HasSelfValidation]
     public class UserModel
     {
-        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 4, RangeBoundaryType.Inclusive, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "RequiredField", Ruleset = "RegisterUser")]
+        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 4, RangeBoundaryType.Inclusive, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = ErrorMessages.RequiredFieldResources, Ruleset = "RegisterUser")]
         public string Title { get; set; }
 
-        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Inclusive, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "RequiredField", Ruleset = "RegisterUser")]
+        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Inclusive, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = ErrorMessages.RequiredFieldResources, Ruleset = "RegisterUser")]
         public string FirstName { get; set; }
 
-        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Inclusive, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "RequiredField", Ruleset = "RegisterUser")]
+        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Inclusive, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = ErrorMessages.RequiredFieldResources, Ruleset = "RegisterUser")]
         public string Surname { get; set; }
 
-        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "RequiredField", Ruleset = "RegisterUser")]
+        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = ErrorMessages.RequiredFieldResources, Ruleset = "RegisterUser")]
         [EmailAddress]
         public string Email { get; set; }
 
         [StringLengthValidator(8, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplate = "Must be at least 8 characters", Ruleset = "RegisterUser")]
-        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "RequiredField", Ruleset = "RegisterUser")]
+        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = ErrorMessages.RequiredFieldResources, Ruleset = "RegisterUser")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [StringLengthValidator(8, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplate = "Must be at least 8 characters", Ruleset = "RegisterUser")]
-        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "RequiredField", Ruleset = "RegisterUser")]
+        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = ErrorMessages.RequiredFieldResources, Ruleset = "RegisterUser")]
         [DataType(DataType.Password)]
         public string RepeatPassword { get; set; }
 
         [StringLengthValidator(10, RangeBoundaryType.Inclusive, 10, RangeBoundaryType.Inclusive, MessageTemplate = "Must be exactly 10 characters", Ruleset = "RegisterUser")]
-        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "RequiredField", Ruleset = "RegisterUser")]
+        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = ErrorMessages.RequiredFieldResources, Ruleset = "RegisterUser")]
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
 
@@ -41,14 +42,16 @@ namespace Web.eBado.Models.Account
         [DataType(DataType.PhoneNumber)]
         public string AdditionalPhoneNumber { get; set; }
 
-        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "RequiredField", Ruleset = "RegisterUser")]
+        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = ErrorMessages.RequiredFieldResources, Ruleset = "RegisterUser")]
         public string Street { get; set; }
 
-        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "RequiredField", Ruleset = "RegisterUser")]
+        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = ErrorMessages.RequiredFieldResources, Ruleset = "RegisterUser")]
         public string StreetNumber { get; set; }
 
-        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "RequiredField", Ruleset = "RegisterUser")]
+        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = ErrorMessages.RequiredFieldResources, Ruleset = "RegisterUser")]
         public string PostalCode { get; set; }
+
+        public string ProfileUrl { get; set; }
 
         /// <summary>
         /// Validation of whether the entered passwords match.

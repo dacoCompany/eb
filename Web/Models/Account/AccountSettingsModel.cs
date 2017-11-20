@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Web;
 
 namespace Web.eBado.Models.Account
 {
@@ -14,6 +15,7 @@ namespace Web.eBado.Models.Account
             EditMembersAndRolesModel = new EditMembersAndRolesModel();
         }
 
+        public HttpPostedFileBase ProfilePicture { get; set; }
         public bool IsFacebookLogin { get; set; }
         public IEnumerable<string> CurrentCategories { get; set; }        
         public IEnumerable<CurrentLanguagesModel> CurrentLanguages { get; set; }        

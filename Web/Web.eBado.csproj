@@ -317,7 +317,6 @@
     <Content Include="Content\BaseContent\img\flag_HU.png" />
     <Content Include="Content\BaseContent\img\flag_SK_B.png" />
     <Content Include="Content\BaseContent\img\no_photo.jpg" />
-    <Content Include="Content\BaseContent\img\secure_lock.png" />
     <Content Include="Content\BaseContent\img\flag_CZ.png" />
     <Content Include="Content\blueimp-gallery2\css\blueimp-gallery-indicator.css" />
     <Content Include="Content\blueimp-gallery2\css\blueimp-gallery-indicator.min.css" />
@@ -593,6 +592,7 @@
     <Content Include="Content\jQuery.FileUpload\img\progressbar.gif" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\changeSettings.js" />
     <Content Include="Scripts\setPostalCode.js" />
     <Content Include="Scripts\blueimp-gallery2\js\blueimp-gallery-fullscreen.js" />
     <Content Include="Scripts\blueimp-gallery2\js\blueimp-gallery-fullscreen.min.js" />
