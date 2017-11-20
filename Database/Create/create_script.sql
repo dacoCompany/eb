@@ -474,7 +474,7 @@
 
 		PRINT 'Create indexes'
 		CREATE INDEX IXEmail ON UserDetails (Email);
-		CREATE INDEX IXCompanyName ON CompanyDetails(CompanyName);
+		CREATE INDEX IXCompanyName ON CompanyDetails(Name);
 		CREATE INDEX IXBatchGuId ON BatchAttachment(GuId);
 		PRINT 'Create indexes finished successfully'
 
