@@ -50,9 +50,9 @@ namespace Web.eBado.Models.Account
         public string CompanyPostalCode { get; set; }
 
         [ObjectValidator("RegisterCompany", Ruleset = "RegisterCompany")]
-        public CategoriesModel Categories { get; set; }
+        public CategoriesModel Categories { get; private set; }
 
-        public LanguagesModel Languages { get; set; }
+        public LanguagesModel Languages { get; private set; }
 
         public string ProfileUrl { get; set; }
 
@@ -61,7 +61,7 @@ namespace Web.eBado.Models.Account
         /// </summary>
         /// <param name="results">Results of the validation.</param>
         [SelfValidation(Ruleset = "RegisterCompany")]
-        public void ValidatePasswordMatch(ValidationResults results)
+        public void ValidateCompaneAddress(ValidationResults results)
         {
             if (results == null)
                 return;

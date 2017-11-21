@@ -17,6 +17,7 @@ using WebAPIFactory.Logging.Core.Diagnostics;
 using System.Linq;
 using System.Web.Security;
 using System.Collections.Generic;
+using System.Globalization;
 using Infrastructure.Common.Enums;
 using System.Net;
 using System.Net.Http;
@@ -258,7 +259,7 @@ namespace Web.eBado.Controllers
 
                 return View("RegisterUser", model);
             }
-            
+
             var validationResult = new ValidationResultCollection();
 
             AccountValidator.ValidateUserRegistration(unitOfWork, validationResult, model.UserModel);
@@ -290,12 +291,17 @@ namespace Web.eBado.Controllers
         {
             EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt (user & company) with e-mail address: {model.UserModel.Email}", diagnosticLogConstant);
 
-            var entlibValidationResult = Validation.Validate(model, "RegisterCompany");
+            var entlibValidationResult = Validation.Validate(model, new[] { "RegisterCompany", "RegisterUser" });
 
             if (!entlibValidationResult.IsValid)
             {
-                this.ModelState.AddValidationErrors(entlibValidationResult);
+                this.ModelState.Add(new KeyValuePair<string, ModelState>("CompanyModel.Categories.SelectedCategories", new ModelState
+                {
+                    Value = new ValueProviderResult(model.CompanyModel.Categories.SelectedCategories, model.CompanyModel.Categories.SelectedCategories?.ToString(), CultureInfo.CurrentCulture)
+                }));
 
+                this.ModelState.AddValidationErrors(entlibValidationResult);
+                accountHelper.InitializeData(model.CompanyModel, unitOfWork);
                 return View("RegisterCompany", model);
             }
 
