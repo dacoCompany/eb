@@ -9,16 +9,20 @@ namespace Web.eBado.Models.Account
     [HasSelfValidation]
     public class UserModel
     {
-        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 4, RangeBoundaryType.Inclusive, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = ErrorMessages.RequiredFieldResources, Ruleset = "RegisterUser")]
+        [IgnoreNulls(Ruleset = "RegisterUser")]
+        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 20, RangeBoundaryType.Inclusive, MessageTemplate = "Too long (max. 20 characters)", Ruleset = "RegisterUser")]
         public string Title { get; set; }
 
-        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Inclusive, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = ErrorMessages.RequiredFieldResources, Ruleset = "RegisterUser")]
+        [IgnoreNulls(Ruleset = "RegisterUser")]
+        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Inclusive, MessageTemplate = "Too long (max. 50 characters)", Ruleset = "RegisterUser")]
         public string FirstName { get; set; }
 
-        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Inclusive, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = ErrorMessages.RequiredFieldResources, Ruleset = "RegisterUser")]
+        [IgnoreNulls(Ruleset = "RegisterUser")]
+        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Inclusive, MessageTemplate = "Too long (max. 50 characters)", Ruleset = "RegisterUser")]
         public string Surname { get; set; }
 
-        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = ErrorMessages.RequiredFieldResources, Ruleset = "RegisterUser")]
+        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 100, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "RequiredField", Ruleset = "RegisterUser")]
+        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 100, RangeBoundaryType.Inclusive, MessageTemplate = "Too long (max. 100 characters)", Ruleset = "RegisterUser")]
         [EmailAddress]
         public string Email { get; set; }
 
@@ -32,6 +36,7 @@ namespace Web.eBado.Models.Account
         [DataType(DataType.Password)]
         public string RepeatPassword { get; set; }
 
+        [IgnoreNulls(Ruleset = "RegisterUser")]
         [StringLengthValidator(10, RangeBoundaryType.Inclusive, 10, RangeBoundaryType.Inclusive, MessageTemplate = "Must be exactly 10 characters", Ruleset = "RegisterUser")]
         [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = ErrorMessages.RequiredFieldResources, Ruleset = "RegisterUser")]
         [DataType(DataType.PhoneNumber)]
@@ -42,10 +47,12 @@ namespace Web.eBado.Models.Account
         [DataType(DataType.PhoneNumber)]
         public string AdditionalPhoneNumber { get; set; }
 
-        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = ErrorMessages.RequiredFieldResources, Ruleset = "RegisterUser")]
+        [IgnoreNulls(Ruleset = "RegisterUser")]
+        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 100, RangeBoundaryType.Ignore, MessageTemplate = "Too long (max. 100 characters)", Ruleset = "RegisterUser")]
         public string Street { get; set; }
 
-        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = ErrorMessages.RequiredFieldResources, Ruleset = "RegisterUser")]
+        [IgnoreNulls(Ruleset = "RegisterUser")]
+        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 10, RangeBoundaryType.Ignore, MessageTemplate = "Too long (max. 10 characters)", Ruleset = "RegisterUser")]
         public string StreetNumber { get; set; }
 
         [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = ErrorMessages.RequiredFieldResources, Ruleset = "RegisterUser")]
