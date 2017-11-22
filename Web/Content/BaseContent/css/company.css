@@ -1,0 +1,31 @@
+﻿.search_panel{
+    margin-top:30px;
+    border-radius:3px;
+    width:100%;
+    min-height:60px;
+    background-color:#19acff;
+    padding:10px 20px 0 20px;
+}
+
+.search_text{
+float:left;
+text-align:right;
+font-size: 15px;
+margin: 8px 5px 0 20px;
+color:#fff;
+}
+
+.search_textBox-lg{
+    float:left;
+    width: 250px;
+}
+
+.search_textBox-md {
+    float: left;
+    width: 150px;
+}
+
+.search_textBox-sm {
+    float: left;
+    width: 50px;
+}

@@ -82,7 +82,7 @@ $('.language_tags_block-symbol').on('click', function () {
 function DeleteMember(email) {
     $.ajax({
         type: 'POST',
-        url: '@Url.Action("DeleteMember", "Manage")',
+        url: "/Manage/DeleteMember",
         data: JSON.stringify({ email: email }),
         contentType: 'application/json',
         success: function (data) {
@@ -102,7 +102,7 @@ $('[id^=memberRole]').change(function () {
     var selectedRole = $("#" + divId).find('option:selected').text();
     $.ajax({
         type: 'POST',
-        url: '@Url.Action("ChangeMemberRole", "Manage")',
+        url: "/Manage/ChangeMemberRole",
         data: JSON.stringify({ user: user, role: selectedRole }),
         contentType: 'application/json',
         success: function (data) {
@@ -121,7 +121,7 @@ function AddNewMember() {
     var role = $("#newMemberDrop").val();
     $.ajax({
         type: 'GET',
-        url: '@Url.Action("AddMemberToCompany", "Manage")',
+        url: "/Manage/AddMemberToCompany",
         contentType: "application/json; charset=utf-8",
         data: { email: email, selectedRole: role },
         success: function (data) {
@@ -142,7 +142,7 @@ function AddNewRole() {
     var permissions = GetPermissions();
     $.ajax({
         type: 'POST',
-        url: '@Url.Action("AddCustomRoleToCompany", "Manage")',
+        url: "/Manage/AddCustomRoleToCompany",
         data: JSON.stringify({ roleName: role, permissions: permissions }),
         contentType: 'application/json',
         success: function (data) {

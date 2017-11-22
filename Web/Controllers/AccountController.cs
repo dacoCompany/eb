@@ -16,8 +16,6 @@ using WebAPIFactory.Logging.Core;
 using WebAPIFactory.Logging.Core.Diagnostics;
 using System.Linq;
 using System.Web.Security;
-using System.Collections.Generic;
-using Infrastructure.Common.Enums;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;

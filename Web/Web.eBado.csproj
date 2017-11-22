@@ -238,6 +238,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\FileUploadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -254,8 +255,6 @@
     <Compile Include="Models\Account\BatchGalleryModel.cs" />
     <Compile Include="Models\Account\BatchModel.cs" />
     <Compile Include="Models\Account\CurrentLanguagesModel.cs" />
-    <Compile Include="Models\Account\LanguagesModel.cs" />
-    <Compile Include="Models\Account\CategoriesModel.cs" />
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
     <Compile Include="Models\Account\CompanyMemberNotificationModel.cs" />
     <Compile Include="Models\Account\CompanyPermissionsModel.cs" />
@@ -269,15 +268,18 @@
     <Compile Include="Models\Account\UserModel.cs" />
     <Compile Include="Models\Account\AccountSettingsModel.cs" />
     <Compile Include="Models\Account\UserRoleModel.cs" />
+    <Compile Include="Models\Company\SearchModel.cs" />
     <Compile Include="Models\Email\RegisterEmailModel.cs" />
     <Compile Include="Models\MvcExtensions\ModelStateExtensions.cs" />
     <Compile Include="Models\Shared\AllLanguagesModel.cs" />
     <Compile Include="Models\Shared\AttachmentGalleryModel.cs" />
     <Compile Include="Models\Shared\AttachmentModel.cs" />
     <Compile Include="Models\Shared\AllCategoriesModel.cs" />
+    <Compile Include="Models\Account\CategoriesModel.cs" />
     <Compile Include="Models\Shared\CompanySessionModel.cs" />
     <Compile Include="Models\Shared\FileModel.cs" />
     <Compile Include="Models\Shared\FilesViewModel.cs" />
+    <Compile Include="Models\Account\LanguagesModel.cs" />
     <Compile Include="Models\Shared\PostalCodeModel.cs" />
     <Compile Include="Models\Shared\SessionModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -294,9 +296,9 @@
     <Content Include="Content\BaseContent\css\jquery-ui.css" />
     <Content Include="Content\BaseContent\css\check_radio.css" />
     <Content Include="Content\BaseContent\css\batch-gallery.css" />
+    <Content Include="Content\BaseContent\css\company.css" />
     <Content Include="Content\BaseContent\css\user-settings.css" />
     <Content Include="Content\BaseContent\css\media-queries.css" />
-    <Content Include="Content\BaseContent\css\register.css" />
     <Content Include="Content\BaseContent\css\reset.css" />
     <Content Include="Content\BaseContent\css\login.css" />
     <Content Include="Content\BaseContent\css\style.css" />
@@ -702,9 +704,11 @@
     <Content Include="Views\Account\EditAccountGallery.cshtml" />
     <Content Include="Views\Account\BatchAccountGallery.cshtml" />
     <Content Include="Views\Account\MyAdvertisements.cshtml" />
+    <Content Include="Views\Home\AllCompanies.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Company\" />
     <Folder Include="Views\Manage\" />
   </ItemGroup>
   <ItemGroup>

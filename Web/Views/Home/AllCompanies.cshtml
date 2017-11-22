@@ -1,0 +1,30 @@
+﻿@model Web.eBado.Models.Account.CompanyModel
+
+@{
+    ViewBag.Title = "AllCompanies";
+}
+@Styles.Render("~/Content/company")
+@Scripts.Render("~/bundles/chosen")
+@Styles.Render("~/Content/chosen")
+<div class="container">
+    <div class="search_panel">
+        <div class="search_textBox-lg">
+            @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Nazov dodavatela" } })
+        </div>
+        @*<div class="search_text">Karegoria:</div>
+        <div class="search_textBox-lg">
+            @Html.DropDownListFor(m => m.Categories.SelectedCategories, Model.Categories.AllCategories, new { @class = "form-control chosen-select", data_placeholder = "Choose your business area..." })
+        </div>*@
+        <div class="search_text">Mesto:</div>
+        <div class="search_textBox-md">
+            @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Mesto alebo PSC" } })
+        </div>
+        <div class="search_text">Okolie:</div>
+        <div class="search_textBox-sm">
+            @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "km" } })
+        </div>
+    </div>
+</div>
+<script>
+    $('.chosen-select').chosen({ width: '100%' });
+</script>
