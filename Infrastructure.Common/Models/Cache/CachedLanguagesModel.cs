@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Web.eBado.Models.Shared
+namespace Infrastructure.Common.Models
 {
-    public class AllLanguagesModel
+    public class CachedLanguagesModel
     {
         public int Id { get; set; }
         public string Code { get; set; }

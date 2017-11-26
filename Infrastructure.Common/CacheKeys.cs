@@ -8,6 +8,7 @@ namespace Infrastructure.Common
 {
     public class CacheKeys
     {
+        public const string CategoryListItemKey = "CategoryListItem";
         public const string CategoryKey = "Category";
         public const string PostalCodeKey = "PostalCode";
         public const string LanguageKey = "Language";

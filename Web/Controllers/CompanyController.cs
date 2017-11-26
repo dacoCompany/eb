@@ -1,27 +1,36 @@
 ﻿using Infrastructure.Common.DB;
 using System.Web.Mvc;
+using Web.eBado.Helpers;
+using Web.eBado.Models.Company;
+using Web.eBado.Models.Shared;
 
 namespace Web.eBado.Controllers
 {
+    [RoutePrefix("Company")]
     public class CompanyController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
+        CompanyHelper companyHelper;
+        SharedHelper sharedHelper;
 
         public CompanyController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
-        }
-        // GET: Company
-        public ActionResult Index()
-        {
-            return View();
+            companyHelper = new CompanyHelper(unitOfWork);
+            sharedHelper = new SharedHelper(unitOfWork);
         }
 
         [Route("AllCompanies")]
         [AllowAnonymous]
-        public ActionResult AllCompanies()
+        public ActionResult AllCompanies(string selectedCategory, CompanySearchModel model)
         {
-            return View();
+            if (model.SearchParameters.SelectedCategory == null)
+            {
+                model.SearchParameters.SelectedCategory = companyHelper.GetCategoryBySelectedItem(selectedCategory);
+            }
+            model.AllMainCategories = sharedHelper.GetMainCategoriesToListItem();
+            model.AllCategories = sharedHelper.GetCategoriesWithSubCategories();
+            return View(model);
         }
     }
 }

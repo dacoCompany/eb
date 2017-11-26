@@ -247,9 +247,11 @@
     </Compile>
     <Compile Include="GlobalExceptionFilter.cs" />
     <Compile Include="Helpers\AccountHelper.cs" />
+    <Compile Include="Helpers\CompanyHelper.cs" />
     <Compile Include="Helpers\FilesHelper.cs" />
     <Compile Include="Helpers\ImageHandler.cs" />
     <Compile Include="Helpers\SessionHelper.cs" />
+    <Compile Include="Helpers\SharedHelper.cs" />
     <Compile Include="IoC\NinjectResolver.cs" />
     <Compile Include="JsonNetResult.cs" />
     <Compile Include="Models\Account\BatchGalleryModel.cs" />
@@ -268,13 +270,13 @@
     <Compile Include="Models\Account\UserModel.cs" />
     <Compile Include="Models\Account\AccountSettingsModel.cs" />
     <Compile Include="Models\Account\UserRoleModel.cs" />
-    <Compile Include="Models\Company\SearchModel.cs" />
+    <Compile Include="Models\Company\CompanySearchModel.cs" />
+    <Compile Include="Models\Shared\AllCategoriesModel.cs" />
+    <Compile Include="Models\Shared\SearchParametersModel.cs" />
     <Compile Include="Models\Email\RegisterEmailModel.cs" />
     <Compile Include="Models\MvcExtensions\ModelStateExtensions.cs" />
-    <Compile Include="Models\Shared\AllLanguagesModel.cs" />
     <Compile Include="Models\Shared\AttachmentGalleryModel.cs" />
     <Compile Include="Models\Shared\AttachmentModel.cs" />
-    <Compile Include="Models\Shared\AllCategoriesModel.cs" />
     <Compile Include="Models\Account\CategoriesModel.cs" />
     <Compile Include="Models\Shared\CompanySessionModel.cs" />
     <Compile Include="Models\Shared\FileModel.cs" />
@@ -704,11 +706,10 @@
     <Content Include="Views\Account\EditAccountGallery.cshtml" />
     <Content Include="Views\Account\BatchAccountGallery.cshtml" />
     <Content Include="Views\Account\MyAdvertisements.cshtml" />
-    <Content Include="Views\Home\AllCompanies.cshtml" />
+    <Content Include="Views\Company\AllCompanies.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Company\" />
     <Folder Include="Views\Manage\" />
   </ItemGroup>
   <ItemGroup>

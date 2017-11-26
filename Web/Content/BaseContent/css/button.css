@@ -17,6 +17,23 @@ float:right;
   color: #fff;
 }
 
+.white-border-btn {
+    float: right;
+    background: #19acff;
+    border: 2px #fff solid;
+    border-radius:5px;
+    font-family: Arial;
+    color: #fff;
+    font-size: 15px;
+    padding: 6px 14px 6px 14px;
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+    .white-border-btn:hover {
+        background: #00b6ff;
+    }
+
 .btn-no-border {
     float: none;
     background-color: #fff;

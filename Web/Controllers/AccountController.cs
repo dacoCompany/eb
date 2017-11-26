@@ -39,7 +39,7 @@ namespace Web.eBado.Controllers
 
         public AccountController(IConfiguration configuration, IUnitOfWork unitOfWork, IFilesBusinessObjects fileBo)
         {
-            accountHelper = new AccountHelper();
+            accountHelper = new AccountHelper(unitOfWork);
             sessionHelper = new SessionHelper();
             this.configuration = configuration;
             this.unitOfWork = unitOfWork;
