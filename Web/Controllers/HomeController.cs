@@ -35,5 +35,17 @@ namespace Web.eBado.Controllers
         {
             return "Welcome";
         }
+
+        /// <summary>
+        /// Just testing automatic build
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("Index5")]
+        [AllowAnonymous]
+        public string Index5()
+        {
+            return "Welcome";
+        }
     }
 }
