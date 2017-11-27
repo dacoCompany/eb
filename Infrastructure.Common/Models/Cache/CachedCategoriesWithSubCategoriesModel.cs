@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Web.eBado.Models.Shared
+namespace Infrastructure.Common.Models.Cache
 {
-    public class AllCategoriesModel
+    public class CachedCategoriesWithSubCategoriesModel
     {
         public string Category { get; set; }
         public IEnumerable<string> SubCategories { get; set; }

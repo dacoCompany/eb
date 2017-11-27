@@ -64,6 +64,9 @@ namespace Web.eBado
             bundles.Add(new StyleBundle("~/Content/chosen")
                 .Include("~/Content/BaseContent/css/chosen.css", new CssRewriteUrlTransform()));
 
+            bundles.Add(new StyleBundle("~/Content/company")
+               .Include("~/Content/BaseContent/css/company.css", new CssRewriteUrlTransform()));
+
             bundles.Add(new StyleBundle("~/Content/settings")
                .Include("~/Content/BaseContent/css/user-settings.css", new CssRewriteUrlTransform()));
 

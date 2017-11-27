@@ -214,158 +214,158 @@
                     <div class="accordion-toggle @push">
                         <div class="accordion-main">zmenit profil firmy</div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12 set-font">Profil</div>
-                    </div>
+                    <div id="companyProfileDiv" class="@hiddenClass accordion-content">
+                        <div class="row">
+                            <div class="col-sm-12 set-font">Profil</div>
+                        </div>
                         <div class="row">
                             @if (Model.CompanyModel.ProfileUrl == null)
                             {
-                            <div class="col-lg-6">
-                                <div class="tags_text">Zatial nemate profilovu fotku</div>
-                            </div>
+                                <div class="col-lg-6">
+                                    <div class="tags_text">Zatial nemate profilovu fotku</div>
+                                </div>
                             }
                             else
                             {
-                            <div class="col-lg-6">
-                                <img src="@Model.CompanyModel.ProfileUrl" class="profile_img">
-                            </div>
+                                <div class="col-lg-6">
+                                    <img src="@Model.CompanyModel.ProfileUrl" class="profile_img">
+                                </div>
                             }
                         </div>
                         <div class="row">
                             <div class=" col-lg-6">
-                                <div class="fileContainer push_top_5">
+                                <div class="fileContainer push_top_5 push_bottom_20">
                                     <span class="glyphicon glyphicon-plus eb_blue"></span> <span id="fileNameC">Nahrat profilovu fotku</span>
                                     <input type="file" name="ProfilePicture" />
                                 </div>
                             </div>
                         </div>
-                        <div id="companyProfileDiv" class="@hiddenClass accordion-content">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    @Html.EditorFor(model => model.CompanyModel.CompanyName, new { htmlAttributes = new { @class = "form-control txt-lg", @readonly = "readonly" } })
+                        <div class="row">
+                            <div class="col-lg-6">
+                                @Html.EditorFor(model => model.CompanyModel.CompanyName, new { htmlAttributes = new { @class = "form-control txt-lg", @readonly = "readonly" } })
+                                <div class="val-message"></div>
+                            </div>
+
+                            <div class="col-lg-3">
+                                @Html.EditorFor(model => model.CompanyModel.CompanyIco, new { htmlAttributes = new { @class = "form-control txt-lg", @readonly = "readonly" } })
+                                <div class="val-message"></div>
+                            </div>
+
+                            <div class="col-lg-3">
+                                @Html.EditorFor(model => model.CompanyModel.CompanyDic, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Dic", @readonly = "readonly" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyDic, "", new { @class = "text-danger" })</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 set-font">Adresa</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <input type="text" class="form-control txt-lg" id="txtCompanyPostalCode" placeholder="PSC" value="@Model.CompanyModel.CompanyPostalCode" />
+                                @Html.HiddenFor(model => model.CompanyModel.CompanyPostalCode, new { @id = "hiddenCompanyPostalCode" })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyPostalCode, "", new { @class = "text-danger" })</div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                @Html.EditorFor(model => model.CompanyModel.CompanyStreet, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Ulica" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyStreet, "", new { @class = "text-danger" })</div>
+                            </div>
+
+                            <div class="col-lg-3">
+                                @Html.EditorFor(model => model.CompanyModel.CompanyStreetNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Cislo" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyStreetNumber, "", new { @class = "text-danger" })</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 set-font">Kontaktne udaje</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                @Html.EditorFor(model => model.CompanyModel.CompanyEmail, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Email" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyEmail, "", new { @class = "text-danger" })</div>
+                            </div>
+                            <div class="col-md-4">
+                                @Html.EditorFor(model => model.CompanyModel.CompanyPhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Mobil" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyPhoneNumber, "", new { @class = "text-danger" })</div>
+                            </div>
+
+                            <div class="col-md-4">
+                                @Html.EditorFor(model => model.CompanyModel.CompanyAdditionalPhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Pevna linka" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyAdditionalPhoneNumber, "", new { @class = "text-danger" })</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 set-font">Oblast podnikania</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.CompanyModel.CompanyDescription, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Popis cinnosti" } })
+                                <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyDescription, "", new { @class = "text-danger" })</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 resp_push_bottom_10">
+                                <div class="val-message hidden_div" id="categoryValidation"></div>
+                                <div class="tags_text">Vasa oblast podnikania:</div>
+                                @{ int categoryId = 1;}
+                                @foreach (var category in Model.CurrentCategories)
+                                {
+                                    <div id="div_@categoryId" class="tags_blocks">
+                                        <div id="name_@categoryId" class="tags_block-text">@category</div>
+                                        <div id="@categoryId" class="tags_block-symbol">&#10006;</div>
+                                    </div>
+                                    categoryId++;
+                                }
+                            </div>
+                        </div>
+                        <div class="edit_container push_bottom_20">
+                            <span class="glyphicon glyphicon-plus eb_blue"><input type="button" id="newCategoryBtn" value="Pridat oblast podnikania" class="btn-no-border" /></span>
+                        </div>
+                        <div class="edit_container">
+                            <div id="categoryDiv" class="col-md-8 hidden_div">
+                                <div class="row">
+                                    <div class="tags_text">Vyberte novu kategoriu:</div>
+                                </div>
+                                <div class="row">
+                                    @Html.DropDownListFor(m => m.CompanyModel.Categories.SelectedCategories, Model.CompanyModel.Categories.AllCategories, new { @class = "form-control chosen-select", @multiple = "true" })
                                     <div class="val-message"></div>
-                                </div>
-
-                                <div class="col-lg-3">
-                                    @Html.EditorFor(model => model.CompanyModel.CompanyIco, new { htmlAttributes = new { @class = "form-control txt-lg", @readonly = "readonly" } })
-                                    <div class="val-message"></div>
-                                </div>
-
-                                <div class="col-lg-3">
-                                    @Html.EditorFor(model => model.CompanyModel.CompanyDic, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Dic", @readonly = "readonly" } })
-                                    <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyDic, "", new { @class = "text-danger" })</div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12 set-font">Adresa</div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <input type="text" class="form-control txt-lg" id="txtCompanyPostalCode" placeholder="PSC" value="@Model.CompanyModel.CompanyPostalCode" />
-                                    @Html.HiddenFor(model => model.CompanyModel.CompanyPostalCode, new { @id = "hiddenCompanyPostalCode" })
-                                    <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyPostalCode, "", new { @class = "text-danger" })</div>
-                                </div>
-
-                                <div class="col-lg-6">
-                                    @Html.EditorFor(model => model.CompanyModel.CompanyStreet, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Ulica" } })
-                                    <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyStreet, "", new { @class = "text-danger" })</div>
-                                </div>
-
-                                <div class="col-lg-3">
-                                    @Html.EditorFor(model => model.CompanyModel.CompanyStreetNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Cislo" } })
-                                    <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyStreetNumber, "", new { @class = "text-danger" })</div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12 set-font">Kontaktne udaje</div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    @Html.EditorFor(model => model.CompanyModel.CompanyEmail, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Email" } })
-                                    <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyEmail, "", new { @class = "text-danger" })</div>
-                                </div>
-                                <div class="col-md-4">
-                                    @Html.EditorFor(model => model.CompanyModel.CompanyPhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Mobil" } })
-                                    <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyPhoneNumber, "", new { @class = "text-danger" })</div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    @Html.EditorFor(model => model.CompanyModel.CompanyAdditionalPhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Pevna linka" } })
-                                    <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyAdditionalPhoneNumber, "", new { @class = "text-danger" })</div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12 set-font">Oblast podnikania</div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-8">
-                                    @Html.EditorFor(model => model.CompanyModel.CompanyDescription, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Popis cinnosti" } })
-                                    <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyDescription, "", new { @class = "text-danger" })</div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12 resp_push_bottom_10">
-                                    <div class="val-message hidden_div" id="categoryValidation"></div>
-                                    <div class="tags_text">Vasa oblast podnikania:</div>
-                                    @{ int categoryId = 1;}
-                                    @foreach (var category in Model.CurrentCategories)
-                                    {
-                                        <div id="div_@categoryId" class="tags_blocks">
-                                            <div id="name_@categoryId" class="tags_block-text">@category</div>
-                                            <div id="@categoryId" class="tags_block-symbol">&#10006;</div>
-                                        </div>
-                                        categoryId++;
-                                    }
-                                </div>
-                            </div>
-                            <div class="edit_container push_bottom_20">
-                                <span class="glyphicon glyphicon-plus eb_blue"><input type="button" id="newCategoryBtn" value="Pridat oblast podnikania" class="btn-no-border" /></span>
-                            </div>
-                            <div class="edit_container">
-                                <div id="categoryDiv" class="col-md-8 hidden_div">
-                                    <div class="row">
-                                        <div class="tags_text">Vyberte novu kategoriu:</div>
-                                    </div>
-                                    <div class="row">
-                                        @Html.DropDownListFor(m => m.CompanyModel.Categories.SelectedCategories, Model.CompanyModel.Categories.AllCategories, new { @class = "form-control chosen-select", @multiple = "true" })
-                                        <div class="val-message"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-sm-12 set-font">Jazyky</div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12 resp_push_bottom_10">
-                                    <div class="val-message hidden_div" id="languageValidation"></div>
-                                    <div class="tags_text">Vase jazyky:</div>
-                                    @{ int languageId = 1;}
-                                    @foreach (var language in Model.CurrentLanguages)
-                                    {
-                                        <div id="div_@language.Code" class="tags_blocks">
-                                            <div id="name_@language.Code" class="tags_block-text">(@language.Code) @language.LanguageName</div>
-                                            <div id="@language.Code" class="language_tags_block-symbol">&#10006;</div>
-                                        </div>
-                                        languageId++;
-                                    }
-                                </div>
-                            </div>
-                            <div class="edit_container push_bottom_20">
-                                <span class="glyphicon glyphicon-plus eb_blue"><input type="button" id="newLanguageBtn" value="Pridat dalsie jazyky" class="btn-no-border" /></span>
-                            </div>
-                            <div class="edit_container">
-                                <div id="languageDiv" class="col-md-8 hidden_div">
-                                    <div class="row">
-                                        <div class="tags_text">Vyberte novy jazyk:</div>
-                                    </div>
-                                    <div class="row">
-                                        @Html.DropDownListFor(m => m.CompanyModel.Languages.SelectedLanguages, Model.CompanyModel.Languages.AllLanguages, new { @class = "form-control chosen-select", @multiple = "true" })
-                                        <div class="val-message"></div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col-sm-12 set-font">Jazyky</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 resp_push_bottom_10">
+                                <div class="val-message hidden_div" id="languageValidation"></div>
+                                <div class="tags_text">Vase jazyky:</div>
+                                @{ int languageId = 1;}
+                                @foreach (var language in Model.CurrentLanguages)
+                                {
+                                    <div id="div_@language.Code" class="tags_blocks">
+                                        <div id="name_@language.Code" class="tags_block-text">(@language.Code) @language.LanguageName</div>
+                                        <div id="@language.Code" class="language_tags_block-symbol">&#10006;</div>
+                                    </div>
+                                    languageId++;
+                                }
+                            </div>
+                        </div>
+                        <div class="edit_container push_bottom_20">
+                            <span class="glyphicon glyphicon-plus eb_blue"><input type="button" id="newLanguageBtn" value="Pridat dalsie jazyky" class="btn-no-border" /></span>
+                        </div>
+                        <div class="edit_container">
+                            <div id="languageDiv" class="col-md-8 hidden_div">
+                                <div class="row">
+                                    <div class="tags_text">Vyberte novy jazyk:</div>
+                                </div>
+                                <div class="row">
+                                    @Html.DropDownListFor(m => m.CompanyModel.Languages.SelectedLanguages, Model.CompanyModel.Languages.AllLanguages, new { @class = "form-control chosen-select", @multiple = "true" })
+                                    <div class="val-message"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                         <div class="accordion-toggle">
                             <div class="accordion-main">nastavenia firemneho uctu</div>

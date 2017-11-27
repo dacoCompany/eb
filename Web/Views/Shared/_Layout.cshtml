@@ -85,7 +85,7 @@
                     <a class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active_menu" : "")" href="@Url.Action("Index", "Home")">bazár</a>
                     <a class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index2" ? "active_menu" : "")" href="@Url.Action("Index2", "Home")">dopyt</a>
                     <a href="#contact">faq</a>
-                    <a href="#about">cenník</a>
+                    <a class="@(ViewContext.RouteData.Values["Action"].ToString() == "AllCompanies" ? "active_menu" : "")" href="@Url.Action("AllCompanies", "Company")">zoznam dodavatelov</a>
                 </div>
                 <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
             </div>

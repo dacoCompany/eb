@@ -1,0 +1,68 @@
+﻿@model Web.eBado.Models.Company.CompanySearchModel
+
+@{
+    ViewBag.Title = "AllCompanies";
+}
+
+@Styles.Render("~/Content/company")
+@using (Html.BeginForm())
+{
+    <div class="container">
+        <div class="search_panel">
+            <div class="search_textBox-xlg">
+                @Html.EditorFor(model => model.SearchParameters.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Nazov dodavatela" } })
+            </div>
+            <div class="search_textBox-lg">
+                @Html.DropDownListFor(model => model.SearchParameters.SelectedCategory, Model.AllMainCategories, "All categories", new { @class = "form-control" })
+            </div>
+            <div class="search_text">Mesto:</div>
+            <div class="search_textBox-md">
+                @Html.EditorFor(model => model.SearchParameters.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Mesto alebo PSC" } })
+            </div>
+            <div class="search_text">Okolie:</div>
+            <div class="search_textBox-sm">
+                @Html.EditorFor(model => model.SearchParameters.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "km" } })
+            </div>
+            <div class="search_button">
+                <button type="submit" class="white-border-btn search_btn_resp"><i class="glyphicon glyphicon-search"></i> Hladat</button>
+            </div>
+        </div>
+        <div class="main_container">
+            <div class="category_container">
+                @{
+                    var currentCategory = Model.AllCategories.FirstOrDefault(ac => ac.Category == Model.SearchParameters.SelectedCategory);
+                    if (currentCategory == null)
+                    {
+                        currentCategory = Model.AllCategories.FirstOrDefault(ac => ac.SubCategories.Contains(Model.SearchParameters.SelectedCategory));
+                    }
+                }
+                @if (Model.SearchParameters.SelectedCategory == null)
+                {
+                    <div class="category_head">Categories:</div>
+                    <div id="cat_container">
+                        @foreach (var cat in Model.AllCategories)
+                    {
+                            <div class="category_body">
+                                <a href="@Url.Action("AllCompanies","Company", new { selectedCategory = cat.Category})">@cat.Category</a>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+
+                    <div class="category_head">@currentCategory.Category</div>
+                    <div id="cat_container">
+                        @foreach (var subCat in currentCategory.SubCategories)
+                        {
+                            <div class="category_body">
+                                <a href="@Url.Action("AllCompanies","Company", new { selectedCategory = subCat})">@subCat</a>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+            <div class="company_container">sadfjk</div>
+        </div>
+    </div>
+                    }

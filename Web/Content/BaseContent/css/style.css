@@ -309,14 +309,13 @@ ul.navbar-nav li.active .dropdown-menu > .active > a {
         padding: 14px 16px;
         text-decoration: none;
         font-family: Verdana;
-        font-size: 18px;
+        font-size: 16px;
         opacity: 0.8;
-        line-height: 25px;
+        line-height: 27px;
         font-style: normal;
         font-variant: normal;
         font-weight: 300;
         text-transform: uppercase;
-        border-top: solid 3px #19acff;
         -webkit-transition: color 0.3s ease;
         -moz-transition: color 0.3s ease;
         -o-transition: color 0.3s ease;
@@ -326,13 +325,11 @@ ul.navbar-nav li.active .dropdown-menu > .active > a {
         .submenu a:hover {
             color: #fff;
             opacity: 1;
-            border-top: solid 3px #fff;
         }
 
     .submenu .active_menu {
         color: #f1f1f1;
         opacity: 1;
-        border-top: solid 3px #f1f1f1;
     }
 
     .submenu .icon {
@@ -350,7 +347,7 @@ ul.navbar-nav li.active .dropdown-menu > .active > a {
 }
 
 @media screen and (max-width: 600px) {
-    .submenu a:not(:first-child) {
+    .submenu a:not(:active) {
         display: none;
     }
 

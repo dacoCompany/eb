@@ -1,6 +1,7 @@
 ﻿using Infrastructure.Common;
 using Infrastructure.Common.DB;
 using Infrastructure.Common.Enums;
+using Infrastructure.Common.Models;
 using Infrastructure.Configuration;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,6 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
@@ -30,8 +30,17 @@ namespace Web.eBado.Helpers
         const string AllowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789";
         private readonly Uri locationBaseUri = new Uri("http://freegeoip.net/xml/");
 
-        #endregion
+        private readonly IUnitOfWork unitOfWork;
+        SharedHelper sharedHelper;
 
+        #endregion
+#region Constructor
+        public AccountHelper(IUnitOfWork unitOfWork)
+        {
+            this.unitOfWork = unitOfWork;
+            sharedHelper = new SharedHelper(unitOfWork);
+        }
+#endregion
         #region Public Methods
 
         public Countries GetCountryByIP()
@@ -381,7 +390,7 @@ namespace Web.eBado.Helpers
 
         public void InitializeData(CompanyModel model, IUnitOfWork unitOfWork)
         {
-            model.Categories.AllCategories = GetAllCategories(unitOfWork);
+            model.Categories.AllCategories = sharedHelper.GetCategoriesToListItem();
             model.Languages.AllLanguages = GetAllLanguages(unitOfWork);
         }
 
@@ -414,30 +423,12 @@ namespace Web.eBado.Helpers
             }
             return new string(chars);
         }
-
-        private IEnumerable<SelectListItem> GetAllCategories(IUnitOfWork unitOfWork)
-        {
-            List<SelectListItem> allCategories = new List<SelectListItem>();
-            var cache = NinjectResolver.GetInstance<ICache>();
-            var cachedCategories = cache.GetData<List<AllCategoriesModel>>(CacheKeys.CategoryKey);
-
-            if (cachedCategories == null)
-            {
-                cachedCategories = SetCategoriesCache(cachedCategories, cache, unitOfWork);
-            }
-
-            var categories = cachedCategories.Select(category => new SelectListItem { Value = category.Name, Text = category.Name });
-            var subCategories = cachedCategories.Select(category => new SelectListItem { Value = category.Name, Text = category.Name });
-
-            allCategories.AddRange(categories.Concat(subCategories));
-            return allCategories.AsEnumerable();
-        }
-
+      
         private IEnumerable<SelectListItem> GetAllLanguages(IUnitOfWork unitOfWork)
         {
             List<SelectListItem> allLanguages = new List<SelectListItem>();
             var cache = NinjectResolver.GetInstance<ICache>();
-            var cachedLanguages = cache.GetData<List<AllLanguagesModel>>(CacheKeys.LanguageKey);
+            var cachedLanguages = cache.GetData<List<CachedLanguagesModel>>(CacheKeys.LanguageKey);
 
             if (cachedLanguages == null)
             {
@@ -568,11 +559,11 @@ namespace Web.eBado.Helpers
         private void SetSelectedCategories(IUnitOfWork uow, List<string> selectedCategories, CompanyDetailDbo companyDetails)
         {
             var cache = NinjectResolver.GetInstance<ICache>();
-            var cachedCategories = cache.GetData<List<AllCategoriesModel>>(CacheKeys.CategoryKey);
+            var cachedCategories = cache.GetData<List<CachedAllCategoriesModel>>(CacheKeys.CategoryListItemKey);
 
             if (cachedCategories == null)
             {
-                cachedCategories = SetCategoriesCache(cachedCategories, cache, uow);
+                cachedCategories = sharedHelper.SetCategoriesCacheToListItem(cachedCategories, cache);
             }
 
             var allcategories = cachedCategories.Where(c => selectedCategories.Contains(c.Name));
@@ -611,7 +602,7 @@ namespace Web.eBado.Helpers
         private void SetSelectedLanguages(IUnitOfWork uow, List<string> selecteLanguages, CompanyDetailDbo companyDetails)
         {
             var cache = NinjectResolver.GetInstance<ICache>();
-            var cachedLanguages = cache.GetData<List<AllLanguagesModel>>(CacheKeys.LanguageKey);
+            var cachedLanguages = cache.GetData<List<CachedLanguagesModel>>(CacheKeys.LanguageKey);
 
             if (cachedLanguages == null)
             {
@@ -634,38 +625,13 @@ namespace Web.eBado.Helpers
                 }
             }
         }
-
-        private List<AllCategoriesModel> SetCategoriesCache(List<AllCategoriesModel> cachedCategories, ICache cache, IUnitOfWork unitOfWork)
+       
+        private List<CachedLanguagesModel> SetLanguagesCache(List<CachedLanguagesModel> cachedLanguages, ICache cache, IUnitOfWork unitOfWork)
         {
             var cacheSettings = new CacheSettings("cacheDurationKey", "cacheExpirationKey");
+            cachedLanguages = new List<CachedLanguagesModel>();
 
-            var categoryList = unitOfWork.CategoryRepository.FindAll().Select(category => new AllCategoriesModel
-            {
-                Id = category.Id,
-                Name = category.Name,
-                IsMain = true
-            }).ToList();
-
-            var subCategoryList = unitOfWork.SubCategoryRepository.FindAll().Select(subCategory => new AllCategoriesModel
-            {
-                Id = subCategory.Id,
-                Name = subCategory.Name,
-                IsMain = false
-            }).ToList();
-
-            cachedCategories = new List<AllCategoriesModel>();
-            cachedCategories.AddRange(categoryList.Concat(subCategoryList));
-
-            cache.Insert(CacheKeys.CategoryKey, cachedCategories, null, cacheSettings);
-            return cachedCategories;
-        }
-
-        private List<AllLanguagesModel> SetLanguagesCache(List<AllLanguagesModel> cachedLanguages, ICache cache, IUnitOfWork unitOfWork)
-        {
-            var cacheSettings = new CacheSettings("cacheDurationKey", "cacheExpirationKey");
-            cachedLanguages = new List<AllLanguagesModel>();
-
-            var languageList = unitOfWork.LanguageRepository.FindAll().Select(language => new AllLanguagesModel
+            var languageList = unitOfWork.LanguageRepository.FindAll().Select(language => new CachedLanguagesModel
             {
                 Id = language.Id,
                 Code = language.Code,
