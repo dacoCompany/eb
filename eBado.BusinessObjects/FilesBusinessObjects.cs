@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Web;
 using System.Web.Helpers;
 using System.Web.Hosting;
 using ByteSizeLib;
@@ -119,6 +120,25 @@ namespace eBado.BusinessObjects
                 EntlibLogger.LogError("File", "Upload", $"Upload failed. - {ex.Message}", diagnosticLogConstant, ex);
                 throw;
             }
+        }
+
+        public bool UploadVideo(string url, string batchId, int companyId)
+        {
+            string videoId = HttpUtility.ParseQueryString(url).Get(0);
+
+            if (string.IsNullOrEmpty(videoId))
+            {
+                return false;
+            }
+
+            var batch = unitOfWork.BatchAttachmentRepository.FindFirstOrDefault(ba => ba.GuId == batchId && ba.CompanyDetailsId == companyId);
+
+            var attachment = new AttachmentDbo
+            {
+                BatchAttId = batch.Id
+            };
+
+            return true;
         }
 
         public bool DeleteFile(string fileName)

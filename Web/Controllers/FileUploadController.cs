@@ -139,6 +139,14 @@ namespace Web.eBado.Controllers
         }
 
         [HttpPost]
+        [Route("UploadVideo")]
+        [System.Web.Http.Authorize(Roles = "AddAttachments")]
+        public ActionResult UploadVideo(string url, string batchId)
+        {
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
+
+        [HttpPost]
         [Route("DeleteVideo")]
         [System.Web.Http.Authorize(Roles = "RemoveAttachments")]
         public JsonResult DeleteVideo(string batchId, string name)
