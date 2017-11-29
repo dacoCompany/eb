@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -13,6 +14,7 @@ namespace Web.eBado.Models.Company
         public CompanySearchModel()
         {
             SearchParameters = new SearchParametersModel();
+            CompanyModel = new Collection<CompanyModel>();
         }
         public IEnumerable<SelectListItem> AllMainCategories { get; set; }
         public IEnumerable<AllCategoriesModel> AllCategories { get; set; }

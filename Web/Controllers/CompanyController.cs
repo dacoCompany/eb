@@ -1,6 +1,9 @@
 ﻿using Infrastructure.Common.DB;
+using System.Data.Entity;
+using System.Linq;
 using System.Web.Mvc;
 using Web.eBado.Helpers;
+using Web.eBado.Models.Account;
 using Web.eBado.Models.Company;
 using Web.eBado.Models.Shared;
 
@@ -24,6 +27,8 @@ namespace Web.eBado.Controllers
         [AllowAnonymous]
         public ActionResult AllCompanies(string selectedCategory, CompanySearchModel model)
         {
+            model = companyHelper.GetAllCompanies(model, unitOfWork);
+
             if (model.SearchParameters.SelectedCategory == null)
             {
                 model.SearchParameters.SelectedCategory = companyHelper.GetCategoryBySelectedItem(selectedCategory);

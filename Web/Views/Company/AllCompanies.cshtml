@@ -5,30 +5,105 @@
 }
 
 @Styles.Render("~/Content/company")
-@using (Html.BeginForm())
+<script>
+    $(document).ready(function () {
+        CatContainerShowHide();
+        SearchContainerShowHide();
+        $(window).resize(function () {
+            CatContainerShowHide();
+            SearchContainerShowHide();
+        });
+    });
+
+    function CatContainerShowHide() {
+        if ($(window).width() < 992) {
+            jQuery("#cat_container").hide();
+            if ($("#categorySpan").hasClass('glyphicon-minus')) {
+                jQuery("#categorySpan").removeClass('glyphicon-minus').addClass('glyphicon-plus');
+            }
+        } else {
+            jQuery("#cat_container").show();
+            if ($("#categorySpan").hasClass('glyphicon-plus')) {
+                jQuery("#categorySpan").removeClass('glyphicon-plus').addClass('glyphicon-minus');
+            }
+        }
+    }
+
+    function SearchContainerShowHide() {
+        if ($(window).width() < 992) {
+            jQuery("#search_container").hide();
+            if ($("#searchSpan").hasClass('glyphicon-minus')) {
+                jQuery("#searchSpan").removeClass('glyphicon-minus').addClass('glyphicon-plus');
+            }
+        } else {
+            jQuery("#search_container").show();
+            if ($("#searchSpan").hasClass('glyphicon-plus')) {
+                jQuery("#searchSpan").removeClass('glyphicon-plus').addClass('glyphicon-minus');
+            }
+        }
+    }
+</script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "allCompaniesForm" }))
 {
     <div class="container">
         <div class="search_panel">
             <div class="search_textBox-xlg">
-                @Html.EditorFor(model => model.SearchParameters.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Nazov dodavatela" } })
+                @*@Html.EditorFor(model => model.SearchParameters.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Nazov dodavatela" } })*@
+                @Html.TextBox("name", null, new { @class = "form-control", @placeholder = "Nazov dodavatela" })
             </div>
             <div class="search_textBox-lg">
-                @Html.DropDownListFor(model => model.SearchParameters.SelectedCategory, Model.AllMainCategories, "All categories", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.SearchParameters.SelectedCategory, Model.AllMainCategories, "All categories", new { @class = "form-control", onchange = "UpdateUrl()" })
             </div>
             <div class="search_text">Mesto:</div>
             <div class="search_textBox-md">
-                @Html.EditorFor(model => model.SearchParameters.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Mesto alebo PSC" } })
+                @*@Html.EditorFor(model => model.SearchParameters.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Mesto alebo PSC" } })*@
+                @Html.TextBox("psc", null, new { @class = "form-control", @placeholder = "Mesto alebo PSC" })
             </div>
             <div class="search_text">Okolie:</div>
             <div class="search_textBox-sm">
-                @Html.EditorFor(model => model.SearchParameters.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "km" } })
+                @*@Html.EditorFor(model => model.SearchParameters.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "km" } })*@
+                @Html.TextBox("radius", null, new { @class = "form-control", @placeholder = "km" })
             </div>
             <div class="search_button">
                 <button type="submit" class="white-border-btn search_btn_resp"><i class="glyphicon glyphicon-search"></i> Hladat</button>
             </div>
         </div>
         <div class="main_container">
-            <div class="category_container">
+            <div class="col-md-3 nopadding category_container">
+
+                <div class="search_head"><span id="searchSpan" class="glyphicon glyphicon-minus"></span>  Advanced search:</div>
+                <div id="search_container">
+                    <div class="search_body">
+                        <div class="settings_wrapper">
+                            <div class="text_div">Search in Slovakia:</div>
+                            <div class="toggle_div">
+                                <label class="switch_small">
+                                    @Html.CheckBoxFor(m => m.SearchParameters.SearchInSK, new { @class = "form-control" })
+                                    <span class="slider_small"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="settings_wrapper">
+                            <div class="text_div">Search in Czechia:</div>
+                            <div class="toggle_div">
+                                <label class="switch_small">
+                                    @Html.CheckBoxFor(m => m.SearchParameters.SearchInCZ, new { @class = "form-control" })
+                                    <span class="slider_small"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="settings_wrapper">
+                            <div class="text_div">Search in Hungary:</div>
+                            <div class="toggle_div">
+                                <label class="switch_small">
+                                    @Html.CheckBoxFor(m => m.SearchParameters.SearchInHU, new { @class = "form-control" })
+                                    <span class="slider_small"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="space_10"></div>
                 @{
                     var currentCategory = Model.AllCategories.FirstOrDefault(ac => ac.Category == Model.SearchParameters.SelectedCategory);
                     if (currentCategory == null)
@@ -38,10 +113,10 @@
                 }
                 @if (Model.SearchParameters.SelectedCategory == null)
                 {
-                    <div class="category_head">Categories:</div>
+                    <div class="category_head"><span id="categorySpan" class="glyphicon glyphicon-minus"></span>  Categories:</div>
                     <div id="cat_container">
                         @foreach (var cat in Model.AllCategories)
-                    {
+                        {
                             <div class="category_body">
                                 <a href="@Url.Action("AllCompanies","Company", new { selectedCategory = cat.Category})">@cat.Category</a>
                             </div>
@@ -50,8 +125,7 @@
                 }
                 else
                 {
-
-                    <div class="category_head">@currentCategory.Category</div>
+                    <div class="category_head"><span id="categorySpan" class="glyphicon glyphicon-minus"></span> @currentCategory.Category</div>
                     <div id="cat_container">
                         @foreach (var subCat in currentCategory.SubCategories)
                         {
@@ -61,8 +135,96 @@
                         }
                     </div>
                 }
+
+               
             </div>
-            <div class="company_container">sadfjk</div>
+            <div class="col-md-9 nopadding_md">
+                @foreach (var company in Model.CompanyModel)
+                {
+                    <div class="col-md-12 push_bottom_20 company_area">
+                        <div class="col-sm-2 nopadding">
+                            <a href='@Url.Action("CompanyDetail","Company", new {id = company.CompanyId })'>
+                                @if (company.ProfileUrl == null)
+                                {
+                                    <img src="~/Content/BaseContent/img/no_photo.jpg" />
+                                }
+                                else
+                                {
+                                    <img src="@company.ProfileUrl" />
+                                }
+                            </a>
+                        </div>
+                        <div class="col-md-8 nopadding">
+                            <div class="col-md-12 text-left head_text">@company.CompanyName</div>
+                            <div class="col-md-12 text-left body_text">
+                                @company.CompanyDescription
+                            </div>
+                            <div class="col-md-12">
+                                <div class="company_head_text head_text">Kategorie:</div>
+                                @foreach (var category in company.AllSelectedCategories)
+                                {
+                                    <div class="company_tags">@category</div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="col-md-12 push_top_30 head_text">@company.CompanyPostalCode</div>
+                            <div class="col-md-12 head_text">@company.CompanyCity</div>
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
     </div>
                     }
+<script>
+    $('a').click(function () {
+        $(this).addClass('active_text');
+    });
+
+    jQuery('.category_head').on('click', function () {
+        jQuery("#cat_container").slideToggle();
+        if ($("#categorySpan").hasClass('glyphicon-minus')) {
+            jQuery("#categorySpan").removeClass('glyphicon-minus').addClass('glyphicon-plus');
+        }
+        else
+        {
+            jQuery("#categorySpan").removeClass('glyphicon-plus').addClass('glyphicon-minus');
+        }
+    });  
+
+    jQuery('.search_head').on('click', function () {
+        jQuery("#search_container").slideToggle();
+        if ($("#searchSpan").hasClass('glyphicon-minus')) {
+            jQuery("#searchSpan").removeClass('glyphicon-minus').addClass('glyphicon-plus');
+        }
+        else {
+            jQuery("#searchSpan").removeClass('glyphicon-plus').addClass('glyphicon-minus');
+        }
+    });   
+
+    function UpdateUrl() {
+        var url = window.location.href;
+        var newUrl = RemoveParam("selectedCategory", url);
+        window.history.pushState({}, document.title, "/" + newUrl);
+        $("#allCompaniesForm").submit();
+    }
+
+    function RemoveParam(key, sourceURL) {
+        var url = sourceURL.split("?")[0],
+            param,
+            params_arr = [],
+            queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
+        if (queryString !== "") {
+            params_arr = queryString.split("&");
+            for (var i = params_arr.length - 1; i >= 0; i -= 1) {
+                param = params_arr[i].split("=")[0];
+                if (param === key) {
+                    params_arr.splice(i, 1);
+                }
+            }
+            url = url + "?" + params_arr.join("&");
+        }
+        return url;
+    }
+</script>

@@ -27,8 +27,7 @@ namespace Web.eBado.Helpers
     {
         #region Constants
 
-        const string AllowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789";
-        private readonly Uri locationBaseUri = new Uri("http://freegeoip.net/xml/");
+        const string AllowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789";        
 
         private readonly IUnitOfWork unitOfWork;
         SharedHelper sharedHelper;
@@ -42,22 +41,6 @@ namespace Web.eBado.Helpers
         }
 #endregion
         #region Public Methods
-
-        public Countries GetCountryByIP()
-        {
-            string ip = HttpContext.Current.Request.UserHostAddress;
-            var url = new Uri(locationBaseUri, ip);
-            XmlDocument doc = new XmlDocument();
-            doc.Load(url.ToString());
-            XmlNodeList nodeLstCity = doc.GetElementsByTagName("CountryName");
-            string countryName = nodeLstCity[0].InnerText;
-            if (!string.IsNullOrEmpty(countryName))
-            {
-                return (Countries)Enum.Parse(typeof(Countries), countryName);
-            }
-
-            return Countries.Select;
-        }
 
         public static bool IsValidCaptcha()
         {

@@ -745,7 +745,14 @@ hr.transparent {
 .eb_blue {
     color: #00b6ff;
 }
-
+.nopadding {
+    padding: 0 !important;
+}
+@media(max-width:992px) {
+    .nopadding_md {
+        padding: 0 !important;
+    }
+}
 @media(max-width:750px) {
     .resp_push_top_10 {
         margin-top: 10px;

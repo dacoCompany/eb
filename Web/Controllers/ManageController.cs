@@ -35,7 +35,7 @@ namespace Web.eBado.Controllers
         {
             this.unitOfWork = unitOfWork;
             this.configuration = configuration;
-            sessionHelper = new SessionHelper();
+            sessionHelper = new SessionHelper(unitOfWork);
         }
 
         [AllowAnonymous]
@@ -69,7 +69,7 @@ namespace Web.eBado.Controllers
 
             if (isUserAccount)
             {
-                newSession = sessionHelper.SetUserSession(currentSession.Id, unitOfWork);
+                newSession = sessionHelper.SetUserSession(currentSession.Id);
 
                 int userRoleId = 0;
 
@@ -85,7 +85,7 @@ namespace Web.eBado.Controllers
             }
             else
             {
-                newSession = sessionHelper.SetCompanySession(accountName, currentSession, unitOfWork);
+                newSession = sessionHelper.SetCompanySession(accountName, currentSession);
 
                 int companyRoleId = 0;
 
