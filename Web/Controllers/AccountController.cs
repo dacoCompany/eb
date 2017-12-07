@@ -297,11 +297,16 @@ namespace Web.eBado.Controllers
 
             if (!entlibValidationResult.IsValid)
             {
-                this.ModelState.Add(new KeyValuePair<string, ModelState>("CompanyModel.Categories.SelectedCategories", new ModelState
+                if (!ModelState.ContainsKey("CompanyModel.Categories.SelectedCategories"))
                 {
-                    Value = new ValueProviderResult(model.CompanyModel.Categories.SelectedCategories, model.CompanyModel.Categories.SelectedCategories?.ToString(), CultureInfo.CurrentCulture)
-                }));
-
+                    this.ModelState.Add(new KeyValuePair<string, ModelState>(
+                        "CompanyModel.Categories.SelectedCategories", new ModelState
+                        {
+                            Value = new ValueProviderResult(model.CompanyModel.Categories.SelectedCategories,
+                                model.CompanyModel.Categories.SelectedCategories?.ToString(),
+                                CultureInfo.CurrentCulture)
+                        }));
+                }
                 this.ModelState.AddValidationErrors(entlibValidationResult);
                 accountHelper.InitializeData(model.CompanyModel, unitOfWork);
                 return View("RegisterCompany", model);
