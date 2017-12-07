@@ -29,7 +29,6 @@ namespace Infrastructure.Common.DB
         public virtual DbSet<BatchAttachmentDbo> BatchAttachmentDboes { get; set; }
         public virtual DbSet<CategoryDbo> CategoryDboes { get; set; }
         public virtual DbSet<Category2CompanyDetailsDbo> Category2CompanyDetailsDbo { get; set; }
-        public virtual DbSet<CompanyDetailDbo> CompanyDetailDboes { get; set; }
         public virtual DbSet<CompanyDetails2UserDetailsDbo> CompanyDetails2UserDetailsDbo { get; set; }
         public virtual DbSet<CompanyPermissionDbo> CompanyPermissionDboes { get; set; }
         public virtual DbSet<CompanyRoleDbo> CompanyRoleDboes { get; set; }
@@ -47,5 +46,6 @@ namespace Infrastructure.Common.DB
         public virtual DbSet<UserSettingDbo> UserSettingDboes { get; set; }
         public virtual DbSet<CompanyDetails2LanguagesDbo> CompanyDetails2LanguagesDbo { get; set; }
         public virtual DbSet<LanguageDbo> LanguageDboes { get; set; }
+        public virtual DbSet<CompanyDetailDbo> CompanyDetailDboes { get; set; }
     }
 }

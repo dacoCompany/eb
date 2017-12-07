@@ -27,19 +27,19 @@ namespace Web.eBado.Helpers
     {
         #region Constants
 
-        const string AllowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789";        
+        const string AllowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789";
 
         private readonly IUnitOfWork unitOfWork;
         SharedHelper sharedHelper;
 
         #endregion
-#region Constructor
+        #region Constructor
         public AccountHelper(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
             sharedHelper = new SharedHelper(unitOfWork);
         }
-#endregion
+        #endregion
         #region Public Methods
 
         public static bool IsValidCaptcha()
@@ -68,7 +68,7 @@ namespace Web.eBado.Helpers
             {
                 var userRole = uow.UserRoleRepository.FindFirstOrDefault(r => r.Name == UserRole.User.ToString());
                 string salt = GenerateSalt();
-                int postalCodeId = GetLocation(model.PostalCode, uow);
+                int postalCodeId = sharedHelper.GetLocationByPostalCode(model.PostalCode);
                 var userDetails = new UserDetailDbo
                 {
                     Email = model.Email,
@@ -123,7 +123,7 @@ namespace Web.eBado.Helpers
             var companyTypeId = uow.CompanyTypeRepository.FindFirstOrDefault(ct => ct.Name == model.CompanyType.ToString()).Id;
             var companyRoleId = uow.CompanyRoleRepository.FindFirstOrDefault(cr => cr.Name == CompanyRole.Owner.ToString()).Id;
             var categoriesIds = uow.SubCategoryRepository.FindWhere(a => a.Name.Equals(model.Categories.SelectedCategories));
-            int postalCodeId = GetLocation(model.CompanyPostalCode, uow);
+            int postalCodeId = sharedHelper.GetLocationByPostalCode(model.CompanyPostalCode);
 
             var companyDetails = new CompanyDetailDbo
             {
@@ -135,6 +135,7 @@ namespace Web.eBado.Helpers
                 CompanyTypeId = companyTypeId,
                 Email = model.CompanyEmail
             };
+
             companyDetails.Addresses.Add(new AddressDbo
             {
                 Street = model.CompanyStreet,
@@ -167,7 +168,8 @@ namespace Web.eBado.Helpers
             };
 
             uow.CompanyDetailsRepository.Add(companyDetails);
-
+            uow.Commit();
+            companyDetails.EncryptedId = sharedHelper.EncryptId(companyDetails.Id);
             uow.Commit();
         }
 
@@ -183,7 +185,7 @@ namespace Web.eBado.Helpers
             NotificationModel notificationModel = model.NotificationModel;
             ChangePasswordModel passwordModel = model.PasswordModel;
 
-            if(model.ProfilePicture != null)
+            if (model.ProfilePicture != null)
             {
                 //TODO: upload image to blob and save to db
             }
@@ -203,7 +205,7 @@ namespace Web.eBado.Helpers
             var address = userDetails.Addresses.FirstOrDefault(ad => ad.IsBillingAddress.Value);
             address.Street = userModel.Street;
             address.Number = userModel.StreetNumber;
-            int locationId = GetLocation(userModel.PostalCode, unitOfWork);
+            int locationId = sharedHelper.GetLocationByPostalCode(userModel.PostalCode);
             address.LocationId = locationId;
 
             var userSettings = userDetails.UserSetting;
@@ -231,7 +233,7 @@ namespace Web.eBado.Helpers
             SearchSettingsModel searchModel = model.SearchModel;
             NotificationModel notificationModel = model.NotificationModel;
 
-            if(model.ProfilePicture != null)
+            if (model.ProfilePicture != null)
             {
                 //TODO: upload image to blob and save to db
             }
@@ -247,7 +249,7 @@ namespace Web.eBado.Helpers
             address.Street = companyModel.CompanyStreet;
             address.Number = companyModel.CompanyStreetNumber;
 
-            int locationId = GetLocation(companyModel.CompanyPostalCode, unitOfWork);
+            int locationId = sharedHelper.GetLocationByPostalCode(companyModel.CompanyPostalCode);
             address.LocationId = locationId;
             var companySettings = companyDetails.CompanySetting;
             companySettings.SearchInCZ = searchModel.SearchInCZ;
@@ -263,7 +265,7 @@ namespace Web.eBado.Helpers
             var selectedCategories = model.CompanyModel.Categories.SelectedCategories;
             if (selectedCategories != null)
             {
-                SetSelectedCategories(unitOfWork, selectedCategories?.ToList(), companyDetails);                
+                SetSelectedCategories(unitOfWork, selectedCategories?.ToList(), companyDetails);
             }
 
             var selectedLanguages = model.CompanyModel.Languages.SelectedLanguages;
@@ -282,7 +284,7 @@ namespace Web.eBado.Helpers
                 Permissions = new CompanyPermissionsModel()
             };
             model.CurrentCategories = GetCurrentCategories(companyDetails, selectedCategories?.ToList());
-            if(selectedCategories != null)
+            if (selectedCategories != null)
             {
                 Array.Clear(selectedCategories, 0, selectedCategories.Length);
             }
@@ -406,7 +408,7 @@ namespace Web.eBado.Helpers
             }
             return new string(chars);
         }
-      
+
         private IEnumerable<SelectListItem> GetAllLanguages(IUnitOfWork unitOfWork)
         {
             List<SelectListItem> allLanguages = new List<SelectListItem>();
@@ -443,24 +445,6 @@ namespace Web.eBado.Helpers
             }
         }
 
-        private int GetLocation(string postalCode, IUnitOfWork uow)
-        {
-            var cache = NinjectResolver.GetInstance<ICache>();
-            var cachedPostalCodes = cache.GetData<List<LocationDbo>>(CacheKeys.PostalCodeKey);
-
-            if (cachedPostalCodes == null)
-            {
-                var cacheSettings = new CacheSettings("cacheDurationKey", "cacheExpirationKey");
-                cachedPostalCodes = uow.LocationRepository.FindAll().ToList();
-                cache.Insert(CacheKeys.PostalCodeKey, cachedPostalCodes, null, cacheSettings);
-            }
-
-            return cachedPostalCodes.FirstOrDefault(x => x.PostalCode.Equals(postalCode)
-                   || x.PostalCode.Replace(" ", "").Equals(postalCode.Replace(" ", ""))
-                   || x.City.StartsWith(postalCode, StringComparison.OrdinalIgnoreCase)
-                   || x.CityAlias.StartsWith(postalCode, StringComparison.OrdinalIgnoreCase)
-                   || x.DistrictAlias.StartsWith(postalCode, StringComparison.OrdinalIgnoreCase)).Id;
-        }
 
         private IEnumerable<SelectListItem> GetAllRoles(IUnitOfWork uow, int companyId)
         {
@@ -542,16 +526,15 @@ namespace Web.eBado.Helpers
         private void SetSelectedCategories(IUnitOfWork uow, List<string> selectedCategories, CompanyDetailDbo companyDetails)
         {
             var cache = NinjectResolver.GetInstance<ICache>();
-            var cachedCategories = cache.GetData<List<CachedAllCategoriesModel>>(CacheKeys.CategoryListItemKey);
+            var cachedCategories = cache.GetData<List<CachedAllCategoriesModel>>(CacheKeys.CategoryKey);
 
             if (cachedCategories == null)
             {
                 cachedCategories = sharedHelper.SetCategoriesCacheToListItem(cachedCategories, cache);
             }
 
-            var allcategories = cachedCategories.Where(c => selectedCategories.Contains(c.Name));
-            var categoryIds = allcategories.Where(ac => ac.IsMain).Select(ac => ac.Id);
-            var subCategoryIds = allcategories.Where(ac => !ac.IsMain).Select(ac => ac.Id);
+            var categoryIds = cachedCategories.Where(c => selectedCategories.Contains(c.CategoryName)).Select(c=>c.Id);
+            var subCategoryIds = cachedCategories.Where(c => selectedCategories.Contains(c.SubCategories.SelectMany(s=>s.SubCategoryName))).Select(c => c.Id);
             var currentCategoriesId = companyDetails.Category2CompanyDetails.Where(c => c.IsActive).Select(c => c.CategoryId);
             var currentSubCategoriesId = companyDetails.SubCategory2CompanyDetails.Where(c => c.IsActive).Select(c => c.SubCategoryId);
 
@@ -608,7 +591,7 @@ namespace Web.eBado.Helpers
                 }
             }
         }
-       
+
         private List<CachedLanguagesModel> SetLanguagesCache(List<CachedLanguagesModel> cachedLanguages, ICache cache, IUnitOfWork unitOfWork)
         {
             var cacheSettings = new CacheSettings("cacheDurationKey", "cacheExpirationKey");

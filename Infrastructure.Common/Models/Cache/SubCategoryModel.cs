@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Common.Models.Cache
 {
-    public class CachedCategoriesWithSubCategoriesModel
+    public class SubCategoryModel
     {
-        public string Category { get; set; }
-        public IEnumerable<string> SubCategories { get; set; }
+        public int Id { get; set; }
+        public string SubCategoryName { get; set; }
     }
 }

@@ -10,7 +10,6 @@
         <EntityTypeShape EntityType="testDBModel.BatchAttachmentDbo" Width="1.5" PointX="5.25" PointY="26.625" />
         <EntityTypeShape EntityType="testDBModel.CategoryDbo" Width="1.5" PointX="0.75" PointY="22" />
         <EntityTypeShape EntityType="testDBModel.Category2CompanyDetailsDbo" Width="1.5" PointX="8.25" PointY="12" />
-        <EntityTypeShape EntityType="testDBModel.CompanyDetailDbo" Width="1.5" PointX="3" PointY="10.625" />
         <EntityTypeShape EntityType="testDBModel.CompanyDetails2UserDetailsDbo" Width="1.5" PointX="8.25" PointY="7.625" />
         <EntityTypeShape EntityType="testDBModel.CompanyPermissionDbo" Width="1.5" PointX="6" PointY="30.75" />
         <EntityTypeShape EntityType="testDBModel.CompanyRoleDbo" Width="1.5" PointX="6" PointY="16.5" />
@@ -23,16 +22,10 @@
         <EntityTypeShape EntityType="testDBModel.UserRoleDbo" Width="1.5" PointX="3.75" PointY="4.625" />
         <EntityTypeShape EntityType="testDBModel.UserRole2UserPermissionDbo" Width="1.5" PointX="9" PointY="3.625" />
         <EntityTypeShape EntityType="testDBModel.AllDeviceDbo" Width="1.5" PointX="0.75" PointY="3.25" />
-        <AssociationConnector Association="testDBModel.FKAddressCompanyDetailsId" />
         <AssociationConnector Association="testDBModel.FKAddressUserDetailsId" />
         <AssociationConnector Association="testDBModel.FKAttachmentBatchAttachmentId" />
-        <AssociationConnector Association="testDBModel.FKCompanyDetailsBatchAttachmentId" />
         <AssociationConnector Association="testDBModel.FKCategory" />
         <AssociationConnector Association="testDBModel.FKCategory2CompanyDetailsCategory" />
-        <AssociationConnector Association="testDBModel.FKCategory2CompanyDetailsCompanyDetails" />
-        <AssociationConnector Association="testDBModel.FKCompanyDetails" />
-        <AssociationConnector Association="testDBModel.FKCompanyType" />
-        <AssociationConnector Association="testDBModel.FKSubCategory2CompanyDetailsCompanyDetails" />
         <AssociationConnector Association="testDBModel.FKCompanyDetails2UserDetails" />
         <AssociationConnector Association="testDBModel.FKUserDetails" />
         <AssociationConnector Association="testDBModel.FKCompanyPermission" />
@@ -44,13 +37,20 @@
         <EntityTypeShape EntityType="testDBModel.LocationDbo" Width="1.5" PointX="10.375" PointY="8" />
         <AssociationConnector Association="testDBModel.FKAddressLocationId" />
         <EntityTypeShape EntityType="testDBModel.CompanySettingDbo" Width="1.5" PointX="0.75" PointY="7.5" />
-        <AssociationConnector Association="testDBModel.FKCompanySettings" />
         <EntityTypeShape EntityType="testDBModel.UserSettingDbo" Width="1.5" PointX="11.375" PointY="1" />
         <AssociationConnector Association="testDBModel.FKUserSettings" />
         <EntityTypeShape EntityType="testDBModel.CompanyDetails2LanguagesDbo" Width="1.5" PointX="11.25" PointY="13.125" />
         <EntityTypeShape EntityType="testDBModel.LanguageDbo" Width="1.5" PointX="9" PointY="20.125" />
-        <AssociationConnector Association="testDBModel.FKCompanyDetails2LanguagesCompanyDetail" />
         <AssociationConnector Association="testDBModel.FKLanguageCompanyDetails2Languages" />
+        <EntityTypeShape EntityType="testDBModel.CompanyDetailDbo" Width="1.5" PointX="3" PointY="8.125" />
+        <AssociationConnector Association="testDBModel.FKAddressCompanyDetailsId" />
+        <AssociationConnector Association="testDBModel.FKCompanyDetailsBatchAttachmentId" />
+        <AssociationConnector Association="testDBModel.FKCategory2CompanyDetailsCompanyDetails" />
+        <AssociationConnector Association="testDBModel.FKCompanyDetails" />
+        <AssociationConnector Association="testDBModel.FKCompanyDetails2LanguagesCompanyDetail" />
+        <AssociationConnector Association="testDBModel.FKCompanySettings" />
+        <AssociationConnector Association="testDBModel.FKCompanyType" />
+        <AssociationConnector Association="testDBModel.FKSubCategory2CompanyDetailsCompanyDetails" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

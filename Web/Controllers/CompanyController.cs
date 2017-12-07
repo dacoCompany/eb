@@ -25,14 +25,17 @@ namespace Web.eBado.Controllers
 
         [Route("AllCompanies")]
         [AllowAnonymous]
-        public ActionResult AllCompanies(string selectedCategory, CompanySearchModel model)
+        public ActionResult AllCompanies(CompanySearchModel model)
         {
+            var session = Session["User"] as SessionModel;
+            model = model ?? new CompanySearchModel();
+            if(model.SelectedCategory != null)
+            {
+                model.SelectedMainCategory = model.SelectedCategory;
+            }
             model = companyHelper.GetAllCompanies(model, unitOfWork);
 
-            if (model.SearchParameters.SelectedCategory == null)
-            {
-                model.SearchParameters.SelectedCategory = companyHelper.GetCategoryBySelectedItem(selectedCategory);
-            }
+            model.DefaultRadius = sharedHelper.GetDefaultRadius(session);
             model.AllMainCategories = sharedHelper.GetMainCategoriesToListItem();
             model.AllCategories = sharedHelper.GetCategoriesWithSubCategories();
             return View(model);

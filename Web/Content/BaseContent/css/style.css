@@ -708,6 +708,10 @@ hr.transparent {
     margin-left: 10px;
 }
 
+.push_bottom_5 {
+    margin-bottom: 5px;
+}
+
 .push_bottom_10 {
     margin-bottom: 10px;
 }
@@ -760,6 +764,12 @@ hr.transparent {
 
     .resp_push_bottom_10 {
         margin-bottom: 0px;
+    }
+    .push_bottom_5_resp{
+        margin-bottom:5px;
+    }
+    .push_bottom_10_resp {
+        margin-bottom: 10px;
     }
 }
 

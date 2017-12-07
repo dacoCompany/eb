@@ -30,12 +30,14 @@ namespace Web.eBado.Controllers
         private readonly IUnitOfWork unitOfWork;
         private readonly IConfiguration configuration;
         SessionHelper sessionHelper;
+        SharedHelper sharedHelper;
 
         public ManageController(IUnitOfWork unitOfWork, IConfiguration configuration)
         {
             this.unitOfWork = unitOfWork;
             this.configuration = configuration;
             sessionHelper = new SessionHelper(unitOfWork);
+            sharedHelper = new SharedHelper(unitOfWork);
         }
 
         [AllowAnonymous]
@@ -299,17 +301,9 @@ namespace Web.eBado.Controllers
         [Route("GetPostalCodes")]
         public JsonResult GetPostalCodes(string prefix)
         {
-            var cache = NinjectResolver.GetInstance<ICache>();
-            var cachedPostalCodes = cache.GetData<List<LocationDbo>>(CacheKeys.PostalCodeKey);
+            var allLocations = sharedHelper.GetCachedLocations();
 
-            if (cachedPostalCodes == null)
-            {
-                var cacheSettings = new CacheSettings("cacheDurationKey", "cacheExpirationKey");
-                cachedPostalCodes = unitOfWork.LocationRepository.FindAll().ToList();
-                cache.Insert(CacheKeys.PostalCodeKey, cachedPostalCodes, null, cacheSettings);
-            }
-
-            var location = cachedPostalCodes.Where(x => x.PostalCode.StartsWith(prefix)
+            var locations = allLocations.Where(x => x.PostalCode.StartsWith(prefix)
                 || x.PostalCode.Replace(" ", "").StartsWith(prefix.Replace(" ", "")) || x.City.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)
                 || x.CityAlias.StartsWith(prefix, StringComparison.OrdinalIgnoreCase) || x.DistrictAlias.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
                 .Take(10).AsEnumerable()
@@ -319,7 +313,7 @@ namespace Web.eBado.Controllers
                     label = $"{loc.PostalCode} - {loc.District} - {loc.City}"
                 }).ToList();
 
-            return Json(location, JsonRequestBehavior.AllowGet);
+            return Json(locations, JsonRequestBehavior.AllowGet);
         }
 
         private async Task<bool> GetToken(int userRoleId = 0, int companyRoleId = 0)

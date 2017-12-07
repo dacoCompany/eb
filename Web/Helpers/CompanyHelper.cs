@@ -1,86 +1,87 @@
-﻿using Infrastructure.Common.DB;
+﻿using GeoCoordinatePortable;
+using Infrastructure.Common;
+using Infrastructure.Common.DB;
 using Infrastructure.Common.Enums;
+using Microsoft.Practices.EnterpriseLibrary.Common.Utility;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using Web.eBado.Models.Account;
 using Web.eBado.Models.Company;
-using Web.eBado.Models.Shared;
+
 
 namespace Web.eBado.Helpers
 {
     public class CompanyHelper
     {
+        private const double MilesToMetersConstant = 1609.344;
         SharedHelper sharedHelper;
         public CompanyHelper(IUnitOfWork unitOfWork)
         {
             sharedHelper = new SharedHelper(unitOfWork);
         }
-        public string GetCategoryBySelectedItem(string selectedItem)
-        {
-            if (selectedItem == null)
-            {
-                return null;
-            }
-            var allCategories = sharedHelper.GetCategoriesWithSubCategories();
-            var category = allCategories.FirstOrDefault(ac => ac.Category.Contains(selectedItem));
-            if (category != null)
-            {
-                return selectedItem;
-            }
-            else
-            {
-                category = allCategories.FirstOrDefault(ac => ac.SubCategories.Contains(selectedItem));
-                return category.Category;
-            }
-        }
 
-        public CompanySearchModel GetAllCompanies(CompanySearchModel model ,IUnitOfWork unitOfWork)
+        public CompanySearchModel GetAllCompanies(CompanySearchModel model, IUnitOfWork unitOfWork, int? page = null)
         {
-            var companyDetailsDbo = unitOfWork.CompanyDetailsRepository.FindAll()
-                .Include(cd => cd.Category2CompanyDetails)
-                .Include(cd => cd.SubCategory2CompanyDetails);
+            model = sharedHelper.GetDefaultCountry(model);
+            var postalCodeList = GetRelatedPostalCodes(model);
 
-            foreach (var company in companyDetailsDbo)
-            {
-                var companyLocation = company.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value).Location;
-                var allCategories = company.Category2CompanyDetails.Select(c => c.Category.Name);
-                var allSubCategories = company.SubCategory2CompanyDetails.Select(s => s.SubCategory.Name);
-                var companyDetail = new CompanyModel
+            var companyDetails = unitOfWork.CompanyDetailsRepository.FindAll()
+                .WhereIf(!string.IsNullOrEmpty(model.Name), search => search.Name.Contains(model.Name))
+                .WhereIf(!string.IsNullOrEmpty(model.SelectedMainCategory), search => search.Category2CompanyDetails.Select(c => c.Category.Name).Contains(model.SelectedMainCategory))
+                .WhereIf(!string.IsNullOrEmpty(model.SelectedSubCategory), search => search.SubCategory2CompanyDetails.Select(sc => sc.SubCategory.Name).Contains(model.SelectedSubCategory))
+                .Where(search => postalCodeList.Contains(search.Addresses.FirstOrDefault(a => a.IsBillingAddress == true).Location.PostalCode))
+                .Select(company => new CompanyModel
                 {
-                    CompanyId = sharedHelper.EncryptId(company.Id),
+                    CompanyId = company.EncryptedId,
                     CompanyDescription = company.Description,
                     CompanyName = company.Name,
-                    CompanyPostalCode = companyLocation?.PostalCode,
-                    CompanyCity = companyLocation?.District,
-                    AllSelectedCategories = allCategories.Concat(allSubCategories),
+                    CompanyPostalCode = company.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value).Location.PostalCode,
+                    CompanyCity = !(string.IsNullOrEmpty(company.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value).Location.District))
+                    ? company.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value).Location.District
+                    : company.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value).Location.City,
+                    AllSelectedCategories = company.Category2CompanyDetails.Select(c => c.Category.Name)
+                    .Concat(company.SubCategory2CompanyDetails.Select(s => s.SubCategory.Name)),
                     ProfileUrl = company.ProfilePictureUrl
-                };
-                model.CompanyModel.Add(companyDetail);
-            }
-           model.SearchParameters = GetDefaultCountry(model);
+                });
+
+            model.CompanyModel = companyDetails.ToList().ToPagedList(model.Page ?? 1, 5);
             return model;
         }
 
-        private SearchParametersModel GetDefaultCountry(CompanySearchModel model)
+        private List<string> GetRelatedPostalCodes(CompanySearchModel model)
         {
-            var currentCountry = sharedHelper.GetUserCountry();
-            var searchParameters = model.SearchParameters;
-            switch (currentCountry)
+            List<string> postalCodeList = new List<string>();
+            var cachedLocations = sharedHelper.GetCachedLocations();
+            int? locationId = null;
+            if (model.PostalCode != null)
             {
-                case Countries.Czechia:
-                    searchParameters.SearchInCZ = true;
-                    break;
-                case Countries.Hungary:
-                    searchParameters.SearchInHU = true;
-                    break;
-                case Countries.Slovakia:
-                    searchParameters.SearchInSK = true;
-                    break;
+                locationId = sharedHelper.GetLocationByPostalCode(model.PostalCode);
             }
-            return searchParameters;
-        }
+            var countryCodes = sharedHelper.GetCountryShortCode(model);
+            var currentLocation = cachedLocations.FirstOrDefault(location => location.Id == locationId);
+            var locationsBySelectedCountries = cachedLocations.Where(location => countryCodes.Contains(location.Country));
+            if (currentLocation != null)
+            {
+                foreach (var location in locationsBySelectedCountries)
+                {
+                    var sCoord = new GeoCoordinate((double)currentLocation.Lat, (double)currentLocation.Lon);
+                    var eCoord = new GeoCoordinate((double)location.Lat, (double)location.Lon);
+
+                    var result = (sCoord.GetDistanceTo(eCoord)) / MilesToMetersConstant;
+                    if (result < model.Radius)
+                    {
+                        postalCodeList.Add(location.PostalCode);
+                    }
+                }
+            }
+            else
+            {
+                postalCodeList.AddRange(locationsBySelectedCountries.Select(location => location.PostalCode));
+            }
+            return postalCodeList;
+        }       
     }
 }

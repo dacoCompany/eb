@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CacheKeys.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Enums\AccountType.cs" />
     <Compile Include="Enums\Countries.cs" />
@@ -54,8 +55,9 @@
     <Compile Include="Enums\CompanyRole.cs" />
     <Compile Include="ErrorMessages.cs" />
     <Compile Include="Models\Cache\CachedAllCategoriesModel.cs" />
-    <Compile Include="Models\Cache\CachedCategoriesWithSubCategoriesModel.cs" />
+    <Compile Include="Models\Cache\CachedLocationsModel.cs" />
     <Compile Include="Models\Cache\CachedLanguagesModel.cs" />
+    <Compile Include="Models\Cache\SubCategoryModel.cs" />
     <Compile Include="Models\CompanyDetailsModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Enums\UserRole.cs" />
