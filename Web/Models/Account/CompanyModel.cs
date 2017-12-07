@@ -1,8 +1,10 @@
 ﻿using Infrastructure.Common.Enums;
 using System.ComponentModel.DataAnnotations;
+using Infrastructure.Common.DB;
 using Infrastructure.Resources;
 using Microsoft.Practices.EnterpriseLibrary.Validation;
 using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
+using Web.eBado.IoC;
 
 namespace Web.eBado.Models.Account
 {
@@ -76,6 +78,19 @@ namespace Web.eBado.Models.Account
                 if (!string.IsNullOrEmpty(CompanyStreetNumber))
                 {
                     results.AddResult(new Microsoft.Practices.EnterpriseLibrary.Validation.ValidationResult(Resources.RequiredField, this, nameof(CompanyStreetNumber), null, null));
+                }
+            }
+
+            if (CompanyType != CompanyType.PartTime)
+            {
+                using (var uow = NinjectResolver.GetInstance<IUnitOfWork>())
+                {
+                    var company = uow.CompanyDetailsRepository.FindFirstOrDefault(cd => cd.Ico == CompanyIco);
+
+                    if (company != null)
+                    {
+                        results.AddResult(new Microsoft.Practices.EnterpriseLibrary.Validation.ValidationResult("Company already exists.", this, nameof(CompanyIco), null, null));
+                    }
                 }
             }
         }

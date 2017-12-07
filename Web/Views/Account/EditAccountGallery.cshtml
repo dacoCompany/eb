@@ -85,13 +85,13 @@
                 <div id="videoArea" class="col-lg-12" style="margin-top:30px; display:none">
                     <div class="form-group">
                         <div class="col-md-10">
-                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Name" } })
-                            <div class="val-message">@Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })</div>
+                            <input type="text" class = "form-control txt-lg" placeholder = "Youtube Url" id="videoUrlTxt" />
+                            <div id="validateUrl" class="val-message"></div>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-lg-10">
-                            <button id="MyButton" class="form-btn" data-callback="onSubmit">Create</button>
+                            <input type="button" class="form-btn" value="Create" onclick="PostVideo()" />
                             <a href="#" class="push_left_10">Ako tu jebnut link z YouTube?</a>
                         </div>
                     </div>
@@ -236,6 +236,30 @@
 <script>
     function enableDeleteBtn() {
         $("#deleteSelected").prop("disabled", !$('input:checked').length);
+    }
+    function PostVideo()
+    {
+        var url = $("#videoUrlTxt").val();
+        $.ajax({
+            url: "/FileUpload/UploadVideo",
+            type: "POST",
+            data: JSON.stringify({ url: url, batchId: '@Model.Guid' }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                if (response === "OK") {
+                    setTimeout(
+                        window.location.reload(),
+                        100);
+                } else {
+                    $("#validateUrl").text(response);
+                }
+                
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.responseText);
+            }
+        });
     }
 
     function btnClick(name, id) {

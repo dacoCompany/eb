@@ -20,6 +20,8 @@ namespace Web.eBado.Models.Shared
         public string Guid { get; set; }
         [JsonProperty(PropertyName = "description")]
         public string Description { get; set; }
+        [JsonProperty(PropertyName = "videourl")]
+        public string VideoUrl { get; set; }
         [JsonProperty(PropertyName = "attachments")]
         public ICollection<AttachmentModel> Attachments { get; private set; }
     }

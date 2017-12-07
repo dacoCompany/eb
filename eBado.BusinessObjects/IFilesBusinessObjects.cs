@@ -20,5 +20,7 @@ namespace eBado.BusinessObjects
         ICollection<BatchEntity> GetBatches(int companyId);
 
         bool UploadVideo(string url, string batchId, int companyId);
+
+        bool DeleteVideo(string batchId, string name);
     }
 }

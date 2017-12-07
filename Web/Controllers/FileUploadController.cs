@@ -141,9 +141,11 @@ namespace Web.eBado.Controllers
         [HttpPost]
         [Route("UploadVideo")]
         [System.Web.Http.Authorize(Roles = "AddAttachments")]
-        public ActionResult UploadVideo(string url, string batchId)
+        public JsonResult UploadVideo(string url, string batchId)
         {
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
+            bool result = filesBo.UploadVideo(url, batchId, GetActiveCompany());
+
+            return result ? new JsonNetResult("OK") : new JsonNetResult("Upload failed.");
         }
 
         [HttpPost]
@@ -151,9 +153,9 @@ namespace Web.eBado.Controllers
         [System.Web.Http.Authorize(Roles = "RemoveAttachments")]
         public JsonResult DeleteVideo(string batchId, string name)
         {
-            bool deleted = true;
+            bool deleted = filesBo.DeleteVideo(batchId, name);
 
-            return deleted ? Json("Deleted", JsonRequestBehavior.AllowGet) : Json("Error", JsonRequestBehavior.AllowGet);
+            return deleted ? new JsonNetResult("OK") : new JsonNetResult("Error");
         }
 
         [HttpGet]

@@ -104,13 +104,21 @@ namespace Web.eBado.Controllers
             AccountSettingsModel model = new AccountSettingsModel();
             var session = Session["User"] as SessionModel;
 
-            if (session.IsActive)
+            try
             {
-                model = accountHelper.GetUserSettings(unitOfWork, session);
+                if (session.IsActive)
+                {
+                    model = accountHelper.GetUserSettings(unitOfWork, session);
+                }
+                else
+                {
+                    model = accountHelper.GetCompanySettings(unitOfWork, session);
+                }
             }
-            else
+            catch (Exception e)
             {
-                model = accountHelper.GetCompanySettings(unitOfWork, session);
+                EntlibLogger.LogError("Account", "ChangeSettings-GET", e.Message, diagnosticLogConstant, e);
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
             }
 
 
@@ -404,13 +412,22 @@ namespace Web.eBado.Controllers
             // TODO: entlib validation before modelState check
             //if (ModelState.IsValid)
             //{
-            if (session.IsActive)
+
+            try
             {
-                model = accountHelper.UpdateUserSettings(unitOfWork, model, changePsw, session);
+                if (session.IsActive)
+                {
+                    model = accountHelper.UpdateUserSettings(unitOfWork, model, changePsw, session);
+                }
+                else
+                {
+                    model = accountHelper.UpdateCompanySettings(unitOfWork, model, session);
+                }
             }
-            else
+            catch (Exception e)
             {
-                model = accountHelper.UpdateCompanySettings(unitOfWork, model, session);
+                EntlibLogger.LogError("Account", "ChangeSettings-POST", e.Message, diagnosticLogConstant, e);
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
             }
             //}
             accountHelper.InitializeData(model.CompanyModel, unitOfWork);

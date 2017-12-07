@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Hosting;
@@ -13,6 +14,7 @@ using Infrastructure.Common.DB;
 using Microsoft.Practices.EnterpriseLibrary.Common.Utility;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Newtonsoft.Json;
 using WebAPIFactory.Configuration.Core;
 using WebAPIFactory.Logging.Core;
 using WebAPIFactory.Logging.Core.Diagnostics;
@@ -130,15 +132,82 @@ namespace eBado.BusinessObjects
             {
                 return false;
             }
+            
+            string embedUrl = $"https://www.youtube.com/embed/{videoId}";
 
-            var batch = unitOfWork.BatchAttachmentRepository.FindFirstOrDefault(ba => ba.GuId == batchId && ba.CompanyDetailsId == companyId);
+            var client = new HttpClient();
+            client.BaseAddress = new Uri("http://www.youtube.com/");
+            var response = client.GetAsync($"oembed?url=http://www.youtube.com/watch?v={videoId}&format=json").Result;
 
-            var attachment = new AttachmentDbo
+            Dictionary<string, string> values = new Dictionary<string, string>();
+            if (response.IsSuccessStatusCode)
             {
-                BatchAttId = batch.Id
-            };
+                string result = response.Content.ReadAsStringAsync().Result;
 
-            return true;
+                values = JsonConvert.DeserializeObject<Dictionary<string, string>>(result);
+            }
+            else
+            {
+                return false;
+            }
+
+            try
+            {
+                var batch = unitOfWork.BatchAttachmentRepository.FindFirstOrDefault(ba => ba.GuId == batchId && ba.CompanyDetailsId == companyId);
+
+                var videoAttachment = new AttachmentDbo
+                {
+                    BatchAttId = batch.Id,
+                    Name = values["title"],
+                    FileType = "video",
+                    ThumbnailUrl = values["thumbnail_url"],
+                    Size = 0,
+                    OriginalUrl = embedUrl
+                };
+
+                batch.Attachments.Add(videoAttachment);
+
+                unitOfWork.Commit();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                EntlibLogger.LogError("File", "Video Upload", $"Video upload failed. - {ex.Message}", diagnosticLogConstant, ex);
+                throw;
+            }
+        }
+
+        public bool DeleteVideo(string batchId, string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return false;
+            }
+
+            try
+            {
+                var batch = unitOfWork.BatchAttachmentRepository.FindFirstOrDefault(ba => ba.GuId == batchId);
+                var attachment = unitOfWork.AttachmentRepository.FindFirstOrDefault(a => a.Name == name && a.BatchAttId == batch.Id);
+
+                if (attachment != null)
+                {
+                    attachment.IsActive = false;
+                }
+                else
+                {
+                    return false;
+                }
+
+                unitOfWork.Commit();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                EntlibLogger.LogError("File", "Delete Video", $"Video delete failed. - {ex.Message}", diagnosticLogConstant, ex);
+                throw;
+            }
         }
 
         public bool DeleteFile(string fileName)
