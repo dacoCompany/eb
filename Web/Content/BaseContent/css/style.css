@@ -708,6 +708,10 @@ hr.transparent {
     margin-left: 10px;
 }
 
+.push_bottom_5 {
+    margin-bottom: 5px;
+}
+
 .push_bottom_10 {
     margin-bottom: 10px;
 }
@@ -745,7 +749,14 @@ hr.transparent {
 .eb_blue {
     color: #00b6ff;
 }
-
+.nopadding {
+    padding: 0 !important;
+}
+@media(max-width:992px) {
+    .nopadding_md {
+        padding: 0 !important;
+    }
+}
 @media(max-width:750px) {
     .resp_push_top_10 {
         margin-top: 10px;
@@ -753,6 +764,12 @@ hr.transparent {
 
     .resp_push_bottom_10 {
         margin-bottom: 0px;
+    }
+    .push_bottom_5_resp{
+        margin-bottom:5px;
+    }
+    .push_bottom_10_resp {
+        margin-bottom: 10px;
     }
 }
 

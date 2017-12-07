@@ -1,6 +1,9 @@
 ﻿using Infrastructure.Common.DB;
+using System.Data.Entity;
+using System.Linq;
 using System.Web.Mvc;
 using Web.eBado.Helpers;
+using Web.eBado.Models.Account;
 using Web.eBado.Models.Company;
 using Web.eBado.Models.Shared;
 
@@ -22,12 +25,17 @@ namespace Web.eBado.Controllers
 
         [Route("AllCompanies")]
         [AllowAnonymous]
-        public ActionResult AllCompanies(string selectedCategory, CompanySearchModel model)
+        public ActionResult AllCompanies(CompanySearchModel model)
         {
-            if (model.SearchParameters.SelectedCategory == null)
+            var session = Session["User"] as SessionModel;
+            model = model ?? new CompanySearchModel();
+            if(model.SelectedCategory != null)
             {
-                model.SearchParameters.SelectedCategory = companyHelper.GetCategoryBySelectedItem(selectedCategory);
+                model.SelectedMainCategory = model.SelectedCategory;
             }
+            model = companyHelper.GetAllCompanies(model, unitOfWork);
+
+            model.DefaultRadius = sharedHelper.GetDefaultRadius(session);
             model.AllMainCategories = sharedHelper.GetMainCategoriesToListItem();
             model.AllCategories = sharedHelper.GetCategoriesWithSubCategories();
             return View(model);

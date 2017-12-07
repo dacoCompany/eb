@@ -1,14 +1,12 @@
-﻿using System;
+﻿using Infrastructure.Common.Models.Cache;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Infrastructure.Common.Models
 {
     public class CachedAllCategoriesModel
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public bool IsMain { get; set; }
+        public string CategoryName { get; set; }
+        public IEnumerable<SubCategoryModel> SubCategories { get; set; }
     }
 }

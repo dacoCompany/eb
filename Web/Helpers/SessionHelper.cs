@@ -10,7 +10,12 @@ namespace Web.eBado.Helpers
 {
     public class SessionHelper
     {
-        public SessionModel SetCompanySession(string accountName, SessionModel currentSession, IUnitOfWork unitOfWork)
+        private readonly IUnitOfWork unitOfWork;
+        public SessionHelper(IUnitOfWork unitOfWork)
+        {
+            this.unitOfWork = unitOfWork;
+        }
+        public SessionModel SetCompanySession(string accountName, SessionModel currentSession)
         {
             SessionModel newSession;
             int companyId = currentSession.Companies.FirstOrDefault(c => c.Name == accountName).Id;
@@ -55,7 +60,7 @@ namespace Web.eBado.Helpers
             return newSession;
         }
 
-        public SessionModel SetUserSession(int userId, IUnitOfWork unitOfWork)
+        public SessionModel SetUserSession(int userId)
         {
             SessionModel newSession;
             var userDetailDbo = unitOfWork.UserDetailsRepository.FindWhere(ud => ud.Id == userId)

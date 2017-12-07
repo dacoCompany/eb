@@ -106,6 +106,7 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="DateModified" Type="datetime2" Precision="0" />
           <Property Name="CompanyTypeId" Type="int" Nullable="false" />
           <Property Name="CompanySettingId" Type="int" Nullable="false" />
+          <Property Name="EncryptedId" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="CompanyDetails2Languages">
           <Key>
@@ -727,7 +728,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <EntitySet Name="BatchAttachmentDboes" EntityType="testDBModel.BatchAttachmentDbo" />
           <EntitySet Name="CategoryDboes" EntityType="testDBModel.CategoryDbo" />
           <EntitySet Name="Category2CompanyDetailsDbo" EntityType="testDBModel.Category2CompanyDetailsDbo" />
-          <EntitySet Name="CompanyDetailDboes" EntityType="testDBModel.CompanyDetailDbo" />
           <EntitySet Name="CompanyDetails2UserDetailsDbo" EntityType="testDBModel.CompanyDetails2UserDetailsDbo" />
           <EntitySet Name="CompanyPermissionDboes" EntityType="testDBModel.CompanyPermissionDbo" />
           <EntitySet Name="CompanyRoleDboes" EntityType="testDBModel.CompanyRoleDbo" />
@@ -740,10 +740,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <EntitySet Name="UserRoleDboes" EntityType="testDBModel.UserRoleDbo" />
           <EntitySet Name="UserRole2UserPermissionDbo" EntityType="testDBModel.UserRole2UserPermissionDbo" />
           <EntitySet Name="AllDeviceDboes" EntityType="testDBModel.AllDeviceDbo" />
-          <AssociationSet Name="FKAddressCompanyDetailsId" Association="testDBModel.FKAddressCompanyDetailsId">
-            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
-            <End Role="Address" EntitySet="AddressDboes" />
-          </AssociationSet>
           <AssociationSet Name="FKAddressUserDetailsId" Association="testDBModel.FKAddressUserDetailsId">
             <End Role="UserDetail" EntitySet="UserDetailDboes" />
             <End Role="Address" EntitySet="AddressDboes" />
@@ -752,10 +748,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             <End Role="BatchAttachment" EntitySet="BatchAttachmentDboes" />
             <End Role="Attachment" EntitySet="AttachmentDboes" />
           </AssociationSet>
-          <AssociationSet Name="FKCompanyDetailsBatchAttachmentId" Association="testDBModel.FKCompanyDetailsBatchAttachmentId">
-            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
-            <End Role="BatchAttachment" EntitySet="BatchAttachmentDboes" />
-          </AssociationSet>
           <AssociationSet Name="FKCategory" Association="testDBModel.FKCategory">
             <End Role="Category" EntitySet="CategoryDboes" />
             <End Role="SubCategory" EntitySet="SubCategoryDboes" />
@@ -763,22 +755,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <AssociationSet Name="FKCategory2CompanyDetailsCategory" Association="testDBModel.FKCategory2CompanyDetailsCategory">
             <End Role="Category" EntitySet="CategoryDboes" />
             <End Role="Category2CompanyDetails" EntitySet="Category2CompanyDetailsDbo" />
-          </AssociationSet>
-          <AssociationSet Name="FKCategory2CompanyDetailsCompanyDetails" Association="testDBModel.FKCategory2CompanyDetailsCompanyDetails">
-            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
-            <End Role="Category2CompanyDetails" EntitySet="Category2CompanyDetailsDbo" />
-          </AssociationSet>
-          <AssociationSet Name="FKCompanyDetails" Association="testDBModel.FKCompanyDetails">
-            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
-            <End Role="CompanyDetails2UserDetails" EntitySet="CompanyDetails2UserDetailsDbo" />
-          </AssociationSet>
-          <AssociationSet Name="FKCompanyType" Association="testDBModel.FKCompanyType">
-            <End Role="CompanyType" EntitySet="CompanyTypeDboes" />
-            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
-          </AssociationSet>
-          <AssociationSet Name="FKSubCategory2CompanyDetailsCompanyDetails" Association="testDBModel.FKSubCategory2CompanyDetailsCompanyDetails">
-            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
-            <End Role="SubCategory2CompanyDetails" EntitySet="SubCategory2CompanyDetailsDbo" />
           </AssociationSet>
           <AssociationSet Name="FKCompanyDetails2UserDetails" Association="testDBModel.FKCompanyDetails2UserDetails">
             <End Role="CompanyRole" EntitySet="CompanyRoleDboes" />
@@ -818,10 +794,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             <End Role="AddressDbo" EntitySet="AddressDboes" />
           </AssociationSet>
           <EntitySet Name="CompanySettingDboes" EntityType="testDBModel.CompanySettingDbo" />
-          <AssociationSet Name="FKCompanySettings" Association="testDBModel.FKCompanySettings">
-            <End Role="CompanySetting" EntitySet="CompanySettingDboes" />
-            <End Role="CompanyDetailDbo" EntitySet="CompanyDetailDboes" />
-          </AssociationSet>
           <EntitySet Name="UserSettingDboes" EntityType="testDBModel.UserSettingDbo" />
           <AssociationSet Name="FKUserSettings" Association="testDBModel.FKUserSettings">
             <End Role="UserSetting" EntitySet="UserSettingDboes" />
@@ -829,13 +801,42 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           </AssociationSet>
           <EntitySet Name="CompanyDetails2LanguagesDbo" EntityType="testDBModel.CompanyDetails2LanguagesDbo" />
           <EntitySet Name="LanguageDboes" EntityType="testDBModel.LanguageDbo" />
-          <AssociationSet Name="FKCompanyDetails2LanguagesCompanyDetail" Association="testDBModel.FKCompanyDetails2LanguagesCompanyDetail">
-            <End Role="CompanyDetailDbo" EntitySet="CompanyDetailDboes" />
-            <End Role="CompanyDetails2Languages" EntitySet="CompanyDetails2LanguagesDbo" />
-          </AssociationSet>
           <AssociationSet Name="FKLanguageCompanyDetails2Languages" Association="testDBModel.FKLanguageCompanyDetails2Languages">
             <End Role="Language" EntitySet="LanguageDboes" />
             <End Role="CompanyDetails2Languages" EntitySet="CompanyDetails2LanguagesDbo" />
+          </AssociationSet>
+          <EntitySet Name="CompanyDetailDboes" EntityType="testDBModel.CompanyDetailDbo" />
+          <AssociationSet Name="FKAddressCompanyDetailsId" Association="testDBModel.FKAddressCompanyDetailsId">
+            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
+            <End Role="AddressDbo" EntitySet="AddressDboes" />
+          </AssociationSet>
+          <AssociationSet Name="FKCompanyDetailsBatchAttachmentId" Association="testDBModel.FKCompanyDetailsBatchAttachmentId">
+            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
+            <End Role="BatchAttachmentDbo" EntitySet="BatchAttachmentDboes" />
+          </AssociationSet>
+          <AssociationSet Name="FKCategory2CompanyDetailsCompanyDetails" Association="testDBModel.FKCategory2CompanyDetailsCompanyDetails">
+            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
+            <End Role="Category2CompanyDetailsDbo" EntitySet="Category2CompanyDetailsDbo" />
+          </AssociationSet>
+          <AssociationSet Name="FKCompanyDetails" Association="testDBModel.FKCompanyDetails">
+            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
+            <End Role="CompanyDetails2UserDetailsDbo" EntitySet="CompanyDetails2UserDetailsDbo" />
+          </AssociationSet>
+          <AssociationSet Name="FKCompanyDetails2LanguagesCompanyDetail" Association="testDBModel.FKCompanyDetails2LanguagesCompanyDetail">
+            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
+            <End Role="CompanyDetails2LanguagesDbo" EntitySet="CompanyDetails2LanguagesDbo" />
+          </AssociationSet>
+          <AssociationSet Name="FKCompanySettings" Association="testDBModel.FKCompanySettings">
+            <End Role="CompanySettingDbo" EntitySet="CompanySettingDboes" />
+            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
+          </AssociationSet>
+          <AssociationSet Name="FKCompanyType" Association="testDBModel.FKCompanyType">
+            <End Role="CompanyTypeDbo" EntitySet="CompanyTypeDboes" />
+            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
+          </AssociationSet>
+          <AssociationSet Name="FKSubCategory2CompanyDetailsCompanyDetails" Association="testDBModel.FKSubCategory2CompanyDetailsCompanyDetails">
+            <End Role="CompanyDetail" EntitySet="CompanyDetailDboes" />
+            <End Role="SubCategory2CompanyDetailsDbo" EntitySet="SubCategory2CompanyDetailsDbo" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="AddressDbo">
@@ -853,9 +854,9 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="LocationId" Type="Int32" Nullable="false" />
           <Property Name="UserDetailsId" Type="Int32" />
           <Property Name="CompanyDetailsId" Type="Int32" />
-          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKAddressCompanyDetailsId" FromRole="Address" ToRole="CompanyDetail" />
           <NavigationProperty Name="UserDetail" Relationship="testDBModel.FKAddressUserDetailsId" FromRole="Address" ToRole="UserDetail" />
           <NavigationProperty Name="Location" Relationship="testDBModel.FKAddressLocationId" FromRole="AddressDbo" ToRole="Location" />
+          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKAddressCompanyDetailsId" FromRole="AddressDbo" ToRole="CompanyDetail" />
         </EntityType>
         <EntityType Name="AttachmentDbo">
           <Key>
@@ -887,7 +888,7 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="DateModified" Type="DateTime" Precision="0" />
           <Property Name="CompanyDetailsId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Attachments" Relationship="testDBModel.FKAttachmentBatchAttachmentId" FromRole="BatchAttachment" ToRole="Attachment" />
-          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKCompanyDetailsBatchAttachmentId" FromRole="BatchAttachment" ToRole="CompanyDetail" />
+          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKCompanyDetailsBatchAttachmentId" FromRole="BatchAttachmentDbo" ToRole="CompanyDetail" />
         </EntityType>
         <EntityType Name="CategoryDbo">
           <Key>
@@ -913,35 +914,7 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="DateCreated" Type="DateTime" Precision="0" />
           <Property Name="DateModified" Type="DateTime" Precision="0" />
           <NavigationProperty Name="Category" Relationship="testDBModel.FKCategory2CompanyDetailsCategory" FromRole="Category2CompanyDetails" ToRole="Category" />
-          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKCategory2CompanyDetailsCompanyDetails" FromRole="Category2CompanyDetails" ToRole="CompanyDetail" />
-        </EntityType>
-        <EntityType Name="CompanyDetailDbo">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="AdditionalPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Ico" Type="Int32" />
-          <Property Name="Dic" Type="Int32" />
-          <Property Name="IsCompanyVerified" Type="Boolean" Nullable="false" />
-          <Property Name="ProfilePictureUrl" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="DateCreated" Type="DateTime" Precision="0" />
-          <Property Name="DateModified" Type="DateTime" Precision="0" />
-          <Property Name="CompanyTypeId" Type="Int32" Nullable="false" />
-          <Property Name="CompanySettingId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Addresses" Relationship="testDBModel.FKAddressCompanyDetailsId" FromRole="CompanyDetail" ToRole="Address" />
-          <NavigationProperty Name="BatchAttachments" Relationship="testDBModel.FKCompanyDetailsBatchAttachmentId" FromRole="CompanyDetail" ToRole="BatchAttachment" />
-          <NavigationProperty Name="Category2CompanyDetails" Relationship="testDBModel.FKCategory2CompanyDetailsCompanyDetails" FromRole="CompanyDetail" ToRole="Category2CompanyDetails" />
-          <NavigationProperty Name="CompanyDetails2UserDetails" Relationship="testDBModel.FKCompanyDetails" FromRole="CompanyDetail" ToRole="CompanyDetails2UserDetails" />
-          <NavigationProperty Name="CompanyType" Relationship="testDBModel.FKCompanyType" FromRole="CompanyDetail" ToRole="CompanyType" />
-          <NavigationProperty Name="SubCategory2CompanyDetails" Relationship="testDBModel.FKSubCategory2CompanyDetailsCompanyDetails" FromRole="CompanyDetail" ToRole="SubCategory2CompanyDetails" />
-          <NavigationProperty Name="CompanySetting" Relationship="testDBModel.FKCompanySettings" FromRole="CompanyDetailDbo" ToRole="CompanySetting" />
-          <NavigationProperty Name="CompanyDetails2Languages" Relationship="testDBModel.FKCompanyDetails2LanguagesCompanyDetail" FromRole="CompanyDetailDbo" ToRole="CompanyDetails2Languages" />
+          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKCategory2CompanyDetailsCompanyDetails" FromRole="Category2CompanyDetailsDbo" ToRole="CompanyDetail" />
         </EntityType>
         <EntityType Name="CompanyDetails2UserDetailsDbo">
           <Key>
@@ -955,9 +928,9 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="CompanyDetailsId" Type="Int32" Nullable="false" />
           <Property Name="UserDetailsId" Type="Int32" Nullable="false" />
           <Property Name="CompanyRoleId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKCompanyDetails" FromRole="CompanyDetails2UserDetails" ToRole="CompanyDetail" />
           <NavigationProperty Name="CompanyRole" Relationship="testDBModel.FKCompanyDetails2UserDetails" FromRole="CompanyDetails2UserDetails" ToRole="CompanyRole" />
           <NavigationProperty Name="UserDetail" Relationship="testDBModel.FKUserDetails" FromRole="CompanyDetails2UserDetails" ToRole="UserDetail" />
+          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKCompanyDetails" FromRole="CompanyDetails2UserDetailsDbo" ToRole="CompanyDetail" />
         </EntityType>
         <EntityType Name="CompanyPermissionDbo">
           <Key>
@@ -1006,7 +979,7 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="DateCreated" Type="DateTime" Precision="3" />
           <Property Name="DateModified" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="CompanyDetails" Relationship="testDBModel.FKCompanyType" FromRole="CompanyType" ToRole="CompanyDetail" />
+          <NavigationProperty Name="CompanyDetails" Relationship="testDBModel.FKCompanyType" FromRole="CompanyTypeDbo" ToRole="CompanyDetail" />
         </EntityType>
         <EntityType Name="SubCategoryDbo">
           <Key>
@@ -1032,8 +1005,8 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="DateCreated" Type="DateTime" Precision="0" />
           <Property Name="DateModified" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKSubCategory2CompanyDetailsCompanyDetails" FromRole="SubCategory2CompanyDetails" ToRole="CompanyDetail" />
           <NavigationProperty Name="SubCategory" Relationship="testDBModel.FKSubCategory2CompanyDetailsSubCategory" FromRole="SubCategory2CompanyDetails" ToRole="SubCategory" />
+          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKSubCategory2CompanyDetailsCompanyDetails" FromRole="SubCategory2CompanyDetailsDbo" ToRole="CompanyDetail" />
         </EntityType>
         <EntityType Name="UserDetailDbo">
           <Key>
@@ -1113,18 +1086,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="DateCreated" Type="DateTime" Precision="0" />
           <Property Name="DateModified" Type="DateTime" Precision="0" />
         </EntityType>
-        <Association Name="FKAddressCompanyDetailsId">
-          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="0..1" />
-          <End Type="testDBModel.AddressDbo" Role="Address" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CompanyDetail">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Address">
-              <PropertyRef Name="CompanyDetailsId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FKAddressUserDetailsId">
           <End Type="testDBModel.UserDetailDbo" Role="UserDetail" Multiplicity="0..1" />
           <End Type="testDBModel.AddressDbo" Role="Address" Multiplicity="*" />
@@ -1149,18 +1110,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FKCompanyDetailsBatchAttachmentId">
-          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="1" />
-          <End Type="testDBModel.BatchAttachmentDbo" Role="BatchAttachment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CompanyDetail">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="BatchAttachment">
-              <PropertyRef Name="CompanyDetailsId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FKCategory">
           <End Type="testDBModel.CategoryDbo" Role="Category" Multiplicity="1" />
           <End Type="testDBModel.SubCategoryDbo" Role="SubCategory" Multiplicity="*" />
@@ -1182,54 +1131,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             </Principal>
             <Dependent Role="Category2CompanyDetails">
               <PropertyRef Name="CategoryId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FKCategory2CompanyDetailsCompanyDetails">
-          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="0..1" />
-          <End Type="testDBModel.Category2CompanyDetailsDbo" Role="Category2CompanyDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CompanyDetail">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Category2CompanyDetails">
-              <PropertyRef Name="CompanyDetailsId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FKCompanyDetails">
-          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="1" />
-          <End Type="testDBModel.CompanyDetails2UserDetailsDbo" Role="CompanyDetails2UserDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CompanyDetail">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CompanyDetails2UserDetails">
-              <PropertyRef Name="CompanyDetailsId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FKCompanyType">
-          <End Type="testDBModel.CompanyTypeDbo" Role="CompanyType" Multiplicity="1" />
-          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CompanyType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CompanyDetail">
-              <PropertyRef Name="CompanyTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FKSubCategory2CompanyDetailsCompanyDetails">
-          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="0..1" />
-          <End Type="testDBModel.SubCategory2CompanyDetailsDbo" Role="SubCategory2CompanyDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CompanyDetail">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SubCategory2CompanyDetails">
-              <PropertyRef Name="CompanyDetailsId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1376,20 +1277,8 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="DateCreated" Type="DateTime" Precision="0" />
           <Property Name="DateModified" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="CompanyDetails" Relationship="testDBModel.FKCompanySettings" FromRole="CompanySetting" ToRole="CompanyDetailDbo" />
+          <NavigationProperty Name="CompanyDetails" Relationship="testDBModel.FKCompanySettings" FromRole="CompanySettingDbo" ToRole="CompanyDetail" />
         </EntityType>
-        <Association Name="FKCompanySettings">
-          <End Type="testDBModel.CompanySettingDbo" Role="CompanySetting" Multiplicity="1" />
-          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetailDbo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CompanySetting">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CompanyDetailDbo">
-              <PropertyRef Name="CompanySettingId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="UserSettingDbo">
           <Key>
             <PropertyRef Name="Id" />
@@ -1428,8 +1317,8 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="DateModified" Type="DateTime" Precision="0" />
           <Property Name="CompanyDetailsId" Type="Int32" Nullable="false" />
           <Property Name="LanguageId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKCompanyDetails2LanguagesCompanyDetail" FromRole="CompanyDetails2Languages" ToRole="CompanyDetailDbo" />
           <NavigationProperty Name="Language" Relationship="testDBModel.FKLanguageCompanyDetails2Languages" FromRole="CompanyDetails2Languages" ToRole="Language" />
+          <NavigationProperty Name="CompanyDetail" Relationship="testDBModel.FKCompanyDetails2LanguagesCompanyDetail" FromRole="CompanyDetails2LanguagesDbo" ToRole="CompanyDetail" />
         </EntityType>
         <EntityType Name="LanguageDbo">
           <Key>
@@ -1443,18 +1332,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="DateModified" Type="DateTime" Precision="0" />
           <NavigationProperty Name="CompanyDetails2Languages" Relationship="testDBModel.FKLanguageCompanyDetails2Languages" FromRole="Language" ToRole="CompanyDetails2Languages" />
         </EntityType>
-        <Association Name="FKCompanyDetails2LanguagesCompanyDetail">
-          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetailDbo" Multiplicity="1" />
-          <End Type="testDBModel.CompanyDetails2LanguagesDbo" Role="CompanyDetails2Languages" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CompanyDetailDbo">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CompanyDetails2Languages">
-              <PropertyRef Name="CompanyDetailsId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FKLanguageCompanyDetails2Languages">
           <End Type="testDBModel.LanguageDbo" Role="Language" Multiplicity="1" />
           <End Type="testDBModel.CompanyDetails2LanguagesDbo" Role="CompanyDetails2Languages" Multiplicity="*" />
@@ -1464,6 +1341,131 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             </Principal>
             <Dependent Role="CompanyDetails2Languages">
               <PropertyRef Name="LanguageId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CompanyDetailDbo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="AdditionalPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Ico" Type="Int32" />
+          <Property Name="Dic" Type="Int32" />
+          <Property Name="IsCompanyVerified" Type="Boolean" Nullable="false" />
+          <Property Name="ProfilePictureUrl" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="0" />
+          <Property Name="DateModified" Type="DateTime" Precision="0" />
+          <Property Name="CompanyTypeId" Type="Int32" Nullable="false" />
+          <Property Name="CompanySettingId" Type="Int32" Nullable="false" />
+          <Property Name="EncryptedId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Addresses" Relationship="testDBModel.FKAddressCompanyDetailsId" FromRole="CompanyDetail" ToRole="AddressDbo" />
+          <NavigationProperty Name="BatchAttachments" Relationship="testDBModel.FKCompanyDetailsBatchAttachmentId" FromRole="CompanyDetail" ToRole="BatchAttachmentDbo" />
+          <NavigationProperty Name="Category2CompanyDetails" Relationship="testDBModel.FKCategory2CompanyDetailsCompanyDetails" FromRole="CompanyDetail" ToRole="Category2CompanyDetailsDbo" />
+          <NavigationProperty Name="CompanyDetails2UserDetails" Relationship="testDBModel.FKCompanyDetails" FromRole="CompanyDetail" ToRole="CompanyDetails2UserDetailsDbo" />
+          <NavigationProperty Name="CompanyDetails2Languages" Relationship="testDBModel.FKCompanyDetails2LanguagesCompanyDetail" FromRole="CompanyDetail" ToRole="CompanyDetails2LanguagesDbo" />
+          <NavigationProperty Name="CompanySetting" Relationship="testDBModel.FKCompanySettings" FromRole="CompanyDetail" ToRole="CompanySettingDbo" />
+          <NavigationProperty Name="CompanyType" Relationship="testDBModel.FKCompanyType" FromRole="CompanyDetail" ToRole="CompanyTypeDbo" />
+          <NavigationProperty Name="SubCategory2CompanyDetails" Relationship="testDBModel.FKSubCategory2CompanyDetailsCompanyDetails" FromRole="CompanyDetail" ToRole="SubCategory2CompanyDetailsDbo" />
+        </EntityType>
+        <Association Name="FKAddressCompanyDetailsId">
+          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="0..1" />
+          <End Type="testDBModel.AddressDbo" Role="AddressDbo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CompanyDetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AddressDbo">
+              <PropertyRef Name="CompanyDetailsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKCompanyDetailsBatchAttachmentId">
+          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="1" />
+          <End Type="testDBModel.BatchAttachmentDbo" Role="BatchAttachmentDbo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CompanyDetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BatchAttachmentDbo">
+              <PropertyRef Name="CompanyDetailsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKCategory2CompanyDetailsCompanyDetails">
+          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="0..1" />
+          <End Type="testDBModel.Category2CompanyDetailsDbo" Role="Category2CompanyDetailsDbo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CompanyDetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Category2CompanyDetailsDbo">
+              <PropertyRef Name="CompanyDetailsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKCompanyDetails">
+          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="1" />
+          <End Type="testDBModel.CompanyDetails2UserDetailsDbo" Role="CompanyDetails2UserDetailsDbo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CompanyDetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompanyDetails2UserDetailsDbo">
+              <PropertyRef Name="CompanyDetailsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKCompanyDetails2LanguagesCompanyDetail">
+          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="1" />
+          <End Type="testDBModel.CompanyDetails2LanguagesDbo" Role="CompanyDetails2LanguagesDbo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CompanyDetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompanyDetails2LanguagesDbo">
+              <PropertyRef Name="CompanyDetailsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKCompanySettings">
+          <End Type="testDBModel.CompanySettingDbo" Role="CompanySettingDbo" Multiplicity="1" />
+          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CompanySettingDbo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompanyDetail">
+              <PropertyRef Name="CompanySettingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKCompanyType">
+          <End Type="testDBModel.CompanyTypeDbo" Role="CompanyTypeDbo" Multiplicity="1" />
+          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CompanyTypeDbo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompanyDetail">
+              <PropertyRef Name="CompanyTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKSubCategory2CompanyDetailsCompanyDetails">
+          <End Type="testDBModel.CompanyDetailDbo" Role="CompanyDetail" Multiplicity="0..1" />
+          <End Type="testDBModel.SubCategory2CompanyDetailsDbo" Role="SubCategory2CompanyDetailsDbo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CompanyDetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SubCategory2CompanyDetailsDbo">
+              <PropertyRef Name="CompanyDetailsId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1541,27 +1543,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
                 <ScalarProperty Name="CompanyDetailsId" ColumnName="CompanyDetailsId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CompanyDetailDboes">
-            <EntityTypeMapping TypeName="testDBModel.CompanyDetailDbo">
-              <MappingFragment StoreEntitySet="CompanyDetails">
-                <ScalarProperty Name="CompanySettingId" ColumnName="CompanySettingId" />
-                <ScalarProperty Name="CompanyTypeId" ColumnName="CompanyTypeId" />
-                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
-                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="ProfilePictureUrl" ColumnName="ProfilePictureUrl" />
-                <ScalarProperty Name="IsCompanyVerified" ColumnName="IsCompanyVerified" />
-                <ScalarProperty Name="Dic" ColumnName="Dic" />
-                <ScalarProperty Name="Ico" ColumnName="Ico" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="AdditionalPhoneNumber" ColumnName="AdditionalPhoneNumber" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1798,6 +1779,28 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CompanyDetailDboes">
+            <EntityTypeMapping TypeName="testDBModel.CompanyDetailDbo">
+              <MappingFragment StoreEntitySet="CompanyDetails">
+                <ScalarProperty Name="EncryptedId" ColumnName="EncryptedId" />
+                <ScalarProperty Name="CompanySettingId" ColumnName="CompanySettingId" />
+                <ScalarProperty Name="CompanyTypeId" ColumnName="CompanyTypeId" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ProfilePictureUrl" ColumnName="ProfilePictureUrl" />
+                <ScalarProperty Name="IsCompanyVerified" ColumnName="IsCompanyVerified" />
+                <ScalarProperty Name="Dic" ColumnName="Dic" />
+                <ScalarProperty Name="Ico" ColumnName="Ico" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="AdditionalPhoneNumber" ColumnName="AdditionalPhoneNumber" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

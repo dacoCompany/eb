@@ -5,6 +5,7 @@ using Infrastructure.Resources;
 using Microsoft.Practices.EnterpriseLibrary.Validation;
 using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
 using Web.eBado.IoC;
+using System.Collections.Generic;
 
 namespace Web.eBado.Models.Account
 {
@@ -16,6 +17,8 @@ namespace Web.eBado.Models.Account
             Categories = new CategoriesModel();
             Languages = new LanguagesModel();
         }
+
+        public string CompanyId { get; set; }
 
         public CompanyType CompanyType { get; set; }
 
@@ -51,10 +54,14 @@ namespace Web.eBado.Models.Account
         [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "RequiredField", Ruleset = "RegisterCompany")]
         public string CompanyPostalCode { get; set; }
 
+        public string CompanyCity { get; set; }
+
         [ObjectValidator("RegisterCompany", Ruleset = "RegisterCompany")]
         public CategoriesModel Categories { get; private set; }
 
         public LanguagesModel Languages { get; private set; }
+
+        public IEnumerable<string> AllSelectedCategories { get; set; }
 
         public string ProfileUrl { get; set; }
 

@@ -32,6 +32,7 @@ namespace Web.eBado.Controllers
     {
         AccountHelper accountHelper;
         SessionHelper sessionHelper;
+        SharedHelper sharedHelper;
         private readonly IConfiguration configuration;
         private readonly IUnitOfWork unitOfWork;
         private readonly IFilesBusinessObjects fileBo;
@@ -40,7 +41,8 @@ namespace Web.eBado.Controllers
         public AccountController(IConfiguration configuration, IUnitOfWork unitOfWork, IFilesBusinessObjects fileBo)
         {
             accountHelper = new AccountHelper(unitOfWork);
-            sessionHelper = new SessionHelper();
+            sessionHelper = new SessionHelper(unitOfWork);
+            sharedHelper = new SharedHelper(unitOfWork);
             this.configuration = configuration;
             this.unitOfWork = unitOfWork;
             this.fileBo = fileBo;
@@ -80,7 +82,7 @@ namespace Web.eBado.Controllers
         {
             RegistrationModel model = new RegistrationModel();
             accountHelper.InitializeData(model.CompanyModel, unitOfWork);
-            model.CompanyModel.CompanyLocation = accountHelper.GetCountryByIP();
+            model.CompanyModel.CompanyLocation = sharedHelper.GetUserCountry();
 
             return View(model);
         }
@@ -209,7 +211,7 @@ namespace Web.eBado.Controllers
             if (ModelState.IsValid)
             {
                 var userDetail = unitOfWork.UserDetailsRepository.FindFirstOrDefault(ud => ud.Email.ToLower().Equals(model.Email.ToLower()));
-                var session = sessionHelper.SetUserSession(userDetail.Id, unitOfWork);
+                var session = sessionHelper.SetUserSession(userDetail.Id);
 
                 //FormsAuthentication.SetAuthCookie(session.Email, true);
                 Session["User"] = session;
@@ -303,11 +305,16 @@ namespace Web.eBado.Controllers
 
             if (!entlibValidationResult.IsValid)
             {
-                this.ModelState.Add(new KeyValuePair<string, ModelState>("CompanyModel.Categories.SelectedCategories", new ModelState
+                if (!ModelState.ContainsKey("CompanyModel.Categories.SelectedCategories"))
                 {
-                    Value = new ValueProviderResult(model.CompanyModel.Categories.SelectedCategories, model.CompanyModel.Categories.SelectedCategories?.ToString(), CultureInfo.CurrentCulture)
-                }));
-
+                    this.ModelState.Add(new KeyValuePair<string, ModelState>(
+                        "CompanyModel.Categories.SelectedCategories", new ModelState
+                        {
+                            Value = new ValueProviderResult(model.CompanyModel.Categories.SelectedCategories,
+                                model.CompanyModel.Categories.SelectedCategories?.ToString(),
+                                CultureInfo.CurrentCulture)
+                        }));
+                }
                 this.ModelState.AddValidationErrors(entlibValidationResult);
                 accountHelper.InitializeData(model.CompanyModel, unitOfWork);
                 return View("RegisterCompany", model);

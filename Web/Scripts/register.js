@@ -1,5 +1,4 @@
-function setDefaultValues(btn, oldText)
-{
+function setDefaultValues(btn, oldText) {
     $("#IcoValidation").text("Sorry! We have not found this company identifier");
     $("#txtCompanyName").val("");
     $("#txtDic").val("");
@@ -9,20 +8,19 @@ function setDefaultValues(btn, oldText)
     btn.text(oldText);
 }
 
-function disableFilledTextBoxes(data)
-{
-    if (data != null)
-    {
+function disableFilledTextBoxes(data) {
+    if (data != null) {
         $("#WithoutIco").attr("disabled", "disabled");
     }
-    if (data.Name != null)
-    {
+    if (data.Name != null) {
         $("#txtCompanyName").attr("readonly", true);
     }
     if (data.Dic != null) {
         $("#txtDic").attr("readonly", true);
     }
-    if (data.PostCode != null) {
+    if (data.PostCode === "00000") {
+        $("#txtCompanyPostalCode").val(null);
+    } else {
         $("#txtCompanyPostalCode").attr("readonly", true);
     }
 }
@@ -51,7 +49,7 @@ $(function () {
                     $("#IcoValidation").text("");
                     $("#txtCompanyName").val(data.Name);
                     $("#txtDic").val(data.Dic);
-                    $("#txtCompanyPostalCode").val(data.PostCode != null ? data.PostCode : "");
+                    $("#txtCompanyPostalCode").val(data.PostCode);
                     if (data.CompanyType === "SE") {
                         $("#AccountTypeDropDown").val('2');
                     } else {
@@ -62,11 +60,11 @@ $(function () {
                     disableFilledTextBoxes(data);
                 }
                 else {
-                    setDefaultValues(btn,oldText);
+                    setDefaultValues(btn, oldText);
                 }
             },
             error: function (response) {
-                setDefaultValues(btn,oldText);
+                setDefaultValues(btn, oldText);
             },
             failure: function (response) {
                 alert(response.responseText);
