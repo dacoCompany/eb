@@ -36,8 +36,10 @@
     function generateGallery(response, textStatus, jqXHR) {
         var index = 1;
         jQuery.each(response, function (index, item) {
+            if (item.attachmentType !== "video") {
             jQuery("#imagesContainer").append('<div id="imgContainer' + index + '" class="polaroid zoom over-flow-hidden"><div style="overflow: hidden;"> <a target="_blank" href="' + item.url + '" style="background-image: url(' + item.thumbnailUrl + ');" class="zoomzoom"></a></div><div class="btm"><div class="chBox"><input type="checkbox" onchange="enableDeleteBtn()" id="btn' + index + '" value="btn' + item.name + '" /></div><div style="float:right"><button id="btn' + index + '" onclick="btnClick(\'' + item.name + '\', \'btn' + index + '\')" class="form-btn btn-space-5">Delete</button></div></div></div>');
             index++;
+            }
         });
     };
 </script>

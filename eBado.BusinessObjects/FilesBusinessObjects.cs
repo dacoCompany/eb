@@ -105,7 +105,8 @@ namespace eBado.BusinessObjects
                         OriginalUrl = file.Url,
                         ThumbnailUrl = file.ThumbnailUrl,
                         Name = file.Name,
-                        Size = file.Size
+                        Size = file.Size,
+                        FileType = "file"
                     };
                     batch.Attachments.Add(attachment);
                     ++fileCount;
@@ -342,7 +343,8 @@ namespace eBado.BusinessObjects
                     Size = ByteSize.FromBytes(dbo.Size).KiloBytes.ToString("N2"),
                     ThumbnailUrl = dbo.ThumbnailUrl,
                     Url = dbo.OriginalUrl,
-                    Batch = batchDbo.GuId
+                    Batch = batchDbo.GuId,
+                    AttachmentType = dbo.FileType
                 });
             }
 
