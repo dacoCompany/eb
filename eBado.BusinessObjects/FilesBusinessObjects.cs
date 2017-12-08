@@ -134,7 +134,7 @@ namespace eBado.BusinessObjects
                 return false;
             }
             
-            string embedUrl = $"https://www.youtube.com/embed/{videoId}";
+            string embedUrl = $"https://www.youtube.com/embed/{videoId}?rel=0";
 
             var client = new HttpClient();
             client.BaseAddress = new Uri("http://www.youtube.com/");
