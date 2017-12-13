@@ -19,12 +19,15 @@ namespace Web.eBado.Helpers
     public class SharedHelper
     {
         private readonly IUnitOfWork unitOfWork;
+        private readonly ICache httpCache;
         private const int encryptConstant = 5168;
         private const int multiplyContstant = 42;
         private readonly Uri locationBaseUri = new Uri("http://freegeoip.net/xml/");
+
         public SharedHelper(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
+            httpCache = NinjectResolver.GetInstance<ICache>();
         }
 
         public Countries GetUserCountry()
@@ -43,8 +46,8 @@ namespace Web.eBado.Helpers
 
         public IEnumerable<SelectListItem> GetCategoriesToListItem()
         {
-            var cache = NinjectResolver.GetInstance<ICache>();
-            List<CachedAllCategoriesModel> cachedCategories = GetCachedCategoriesInListItem(cache);
+            
+            List<CachedAllCategoriesModel> cachedCategories = GetCachedCategoriesInListItem();
             var allCategories = new List<SelectListItem>();
             foreach (var category in cachedCategories)
             {
@@ -56,8 +59,8 @@ namespace Web.eBado.Helpers
 
         public IEnumerable<SelectListItem> GetMainCategoriesToListItem()
         {
-            var cache = NinjectResolver.GetInstance<ICache>();
-            List<CachedAllCategoriesModel> cachedCategories = GetCachedCategoriesInListItem(cache);
+            
+            List<CachedAllCategoriesModel> cachedCategories = GetCachedCategoriesInListItem();
 
             var allCategories = cachedCategories.Select(category => new SelectListItem { Value = category.CategoryName, Text = category.CategoryName });
 
@@ -66,8 +69,8 @@ namespace Web.eBado.Helpers
 
         public IEnumerable<AllCategoriesModel> GetCategoriesWithSubCategories()
         {
-            var cache = NinjectResolver.GetInstance<ICache>();
-            List<CachedAllCategoriesModel> cachedCategories = GetCachedCategoriesInListItem(cache);
+            
+            List<CachedAllCategoriesModel> cachedCategories = GetCachedCategoriesInListItem();
 
             return cachedCategories.Select(category => new AllCategoriesModel
             {
@@ -76,7 +79,7 @@ namespace Web.eBado.Helpers
             });
         }
 
-        public List<CachedAllCategoriesModel> SetCategoriesCacheToListItem(List<CachedAllCategoriesModel> cachedCategories, ICache cache)
+        public List<CachedAllCategoriesModel> SetCategoriesCacheToListItem(List<CachedAllCategoriesModel> cachedCategories)
         {
             var cacheSettings = new CacheSettings("cacheDurationKey", "cacheExpirationKey");
 
@@ -92,18 +95,18 @@ namespace Web.eBado.Helpers
             }).ToList();
 
 
-            cache.Insert(CacheKeys.CategoryKey, cachedCategories, null, cacheSettings);
+            httpCache.Insert(CacheKeys.CategoryKey, cachedCategories, null, cacheSettings);
             return cachedCategories;
         }
 
         public IEnumerable<CachedLocationsModel> GetCachedLocations()
         {
-            var cache = NinjectResolver.GetInstance<ICache>();
-            var cachedLocations = cache.GetData<List<CachedLocationsModel>>(CacheKeys.LocationKey);
+            
+            var cachedLocations = httpCache.GetData<List<CachedLocationsModel>>(CacheKeys.LocationKey);
 
             if (cachedLocations == null)
             {
-                cachedLocations = SetLocationsToCache(cachedLocations, cache);
+                cachedLocations = SetLocationsToCache(cachedLocations);
             }
 
             return cachedLocations;
@@ -188,13 +191,13 @@ namespace Web.eBado.Helpers
             return (decryptedId / multiplyContstant) - encryptConstant;
         }
 
-        private List<CachedAllCategoriesModel> GetCachedCategoriesInListItem(ICache cache)
+        private List<CachedAllCategoriesModel> GetCachedCategoriesInListItem()
         {
-            var cachedCategories = cache.GetData<List<CachedAllCategoriesModel>>(CacheKeys.CategoryKey);
+            var cachedCategories = httpCache.GetData<List<CachedAllCategoriesModel>>(CacheKeys.CategoryKey);
 
             if (cachedCategories == null)
             {
-                cachedCategories = SetCategoriesCacheToListItem(cachedCategories, cache);
+                cachedCategories = SetCategoriesCacheToListItem(cachedCategories);
             }
 
             return cachedCategories;
@@ -202,7 +205,7 @@ namespace Web.eBado.Helpers
 
       
 
-        private List<CachedLocationsModel> SetLocationsToCache(List<CachedLocationsModel> cachedLocations, ICache cache)
+        private List<CachedLocationsModel> SetLocationsToCache(List<CachedLocationsModel> cachedLocations)
         {
             var cacheSettings = new CacheSettings("cacheDurationKey", "cacheExpirationKey");
 
@@ -221,7 +224,7 @@ namespace Web.eBado.Helpers
             }).ToList();
 
 
-            cache.Insert(CacheKeys.LanguageKey, cachedLocations, null, cacheSettings);
+            httpCache.Insert(CacheKeys.LanguageKey, cachedLocations, null, cacheSettings);
             return cachedLocations;
         }
 

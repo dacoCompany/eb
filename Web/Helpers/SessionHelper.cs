@@ -1,9 +1,6 @@
 ﻿using Infrastructure.Common.DB;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using Web.eBado.Models.Shared;
 
 namespace Web.eBado.Helpers
@@ -11,18 +8,19 @@ namespace Web.eBado.Helpers
     public class SessionHelper
     {
         private readonly IUnitOfWork unitOfWork;
+
         public SessionHelper(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
+
         public SessionModel SetCompanySession(string accountName, SessionModel currentSession)
         {
-            SessionModel newSession;
             int companyId = currentSession.Companies.FirstOrDefault(c => c.Name == accountName).Id;
             var companyDetailDbo = unitOfWork.CompanyDetailsRepository.FindById(companyId);
             var userDetailDbo = companyDetailDbo.CompanyDetails2UserDetails.FirstOrDefault(cd=>cd.UserDetailsId == currentSession.Id).UserDetail;
 
-            newSession = new SessionModel
+            var newSession = new SessionModel
             {
                 Id = userDetailDbo.Id,
                 Email = userDetailDbo.Email,
@@ -62,7 +60,6 @@ namespace Web.eBado.Helpers
 
         public SessionModel SetUserSession(int userId)
         {
-            SessionModel newSession;
             var userDetailDbo = unitOfWork.UserDetailsRepository.FindWhere(ud => ud.Id == userId)
                  .Include(ud => ud.UserRole.UserRole2UserPermission.Select(ur => ur.UserPermission))
                  .Include(ud => ud.CompanyDetails2UserDetails.Select(cd => cd.CompanyDetail))
@@ -70,7 +67,7 @@ namespace Web.eBado.Helpers
                  .Select(cr => cr.CompanyPermission))).FirstOrDefault();
 
             var userRole = userDetailDbo.UserRole;
-            newSession = new SessionModel
+            var newSession = new SessionModel
             {
                 Id = userDetailDbo.Id,
                 Email = userDetailDbo.Email,

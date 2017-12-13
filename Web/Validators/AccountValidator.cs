@@ -1,5 +1,4 @@
 ﻿using Infrastructure.Common.DB;
-using Infrastructure.Common.Enums;
 using Infrastructure.Common.Validations;
 using System;
 using Web.eBado.Helpers;
@@ -91,6 +90,7 @@ namespace Web.eBado.Validators
                 }
             }
         }
+
         #endregion
     }
 }

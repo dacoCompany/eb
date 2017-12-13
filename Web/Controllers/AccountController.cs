@@ -18,7 +18,6 @@ using System.Linq;
 using System.Web.Security;
 using System.Collections.Generic;
 using System.Globalization;
-using Infrastructure.Common.Enums;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -30,9 +29,9 @@ namespace Web.eBado.Controllers
     [RoutePrefix("Account")]
     public class AccountController : Controller
     {
-        AccountHelper accountHelper;
-        SessionHelper sessionHelper;
-        SharedHelper sharedHelper;
+        private readonly AccountHelper accountHelper;
+        private readonly SessionHelper sessionHelper;
+        private readonly SharedHelper sharedHelper;
         private readonly IConfiguration configuration;
         private readonly IUnitOfWork unitOfWork;
         private readonly IFilesBusinessObjects fileBo;
@@ -134,7 +133,7 @@ namespace Web.eBado.Controllers
             return View();
         }
 
-        [System.Web.Http.Authorize]
+        [System.Web.Http.Authorize(Roles = "AddGallery,RemoveGallery,AddAttachments,RemoveAttachments")]
         [Route("EditAccountGallery")]
         public ActionResult EditAccountGallery(string batchId)
         {
@@ -156,7 +155,7 @@ namespace Web.eBado.Controllers
             return View(model);
         }
 
-        [System.Web.Http.Authorize]
+        [System.Web.Http.Authorize(Roles = "AddGallery,RemoveGallery,AddAttachments,RemoveAttachments")]
         [Route("BatchAccountGallery")]
         public ActionResult BatchAccountGallery()
         {
