@@ -33,13 +33,17 @@ namespace Web.eBado.Helpers
         SharedHelper sharedHelper;
 
         #endregion
+
         #region Constructor
+
         public AccountHelper(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
             sharedHelper = new SharedHelper(unitOfWork);
         }
+
         #endregion
+
         #region Public Methods
 
         public static bool IsValidCaptcha()
@@ -153,7 +157,7 @@ namespace Web.eBado.Helpers
             var selectedCategories = model.Categories.SelectedCategories.ToList();
             if (selectedCategories.Any())
             {
-                SetSelectedCategories(uow, selectedCategories, companyDetails);
+                SetSelectedCategories(selectedCategories, companyDetails);
             }
 
             companyDetails.CompanySetting = new CompanySettingDbo
@@ -265,7 +269,7 @@ namespace Web.eBado.Helpers
             var selectedCategories = model.CompanyModel.Categories.SelectedCategories;
             if (selectedCategories != null)
             {
-                SetSelectedCategories(unitOfWork, selectedCategories?.ToList(), companyDetails);
+                SetSelectedCategories(selectedCategories?.ToList(), companyDetails);
             }
 
             var selectedLanguages = model.CompanyModel.Languages.SelectedLanguages;
@@ -523,14 +527,14 @@ namespace Web.eBado.Helpers
         }
 
 
-        private void SetSelectedCategories(IUnitOfWork uow, List<string> selectedCategories, CompanyDetailDbo companyDetails)
+        private void SetSelectedCategories(List<string> selectedCategories, CompanyDetailDbo companyDetails)
         {
             var cache = NinjectResolver.GetInstance<ICache>();
             var cachedCategories = cache.GetData<List<CachedAllCategoriesModel>>(CacheKeys.CategoryKey);
 
             if (cachedCategories == null)
             {
-                cachedCategories = sharedHelper.SetCategoriesCacheToListItem(cachedCategories, cache);
+                cachedCategories = sharedHelper.SetCategoriesCacheToListItem(cachedCategories);
             }
 
             var categoryIds = cachedCategories.Where(c => selectedCategories.Contains(c.CategoryName)).Select(c=>c.Id);
