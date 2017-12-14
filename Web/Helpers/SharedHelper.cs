@@ -201,7 +201,6 @@ namespace Web.eBado.Helpers
             return $"({language.Code}) {language.Name}";
         }
 
-        private List<CachedAllCategoriesModel> GetCachedCategoriesInListItem(ICache cache)
         private List<CachedAllCategoriesModel> GetCachedCategoriesInListItem()
         {
             var cachedCategories = httpCache.GetData<List<CachedAllCategoriesModel>>(CacheKeys.CategoryKey);
