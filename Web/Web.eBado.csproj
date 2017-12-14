@@ -276,9 +276,10 @@
     <Compile Include="Models\Account\UserModel.cs" />
     <Compile Include="Models\Account\AccountSettingsModel.cs" />
     <Compile Include="Models\Account\UserRoleModel.cs" />
+    <Compile Include="Models\Company\CompanyDetailModel.cs" />
     <Compile Include="Models\Company\CompanySearchModel.cs" />
     <Compile Include="Models\Shared\AllCategoriesModel.cs" />
-    <Compile Include="Models\Shared\SearchParametersModel.cs" />
+    <Compile Include="Models\Shared\AllCompanyAttachmentsModel.cs" />
     <Compile Include="Models\Email\RegisterEmailModel.cs" />
     <Compile Include="Models\MvcExtensions\ModelStateExtensions.cs" />
     <Compile Include="Models\Shared\AttachmentGalleryModel.cs" />
@@ -300,6 +301,7 @@
     <Content Include="Content\BaseContent\css\bootstrap.css" />
     <Content Include="Content\BaseContent\css\button.css" />
     <Content Include="Content\BaseContent\css\chosen.css" />
+    <Content Include="Content\BaseContent\css\company-detail.css" />
     <Content Include="Content\BaseContent\css\font-awesome.min.css" />
     <Content Include="Content\BaseContent\css\jquery-ui.css" />
     <Content Include="Content\BaseContent\css\check_radio.css" />
@@ -600,7 +602,7 @@
     <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload.css" />
     <Content Include="Content\jQuery.FileUpload\img\loading.gif" />
     <Content Include="Content\jQuery.FileUpload\img\progressbar.gif" />
-    <Content Include="Content\PagedList.css" />
+    <Content Include="Content\BaseContent\css\PagedList.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\changeSettings.js" />
@@ -714,6 +716,7 @@
     <Content Include="Views\Account\BatchAccountGallery.cshtml" />
     <Content Include="Views\Account\MyAdvertisements.cshtml" />
     <Content Include="Views\Company\AllCompanies.cshtml" />
+    <Content Include="Views\Company\CompanyDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

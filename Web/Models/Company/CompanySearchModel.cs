@@ -8,10 +8,6 @@ namespace Web.eBado.Models.Company
 {
     public class CompanySearchModel
     {
-        public CompanySearchModel()
-        {
-            SearchParameters = new SearchParametersModel();
-        }
         public int? Page { get; set; }
         public string SelectedMainCategory { get; set; }
         public string SelectedCategory { get; set; }
@@ -25,7 +21,6 @@ namespace Web.eBado.Models.Company
         public bool SearchInHU { get; set; }
         public IEnumerable<SelectListItem> AllMainCategories { get; set; }
         public IEnumerable<AllCategoriesModel> AllCategories { get; set; }
-        public SearchParametersModel SearchParameters { get; set; }
-        public IPagedList<CompanyModel> CompanyModel { get; set; }
+        public IPagedList<CompanyModel> CompanyModel { get; set; }        
     }
 }
