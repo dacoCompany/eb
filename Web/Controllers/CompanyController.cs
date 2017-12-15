@@ -41,14 +41,13 @@ namespace Web.eBado.Controllers
 
         [Route("CompanyDetail")]
         [AllowAnonymous]
-        public ActionResult CompanyDetail(string id)
+        public ActionResult CompanyDetail(string id, CompanyDetailModel model)
         {
             var session = Session["User"] as SessionModel;
-            var model = new CompanyDetailModel();
+            model = model ?? new CompanyDetailModel();
             int companyId = sharedHelper.DecryptId(id);
 
-            model = companyHelper.GetCompanyDetail(model, unitOfWork, companyId);
-
+            model = companyHelper.GetCompanyDetail(model, unitOfWork, companyId, session);
             return View(model);
         }
     }

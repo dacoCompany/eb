@@ -209,7 +209,7 @@
                         <a onclick="playVideo('video_@index','youtube_@index')" style="background-image: url(@video.ThumbnailUrl);" class="zoomzoom"></a>
                     </div>
                     <div class="btm">
-                        <button id="btnVideo_@index" onclick="btnVideoClick('@video.Name','btnVideo_@index')" class="form-btn btn-space-5">Delete</button>
+                        <button id="btnVideo_@index" onclick="btnDeleteVideo('@video.Name','btnVideo_@index')" class="form-btn btn-space-5">Delete</button>
                     </div>
                 </div>
 
@@ -281,7 +281,7 @@
         });
     }
 
-    function btnVideoClick(name, id) {
+    function btnDeleteVideo(name, id) {
         $.ajax({
             url: "/FileUpload/DeleteVideo",
             type: "POST",

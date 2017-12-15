@@ -23,6 +23,7 @@ namespace Web.eBado.Helpers
         private const int encryptConstant = 5168;
         private const int multiplyContstant = 42;
         private readonly Uri locationBaseUri = new Uri("http://freegeoip.net/xml/");
+        private const string baseMapUrl = "https://www.google.com/maps/search/?api=1&query=";
 
         public SharedHelper(IUnitOfWork unitOfWork)
         {
@@ -201,6 +202,16 @@ namespace Web.eBado.Helpers
             return $"({language.Code}) {language.Name}";
         }
 
+        public string GenerateMapUrl(AddressDbo address)
+        {
+            if(address == null)
+            {
+                return "";
+            }
+            var location = address.Location;
+            var city = !string.IsNullOrEmpty(location.District) ? location.District : location.City;
+            return $"{baseMapUrl}{address.Street}+{address.Number},+{location.PostalCode.Replace(" ", "+")}+{city}";
+        }
         private List<CachedAllCategoriesModel> GetCachedCategoriesInListItem()
         {
             var cachedCategories = httpCache.GetData<List<CachedAllCategoriesModel>>(CacheKeys.CategoryKey);

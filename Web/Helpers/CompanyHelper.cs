@@ -42,8 +42,8 @@ namespace Web.eBado.Helpers
                     CompanyCity = !(string.IsNullOrEmpty(company.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value).Location.District))
                     ? company.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value).Location.District
                     : company.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value).Location.City,
-                    AllSelectedCategories = company.Category2CompanyDetails.Select(c => c.Category.Name)
-                    .Concat(company.SubCategory2CompanyDetails.Select(s => s.SubCategory.Name)),
+                    AllSelectedCategories = company.Category2CompanyDetails.Where(c => c.IsActive).Select(c => c.Category.Name)
+                    .Concat(company.SubCategory2CompanyDetails.Where(s => s.IsActive).Select(s => s.SubCategory.Name)),
                     ProfileUrl = company.ProfilePictureUrl
                 });
 
@@ -51,14 +51,16 @@ namespace Web.eBado.Helpers
             return model;
         }
 
-        public CompanyDetailModel GetCompanyDetail(CompanyDetailModel model, IUnitOfWork unitOfWork, int companyId)
+        public CompanyDetailModel GetCompanyDetail(CompanyDetailModel model, IUnitOfWork unitOfWork, int companyId, SessionModel session)
         {
             var company = unitOfWork.CompanyDetailsRepository.FindById(companyId);
             var companyAddress = company.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value);
             var companyLocation = companyAddress.Location;
+            int imageCount = 0;
+            int videoCount = 0;
             model.CompanyModel = new CompanyModel
             {
-                CompanyCity = companyLocation.District == null ? companyLocation.City : companyLocation.District,
+                CompanyCity = string.IsNullOrEmpty(companyLocation.District) ? companyLocation.City : companyLocation.District,
                 CompanyAdditionalPhoneNumber = company.AdditionalPhoneNumber,
                 CompanyDescription = company.Description,
                 CompanyDic = company.Dic,
@@ -73,7 +75,7 @@ namespace Web.eBado.Helpers
                 ProfileUrl = company.ProfilePictureUrl
             };
 
-            var batches = company.BatchAttachments;
+            var batches = company.BatchAttachments.Where(ba => ba.IsActive);
             foreach (var batch in batches)
             {
                 var batchModel = new AllCompanyAttachmentsModel
@@ -81,7 +83,7 @@ namespace Web.eBado.Helpers
                     BatchName = batch.Name,
                     BatchDescription = batch.Description,
                 };
-                foreach (var attachment in batch.Attachments)
+                foreach (var attachment in batch.Attachments.Where(a => a.IsActive))
                 {
                     var attachmentModel = new AttachmentModel
                     {
@@ -90,13 +92,28 @@ namespace Web.eBado.Helpers
                         ThumbnailUrl = attachment.ThumbnailUrl,
                         Url = attachment.OriginalUrl
                     };
+                    if (attachment.FileType == "video")
+                    {
+                        videoCount++;
+                    }
+                    else
+                    {
+                        imageCount++;
+                    }
                     batchModel.Attachment.Add(attachmentModel);
                 }
                 model.Attachments.Add(batchModel);
             }
-            model.Languages = company.CompanyDetails2Languages.Select(cd => sharedHelper.GetFormattedLanguage(cd.Language)).ToList();
-            model.Categories = company.Category2CompanyDetails.Select(cat => cat.Category.Name)
-                .Concat(company.SubCategory2CompanyDetails.Select(subCat => subCat.SubCategory.Name)).ToList();
+            model.ImagesCount = imageCount;
+            model.VideosCount = videoCount;
+            model.Languages = company.CompanyDetails2Languages.Where(cd => cd.IsActive).Select(cd => sharedHelper.GetFormattedLanguage(cd.Language)).ToList();
+            model.Categories = company.Category2CompanyDetails.Where(c => c.IsActive).Select(c => c.Category.Name)
+                    .Concat(company.SubCategory2CompanyDetails.Where(s => s.IsActive).Select(s => s.SubCategory.Name)).ToList();
+            if (session != null)
+            {
+                model.CustomerEmail = session.Email;
+            }
+            model.MapUrl = sharedHelper.GenerateMapUrl(company.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value));
 
             return model;
         }

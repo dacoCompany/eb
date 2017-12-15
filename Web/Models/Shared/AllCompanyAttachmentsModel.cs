@@ -10,7 +10,8 @@ namespace Web.eBado.Models.Shared
             Attachment = new Collection<AttachmentModel>();
         }
         public string BatchName { get; set; }
-        public string BatchDescription { get; set; }
+
+        public string BatchDescription { get; set; }       
 
         public ICollection<AttachmentModel> Attachment { get; set; }
     }

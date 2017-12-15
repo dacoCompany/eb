@@ -34,6 +34,22 @@ float:right;
         background: #00b6ff;
     }
 
+.green-border-btn {
+    float: right;
+    background: #57ad53;
+    border: 2px #fff solid;
+    font-family: Arial;
+    color: #fff;
+    font-size: 15px;
+    padding: 6px 14px 6px 14px;
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+    .green-border-btn:hover {
+        background: #3c9338;
+    }
+
 .btn-no-border {
     float: none;
     background-color: #fff;
@@ -47,6 +63,24 @@ float:right;
     .btn-no-border:hover {
         font-weight:700;
     }
+
+.green-btn {
+    cursor:pointer;
+    background-color: #57ad53;
+    font-family: Arial;
+    color: #fff;
+    font-size: 15px;
+    padding: 6px 14px 6px 14px;
+    text-decoration: none;
+    margin-left: 5px;
+    max-width: 450px;
+}
+
+    .green-btn:hover {
+        background: #3c9338;
+        color: #fff;
+    }
+
 
 /***** Form Button*****/
 

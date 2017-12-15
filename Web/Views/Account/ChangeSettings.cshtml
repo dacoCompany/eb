@@ -299,7 +299,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-8">
-                                @Html.EditorFor(model => model.CompanyModel.CompanyDescription, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Popis cinnosti" } })
+                                @Html.EditorFor(model => model.CompanyModel.CompanyDescription, new { htmlAttributes = new { @class = "form-control txt-lg", @rows = "6", @placeholder = "Popis cinnosti" } })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyDescription, "", new { @class = "text-danger" })</div>
                             </div>
                         </div>

@@ -4,75 +4,199 @@
     ViewBag.Title = "CompanyDetail";
 }
 @Styles.Render("~/Content/company")
-<div class="container">
-    @{var company = Model.CompanyModel;  }
-    <div class="col-sm-12 push_top_20">
-        <div class="col-md-4 nopadding" style="text-align:left">
-            @if (company.ProfileUrl == null)
-            {
-                <img src="~/Content/BaseContent/img/no_photo.jpg" />
-            }
-            else
-            {
-                <img src="@company.ProfileUrl" />
-            }
-        </div>
-        <div class="col-md-8 nopadding">
-            <div class="col-md-12 company_name nopadding">@company.CompanyName</div>
-            <div class="col-md-12 text-left nopadding">
-            <span class="company_label push_right_5">Typ: <span class="company_detail_value">@company.CompanyType</span></span>
-            <span class="company_label push_right_5">ICO: <span class="company_detail_value">@company.CompanyIco</span></span>
-            <span class="company_label push_right_5">DIC: <span class="company_detail_value">@company.CompanyDic</span></span>
-                </div>
-            <div class="col-md-12 company_label push_top_10 nopadding">
-                <span class="glyphicon glyphicon-map-marker font_16"></span>
-                <span class="company_label">
-                @company.CompanyStreet @company.CompanyStreetNumber, @company.CompanyPostalCode @company.CompanyCity&nbsp;&nbsp;
-                <span class="glyphicon glyphicon-search navigation_link"></span>
-                <a class="navigation_link" href="#">mapa</a></span>
-            </div>
-            <div class="col-xs-12 nopadding push_top_10">
-                <div class="tags_glyph"><span class="glyphicon glyphicon-bullhorn font_16"></span></div>
-               
-                    @foreach (var language in Model.Languages)
-                    {
-                        <div class="company_tags push_bottom_5">@language</div>
-                    }
-               
-            </div>
+@Styles.Render("~/Content/jQuery-File-Upload")
 
-            <div class="col-xs-12 nopadding push_top_10">
-                <div class="tags_glyph"><span class="glyphicon glyphicon-folder-open font_16"></span></div>
-
-                @foreach (var category in Model.Categories)
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="container">
+        @{var company = Model.CompanyModel;  }
+        <div class="col-sm-12 push_top_20">
+            <div class="col-md-4 nopadding" style="text-align:left">
+                @if (company.ProfileUrl == null)
                 {
-                    <div class="company_tags push_bottom_5">@category</div>
+                    <img src="~/Content/BaseContent/img/no_photo.jpg" />
                 }
+                else
+                {
+                    <img src="@company.ProfileUrl" />
+                }
+            </div>
+            <div class="col-md-8 nopadding">
+                <div class="col-md-12 company_name nopadding">@company.CompanyName</div>
+                <div class="col-md-12 text-left nopadding">
+                    <span class="company_label push_right_5">Typ: <span class="company_detail_value">@company.CompanyType</span></span>
+                    <span class="company_label push_right_5">ICO: <span class="company_detail_value">@company.CompanyIco</span></span>
+                    <span class="company_label push_right_5">DIC: <span class="company_detail_value">@company.CompanyDic</span></span>
+                </div>
+                <div class="col-md-12 company_label push_top_10 nopadding">
+                    <span class="glyphicon glyphicon-map-marker font_16"></span>
+                    <span class="company_label">
+                        @company.CompanyStreet @company.CompanyStreetNumber, @company.CompanyPostalCode @company.CompanyCity&nbsp;&nbsp;
+                        <span class="glyphicon glyphicon-search navigation_link"></span>
+                        <a target="_blank" class="navigation_link" href="@Model.MapUrl">mapa</a>
+                    </span>
+                </div>
+                <div class="col-xs-12 nopadding push_top_10">
+                    <div class="tags_glyph"><span class="glyphicon glyphicon-bullhorn font_16"></span></div>
+                    @if (Model.Languages.Count == 0)
+                    {
+                        <div class="company_detail_value">Uzivatel nema vyplneny jazyk</div>
+                    }
+                    else
+                    {
+                        foreach (var language in Model.Languages)
+                        {
+                            <div class="company_tags push_bottom_5">@language</div>
+                        }
+                    }
 
+                </div>
+
+                <div class="col-xs-12 nopadding push_top_10">
+                    <div class="tags_glyph"><span class="glyphicon glyphicon-folder-open font_16"></span></div>
+
+                    @foreach (var category in Model.Categories)
+                    {
+                        <div class="company_tags push_bottom_5">@category</div>
+                    }
+
+                </div>
+
+                <div class="col-xs-12 nopadding push_top_10">
+                    <div id="contactBtn" class="green-btn"><span class="glyphicon glyphicon-envelope"></span> Kontaktovat dodavatela</div>
+                </div>
+                <div id="contactForm" class="col-xs-12 nopadding" style="display:none">
+                    <div class="col-xs-4 push_top_10">
+                        @Html.EditorFor(model => model.CustomerEmail, new { htmlAttributes = new { @class = "form-control", @placeholder = "Email" } })
+                        <label class="label-form" for="email">
+                            @Html.ValidationMessageFor(model => model.CustomerEmail)
+                        </label>
+                    </div>
+                    <div class="col-xs-6 push_top_10">
+                        @Html.EditorFor(model => model.Subject, new { htmlAttributes = new { @class = "form-control", @placeholder = "Subject" } })
+                        <label class="label-form" for="email">
+                            @Html.ValidationMessageFor(model => model.Subject)
+                        </label>
+                    </div>
+                    <div class="col-xs-10">
+                        @Html.EditorFor(model => model.Message, new { htmlAttributes = new { @class = "form-control", @rows = "5", @placeholder = "Message" } })
+                        <label class="label-form" for="email">
+                            @Html.ValidationMessageFor(model => model.Message)
+                        </label>
+                    </div>
+                    <div class="col-xs-10">
+                        <input type="submit" value="Odoslat" class="green-border-btn" />
+                    </div>
+                </div>
             </div>
 
-        <div class="col-xs-12 nopadding push_top_10">
-            <div class="contact_detail text-right_resp"><span class="glyphicon glyphicon-earphone"></span> @company.CompanyPhoneNumber</div>
-            <div class="contact_detail"><span class="glyphicon glyphicon-phone-alt"></span> @company.CompanyAdditionalPhoneNumber</div>
-            <div class="contact_detail text-left_resp"><span class="glyphicon glyphicon-envelope"></span> @company.CompanyEmail</div>
-        </div>
-        </div>
-       
-        <div class="col-md-12 nopadding push_top_20">
+            <div class="col-md-12 nopadding push_top_20">
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#description" aria-controls="description" role="tab" data-toggle="tab">Popis</a></li>
-                    <li role="presentation"><a href="#foto" aria-controls="foto" role="tab" data-toggle="tab">Obrazky</a></li>
-                    <li role="presentation"><a href="#video" aria-controls="video" role="tab" data-toggle="tab">Videa</a></li>
+                    <li role="presentation"><a href="#foto" aria-controls="foto" role="tab" data-toggle="tab">Obrazky (@Model.ImagesCount)</a></li>
+                    <li role="presentation"><a href="#video" aria-controls="video" role="tab" data-toggle="tab">Videa (@Model.VideosCount)</a></li>
                     <li role="presentation"><a href="#ratings" aria-controls="ratings" role="tab" data-toggle="tab">Hodnotenia</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active text-justify" id="description">@company.CompanyDescription</div>
-                    <div role="tabpanel" class="tab-pane text-justify" id="foto">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</div>
-                    <div role="tabpanel" class="tab-pane text-justify" id="video">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
-                    <div role="tabpanel" class="tab-pane text-justify" id="ratings">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passage..</div>
+                    @if (string.IsNullOrEmpty(company.CompanyDescription))
+                    {
+                        <div role="tabpanel" class="tab-pane active" id="description">Uzivatel nema blizsi popis</div>
+                    }
+                    else
+                    {
+                        <div role="tabpanel" class="tab-pane active text-justify" id="description">@company.CompanyDescription</div>
+                    }
+                    @if (Model.ImagesCount == 0)
+                    {
+                        <div role="tabpanel" class="tab-pane" id="foto">Uzivatel nema ziadne obrazky</div>
+
+                    }
+                    else
+                    {
+                        <div role="tabpanel" class="tab-pane" id="foto">
+                            <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
+                                <div class="slides"></div>
+                                <h3 class="title"></h3>
+                                <a class="prev">‹</a>
+                                <a class="next">›</a>
+                                <a class="close">×</a>
+                                <a class="play-pause"></a>
+                                <ol class="indicator"></ol>
+                            </div>
+
+                            <div id="links" style="text-align:center">
+
+                                @foreach (var batch in Model.Attachments)
+                                {
+                                    <div class="batch_name">@batch.BatchName</div>
+                                    <div class="batch_desc">@batch.BatchDescription</div>
+                                    foreach (var image in batch.Attachment.Where(a => a.AttachmentType != "video"))
+                                    {
+                                        <div class="img_container">
+                                            <a target="_blank" href="@image.Url" style="background-image: url(@image.ThumbnailUrl);" class="zoomzoom"></a>
+                                        </div>
+
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+                    @if (Model.VideosCount == 0)
+                    {
+                        <div role="tabpanel" class="tab-pane" id="video">Uzivatel nema ziadne videa</div>
+                    }
+                    else
+                    {
+                        <div role="tabpanel" class="tab-pane" id="video">
+                            @{ int index = 1; }
+                            @foreach (var video in Model.Attachments.SelectMany(att => att.Attachment).Where(att => att.AttachmentType == "video"))
+                            {
+                                <div class="img_container">
+                                    <a onclick="playVideo('video_@index','youtube_@index')" style="background-image: url(@video.ThumbnailUrl);" class="zoomzoom"></a>
+                                </div>
+
+                                    <div id="video_@index" class="lightbox" onclick="hideVideo('video_@index','youtube_@index')">
+                                        <div class="lightbox-container">
+                                            <div class="lightbox-content">
+
+                                                <button onclick="hideVideo('video_@index','youtube_@index')" class="lightbox-close">
+                                                    Close ✕
+                                                </button>
+                                                <div class="video-container">
+                                                    <iframe id="youtube_@index" width="960" height="540" src="@video.Url" frameborder="0" allowfullscreen></iframe>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                ++index;
+                            }
+                        </div>
+                                }
+                    <div role="tabpanel" class="tab-pane" id="ratings">Uzivatel nema ziadne hodnotenia</div>
                 </div>
+            </div>
+
+
         </div>
     </div>
+                                }
+<script>
+    $("#contactBtn").on('click', function () {
+        jQuery("#contactForm").slideToggle(500);
+    });
 
-
-</div>
+    document.getElementById('links').onclick = function (event) {
+        event = event || window.event;
+        var target = event.target || event.srcElement,
+            link = target.src ? target.parentNode : target,
+            options = { index: link, event: event },
+            links = this.getElementsByTagName('a');
+        if (target.nodeName != "DIV" && target.nodeName != "BUTTON" && target.nodeName != "INPUT") {
+            blueimp.Gallery(links, options);
+        }
+    };
+</script>
+@Scripts.Render("~/bundles/jQuery-File-Upload")
+@Scripts.Render("~/bundles/Blueimp-Gallerry2")
