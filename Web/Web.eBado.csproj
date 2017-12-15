@@ -650,7 +650,6 @@
     <Content Include="Global.app.config" />
     <Content Include="Scripts\chosen.jquery.js" />
     <Content Include="Scripts\youtube.js" />
-    <Content Include="Scripts\register.js" />
     <Content Include="Views\Email\Registration.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
