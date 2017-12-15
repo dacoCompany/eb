@@ -1,0 +1,78 @@
+﻿@model Web.eBado.Models.Company.CompanyDetailModel
+
+@{
+    ViewBag.Title = "CompanyDetail";
+}
+@Styles.Render("~/Content/company")
+<div class="container">
+    @{var company = Model.CompanyModel;  }
+    <div class="col-sm-12 push_top_20">
+        <div class="col-md-4 nopadding" style="text-align:left">
+            @if (company.ProfileUrl == null)
+            {
+                <img src="~/Content/BaseContent/img/no_photo.jpg" />
+            }
+            else
+            {
+                <img src="@company.ProfileUrl" />
+            }
+        </div>
+        <div class="col-md-8 nopadding">
+            <div class="col-md-12 company_name nopadding">@company.CompanyName</div>
+            <div class="col-md-12 text-left nopadding">
+            <span class="company_label push_right_5">Typ: <span class="company_detail_value">@company.CompanyType</span></span>
+            <span class="company_label push_right_5">ICO: <span class="company_detail_value">@company.CompanyIco</span></span>
+            <span class="company_label push_right_5">DIC: <span class="company_detail_value">@company.CompanyDic</span></span>
+                </div>
+            <div class="col-md-12 company_label push_top_10 nopadding">
+                <span class="glyphicon glyphicon-map-marker font_16"></span>
+                <span class="company_label">
+                @company.CompanyStreet @company.CompanyStreetNumber, @company.CompanyPostalCode @company.CompanyCity&nbsp;&nbsp;
+                <span class="glyphicon glyphicon-search navigation_link"></span>
+                <a class="navigation_link" href="#">mapa</a></span>
+            </div>
+            <div class="col-xs-12 nopadding push_top_10">
+                <div class="tags_glyph"><span class="glyphicon glyphicon-bullhorn font_16"></span></div>
+               
+                    @foreach (var language in Model.Languages)
+                    {
+                        <div class="company_tags push_bottom_5">@language</div>
+                    }
+               
+            </div>
+
+            <div class="col-xs-12 nopadding push_top_10">
+                <div class="tags_glyph"><span class="glyphicon glyphicon-folder-open font_16"></span></div>
+
+                @foreach (var category in Model.Categories)
+                {
+                    <div class="company_tags push_bottom_5">@category</div>
+                }
+
+            </div>
+
+        <div class="col-xs-12 nopadding push_top_10">
+            <div class="contact_detail text-right_resp"><span class="glyphicon glyphicon-earphone"></span> @company.CompanyPhoneNumber</div>
+            <div class="contact_detail"><span class="glyphicon glyphicon-phone-alt"></span> @company.CompanyAdditionalPhoneNumber</div>
+            <div class="contact_detail text-left_resp"><span class="glyphicon glyphicon-envelope"></span> @company.CompanyEmail</div>
+        </div>
+        </div>
+       
+        <div class="col-md-12 nopadding push_top_20">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#description" aria-controls="description" role="tab" data-toggle="tab">Popis</a></li>
+                    <li role="presentation"><a href="#foto" aria-controls="foto" role="tab" data-toggle="tab">Obrazky</a></li>
+                    <li role="presentation"><a href="#video" aria-controls="video" role="tab" data-toggle="tab">Videa</a></li>
+                    <li role="presentation"><a href="#ratings" aria-controls="ratings" role="tab" data-toggle="tab">Hodnotenia</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active text-justify" id="description">@company.CompanyDescription</div>
+                    <div role="tabpanel" class="tab-pane text-justify" id="foto">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</div>
+                    <div role="tabpanel" class="tab-pane text-justify" id="video">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
+                    <div role="tabpanel" class="tab-pane text-justify" id="ratings">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passage..</div>
+                </div>
+        </div>
+    </div>
+
+
+</div>

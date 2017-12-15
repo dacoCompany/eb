@@ -29,15 +29,26 @@ namespace Web.eBado.Controllers
         {
             var session = Session["User"] as SessionModel;
             model = model ?? new CompanySearchModel();
-            if(model.SelectedCategory != null)
+            if (model.SelectedCategory != null)
             {
                 model.SelectedMainCategory = model.SelectedCategory;
             }
             model = companyHelper.GetAllCompanies(model, unitOfWork);
+            model = companyHelper.InitializeCompanyData(session, model);
 
-            model.DefaultRadius = sharedHelper.GetDefaultRadius(session);
-            model.AllMainCategories = sharedHelper.GetMainCategoriesToListItem();
-            model.AllCategories = sharedHelper.GetCategoriesWithSubCategories();
+            return View(model);
+        }
+
+        [Route("CompanyDetail")]
+        [AllowAnonymous]
+        public ActionResult CompanyDetail(string id)
+        {
+            var session = Session["User"] as SessionModel;
+            var model = new CompanyDetailModel();
+            int companyId = sharedHelper.DecryptId(id);
+
+            model = companyHelper.GetCompanyDetail(model, unitOfWork, companyId);
+
             return View(model);
         }
     }

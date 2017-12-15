@@ -179,6 +179,11 @@ namespace Web.eBado.Helpers
             return countryShortCodes;
         }
 
+        public CompanyType GetCompanyType(string companyType)
+        {
+            return (CompanyType)System.Enum.Parse(typeof(CompanyType), companyType);
+        }
+
         public string EncryptId(int id)
         {
             var calculatedId = (encryptConstant + id) * multiplyContstant;
@@ -189,6 +194,11 @@ namespace Web.eBado.Helpers
         {
             var decryptedId = Convert.ToInt32(new String(id.Where(Char.IsDigit).ToArray()));
             return (decryptedId / multiplyContstant) - encryptConstant;
+        }
+
+        public string GetFormattedLanguage(LanguageDbo language)
+        {
+            return $"({language.Code}) {language.Name}";
         }
 
         private List<CachedAllCategoriesModel> GetCachedCategoriesInListItem()
