@@ -311,6 +311,9 @@
     margin: 0 10px 10px 0
 }
 
+.resp_top_10 {
+    margin-top:10px;
+}
 
 @media screen and (max-width: 768px) {
     .text-right_resp {
@@ -319,6 +322,9 @@
 
     .text-left_resp {
         text-align: center;
+    }
+    .resp_top_10 {
+        margin: 0 auto;
     }
 }
 
@@ -361,7 +367,6 @@
         width: 20%;
     }
 }
-
 
 @media screen and (max-width: 800px) {
     .category_container {
@@ -421,5 +426,5 @@
 
     .search_button {
         float: left;
-    }
+    }   
 }
