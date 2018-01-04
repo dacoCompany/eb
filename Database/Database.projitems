@@ -9,12 +9,17 @@
     <Import_RootNamespace>Database</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Create\create_db_user.sql" />
     <None Include="$(MSBuildThisFileDirectory)Create\create_script.sql" />
+    <None Include="$(MSBuildThisFileDirectory)create_database_local.ps1" />
+    <None Include="$(MSBuildThisFileDirectory)create_database_azure.ps1" />
     <None Include="$(MSBuildThisFileDirectory)Insert\insert_Category.sql" />
     <None Include="$(MSBuildThisFileDirectory)Insert\insert_Languages.sql" />
     <None Include="$(MSBuildThisFileDirectory)Insert\insert_Sub_Categories.sql" />
     <None Include="$(MSBuildThisFileDirectory)Insert\insert_SK_PostalCodes.sql" />
     <None Include="$(MSBuildThisFileDirectory)Insert\insert_Role_Permissions.sql" />
     <None Include="$(MSBuildThisFileDirectory)Update\Update_001.sql" />
+    <None Include="$(MSBuildThisFileDirectory)update_database_azure.ps1" />
+    <None Include="$(MSBuildThisFileDirectory)update_database_local.ps1" />
   </ItemGroup>
 </Project>
