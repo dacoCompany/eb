@@ -72,29 +72,16 @@ namespace Web.eBado.Helpers
             {
                 var userRole = uow.UserRoleRepository.FindFirstOrDefault(r => r.Name == UserRole.User.ToString());
                 string salt = GenerateSalt();
-                int postalCodeId = sharedHelper.GetLocationByPostalCode(model.PostalCode);
                 var userDetails = new UserDetailDbo
                 {
                     Email = model.Email,
                     Password = EncodePassword(model.Password, salt),
                     Salt = salt,
-                    Title = model.Title,
-                    FirstName = model.FirstName,
-                    Surname = model.Surname,
                     PhoneNumber = model.PhoneNumber,
-                    AdditionalPhoneNumber = string.IsNullOrEmpty(model.AdditionalPhoneNumber) ? null : model.AdditionalPhoneNumber,
                     DisplayName = GetUserDisplayName(model),
                     UserRole = userRole,
                     IsValidated = true
                 };
-
-                userDetails.Addresses.Add(new AddressDbo
-                {
-                    Street = model.Street,
-                    Number = model.StreetNumber,
-                    IsBillingAddress = true,
-                    LocationId = postalCodeId
-                });
 
                 userDetails.UserSetting = new UserSettingDbo
                 {
@@ -313,11 +300,11 @@ namespace Web.eBado.Helpers
                 Email = userDetails.Email,
                 FirstName = userDetails.FirstName,
                 PhoneNumber = userDetails.PhoneNumber,
-                PostalCode = address.Location.PostalCode,
-                Street = address.Street,
-                StreetNumber = address.Number,
-                Surname = userDetails.Surname,
-                Title = userDetails.Title
+                PostalCode = address?.Location?.PostalCode,
+                Street = address?.Street,
+                StreetNumber = address?.Number,
+                Surname = userDetails?.Surname,
+                Title = userDetails?.Title
             };
             model.SearchModel = new SearchSettingsModel
             {

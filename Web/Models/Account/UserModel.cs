@@ -55,6 +55,7 @@ namespace Web.eBado.Models.Account
         [StringLengthValidator(1, RangeBoundaryType.Inclusive, 10, RangeBoundaryType.Ignore, MessageTemplate = "Too long (max. 10 characters)", Ruleset = "RegisterUser")]
         public string StreetNumber { get; set; }
 
+        [IgnoreNulls(Ruleset = "RegisterUser")]
         [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = ErrorMessages.RequiredFieldResources, Ruleset = "RegisterUser")]
         public string PostalCode { get; set; }
 

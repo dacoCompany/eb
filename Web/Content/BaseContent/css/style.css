@@ -728,6 +728,9 @@ hr.transparent {
     margin-bottom: 10px;
 }
 
+.novisible{
+    display:none;
+}
 .row_40 {
     height: 40px;
 }
