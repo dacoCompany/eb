@@ -1,4 +1,6 @@
-﻿using Infrastructure.Common;
+﻿using eBado.BusinessObjects;
+using eBado.Entities;
+using Infrastructure.Common;
 using Infrastructure.Common.DB;
 using Infrastructure.Common.Enums;
 using Infrastructure.Common.Models;
@@ -30,15 +32,17 @@ namespace Web.eBado.Helpers
         const string AllowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789";
 
         private readonly IUnitOfWork unitOfWork;
+        private readonly IFilesBusinessObjects fileBo;
         SharedHelper sharedHelper;
 
         #endregion
 
         #region Constructor
 
-        public AccountHelper(IUnitOfWork unitOfWork)
+        public AccountHelper(IUnitOfWork unitOfWork, IFilesBusinessObjects fileBo)
         {
             this.unitOfWork = unitOfWork;
+            this.fileBo = fileBo;
             sharedHelper = new SharedHelper(unitOfWork);
         }
 
@@ -163,7 +167,11 @@ namespace Web.eBado.Helpers
                 uow.UserDetailsRepository.Add(userDetails);
 
                 if (canCommit)
+                {
                     uow.Commit();
+                    userDetails.EncryptedId = sharedHelper.EncryptId(userDetails.Id, EncryptType.U);
+                    uow.Commit();
+                }
 
                 EntlibLogger.LogInfo("Account", "Register", $"Successful registration with e-mail address: {model.Email}", new DiagnosticsLogging { DiagnosticsArea = "Helper", DiagnosticsCategory = "Register" });
 
@@ -227,7 +235,11 @@ namespace Web.eBado.Helpers
 
             uow.CompanyDetailsRepository.Add(companyDetails);
             uow.Commit();
-            companyDetails.EncryptedId = sharedHelper.EncryptId(companyDetails.Id);
+            companyDetails.EncryptedId = sharedHelper.EncryptId(companyDetails.Id, EncryptType.C);
+
+            if (string.IsNullOrEmpty(userDetail.EncryptedId))
+                userDetail.EncryptedId = sharedHelper.EncryptId(userDetail.Id, EncryptType.U);
+
             uow.Commit();
         }
 
@@ -246,6 +258,22 @@ namespace Web.eBado.Helpers
             if (model.ProfilePicture != null)
             {
                 //TODO: upload image to blob and save to db
+                if (model.ProfilePicture.ContentLength != 0)
+                {
+                    FileEntity picture = null;
+                    using (BinaryReader reader = new BinaryReader(model.ProfilePicture.InputStream))
+                    {
+                        var byteFile = reader.ReadBytes(model.ProfilePicture.ContentLength);
+                        picture = new FileEntity
+                        {
+                            Name = new FileInfo(model.ProfilePicture.FileName).Name,
+                            ContentType = model.ProfilePicture.ContentType,
+                            Content = byteFile,
+                            Size = byteFile.Length
+                        };
+                    }
+                    model.UserModel.ProfileUrl = fileBo.UploadProfilePicture(picture, sharedHelper.EncryptId(session.Id, EncryptType.U), null);
+                }
             }
 
             var userDetails = unitOfWork.UserDetailsRepository.FindById(session.Id);
@@ -294,6 +322,22 @@ namespace Web.eBado.Helpers
             if (model.ProfilePicture != null)
             {
                 //TODO: upload image to blob and save to db
+                if (model.ProfilePicture.ContentLength != 0)
+                {
+                    FileEntity picture = null;
+                    using (BinaryReader reader = new BinaryReader(model.ProfilePicture.InputStream))
+                    {
+                        var byteFile = reader.ReadBytes(model.ProfilePicture.ContentLength);
+                        picture = new FileEntity
+                        {
+                            Name = new FileInfo(model.ProfilePicture.FileName).Name,
+                            ContentType = model.ProfilePicture.ContentType,
+                            Content = byteFile,
+                            Size = byteFile.Length
+                        };
+                    }
+                    model.CompanyModel.ProfileUrl = fileBo.UploadProfilePicture(picture, null, sharedHelper.EncryptId(session.Companies.First(c => c.IsActive).Id, EncryptType.C));
+                }
             }
 
             var companyDetails = unitOfWork.CompanyDetailsRepository.FindById(companyId);
@@ -384,6 +428,7 @@ namespace Web.eBado.Helpers
 
             return model;
         }
+
         public AccountSettingsModel GetCompanySettings(IUnitOfWork uow, SessionModel session)
         {
             AccountSettingsModel model = new AccountSettingsModel();
@@ -402,7 +447,8 @@ namespace Web.eBado.Helpers
                 CompanyStreet = address.Street,
                 CompanyStreetNumber = address.Number,
                 CompanyPostalCode = address.Location.PostalCode,
-                CompanyDescription = companyDetails.Description
+                CompanyDescription = companyDetails.Description,
+                ProfileUrl = companyDetails.ProfilePictureUrl
             };
 
             model.EditMembersAndRolesModel = new EditMembersAndRolesModel
@@ -571,8 +617,8 @@ namespace Web.eBado.Helpers
                 cachedCategories = sharedHelper.SetCategoriesCacheToListItem(cachedCategories);
             }
 
-            var categoryIds = cachedCategories.Where(c => selectedCategories.Contains(c.CategoryName)).Select(c=>c.Id);
-            var subCategoryIds = cachedCategories.Where(c => selectedCategories.Contains(c.SubCategories.SelectMany(s=>s.SubCategoryName))).Select(c => c.Id);
+            var categoryIds = cachedCategories.Where(c => selectedCategories.Contains(c.CategoryName)).Select(c => c.Id);
+            var subCategoryIds = cachedCategories.Where(c => selectedCategories.Contains(c.SubCategories.SelectMany(s => s.SubCategoryName))).Select(c => c.Id);
             var currentCategoriesId = companyDetails.Category2CompanyDetails.Where(c => c.IsActive).Select(c => c.CategoryId);
             var currentSubCategoriesId = companyDetails.SubCategory2CompanyDetails.Where(c => c.IsActive).Select(c => c.SubCategoryId);
 

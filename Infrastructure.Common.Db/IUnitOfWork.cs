@@ -22,7 +22,7 @@ namespace Infrastructure.Common.DB
         IRepository<CompanyPermissionDbo> CompanyPermissionsRepository { get; }
         IRepository<CompanyRoleDbo> CompanyRoleRepository { get; }
         IRepository<CompanyRole2CompanyPermissionDbo> CompanyRole2CompanyPermissionsRepository { get; }
-        IRepository<SubCategory2CompanyDetailsDbo> SubCategory2CompanyDetailsRepository{ get; }
+        IRepository<SubCategory2CompanyDetailsDbo> SubCategory2CompanyDetailsRepository { get; }
         IRepository<UserPermissionDbo> UserPermissionsRepository { get; }
         IRepository<UserRole2UserPermissionDbo> UserRole2UserPermissionsRepository { get; }
         IRepository<LanguageDbo> LanguageRepository { get; }

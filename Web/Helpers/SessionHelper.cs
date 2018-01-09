@@ -18,7 +18,7 @@ namespace Web.eBado.Helpers
         {
             int companyId = currentSession.Companies.FirstOrDefault(c => c.Name == accountName).Id;
             var companyDetailDbo = unitOfWork.CompanyDetailsRepository.FindById(companyId);
-            var userDetailDbo = companyDetailDbo.CompanyDetails2UserDetails.FirstOrDefault(cd=>cd.UserDetailsId == currentSession.Id).UserDetail;
+            var userDetailDbo = companyDetailDbo.CompanyDetails2UserDetails.FirstOrDefault(cd => cd.UserDetailsId == currentSession.Id).UserDetail;
 
             var newSession = new SessionModel
             {

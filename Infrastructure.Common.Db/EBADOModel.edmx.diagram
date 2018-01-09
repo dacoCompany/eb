@@ -5,52 +5,52 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="5579871a982d4a5aa13a099a2abe9042" Name="Diagram1" ZoomLevel="88">
-        <EntityTypeShape EntityType="testDBModel.AddressDbo" Width="1.5" PointX="5.25" PointY="11.375" />
-        <EntityTypeShape EntityType="testDBModel.AttachmentDbo" Width="1.5" PointX="7.5" PointY="26.625" />
-        <EntityTypeShape EntityType="testDBModel.BatchAttachmentDbo" Width="1.5" PointX="5.25" PointY="26.625" />
-        <EntityTypeShape EntityType="testDBModel.CategoryDbo" Width="1.5" PointX="0.75" PointY="22" />
-        <EntityTypeShape EntityType="testDBModel.Category2CompanyDetailsDbo" Width="1.5" PointX="8.25" PointY="12" />
-        <EntityTypeShape EntityType="testDBModel.CompanyDetails2UserDetailsDbo" Width="1.5" PointX="8.25" PointY="7.625" />
-        <EntityTypeShape EntityType="testDBModel.CompanyPermissionDbo" Width="1.5" PointX="6" PointY="30.75" />
-        <EntityTypeShape EntityType="testDBModel.CompanyRoleDbo" Width="1.5" PointX="6" PointY="16.5" />
-        <EntityTypeShape EntityType="testDBModel.CompanyRole2CompanyPermissionDbo" Width="1.5" PointX="8.25" PointY="16.5" />
-        <EntityTypeShape EntityType="testDBModel.CompanyTypeDbo" Width="1.5" PointX="0.75" PointY="12" />
-        <EntityTypeShape EntityType="testDBModel.SubCategoryDbo" Width="1.5" PointX="3" PointY="21.875" />
-        <EntityTypeShape EntityType="testDBModel.SubCategory2CompanyDetailsDbo" Width="1.5" PointX="5.25" PointY="8" />
-        <EntityTypeShape EntityType="testDBModel.UserDetailDbo" Width="1.5" PointX="6" PointY="0.75" />
-        <EntityTypeShape EntityType="testDBModel.UserPermissionDbo" Width="1.5" PointX="6.75" PointY="20.75" />
-        <EntityTypeShape EntityType="testDBModel.UserRoleDbo" Width="1.5" PointX="3.75" PointY="4.625" />
-        <EntityTypeShape EntityType="testDBModel.UserRole2UserPermissionDbo" Width="1.5" PointX="9" PointY="3.625" />
-        <EntityTypeShape EntityType="testDBModel.AllDeviceDbo" Width="1.5" PointX="0.75" PointY="3.25" />
+        <EntityTypeShape EntityType="testDBModel.AddressDbo" Width="1.5" PointX="5.25" PointY="8.125" />
+        <EntityTypeShape EntityType="testDBModel.AttachmentDbo" Width="1.5" PointX="7.5" PointY="19.625" />
+        <EntityTypeShape EntityType="testDBModel.BatchAttachmentDbo" Width="1.5" PointX="5.25" PointY="19.625" />
+        <EntityTypeShape EntityType="testDBModel.CategoryDbo" Width="1.5" PointX="3" PointY="0.75" />
+        <EntityTypeShape EntityType="testDBModel.Category2CompanyDetailsDbo" Width="1.5" PointX="5.25" PointY="12.75" />
+        <EntityTypeShape EntityType="testDBModel.CompanyDetailDbo" Width="1.5" PointX="3" PointY="11.25" />
+        <EntityTypeShape EntityType="testDBModel.CompanyDetails2LanguagesDbo" Width="1.5" PointX="8.25" PointY="8.75" />
+        <EntityTypeShape EntityType="testDBModel.CompanyDetails2UserDetailsDbo" Width="1.5" PointX="8.25" PointY="12.5" />
+        <EntityTypeShape EntityType="testDBModel.CompanyPermissionDbo" Width="1.5" PointX="6" PointY="32" />
+        <EntityTypeShape EntityType="testDBModel.CompanyRoleDbo" Width="1.5" PointX="6" PointY="23.75" />
+        <EntityTypeShape EntityType="testDBModel.CompanyRole2CompanyPermissionDbo" Width="1.5" PointX="8.25" PointY="23.75" />
+        <EntityTypeShape EntityType="testDBModel.CompanySettingDbo" Width="1.5" PointX="0.75" PointY="8.25" />
+        <EntityTypeShape EntityType="testDBModel.CompanyTypeDbo" Width="1.5" PointX="0.75" PointY="12.875" />
+        <EntityTypeShape EntityType="testDBModel.LanguageDbo" Width="1.5" PointX="6" PointY="4.875" />
+        <EntityTypeShape EntityType="testDBModel.LocationDbo" Width="1.5" PointX="3" PointY="4.625" />
+        <EntityTypeShape EntityType="testDBModel.SubCategoryDbo" Width="1.5" PointX="8" PointY="27.625" />
+        <EntityTypeShape EntityType="testDBModel.SubCategory2CompanyDetailsDbo" Width="1.5" PointX="10.25" PointY="16.75" />
+        <EntityTypeShape EntityType="testDBModel.UserDetailDbo" Width="1.5" PointX="3" PointY="18.375" />
+        <EntityTypeShape EntityType="testDBModel.UserPermissionDbo" Width="1.5" PointX="0.75" PointY="26.125" />
+        <EntityTypeShape EntityType="testDBModel.UserRoleDbo" Width="1.5" PointX="0.75" PointY="22" />
+        <EntityTypeShape EntityType="testDBModel.UserRole2UserPermissionDbo" Width="1.5" PointX="3" PointY="24.875" />
+        <EntityTypeShape EntityType="testDBModel.UserSettingDbo" Width="1.5" PointX="0.75" PointY="18.125" />
+        <EntityTypeShape EntityType="testDBModel.AllDeviceDbo" Width="1.5" PointX="8.75" PointY="2.125" />
+        <AssociationConnector Association="testDBModel.FKAddressCompanyDetailsId" />
+        <AssociationConnector Association="testDBModel.FKAddressLocationId" />
         <AssociationConnector Association="testDBModel.FKAddressUserDetailsId" />
         <AssociationConnector Association="testDBModel.FKAttachmentBatchAttachmentId" />
+        <AssociationConnector Association="testDBModel.FKCompanyDetailsBatchAttachmentId" />
         <AssociationConnector Association="testDBModel.FKCategory" />
         <AssociationConnector Association="testDBModel.FKCategory2CompanyDetailsCategory" />
-        <AssociationConnector Association="testDBModel.FKCompanyDetails2UserDetails" />
-        <AssociationConnector Association="testDBModel.FKUserDetails" />
-        <AssociationConnector Association="testDBModel.FKCompanyPermission" />
-        <AssociationConnector Association="testDBModel.FKCompanyRole" />
-        <AssociationConnector Association="testDBModel.FKSubCategory2CompanyDetailsSubCategory" />
-        <AssociationConnector Association="testDBModel.FKUserDetailsUserRole" />
-        <AssociationConnector Association="testDBModel.FKUserPermission" />
-        <AssociationConnector Association="testDBModel.FKUserRole" />
-        <EntityTypeShape EntityType="testDBModel.LocationDbo" Width="1.5" PointX="10.375" PointY="8" />
-        <AssociationConnector Association="testDBModel.FKAddressLocationId" />
-        <EntityTypeShape EntityType="testDBModel.CompanySettingDbo" Width="1.5" PointX="0.75" PointY="7.5" />
-        <EntityTypeShape EntityType="testDBModel.UserSettingDbo" Width="1.5" PointX="11.375" PointY="1" />
-        <AssociationConnector Association="testDBModel.FKUserSettings" />
-        <EntityTypeShape EntityType="testDBModel.CompanyDetails2LanguagesDbo" Width="1.5" PointX="11.25" PointY="13.125" />
-        <EntityTypeShape EntityType="testDBModel.LanguageDbo" Width="1.5" PointX="9" PointY="20.125" />
-        <AssociationConnector Association="testDBModel.FKLanguageCompanyDetails2Languages" />
-        <EntityTypeShape EntityType="testDBModel.CompanyDetailDbo" Width="1.5" PointX="3" PointY="8.125" />
-        <AssociationConnector Association="testDBModel.FKAddressCompanyDetailsId" />
-        <AssociationConnector Association="testDBModel.FKCompanyDetailsBatchAttachmentId" />
         <AssociationConnector Association="testDBModel.FKCategory2CompanyDetailsCompanyDetails" />
         <AssociationConnector Association="testDBModel.FKCompanyDetails" />
         <AssociationConnector Association="testDBModel.FKCompanyDetails2LanguagesCompanyDetail" />
         <AssociationConnector Association="testDBModel.FKCompanySettings" />
         <AssociationConnector Association="testDBModel.FKCompanyType" />
         <AssociationConnector Association="testDBModel.FKSubCategory2CompanyDetailsCompanyDetails" />
+        <AssociationConnector Association="testDBModel.FKLanguageCompanyDetails2Languages" />
+        <AssociationConnector Association="testDBModel.FKCompanyDetails2UserDetails" />
+        <AssociationConnector Association="testDBModel.FKUserDetails" />
+        <AssociationConnector Association="testDBModel.FKCompanyPermission" />
+        <AssociationConnector Association="testDBModel.FKCompanyRole" />
+        <AssociationConnector Association="testDBModel.FKSubCategory2CompanyDetailsSubCategory" />
+        <AssociationConnector Association="testDBModel.FKUserDetailsUserRole" />
+        <AssociationConnector Association="testDBModel.FKUserSettings" />
+        <AssociationConnector Association="testDBModel.FKUserPermission" />
+        <AssociationConnector Association="testDBModel.FKUserRole" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
