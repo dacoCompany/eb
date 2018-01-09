@@ -47,7 +47,7 @@ namespace Web.eBado.Helpers
 
         public IEnumerable<SelectListItem> GetCategoriesToListItem()
         {
-            
+
             List<CachedAllCategoriesModel> cachedCategories = GetCachedCategoriesInListItem();
             var allCategories = new List<SelectListItem>();
             foreach (var category in cachedCategories)
@@ -60,7 +60,7 @@ namespace Web.eBado.Helpers
 
         public IEnumerable<SelectListItem> GetMainCategoriesToListItem()
         {
-            
+
             List<CachedAllCategoriesModel> cachedCategories = GetCachedCategoriesInListItem();
 
             var allCategories = cachedCategories.Select(category => new SelectListItem { Value = category.CategoryName, Text = category.CategoryName });
@@ -70,7 +70,7 @@ namespace Web.eBado.Helpers
 
         public IEnumerable<AllCategoriesModel> GetCategoriesWithSubCategories()
         {
-            
+
             List<CachedAllCategoriesModel> cachedCategories = GetCachedCategoriesInListItem();
 
             return cachedCategories.Select(category => new AllCategoriesModel
@@ -102,7 +102,7 @@ namespace Web.eBado.Helpers
 
         public IEnumerable<CachedLocationsModel> GetCachedLocations()
         {
-            
+
             var cachedLocations = httpCache.GetData<List<CachedLocationsModel>>(CacheKeys.LocationKey);
 
             if (cachedLocations == null)
@@ -134,11 +134,11 @@ namespace Web.eBado.Helpers
                 userId = session.IsActive ? session.Id : userId;
                 if (userId != null)
                 {
-                    defaultId = unitOfWork.UserDetailsRepository.FindById(userId.Value).UserSetting.SearchRadius ?? defaultId;
+                    defaultId = unitOfWork.UserDetailsRepository.FindById(userId.Value).UserSettings.SearchRadius ?? defaultId;
                 }
                 else
                 {
-                    defaultId = unitOfWork.CompanyDetailsRepository.FindById(companyId.Value).CompanySetting.SearchRadius ?? defaultId;
+                    defaultId = unitOfWork.CompanyDetailsRepository.FindById(companyId.Value).CompanySettings.SearchRadius ?? defaultId;
                 }
             }
             return defaultId;
@@ -185,12 +185,12 @@ namespace Web.eBado.Helpers
             return (CompanyType)System.Enum.Parse(typeof(CompanyType), companyType);
         }
 
-        public string EncryptId(int id)
+        public string EncryptId(int id, EncryptType type)
         {
             var calculatedId = (encryptConstant + id) * multiplyContstant;
-            return $"E{calculatedId}C";
+            return $"E{calculatedId}{type.ToString()}";
         }
-      
+
         public int DecryptId(string id)
         {
             var decryptedId = Convert.ToInt32(new String(id.Where(Char.IsDigit).ToArray()));
@@ -204,7 +204,7 @@ namespace Web.eBado.Helpers
 
         public string GenerateMapUrl(AddressDbo address)
         {
-            if(address == null)
+            if (address == null)
             {
                 return "";
             }
@@ -224,7 +224,7 @@ namespace Web.eBado.Helpers
             return cachedCategories;
         }
 
-      
+
 
         private List<CachedLocationsModel> SetLocationsToCache(List<CachedLocationsModel> cachedLocations)
         {

@@ -13,11 +13,11 @@ namespace Infrastructure.Common.DB
         IRepository<CategoryDbo> CategoryRepository { get; }
         IRepository<LocationDbo> LocationRepository { get; }
         IRepository<SubCategoryDbo> SubCategoryRepository { get; }
-        IRepository<UserDetailDbo> UserDetailsRepository { get; }
+        IRepository<UserDetailsDbo> UserDetailsRepository { get; }
         IRepository<UserRoleDbo> UserRoleRepository { get; }
         IRepository<BatchAttachmentDbo> BatchAttachmentRepository { get; }
         IRepository<AttachmentDbo> AttachmentRepository { get; }
-        IRepository<CompanyDetailDbo> CompanyDetailsRepository { get; }
+        IRepository<CompanyDetailsDbo> CompanyDetailsRepository { get; }
         IRepository<CompanyDetails2UserDetailsDbo> CompanyDetails2UserDetailsRepository { get; }
         IRepository<CompanyPermissionDbo> CompanyPermissionsRepository { get; }
         IRepository<CompanyRoleDbo> CompanyRoleRepository { get; }

@@ -23,6 +23,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Practices.EnterpriseLibrary.Validation;
+using System.IO;
 
 namespace Web.eBado.Controllers
 {
@@ -39,7 +40,7 @@ namespace Web.eBado.Controllers
 
         public AccountController(IConfiguration configuration, IUnitOfWork unitOfWork, IFilesBusinessObjects fileBo)
         {
-            accountHelper = new AccountHelper(unitOfWork);
+            accountHelper = new AccountHelper(unitOfWork, fileBo);
             sessionHelper = new SessionHelper(unitOfWork);
             sharedHelper = new SharedHelper(unitOfWork);
             this.configuration = configuration;
@@ -95,6 +96,7 @@ namespace Web.eBado.Controllers
 
         [System.Web.Http.Authorize(Roles = "ChangeSettings, Read, Write")]
         [Route("ChangeSettings")]
+        [NoClientCache]
         public ActionResult ChangeSettings()
         {
             var currentUrl = Request.Url.ToString();
@@ -480,6 +482,36 @@ namespace Web.eBado.Controllers
         {
             var session = Session["User"] as SessionModel;
             return session.Companies.First(c => c.IsActive)?.Id;
+        }
+
+        private ICollection<FileModel> MapAttachmentsFromRequest()
+        {
+            HttpRequestBase currentRequest = HttpContext.Request;
+            ICollection<FileModel> fileCollection = new Collection<FileModel>();
+
+            if (currentRequest.Files.Count <= 0)
+                return fileCollection;
+
+            foreach (string file in currentRequest.Files)
+            {
+                var httpPostedFile = currentRequest.Files[file] as HttpPostedFileBase;
+                if (httpPostedFile.ContentLength == 0)
+                    continue;
+
+                using (BinaryReader reader = new BinaryReader(httpPostedFile.InputStream))
+                {
+                    var byteFile = reader.ReadBytes(httpPostedFile.ContentLength);
+                    fileCollection.Add(new FileModel
+                    {
+                        Name = new FileInfo(httpPostedFile.FileName).Name,
+                        ContentType = httpPostedFile.ContentType,
+                        Content = byteFile,
+                        Size = byteFile.Length
+                    });
+                }
+            }
+
+            return fileCollection;
         }
 
         #endregion

@@ -213,7 +213,7 @@ namespace Web.eBado.Controllers
             string response = ErrorMessages.SuccessResponse;
 
             var company2UserDbo = unitOfWork.CompanyDetails2UserDetailsRepository
-                .FindFirstOrDefault(cd => cd.CompanyDetailsId == companyId && cd.UserDetail.Email == email);
+                .FindFirstOrDefault(cd => cd.CompanyDetailsId == companyId && cd.UserDetails.Email == email);
 
             if (company2UserDbo == null)
             {
@@ -238,7 +238,7 @@ namespace Web.eBado.Controllers
 
             var companyRole = unitOfWork.CompanyRoleRepository.FindFirstOrDefault(cr => cr.Name == role);
             var user2Company = unitOfWork.CompanyDetails2UserDetailsRepository
-                .FindFirstOrDefault(cd => cd.UserDetail.Email == user && cd.CompanyDetailsId == companyId);
+                .FindFirstOrDefault(cd => cd.UserDetails.Email == user && cd.CompanyDetailsId == companyId);
 
             if (companyRole == null || user2Company == null)
             {
@@ -351,7 +351,7 @@ namespace Web.eBado.Controllers
             return false;
         }
 
-        private UserDetailDbo GetUserByEmail(string email)
+        private UserDetailsDbo GetUserByEmail(string email)
         {
             return unitOfWork.UserDetailsRepository.FindFirstOrDefault(ud => ud.Email == email);
         }

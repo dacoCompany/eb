@@ -7,6 +7,8 @@ namespace eBado.BusinessObjects
     {
         int UploadFiles(IEnumerable<FileEntity> files, string batchId, int companyId);
 
+        string UploadProfilePicture(FileEntity file, string userId, string companyId);
+
         bool DeleteFile(string fileName);
 
         bool DeleteFiles(IEnumerable<string> files, string batchId);

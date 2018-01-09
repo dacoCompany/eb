@@ -125,6 +125,104 @@ namespace eBado.BusinessObjects
             }
         }
 
+        public string UploadProfilePicture(FileEntity file, string userId, string companyId)
+        {
+            try
+            {
+                if (!supportedImageTypes.Contains(file.ContentType))
+                    throw new InvalidDataException("File type not supported.");
+
+                var container = GetAzureBlobContainer();
+
+                // TODO: add check if profile picture exists, then delete old
+
+                string fileThumb32;
+                string fileThumb256;
+                string fileThumb512;
+                UserDetailsDbo user = null;
+                CompanyDetailsDbo company = null;
+
+                if (!string.IsNullOrEmpty(userId))
+                {
+                    fileThumb32 = $"{userId}_32.jpg";
+                    fileThumb256 = $"{userId}_256.jpg";
+                    fileThumb512 = $"{userId}_512.jpg";
+                    int userIdDecr = DecryptId(userId);
+                    user = unitOfWork.UserDetailsRepository.FindById(userIdDecr);
+                }
+                else if (!string.IsNullOrEmpty(companyId))
+                {
+                    fileThumb32 = $"{companyId}_32.jpg";
+                    fileThumb256 = $"{companyId}_256.jpg";
+                    fileThumb512 = $"{companyId}_512.jpg";
+                    int companyIdDecr = DecryptId(companyId);
+                    company = unitOfWork.CompanyDetailsRepository.FindById(companyIdDecr);
+                }
+                else
+                {
+                    throw new Exception();
+                }
+
+                using (MemoryStream stream = new MemoryStream(file.Content))
+                {
+                    var thumbnail32 = new WebImage(stream).Resize(32, 32, true, true);
+                    thumbnail32.FileName = fileThumb32;
+                    byte[] thumb32 = thumbnail32.GetBytes("image/jpeg");
+                    CloudBlockBlob blockBlobThumb32 = container.GetBlockBlobReference($"profiles/{fileThumb32}");
+                    blockBlobThumb32.UploadFromByteArray(thumb32, 0, thumb32.Length);
+                    fileThumb32 = blockBlobThumb32.Uri.ToString();
+                }
+
+                using (MemoryStream stream = new MemoryStream(file.Content))
+                {
+                    var thumbnail256 = new WebImage(stream).Resize(256, 256, true, true);
+                    thumbnail256.FileName = fileThumb256;
+                    byte[] thumb256 = thumbnail256.GetBytes("image/jpeg");
+                    CloudBlockBlob blockBlobThumb256 = container.GetBlockBlobReference($"profiles/{fileThumb256}");
+                    blockBlobThumb256.UploadFromByteArray(thumb256, 0, thumb256.Length);
+                    fileThumb256 = blockBlobThumb256.Uri.ToString();
+                }
+
+                using (MemoryStream stream = new MemoryStream(file.Content))
+                {
+                    var thumbnail512 = new WebImage(stream).Resize(512, 512, true, true);
+                    thumbnail512.FileName = fileThumb512;
+                    byte[] thumb512 = thumbnail512.GetBytes("image/jpeg");
+                    CloudBlockBlob blockBlobThumb512 = container.GetBlockBlobReference($"profiles/{fileThumb512}");
+                    blockBlobThumb512.UploadFromByteArray(thumb512, 0, thumb512.Length);
+                    fileThumb512 = blockBlobThumb512.Uri.ToString();
+                }
+
+                if (user != null)
+                {
+                    user.ProfilePictureUrl = fileThumb512;
+                }
+                else if (company != null)
+                {
+                    company.ProfilePictureUrl = fileThumb512;
+                }
+
+                unitOfWork.Commit();
+                EntlibLogger.LogVerbose("File", "UploadProfilePicture", $"Uploaded profile picture for user {userId}.", diagnosticLogConstant);
+
+                return fileThumb512;
+            }
+            catch (Exception ex)
+            {
+                EntlibLogger.LogError("File", "UploadProfilePicture", $"Upload failed. - {ex.Message}", diagnosticLogConstant, ex);
+                throw;
+            }
+        }
+
+        public int DecryptId(string id)
+        {
+            int encryptConstant = 5168;
+            int multiplyContstant = 42;
+
+            var decryptedId = Convert.ToInt32(new String(id.Where(Char.IsDigit).ToArray()));
+            return (decryptedId / multiplyContstant) - encryptConstant;
+        }
+
         public bool UploadVideo(string url, string batchId, int companyId)
         {
             string videoId = HttpUtility.ParseQueryString(url).Get(0);
@@ -133,7 +231,7 @@ namespace eBado.BusinessObjects
             {
                 return false;
             }
-            
+
             string embedUrl = $"https://www.youtube.com/embed/{videoId}?rel=0";
 
             var client = new HttpClient();

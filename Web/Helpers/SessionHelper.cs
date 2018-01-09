@@ -18,7 +18,7 @@ namespace Web.eBado.Helpers
         {
             int companyId = currentSession.Companies.FirstOrDefault(c => c.Name == accountName).Id;
             var companyDetailDbo = unitOfWork.CompanyDetailsRepository.FindById(companyId);
-            var userDetailDbo = companyDetailDbo.CompanyDetails2UserDetails.FirstOrDefault(cd=>cd.UserDetailsId == currentSession.Id).UserDetail;
+            var userDetailDbo = companyDetailDbo.CompanyDetails2UserDetails.FirstOrDefault(cd => cd.UserDetailsId == currentSession.Id).UserDetails;
 
             var newSession = new SessionModel
             {
@@ -30,9 +30,9 @@ namespace Web.eBado.Helpers
                 UserPermissions = userDetailDbo.UserRole.UserRole2UserPermission.Select(ur => ur.UserPermission.Name)
             };
             CompanySessionModel companySession = null;
-            foreach (var company in userDetailDbo.CompanyDetails2UserDetails.Where(cd => cd.IsActive && cd.CompanyDetail != companyDetailDbo))
+            foreach (var company in userDetailDbo.CompanyDetails2UserDetails.Where(cd => cd.IsActive && cd.CompanyDetails != companyDetailDbo))
             {
-                var companyDetail = company.CompanyDetail;
+                var companyDetail = company.CompanyDetails;
                 var companyRole = company.CompanyRole;
                 companySession = new CompanySessionModel()
                 {
@@ -44,7 +44,7 @@ namespace Web.eBado.Helpers
                 newSession.Companies.Add(companySession);
             }
             var companyRoleDbo = companyDetailDbo.CompanyDetails2UserDetails
-                .FirstOrDefault(cd => cd.IsActive && cd.UserDetail == userDetailDbo && cd.CompanyDetail == companyDetailDbo).CompanyRole;
+                .FirstOrDefault(cd => cd.IsActive && cd.UserDetails == userDetailDbo && cd.CompanyDetails == companyDetailDbo).CompanyRole;
 
             companySession = new CompanySessionModel()
             {
@@ -62,7 +62,7 @@ namespace Web.eBado.Helpers
         {
             var userDetailDbo = unitOfWork.UserDetailsRepository.FindWhere(ud => ud.Id == userId)
                  .Include(ud => ud.UserRole.UserRole2UserPermission.Select(ur => ur.UserPermission))
-                 .Include(ud => ud.CompanyDetails2UserDetails.Select(cd => cd.CompanyDetail))
+                 .Include(ud => ud.CompanyDetails2UserDetails.Select(cd => cd.CompanyDetails))
                  .Include(ud => ud.CompanyDetails2UserDetails.Select(cd => cd.CompanyRole.CompanyRole2CompanyPermission
                  .Select(cr => cr.CompanyPermission))).FirstOrDefault();
 
@@ -79,7 +79,7 @@ namespace Web.eBado.Helpers
             };
             foreach (var company in userDetailDbo.CompanyDetails2UserDetails.Where(cd => cd.IsActive))
             {
-                var companyDetail = company.CompanyDetail;
+                var companyDetail = company.CompanyDetails;
                 var companyRole = company.CompanyRole;
                 CompanySessionModel companySession = new CompanySessionModel()
                 {

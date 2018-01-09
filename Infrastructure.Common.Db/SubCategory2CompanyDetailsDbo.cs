@@ -22,6 +22,6 @@ namespace Infrastructure.Common.DB
         public Nullable<System.DateTime> DateModified { get; set; }
     
         public virtual SubCategoryDbo SubCategory { get; set; }
-        public virtual CompanyDetailDbo CompanyDetail { get; set; }
+        public virtual CompanyDetailsDbo CompanyDetails { get; set; }
     }
 }

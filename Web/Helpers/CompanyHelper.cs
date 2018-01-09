@@ -32,16 +32,16 @@ namespace Web.eBado.Helpers
                 .WhereIf(!string.IsNullOrEmpty(model.Name), search => search.Name.Contains(model.Name))
                 .WhereIf(!string.IsNullOrEmpty(model.SelectedMainCategory), search => search.Category2CompanyDetails.Select(c => c.Category.Name).Contains(model.SelectedMainCategory))
                 .WhereIf(!string.IsNullOrEmpty(model.SelectedSubCategory), search => search.SubCategory2CompanyDetails.Select(sc => sc.SubCategory.Name).Contains(model.SelectedSubCategory))
-                .Where(search => postalCodeList.Contains(search.Addresses.FirstOrDefault(a => a.IsBillingAddress == true).Location.PostalCode))
+                .Where(search => postalCodeList.Contains(search.Address.FirstOrDefault(a => a.IsBillingAddress == true).Location.PostalCode))
                 .Select(company => new CompanyModel
                 {
                     CompanyId = company.EncryptedId,
                     CompanyDescription = company.Description,
                     CompanyName = company.Name,
-                    CompanyPostalCode = company.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value).Location.PostalCode,
-                    CompanyCity = !(string.IsNullOrEmpty(company.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value).Location.District))
-                    ? company.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value).Location.District
-                    : company.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value).Location.City,
+                    CompanyPostalCode = company.Address.FirstOrDefault(a => a.IsBillingAddress.Value).Location.PostalCode,
+                    CompanyCity = !(string.IsNullOrEmpty(company.Address.FirstOrDefault(a => a.IsBillingAddress.Value).Location.District))
+                    ? company.Address.FirstOrDefault(a => a.IsBillingAddress.Value).Location.District
+                    : company.Address.FirstOrDefault(a => a.IsBillingAddress.Value).Location.City,
                     AllSelectedCategories = company.Category2CompanyDetails.Where(c => c.IsActive).Select(c => c.Category.Name)
                     .Concat(company.SubCategory2CompanyDetails.Where(s => s.IsActive).Select(s => s.SubCategory.Name)),
                     ProfileUrl = company.ProfilePictureUrl
@@ -54,7 +54,7 @@ namespace Web.eBado.Helpers
         public CompanyDetailModel GetCompanyDetail(CompanyDetailModel model, IUnitOfWork unitOfWork, int companyId, SessionModel session)
         {
             var company = unitOfWork.CompanyDetailsRepository.FindById(companyId);
-            var companyAddress = company.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value);
+            var companyAddress = company.Address.FirstOrDefault(a => a.IsBillingAddress.Value);
             var companyLocation = companyAddress.Location;
             int imageCount = 0;
             int videoCount = 0;
@@ -113,7 +113,7 @@ namespace Web.eBado.Helpers
             {
                 model.CustomerEmail = session.Email;
             }
-            model.MapUrl = sharedHelper.GenerateMapUrl(company.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value));
+            model.MapUrl = sharedHelper.GenerateMapUrl(company.Address.FirstOrDefault(a => a.IsBillingAddress.Value));
 
             return model;
         }

@@ -22,6 +22,6 @@ namespace Infrastructure.Common.DB
         public int LanguageId { get; set; }
     
         public virtual LanguageDbo Language { get; set; }
-        public virtual CompanyDetailDbo CompanyDetail { get; set; }
+        public virtual CompanyDetailsDbo CompanyDetails { get; set; }
     }
 }

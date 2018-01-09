@@ -20,11 +20,11 @@ namespace Infrastructure.Common.DB
         private Repository<CategoryDbo> categoryRepository;
         private Repository<LocationDbo> locationRepository;
         private Repository<SubCategoryDbo> subCategoryRepository;
-        private Repository<UserDetailDbo> userDetailsRepository;
+        private Repository<UserDetailsDbo> userDetailsRepository;
         private Repository<UserRoleDbo> userRoleRepository;
         private Repository<BatchAttachmentDbo> batchAttachmentRepository;
         private Repository<AttachmentDbo> attachmentRepository;
-        private Repository<CompanyDetailDbo> companyDetailsRespository;
+        private Repository<CompanyDetailsDbo> companyDetailsRespository;
         private Repository<CompanyDetails2UserDetailsDbo> companyDetails2UserDetailsRespository;
         private Repository<Category2CompanyDetailsDbo> category2CompanyDetailsRespository;
         private Repository<CompanyPermissionDbo> companyPermissionsRespository;
@@ -94,8 +94,8 @@ namespace Infrastructure.Common.DB
         /// <value>
         /// The user account repository.
         /// </value>
-        public IRepository<UserDetailDbo> UserDetailsRepository =>
-            userDetailsRepository ?? (userDetailsRepository = new Repository<UserDetailDbo>(context));
+        public IRepository<UserDetailsDbo> UserDetailsRepository =>
+            userDetailsRepository ?? (userDetailsRepository = new Repository<UserDetailsDbo>(context));
 
         /// <summary>
         /// Gets the user role repository.
@@ -121,8 +121,8 @@ namespace Infrastructure.Common.DB
         /// <summary>
         /// Gets or sets the company details repository.
         /// </summary>
-        public IRepository<CompanyDetailDbo> CompanyDetailsRepository =>
-            companyDetailsRespository ?? (companyDetailsRespository = new Repository<CompanyDetailDbo>(context));
+        public IRepository<CompanyDetailsDbo> CompanyDetailsRepository =>
+            companyDetailsRespository ?? (companyDetailsRespository = new Repository<CompanyDetailsDbo>(context));
 
         /// <summary>
         /// Gets or sets the company details to user details repository.

@@ -11,7 +11,7 @@ namespace Messaging.Email
         /// </summary>
         /// <param name="type">The type.</param>
         /// <param name="user">The user.</param>
-        void CreateMessage(MailMessageType type, UserDetailDbo user);
+        void CreateMessage(MailMessageType type, UserDetailsDbo user);
         /// <summary>
         /// Sends email message synchronosly
         /// </summary>

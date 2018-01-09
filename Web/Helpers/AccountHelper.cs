@@ -1,4 +1,6 @@
-﻿using Infrastructure.Common;
+﻿using eBado.BusinessObjects;
+using eBado.Entities;
+using Infrastructure.Common;
 using Infrastructure.Common.DB;
 using Infrastructure.Common.Enums;
 using Infrastructure.Common.Models;
@@ -30,15 +32,17 @@ namespace Web.eBado.Helpers
         const string AllowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789";
 
         private readonly IUnitOfWork unitOfWork;
+        private readonly IFilesBusinessObjects fileBo;
         SharedHelper sharedHelper;
 
         #endregion
 
         #region Constructor
 
-        public AccountHelper(IUnitOfWork unitOfWork)
+        public AccountHelper(IUnitOfWork unitOfWork, IFilesBusinessObjects fileBo)
         {
             this.unitOfWork = unitOfWork;
+            this.fileBo = fileBo;
             sharedHelper = new SharedHelper(unitOfWork);
         }
 
@@ -66,14 +70,14 @@ namespace Web.eBado.Helpers
             return false;
         }
 
-        public UserDetailDbo RegisterUser(IUnitOfWork uow, UserModel model, bool canCommit = false)
+        public UserDetailsDbo RegisterUser(IUnitOfWork uow, UserModel model, bool canCommit = false)
         {
             try
             {
                 var userRole = uow.UserRoleRepository.FindFirstOrDefault(r => r.Name == UserRole.User.ToString());
                 string salt = GenerateSalt();
                 int postalCodeId = sharedHelper.GetLocationByPostalCode(model.PostalCode);
-                var userDetails = new UserDetailDbo
+                var userDetails = new UserDetailsDbo
                 {
                     Email = model.Email,
                     Password = EncodePassword(model.Password, salt),
@@ -88,7 +92,7 @@ namespace Web.eBado.Helpers
                     IsValidated = true
                 };
 
-                userDetails.Addresses.Add(new AddressDbo
+                userDetails.Address.Add(new AddressDbo
                 {
                     Street = model.Street,
                     Number = model.StreetNumber,
@@ -96,7 +100,7 @@ namespace Web.eBado.Helpers
                     LocationId = postalCodeId
                 });
 
-                userDetails.UserSetting = new UserSettingDbo
+                userDetails.UserSettings = new UserSettingDbo
                 {
                     SearchInCZ = true,
                     SearchInSK = true,
@@ -109,7 +113,11 @@ namespace Web.eBado.Helpers
                 uow.UserDetailsRepository.Add(userDetails);
 
                 if (canCommit)
+                {
                     uow.Commit();
+                    userDetails.EncryptedId = sharedHelper.EncryptId(userDetails.Id, EncryptType.U);
+                    uow.Commit();
+                }
 
                 EntlibLogger.LogInfo("Account", "Register", $"Successful registration with e-mail address: {model.Email}", new DiagnosticsLogging { DiagnosticsArea = "Helper", DiagnosticsCategory = "Register" });
 
@@ -122,14 +130,14 @@ namespace Web.eBado.Helpers
             }
         }
 
-        public void RegisterCompany(IUnitOfWork uow, CompanyModel model, UserDetailDbo userDetail)
+        public void RegisterCompany(IUnitOfWork uow, CompanyModel model, UserDetailsDbo userDetail)
         {
             var companyTypeId = uow.CompanyTypeRepository.FindFirstOrDefault(ct => ct.Name == model.CompanyType.ToString()).Id;
             var companyRoleId = uow.CompanyRoleRepository.FindFirstOrDefault(cr => cr.Name == CompanyRole.Owner.ToString()).Id;
             var categoriesIds = uow.SubCategoryRepository.FindWhere(a => a.Name.Equals(model.Categories.SelectedCategories));
             int postalCodeId = sharedHelper.GetLocationByPostalCode(model.CompanyPostalCode);
 
-            var companyDetails = new CompanyDetailDbo
+            var companyDetails = new CompanyDetailsDbo
             {
                 Name = string.IsNullOrEmpty(model.CompanyName) ? "test company" : model.CompanyName,
                 PhoneNumber = model.CompanyPhoneNumber,
@@ -140,7 +148,7 @@ namespace Web.eBado.Helpers
                 Email = model.CompanyEmail
             };
 
-            companyDetails.Addresses.Add(new AddressDbo
+            companyDetails.Address.Add(new AddressDbo
             {
                 Street = model.CompanyStreet,
                 Number = model.CompanyStreetNumber,
@@ -150,7 +158,7 @@ namespace Web.eBado.Helpers
             companyDetails.CompanyDetails2UserDetails.Add(new CompanyDetails2UserDetailsDbo
             {
                 CompanyRoleId = companyRoleId,
-                UserDetail = userDetail,
+                UserDetails = userDetail,
                 EnableNotification = true
             });
 
@@ -160,7 +168,7 @@ namespace Web.eBado.Helpers
                 SetSelectedCategories(selectedCategories, companyDetails);
             }
 
-            companyDetails.CompanySetting = new CompanySettingDbo
+            companyDetails.CompanySettings = new CompanySettingDbo
             {
                 NotifyCommentOnAccount = true,
                 NotifyCommentOnContribution = true,
@@ -173,7 +181,11 @@ namespace Web.eBado.Helpers
 
             uow.CompanyDetailsRepository.Add(companyDetails);
             uow.Commit();
-            companyDetails.EncryptedId = sharedHelper.EncryptId(companyDetails.Id);
+            companyDetails.EncryptedId = sharedHelper.EncryptId(companyDetails.Id, EncryptType.C);
+
+            if (string.IsNullOrEmpty(userDetail.EncryptedId))
+                userDetail.EncryptedId = sharedHelper.EncryptId(userDetail.Id, EncryptType.U);
+
             uow.Commit();
         }
 
@@ -192,6 +204,22 @@ namespace Web.eBado.Helpers
             if (model.ProfilePicture != null)
             {
                 //TODO: upload image to blob and save to db
+                if (model.ProfilePicture.ContentLength != 0)
+                {
+                    FileEntity picture = null;
+                    using (BinaryReader reader = new BinaryReader(model.ProfilePicture.InputStream))
+                    {
+                        var byteFile = reader.ReadBytes(model.ProfilePicture.ContentLength);
+                        picture = new FileEntity
+                        {
+                            Name = new FileInfo(model.ProfilePicture.FileName).Name,
+                            ContentType = model.ProfilePicture.ContentType,
+                            Content = byteFile,
+                            Size = byteFile.Length
+                        };
+                    }
+                    model.UserModel.ProfileUrl = fileBo.UploadProfilePicture(picture, sharedHelper.EncryptId(session.Id, EncryptType.U), null);
+                }
             }
 
             var userDetails = unitOfWork.UserDetailsRepository.FindById(session.Id);
@@ -206,13 +234,13 @@ namespace Web.eBado.Helpers
             userDetails.Surname = userModel.Surname;
             userDetails.Title = userModel.Title;
 
-            var address = userDetails.Addresses.FirstOrDefault(ad => ad.IsBillingAddress.Value);
+            var address = userDetails.Address.FirstOrDefault(ad => ad.IsBillingAddress.Value);
             address.Street = userModel.Street;
             address.Number = userModel.StreetNumber;
             int locationId = sharedHelper.GetLocationByPostalCode(userModel.PostalCode);
             address.LocationId = locationId;
 
-            var userSettings = userDetails.UserSetting;
+            var userSettings = userDetails.UserSettings;
             userSettings.SearchInCZ = searchModel.SearchInCZ;
             userSettings.SearchInHU = searchModel.SearchInHU;
             userSettings.SearchInSK = searchModel.SearchInSK;
@@ -240,6 +268,22 @@ namespace Web.eBado.Helpers
             if (model.ProfilePicture != null)
             {
                 //TODO: upload image to blob and save to db
+                if (model.ProfilePicture.ContentLength != 0)
+                {
+                    FileEntity picture = null;
+                    using (BinaryReader reader = new BinaryReader(model.ProfilePicture.InputStream))
+                    {
+                        var byteFile = reader.ReadBytes(model.ProfilePicture.ContentLength);
+                        picture = new FileEntity
+                        {
+                            Name = new FileInfo(model.ProfilePicture.FileName).Name,
+                            ContentType = model.ProfilePicture.ContentType,
+                            Content = byteFile,
+                            Size = byteFile.Length
+                        };
+                    }
+                    model.CompanyModel.ProfileUrl = fileBo.UploadProfilePicture(picture, null, sharedHelper.EncryptId(session.Companies.First(c => c.IsActive).Id, EncryptType.C));
+                }
             }
 
             var companyDetails = unitOfWork.CompanyDetailsRepository.FindById(companyId);
@@ -249,13 +293,13 @@ namespace Web.eBado.Helpers
             companyDetails.PhoneNumber = companyModel.CompanyPhoneNumber;
             companyDetails.Description = companyModel.CompanyDescription;
 
-            var address = companyDetails.Addresses.First(ad => ad.IsBillingAddress.Value);
+            var address = companyDetails.Address.First(ad => ad.IsBillingAddress.Value);
             address.Street = companyModel.CompanyStreet;
             address.Number = companyModel.CompanyStreetNumber;
 
             int locationId = sharedHelper.GetLocationByPostalCode(companyModel.CompanyPostalCode);
             address.LocationId = locationId;
-            var companySettings = companyDetails.CompanySetting;
+            var companySettings = companyDetails.CompanySettings;
             companySettings.SearchInCZ = searchModel.SearchInCZ;
             companySettings.SearchInHU = searchModel.SearchInHU;
             companySettings.SearchInSK = searchModel.SearchInSK;
@@ -304,9 +348,9 @@ namespace Web.eBado.Helpers
             AccountSettingsModel model = new AccountSettingsModel();
 
             int userId = session.Id;
-            UserDetailDbo userDetails = uow.UserDetailsRepository.FindFirstOrDefault(ud => ud.Id == userId);
-            AddressDbo address = userDetails.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value);
-            UserSettingDbo userSettings = userDetails.UserSetting;
+            UserDetailsDbo userDetails = uow.UserDetailsRepository.FindFirstOrDefault(ud => ud.Id == userId);
+            AddressDbo address = userDetails.Address.FirstOrDefault(a => a.IsBillingAddress.Value);
+            UserSettingDbo userSettings = userDetails.UserSettings;
             model.UserModel = new UserModel
             {
                 AdditionalPhoneNumber = userDetails.AdditionalPhoneNumber,
@@ -317,7 +361,8 @@ namespace Web.eBado.Helpers
                 Street = address.Street,
                 StreetNumber = address.Number,
                 Surname = userDetails.Surname,
-                Title = userDetails.Title
+                Title = userDetails.Title,
+                ProfileUrl = userDetails.ProfilePictureUrl
             };
             model.SearchModel = new SearchSettingsModel
             {
@@ -330,13 +375,14 @@ namespace Web.eBado.Helpers
 
             return model;
         }
+
         public AccountSettingsModel GetCompanySettings(IUnitOfWork uow, SessionModel session)
         {
             AccountSettingsModel model = new AccountSettingsModel();
             int companyId = session.Companies.FirstOrDefault(c => c.IsActive).Id;
-            CompanyDetailDbo companyDetails = uow.CompanyDetailsRepository.FindFirstOrDefault(cd => cd.Id == companyId);
-            AddressDbo address = companyDetails.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value);
-            CompanySettingDbo companySettings = companyDetails.CompanySetting;
+            CompanyDetailsDbo companyDetails = uow.CompanyDetailsRepository.FindFirstOrDefault(cd => cd.Id == companyId);
+            AddressDbo address = companyDetails.Address.FirstOrDefault(a => a.IsBillingAddress.Value);
+            CompanySettingDbo companySettings = companyDetails.CompanySettings;
             model.CompanyModel = new CompanyModel
             {
                 CompanyAdditionalPhoneNumber = companyDetails.AdditionalPhoneNumber,
@@ -348,7 +394,8 @@ namespace Web.eBado.Helpers
                 CompanyStreet = address.Street,
                 CompanyStreetNumber = address.Number,
                 CompanyPostalCode = address.Location.PostalCode,
-                CompanyDescription = companyDetails.Description
+                CompanyDescription = companyDetails.Description,
+                ProfileUrl = companyDetails.ProfilePictureUrl
             };
 
             model.EditMembersAndRolesModel = new EditMembersAndRolesModel
@@ -473,7 +520,7 @@ namespace Web.eBado.Helpers
             return roles;
         }
 
-        private static void SetMembersNotification(NotificationModel notificationModel, CompanyDetailDbo companyDetails)
+        private static void SetMembersNotification(NotificationModel notificationModel, CompanyDetailsDbo companyDetails)
         {
             if (notificationModel.NotifyAllMember)
             {
@@ -493,18 +540,18 @@ namespace Web.eBado.Helpers
             }
         }
 
-        private List<UserRoleModel> GetUserRoles(CompanyDetailDbo companyDetails)
+        private List<UserRoleModel> GetUserRoles(CompanyDetailsDbo companyDetails)
         {
             return companyDetails.CompanyDetails2UserDetails
             .Where(cd => cd.CompanyRole.Name != CompanyRole.Owner.ToString() && cd.IsActive)
             .Select(cd => new UserRoleModel
             {
-                UserEmail = cd.UserDetail.Email,
+                UserEmail = cd.UserDetails.Email,
                 SelectedRoleId = cd.CompanyRole.Name
             }).ToList();
         }
 
-        private IEnumerable<string> GetCurrentCategories(CompanyDetailDbo companyDetails, List<string> selectedCategories = null)
+        private IEnumerable<string> GetCurrentCategories(CompanyDetailsDbo companyDetails, List<string> selectedCategories = null)
         {
             var allCategories = new List<string>();
             var categories = companyDetails.Category2CompanyDetails.Where(c => c.IsActive).Select(c => c.Category.Name);
@@ -517,7 +564,7 @@ namespace Web.eBado.Helpers
             return allCategories;
         }
 
-        private IEnumerable<CurrentLanguagesModel> GetCurrentLanguages(CompanyDetailDbo companyDetails, IUnitOfWork unitOfWork)
+        private IEnumerable<CurrentLanguagesModel> GetCurrentLanguages(CompanyDetailsDbo companyDetails, IUnitOfWork unitOfWork)
         {
             return unitOfWork.CompanyDetails2LanguagesRepository.FindWhere(c => c.CompanyDetailsId == companyDetails.Id).Select(c => new CurrentLanguagesModel
             {
@@ -527,7 +574,7 @@ namespace Web.eBado.Helpers
         }
 
 
-        private void SetSelectedCategories(List<string> selectedCategories, CompanyDetailDbo companyDetails)
+        private void SetSelectedCategories(List<string> selectedCategories, CompanyDetailsDbo companyDetails)
         {
             var cache = NinjectResolver.GetInstance<ICache>();
             var cachedCategories = cache.GetData<List<CachedAllCategoriesModel>>(CacheKeys.CategoryKey);
@@ -537,8 +584,8 @@ namespace Web.eBado.Helpers
                 cachedCategories = sharedHelper.SetCategoriesCacheToListItem(cachedCategories);
             }
 
-            var categoryIds = cachedCategories.Where(c => selectedCategories.Contains(c.CategoryName)).Select(c=>c.Id);
-            var subCategoryIds = cachedCategories.Where(c => selectedCategories.Contains(c.SubCategories.SelectMany(s=>s.SubCategoryName))).Select(c => c.Id);
+            var categoryIds = cachedCategories.Where(c => selectedCategories.Contains(c.CategoryName)).Select(c => c.Id);
+            var subCategoryIds = cachedCategories.Where(c => selectedCategories.Contains(c.SubCategories.SelectMany(s => s.SubCategoryName))).Select(c => c.Id);
             var currentCategoriesId = companyDetails.Category2CompanyDetails.Where(c => c.IsActive).Select(c => c.CategoryId);
             var currentSubCategoriesId = companyDetails.SubCategory2CompanyDetails.Where(c => c.IsActive).Select(c => c.SubCategoryId);
 
@@ -569,7 +616,7 @@ namespace Web.eBado.Helpers
             }
         }
 
-        private void SetSelectedLanguages(IUnitOfWork uow, List<string> selecteLanguages, CompanyDetailDbo companyDetails)
+        private void SetSelectedLanguages(IUnitOfWork uow, List<string> selecteLanguages, CompanyDetailsDbo companyDetails)
         {
             var cache = NinjectResolver.GetInstance<ICache>();
             var cachedLanguages = cache.GetData<List<CachedLanguagesModel>>(CacheKeys.LanguageKey);

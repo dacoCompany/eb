@@ -18,6 +18,7 @@
     <None Include="$(MSBuildThisFileDirectory)Insert\insert_Sub_Categories.sql" />
     <None Include="$(MSBuildThisFileDirectory)Insert\insert_SK_PostalCodes.sql" />
     <None Include="$(MSBuildThisFileDirectory)Insert\insert_Role_Permissions.sql" />
+    <None Include="$(MSBuildThisFileDirectory)Update\Update_003.sql" />
     <None Include="$(MSBuildThisFileDirectory)Update\Update_002.sql" />
     <None Include="$(MSBuildThisFileDirectory)Update\Update_001.sql" />
     <None Include="$(MSBuildThisFileDirectory)update_database_azure.ps1" />
