@@ -34,6 +34,7 @@ namespace Web.eBado.Models.Account
         [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Inclusive, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "RequiredField", Ruleset = "RegisterCompany")]
         public string CompanyEmail { get; set; }
 
+        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 10, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "RequiredField", Ruleset = "RegisterCompany")]
         public int? CompanyIco { get; set; }
 
         public int? CompanyDic { get; set; }
@@ -43,8 +44,6 @@ namespace Web.eBado.Models.Account
         [DataType(DataType.PhoneNumber)]
         public string CompanyPhoneNumber { get; set; }
 
-        [IgnoreNulls(Ruleset = "RegisterCompany")]
-        [StringLengthValidator(10, RangeBoundaryType.Inclusive, 10, RangeBoundaryType.Inclusive, MessageTemplate = "Must be exactly 10 characters", Ruleset = "RegisterCompany")]
         public string CompanyAdditionalPhoneNumber { get; set; }
 
         public string CompanyStreet { get; set; }

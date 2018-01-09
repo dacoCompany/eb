@@ -21,6 +21,7 @@
     function onSubmit(token) {
         document.getElementById("htmlForm").submit();
     }
+
 </script>
 
 @using (Html.BeginForm("RegisterCompany", "Account", FormMethod.Post, new { id = "htmlForm" }))
@@ -44,8 +45,12 @@
                                         @Html.ValidationMessageFor(model => model.UserModel.Email)
                                     </label>
                                 </div>
-                                <div class="form-group col-sm-6"></div>
-
+                                <div class="form-group col-sm-6">
+                                    @Html.EditorFor(model => model.UserModel.PhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPhoneNumber } })
+                                    <label class="label-form" for="email">
+                                        @Html.ValidationMessagesFor(model => model.UserModel.PhoneNumber)
+                                    </label>
+                                </div>
                                 <div class="col-sm-12 reg-font"></div>
                                 <div class="form-group col-sm-6">
                                     @Html.EditorFor(model => model.UserModel.Password, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPassword } })
@@ -59,123 +64,59 @@
                                         @Html.ValidationMessagesFor(model => model.UserModel.RepeatPassword)
                                     </label>
                                 </div>
-                                <div class="col-sm-12 reg-font">@Resources.ContactPerson</div>
-                                <hr class="col-sm-12 transparent" />
-                                <div class="form-group col-sm-3">
-                                    @Html.EditorFor(model => model.UserModel.Title, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHTitle } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessageFor(model => model.UserModel.Title)
-                                    </label>
-                                </div>
-                                <div class="form-group col-sm-4">
-                                    @Html.EditorFor(model => model.UserModel.FirstName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHFirstname } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessageFor(model => model.UserModel.FirstName)
-                                    </label>
-                                </div>
-                                <div class="form-group col-sm-5">
-                                    @Html.EditorFor(model => model.UserModel.Surname, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHLastName } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessageFor(model => model.UserModel.Surname)
-                                    </label>
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.UserModel.PhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPhoneNumber } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessagesFor(model => model.UserModel.PhoneNumber)
-                                    </label>
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.UserModel.AdditionalPhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPhoneNumber } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessageFor(model => model.UserModel.AdditionalPhoneNumber)
-                                    </label>
-                                </div>
-                                <div class="col-sm-12 reg-font">@Resources.ContactDetails</div>
-                                <hr class="col-sm-12 transparent" />
-                                <div class="form-group col-sm-4">
-                                    <input type="text" class="form-control txt-lg" id="txtPostalCode" placeholder="@Resources.PHPostalCode" />
-                                    @Html.HiddenFor(model => model.UserModel.PostalCode, new { @id = "hiddenPostalCode" })
-                                    <input type="hidden" id="hfCustomer" name="CustomerId" />
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessageFor(model => model.UserModel.PostalCode)
-                                    </label>
-                                </div>
-                                <div class="form-group col-sm-5">
-                                    @Html.EditorFor(model => model.UserModel.Street, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetName } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessageFor(model => model.UserModel.Street)
-                                    </label>
-                                </div>
-                                <div class="form-group col-sm-3">
-                                    @Html.EditorFor(model => model.UserModel.StreetNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetNumber } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessageFor(model => model.UserModel.StreetNumber)
-                                    </label>
-                                </div>
+
                                 <div class="col-sm-12 reg-font">@Resources.CompanyInfo</div>
                                 <hr class="col-sm-12 transparent" />
-                                <div class="form-group col-sm-8">
-                                    @Html.DropDownListFor(model => model.CompanyModel.CompanyLocation, EnumHelper.GetSelectList(typeof(Countries)), new { @class = "form-control txt-lg" })
+                                <div class="form-group col-sm-6">
+                                    @Html.DropDownListFor(model => model.CompanyModel.CompanyType, EnumHelper.GetSelectList(typeof(CompanyType)), "Select", new { @class = "form-control txt-lg", @id = "companyType" })
                                     <label class="label-form" for="email">
                                     </label>
-                                </div>                                
-                                <div class="form-group col-sm-12"></div>
-
-                                <div class="form-group col-sm-1">
-                                    <input checked="checked" id="WithIco" name="ICO_choose" type="radio" />
                                 </div>
-                                <div class="form-group col-sm-7">
-                                    @Html.EditorFor(model => model.CompanyModel.CompanyIco, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtCompanyNumber", @placeholder = @Resources.PHCompanyNumber } })
-                                    <label class="label-form" for="email" id="IcoValidation">
-                                        @Html.ValidationMessageFor(model => model.CompanyModel.CompanyIco)
-                                    </label>
+                                <div id="contractor" class="novisible col-sm-12 nopadding">
+                                    <div class="form-group col-sm-6">
+                                        @Html.EditorFor(model => model.UserModel.FirstName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = Resources.PHFirstname } })
+                                        <label class="label-form" for="email">
+                                            @Html.ValidationMessageFor(model => model.UserModel.FirstName)
+                                        </label>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        @Html.EditorFor(model => model.UserModel.Surname, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = Resources.PHLastName } })
+                                        <label class="label-form" for="email">
+                                            @Html.ValidationMessageFor(model => model.UserModel.Surname)
+                                        </label>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        @Html.EditorFor(model => model.UserModel.PostalCode, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtPostalCode", @placeholder = @Resources.PHPostalCode } })
+                                        @Html.HiddenFor(model => model.UserModel.PostalCode, new { @id = "hiddenPostalCode" })
+                                        <label class="label-form" for="email">
+                                            @Html.ValidationMessageFor(model => model.UserModel.PostalCode)
+                                        </label>
+                                    </div>
                                 </div>
-                                <div class="form-group col-sm-4">
-                                    <button type="button" id="validateBtn" class="form-btn col-sm-12"><span id="spn"></span>@Resources.Validate</button>
-                                </div>
-                                <div class="form-group col-sm-12">
-                                    <input id="WithoutIco" name="ICO_choose" class="radio inline" type="radio" /> <span class="h4">&nbsp;&nbsp;&nbsp; @Resources.DontHaveCopanyNumber</span>
-                                </div>
-                                <hr class="col-sm-12 transparent" />
-                                <div id="companyDiv" style="display:none">
+                                <div id="company" class="novisible col-sm-12 nopadding">
                                     <div class="form-group col-sm-8">
-                                        @Html.EditorFor(model => model.CompanyModel.CompanyName, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtCompanyName", @placeholder = @Resources.PHCompanyName } })
+                                        @Html.EditorFor(model => model.CompanyModel.CompanyName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHCompanyName } })
                                         <label class="label-form" for="email">
                                             @Html.ValidationMessageFor(model => model.CompanyModel.CompanyName)
                                         </label>
                                     </div>
                                     <div class="form-group col-sm-4">
-                                        @Html.EditorFor(model => model.CompanyModel.CompanyDic, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtDic", @placeholder = "Dic" } })
+                                        @Html.EditorFor(model => model.CompanyModel.CompanyIco, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHCompanyNumber } })
+                                        <label class="label-form" for="email">
+                                            @Html.ValidationMessageFor(model => model.CompanyModel.CompanyIco)
+                                        </label>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        @Html.EditorFor(model => model.CompanyModel.CompanyDic, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Dic" } })
                                         <label class="label-form" for="email">
                                             @Html.ValidationMessageFor(model => model.CompanyModel.CompanyDic)
                                         </label>
                                     </div>
                                     <div class="form-group col-sm-6">
-                                        @Html.DropDownListFor(model => model.CompanyModel.CompanyType, EnumHelper.GetSelectList(typeof(CompanyType)), new { @class = "form-control txt-lg input-disabled", @id = "AccountTypeDropDown" })
-                                        @Html.HiddenFor(model => model.CompanyModel.CompanyType)
-                                        <label class="label-form" for="email">
-                                            @Html.ValidationMessageFor(model => model.CompanyModel.CompanyType)
-                                        </label>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        @*<input type="text" class="form-control txt-lg" id="txtCompanyPostalCode" placeholder="@Resources.PHPostalCode" />*@
-                                        @Html.EditorFor(model => model.CompanyModel.CompanyPostalCode, new { htmlAttributes = new { @class = "form-control txt-lg", @id= "txtCompanyPostalCode", @placeholder = @Resources.PHPostalCode } })
+                                        @Html.EditorFor(model => model.CompanyModel.CompanyPostalCode, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtCompanyPostalCode", @placeholder = @Resources.PHPostalCode } })
                                         @Html.HiddenFor(model => model.CompanyModel.CompanyPostalCode, new { @id = "hiddenCompanyPostalCode" })
                                         <label class="label-form" for="email">
                                             @Html.ValidationMessageFor(model => model.CompanyModel.CompanyPostalCode)
-                                        </label>
-                                    </div>
-                                    <div class="form-group col-sm-8">
-                                        @Html.EditorFor(model => model.CompanyModel.CompanyStreet, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetName } })
-                                        <label class="label-form" for="email">
-                                            @Html.ValidationMessageFor(model => model.CompanyModel.CompanyStreet)
-                                        </label>
-                                    </div>
-                                    <div class="form-group col-sm-4">
-                                        @Html.EditorFor(model => model.CompanyModel.CompanyStreetNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetNumber } })
-                                        <label class="label-form" for="email">
-                                            @Html.ValidationMessageFor(model => model.CompanyModel.CompanyStreetNumber)
                                         </label>
                                     </div>
                                     <div class="form-group col-sm-6">
@@ -203,92 +144,41 @@
 
                                 <button id="MyButton" class="g-recaptcha form-btn col-sm-12" data-sitekey="@System.Configuration.ConfigurationManager.AppSettings["ReCaptcha_PublicKey"]" data-callback="onSubmit">@Resources.Register2</button>
                             </form>
-                            <script>
-                                $('.chosen-select').chosen({ width: '100%' });
 
-                                function setDefaultValues(btn, oldText) {
-                                    $("#IcoValidation").text("Sorry! We have not found this company identifier");
-                                    $("#txtCompanyName").val("");
-                                    $("#txtDic").val("");
-                                    $("#txtCompanyPostalCode").val("");
-                                    $("#AccountTypeDropDown").val('1');
-                                    $("#companyDiv").hide();
-                                    btn.text(oldText);
-                                }
-
-                                function disableFilledTextBoxes(data) {
-                                    if (data != null) {
-                                        $("#WithoutIco").attr("disabled", "disabled");
-                                    }
-                                    if (data.Name != null) {
-                                        $("#txtCompanyName").attr("readonly", true);
-                                    }
-                                    if (data.Dic != null) {
-                                        $("#txtDic").attr("readonly", true);
-                                    }
-                                    if (data.PostCode === "00000") {
-                                        $("#txtCompanyPostalCode").val(null);
-                                    } else {
-                                        $("#txtCompanyPostalCode").attr("readonly", true);
-                                    }
-                                }
-
-                                    $("#validateBtn").click(function () {
-
-                                        var btn = $("#validateBtn");
-                                        var oldText = btn.text();
-                                        btn.text('');
-                                        btn.html('<span id=\"spn2\" class=\"glyphicon glyphicon-refresh glyphicon-refresh-animate\"></span>');
-                                        var cn = $("#txtCompanyNumber").val().replace(" ", "");
-
-                                        if (cn == null || cn.length < 8) {
-                                            return;
-                                        }
-
-                                        var baseUrl = "@Html.Raw(ConfigurationManager.AppSettings["CompanyRegisterServerBaseUri"])";
-                                        var url = baseUrl + "api/SKRegister/GetCompanyDetailsById3";
-
-                                        $.ajax({
-                                            url: url,
-                                            data: JSON.parse("{ \"id\": \"" + cn + "\"}"),
-                                            dataType: "json",
-                                            type: "GET",
-                                            contentType: "application/json; charset=utf-8",
-                                            success: function (data, textStatus, jqXHR) {
-                                                if (jqXHR.status == "200" && data != null) {
-                                                    $("#IcoValidation").text("");
-                                                    $("#txtCompanyName").val(data.Name);
-                                                    $("#txtDic").val(data.Dic);
-                                                    $("#txtCompanyPostalCode").val(data.PostCode);
-                                                    if (data.CompanyType === "SE") {
-                                                        $("#AccountTypeDropDown").val('2');
-                                                    } else {
-                                                        $("#AccountTypeDropDown").val('3');
-                                                    }
-                                                    $("#companyDiv").fadeIn("slow");
-                                                    btn.text(oldText);
-                                                    disableFilledTextBoxes(data);
-                                                }
-                                                else {
-                                                    setDefaultValues(btn, oldText);
-                                                }
-                                            },
-                                            error: function (response) {
-                                                setDefaultValues(btn, oldText);
-                                            },
-                                            failure: function (response) {
-                                                alert(response.responseText);
-                                                btn.text(oldText);
-                                            },
-                                        });
-                                    });
-
-                            </script>
-                            @Scripts.Render("~/bundles/postalCode")
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function () {
+            var registerType = @Html.Raw(Json.Encode(Model.CompanyModel.CompanyType));
+            if (registerType === 1) {
+                jQuery("#contractor").show();
+            }
+            else if (registerType === 2 || registerType === 3) {
+                jQuery("#company").show();
+            }
+        });
+
+        $('.chosen-select').chosen({ width: '100%' });
+
+        $('#companyType').on('change', function () {
+            if (this.value === '1') {
+                jQuery("#company").hide();
+                jQuery("#contractor").slideDown(500);
+            }
+            else if (this.value === '2' || this.value === '3') {
+                jQuery("#contractor").hide();
+                jQuery("#company").slideDown(500);
+            }
+            else {
+                jQuery('.novisible').slideUp();
+            }
+        })
+
+    </script>
+    @Scripts.Render("~/bundles/postalCode")
 }
+
