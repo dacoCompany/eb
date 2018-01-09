@@ -12,12 +12,12 @@ namespace Infrastructure.Common.DB
     using System;
     using System.Collections.Generic;
     
-    public partial class CompanyDetailsDbo : IEntity
+    public partial class CompanyDetailDbo : IEntity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CompanyDetailsDbo()
+        public CompanyDetailDbo()
         {
-            this.Address = new HashSet<AddressDbo>();
+            this.Addresses = new HashSet<AddressDbo>();
             this.BatchAttachments = new HashSet<BatchAttachmentDbo>();
             this.Category2CompanyDetails = new HashSet<Category2CompanyDetailsDbo>();
             this.CompanyDetails2UserDetails = new HashSet<CompanyDetails2UserDetailsDbo>();
@@ -43,7 +43,7 @@ namespace Infrastructure.Common.DB
         public string EncryptedId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AddressDbo> Address { get; set; }
+        public virtual ICollection<AddressDbo> Addresses { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BatchAttachmentDbo> BatchAttachments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -52,7 +52,7 @@ namespace Infrastructure.Common.DB
         public virtual ICollection<CompanyDetails2UserDetailsDbo> CompanyDetails2UserDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CompanyDetails2LanguagesDbo> CompanyDetails2Languages { get; set; }
-        public virtual CompanySettingDbo CompanySettings { get; set; }
+        public virtual CompanySettingDbo CompanySetting { get; set; }
         public virtual CompanyTypeDbo CompanyType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SubCategory2CompanyDetailsDbo> SubCategory2CompanyDetails { get; set; }

@@ -12,12 +12,12 @@ namespace Infrastructure.Common.DB
     using System;
     using System.Collections.Generic;
     
-    public partial class UserDetailsDbo : IEntity
+    public partial class UserDetailDbo : IEntity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public UserDetailsDbo()
+        public UserDetailDbo()
         {
-            this.Address = new HashSet<AddressDbo>();
+            this.Addresses = new HashSet<AddressDbo>();
             this.CompanyDetails2UserDetails = new HashSet<CompanyDetails2UserDetailsDbo>();
         }
     
@@ -44,10 +44,10 @@ namespace Infrastructure.Common.DB
         public string EncryptedId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AddressDbo> Address { get; set; }
+        public virtual ICollection<AddressDbo> Addresses { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CompanyDetails2UserDetailsDbo> CompanyDetails2UserDetails { get; set; }
         public virtual UserRoleDbo UserRole { get; set; }
-        public virtual UserSettingDbo UserSettings { get; set; }
+        public virtual UserSettingDbo UserSetting { get; set; }
     }
 }

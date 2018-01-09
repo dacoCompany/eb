@@ -134,11 +134,11 @@ namespace Web.eBado.Helpers
                 userId = session.IsActive ? session.Id : userId;
                 if (userId != null)
                 {
-                    defaultId = unitOfWork.UserDetailsRepository.FindById(userId.Value).UserSettings.SearchRadius ?? defaultId;
+                    defaultId = unitOfWork.UserDetailsRepository.FindById(userId.Value).UserSetting.SearchRadius ?? defaultId;
                 }
                 else
                 {
-                    defaultId = unitOfWork.CompanyDetailsRepository.FindById(companyId.Value).CompanySettings.SearchRadius ?? defaultId;
+                    defaultId = unitOfWork.CompanyDetailsRepository.FindById(companyId.Value).CompanySetting.SearchRadius ?? defaultId;
                 }
             }
             return defaultId;

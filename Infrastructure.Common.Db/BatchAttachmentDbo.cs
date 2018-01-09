@@ -32,6 +32,6 @@ namespace Infrastructure.Common.DB
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AttachmentDbo> Attachments { get; set; }
-        public virtual CompanyDetailsDbo CompanyDetails { get; set; }
+        public virtual CompanyDetailDbo CompanyDetail { get; set; }
     }
 }

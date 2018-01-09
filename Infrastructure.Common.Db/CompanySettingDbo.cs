@@ -17,7 +17,7 @@ namespace Infrastructure.Common.DB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public CompanySettingDbo()
         {
-            this.CompanyDetails = new HashSet<CompanyDetailsDbo>();
+            this.CompanyDetails = new HashSet<CompanyDetailDbo>();
         }
     
         public int Id { get; set; }
@@ -34,6 +34,6 @@ namespace Infrastructure.Common.DB
         public Nullable<System.DateTime> DateModified { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CompanyDetailsDbo> CompanyDetails { get; set; }
+        public virtual ICollection<CompanyDetailDbo> CompanyDetails { get; set; }
     }
 }

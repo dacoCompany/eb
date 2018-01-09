@@ -139,8 +139,8 @@ namespace eBado.BusinessObjects
                 string fileThumb32;
                 string fileThumb256;
                 string fileThumb512;
-                UserDetailsDbo user = null;
-                CompanyDetailsDbo company = null;
+                UserDetailDbo user = null;
+                CompanyDetailDbo company = null;
 
                 if (!string.IsNullOrEmpty(userId))
                 {

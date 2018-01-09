@@ -23,8 +23,8 @@ namespace Infrastructure.Common.DB
         public int UserDetailsId { get; set; }
         public int CompanyRoleId { get; set; }
     
+        public virtual CompanyDetailDbo CompanyDetail { get; set; }
         public virtual CompanyRoleDbo CompanyRole { get; set; }
-        public virtual CompanyDetailsDbo CompanyDetails { get; set; }
-        public virtual UserDetailsDbo UserDetails { get; set; }
+        public virtual UserDetailDbo UserDetail { get; set; }
     }
 }

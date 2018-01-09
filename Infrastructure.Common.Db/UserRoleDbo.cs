@@ -17,8 +17,8 @@ namespace Infrastructure.Common.DB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public UserRoleDbo()
         {
+            this.UserDetails = new HashSet<UserDetailDbo>();
             this.UserRole2UserPermission = new HashSet<UserRole2UserPermissionDbo>();
-            this.UserDetails = new HashSet<UserDetailsDbo>();
         }
     
         public int Id { get; set; }
@@ -28,8 +28,8 @@ namespace Infrastructure.Common.DB
         public Nullable<System.DateTime> DateModified { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserRole2UserPermissionDbo> UserRole2UserPermission { get; set; }
+        public virtual ICollection<UserDetailDbo> UserDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserDetailsDbo> UserDetails { get; set; }
+        public virtual ICollection<UserRole2UserPermissionDbo> UserRole2UserPermission { get; set; }
     }
 }

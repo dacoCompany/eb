@@ -84,13 +84,13 @@
     <Compile Include="CategoryDbo.cs">
       <DependentUpon>EBADOModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="CompanyDetailDbo.cs">
+      <DependentUpon>EBADOModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="CompanyDetails2LanguagesDbo.cs">
       <DependentUpon>EBADOModel.tt</DependentUpon>
     </Compile>
     <Compile Include="CompanyDetails2UserDetailsDbo.cs">
-      <DependentUpon>EBADOModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CompanyDetailsDbo.cs">
       <DependentUpon>EBADOModel.tt</DependentUpon>
     </Compile>
     <Compile Include="CompanyPermissionDbo.cs">
@@ -142,7 +142,7 @@
       <DependentUpon>EBADOModel.tt</DependentUpon>
     </Compile>
     <Compile Include="UnitOfWork.cs" />
-    <Compile Include="UserDetailsDbo.cs">
+    <Compile Include="UserDetailDbo.cs">
       <DependentUpon>EBADOModel.tt</DependentUpon>
     </Compile>
     <Compile Include="UserPermissionDbo.cs">

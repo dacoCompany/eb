@@ -70,14 +70,14 @@ namespace Web.eBado.Helpers
             return false;
         }
 
-        public UserDetailsDbo RegisterUser(IUnitOfWork uow, UserModel model, bool canCommit = false)
+        public UserDetailDbo RegisterUser(IUnitOfWork uow, UserModel model, bool canCommit = false)
         {
             try
             {
                 var userRole = uow.UserRoleRepository.FindFirstOrDefault(r => r.Name == UserRole.User.ToString());
                 string salt = GenerateSalt();
                 int postalCodeId = sharedHelper.GetLocationByPostalCode(model.PostalCode);
-                var userDetails = new UserDetailsDbo
+                var userDetails = new UserDetailDbo
                 {
                     Email = model.Email,
                     Password = EncodePassword(model.Password, salt),
@@ -92,7 +92,7 @@ namespace Web.eBado.Helpers
                     IsValidated = true
                 };
 
-                userDetails.Address.Add(new AddressDbo
+                userDetails.Addresses.Add(new AddressDbo
                 {
                     Street = model.Street,
                     Number = model.StreetNumber,
@@ -100,7 +100,7 @@ namespace Web.eBado.Helpers
                     LocationId = postalCodeId
                 });
 
-                userDetails.UserSettings = new UserSettingDbo
+                userDetails.UserSetting = new UserSettingDbo
                 {
                     SearchInCZ = true,
                     SearchInSK = true,
@@ -130,14 +130,14 @@ namespace Web.eBado.Helpers
             }
         }
 
-        public void RegisterCompany(IUnitOfWork uow, CompanyModel model, UserDetailsDbo userDetail)
+        public void RegisterCompany(IUnitOfWork uow, CompanyModel model, UserDetailDbo userDetail)
         {
             var companyTypeId = uow.CompanyTypeRepository.FindFirstOrDefault(ct => ct.Name == model.CompanyType.ToString()).Id;
             var companyRoleId = uow.CompanyRoleRepository.FindFirstOrDefault(cr => cr.Name == CompanyRole.Owner.ToString()).Id;
             var categoriesIds = uow.SubCategoryRepository.FindWhere(a => a.Name.Equals(model.Categories.SelectedCategories));
             int postalCodeId = sharedHelper.GetLocationByPostalCode(model.CompanyPostalCode);
 
-            var companyDetails = new CompanyDetailsDbo
+            var companyDetails = new CompanyDetailDbo
             {
                 Name = string.IsNullOrEmpty(model.CompanyName) ? "test company" : model.CompanyName,
                 PhoneNumber = model.CompanyPhoneNumber,
@@ -148,7 +148,7 @@ namespace Web.eBado.Helpers
                 Email = model.CompanyEmail
             };
 
-            companyDetails.Address.Add(new AddressDbo
+            companyDetails.Addresses.Add(new AddressDbo
             {
                 Street = model.CompanyStreet,
                 Number = model.CompanyStreetNumber,
@@ -158,7 +158,7 @@ namespace Web.eBado.Helpers
             companyDetails.CompanyDetails2UserDetails.Add(new CompanyDetails2UserDetailsDbo
             {
                 CompanyRoleId = companyRoleId,
-                UserDetails = userDetail,
+                UserDetail = userDetail,
                 EnableNotification = true
             });
 
@@ -168,7 +168,7 @@ namespace Web.eBado.Helpers
                 SetSelectedCategories(selectedCategories, companyDetails);
             }
 
-            companyDetails.CompanySettings = new CompanySettingDbo
+            companyDetails.CompanySetting = new CompanySettingDbo
             {
                 NotifyCommentOnAccount = true,
                 NotifyCommentOnContribution = true,
@@ -234,13 +234,13 @@ namespace Web.eBado.Helpers
             userDetails.Surname = userModel.Surname;
             userDetails.Title = userModel.Title;
 
-            var address = userDetails.Address.FirstOrDefault(ad => ad.IsBillingAddress.Value);
+            var address = userDetails.Addresses.FirstOrDefault(ad => ad.IsBillingAddress.Value);
             address.Street = userModel.Street;
             address.Number = userModel.StreetNumber;
             int locationId = sharedHelper.GetLocationByPostalCode(userModel.PostalCode);
             address.LocationId = locationId;
 
-            var userSettings = userDetails.UserSettings;
+            var userSettings = userDetails.UserSetting;
             userSettings.SearchInCZ = searchModel.SearchInCZ;
             userSettings.SearchInHU = searchModel.SearchInHU;
             userSettings.SearchInSK = searchModel.SearchInSK;
@@ -293,13 +293,13 @@ namespace Web.eBado.Helpers
             companyDetails.PhoneNumber = companyModel.CompanyPhoneNumber;
             companyDetails.Description = companyModel.CompanyDescription;
 
-            var address = companyDetails.Address.First(ad => ad.IsBillingAddress.Value);
+            var address = companyDetails.Addresses.First(ad => ad.IsBillingAddress.Value);
             address.Street = companyModel.CompanyStreet;
             address.Number = companyModel.CompanyStreetNumber;
 
             int locationId = sharedHelper.GetLocationByPostalCode(companyModel.CompanyPostalCode);
             address.LocationId = locationId;
-            var companySettings = companyDetails.CompanySettings;
+            var companySettings = companyDetails.CompanySetting;
             companySettings.SearchInCZ = searchModel.SearchInCZ;
             companySettings.SearchInHU = searchModel.SearchInHU;
             companySettings.SearchInSK = searchModel.SearchInSK;
@@ -348,9 +348,9 @@ namespace Web.eBado.Helpers
             AccountSettingsModel model = new AccountSettingsModel();
 
             int userId = session.Id;
-            UserDetailsDbo userDetails = uow.UserDetailsRepository.FindFirstOrDefault(ud => ud.Id == userId);
-            AddressDbo address = userDetails.Address.FirstOrDefault(a => a.IsBillingAddress.Value);
-            UserSettingDbo userSettings = userDetails.UserSettings;
+            UserDetailDbo userDetails = uow.UserDetailsRepository.FindFirstOrDefault(ud => ud.Id == userId);
+            AddressDbo address = userDetails.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value);
+            UserSettingDbo userSettings = userDetails.UserSetting;
             model.UserModel = new UserModel
             {
                 AdditionalPhoneNumber = userDetails.AdditionalPhoneNumber,
@@ -380,9 +380,9 @@ namespace Web.eBado.Helpers
         {
             AccountSettingsModel model = new AccountSettingsModel();
             int companyId = session.Companies.FirstOrDefault(c => c.IsActive).Id;
-            CompanyDetailsDbo companyDetails = uow.CompanyDetailsRepository.FindFirstOrDefault(cd => cd.Id == companyId);
-            AddressDbo address = companyDetails.Address.FirstOrDefault(a => a.IsBillingAddress.Value);
-            CompanySettingDbo companySettings = companyDetails.CompanySettings;
+            CompanyDetailDbo companyDetails = uow.CompanyDetailsRepository.FindFirstOrDefault(cd => cd.Id == companyId);
+            AddressDbo address = companyDetails.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value);
+            CompanySettingDbo companySettings = companyDetails.CompanySetting;
             model.CompanyModel = new CompanyModel
             {
                 CompanyAdditionalPhoneNumber = companyDetails.AdditionalPhoneNumber,
@@ -520,7 +520,7 @@ namespace Web.eBado.Helpers
             return roles;
         }
 
-        private static void SetMembersNotification(NotificationModel notificationModel, CompanyDetailsDbo companyDetails)
+        private static void SetMembersNotification(NotificationModel notificationModel, CompanyDetailDbo companyDetails)
         {
             if (notificationModel.NotifyAllMember)
             {
@@ -540,18 +540,18 @@ namespace Web.eBado.Helpers
             }
         }
 
-        private List<UserRoleModel> GetUserRoles(CompanyDetailsDbo companyDetails)
+        private List<UserRoleModel> GetUserRoles(CompanyDetailDbo companyDetails)
         {
             return companyDetails.CompanyDetails2UserDetails
             .Where(cd => cd.CompanyRole.Name != CompanyRole.Owner.ToString() && cd.IsActive)
             .Select(cd => new UserRoleModel
             {
-                UserEmail = cd.UserDetails.Email,
+                UserEmail = cd.UserDetail.Email,
                 SelectedRoleId = cd.CompanyRole.Name
             }).ToList();
         }
 
-        private IEnumerable<string> GetCurrentCategories(CompanyDetailsDbo companyDetails, List<string> selectedCategories = null)
+        private IEnumerable<string> GetCurrentCategories(CompanyDetailDbo companyDetails, List<string> selectedCategories = null)
         {
             var allCategories = new List<string>();
             var categories = companyDetails.Category2CompanyDetails.Where(c => c.IsActive).Select(c => c.Category.Name);
@@ -564,7 +564,7 @@ namespace Web.eBado.Helpers
             return allCategories;
         }
 
-        private IEnumerable<CurrentLanguagesModel> GetCurrentLanguages(CompanyDetailsDbo companyDetails, IUnitOfWork unitOfWork)
+        private IEnumerable<CurrentLanguagesModel> GetCurrentLanguages(CompanyDetailDbo companyDetails, IUnitOfWork unitOfWork)
         {
             return unitOfWork.CompanyDetails2LanguagesRepository.FindWhere(c => c.CompanyDetailsId == companyDetails.Id).Select(c => new CurrentLanguagesModel
             {
@@ -574,7 +574,7 @@ namespace Web.eBado.Helpers
         }
 
 
-        private void SetSelectedCategories(List<string> selectedCategories, CompanyDetailsDbo companyDetails)
+        private void SetSelectedCategories(List<string> selectedCategories, CompanyDetailDbo companyDetails)
         {
             var cache = NinjectResolver.GetInstance<ICache>();
             var cachedCategories = cache.GetData<List<CachedAllCategoriesModel>>(CacheKeys.CategoryKey);
@@ -616,7 +616,7 @@ namespace Web.eBado.Helpers
             }
         }
 
-        private void SetSelectedLanguages(IUnitOfWork uow, List<string> selecteLanguages, CompanyDetailsDbo companyDetails)
+        private void SetSelectedLanguages(IUnitOfWork uow, List<string> selecteLanguages, CompanyDetailDbo companyDetails)
         {
             var cache = NinjectResolver.GetInstance<ICache>();
             var cachedLanguages = cache.GetData<List<CachedLanguagesModel>>(CacheKeys.LanguageKey);
