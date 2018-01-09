@@ -107,6 +107,8 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="CompanyTypeId" Type="int" Nullable="false" />
           <Property Name="CompanySettingId" Type="int" />
           <Property Name="EncryptedId" Type="varchar" MaxLength="50" />
+          <Property Name="ProfilePictureUrlSmall" Type="varchar" MaxLength="100" />
+          <Property Name="ProfilePictureUrlMedium" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="CompanyDetails2Languages">
           <Key>
@@ -269,6 +271,8 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="UserRoleId" Type="int" Nullable="false" />
           <Property Name="UserSettingId" Type="int" Nullable="false" />
           <Property Name="EncryptedId" Type="varchar" MaxLength="50" />
+          <Property Name="ProfilePictureUrlSmall" Type="varchar" MaxLength="100" />
+          <Property Name="ProfilePictureUrlMedium" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="UserPermission">
           <Key>
@@ -937,6 +941,8 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="CompanyTypeId" Type="Int32" Nullable="false" />
           <Property Name="CompanySettingId" Type="Int32" />
           <Property Name="EncryptedId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ProfilePictureUrlSmall" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ProfilePictureUrlMedium" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Addresses" Relationship="testDBModel.FKAddressCompanyDetailsId" FromRole="CompanyDetail" ToRole="Address" />
           <NavigationProperty Name="BatchAttachments" Relationship="testDBModel.FKCompanyDetailsBatchAttachmentId" FromRole="CompanyDetail" ToRole="BatchAttachment" />
           <NavigationProperty Name="Category2CompanyDetails" Relationship="testDBModel.FKCategory2CompanyDetailsCompanyDetails" FromRole="CompanyDetail" ToRole="Category2CompanyDetails" />
@@ -1125,6 +1131,8 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="UserRoleId" Type="Int32" Nullable="false" />
           <Property Name="UserSettingId" Type="Int32" Nullable="false" />
           <Property Name="EncryptedId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ProfilePictureUrlSmall" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ProfilePictureUrlMedium" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Addresses" Relationship="testDBModel.FKAddressUserDetailsId" FromRole="UserDetail" ToRole="Address" />
           <NavigationProperty Name="CompanyDetails2UserDetails" Relationship="testDBModel.FKUserDetails" FromRole="UserDetail" ToRole="CompanyDetails2UserDetails" />
           <NavigationProperty Name="UserRole" Relationship="testDBModel.FKUserDetailsUserRole" FromRole="UserDetail" ToRole="UserRole" />
@@ -1552,6 +1560,8 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <EntitySetMapping Name="CompanyDetailDboes">
             <EntityTypeMapping TypeName="testDBModel.CompanyDetailDbo">
               <MappingFragment StoreEntitySet="CompanyDetails">
+                <ScalarProperty Name="ProfilePictureUrlMedium" ColumnName="ProfilePictureUrlMedium" />
+                <ScalarProperty Name="ProfilePictureUrlSmall" ColumnName="ProfilePictureUrlSmall" />
                 <ScalarProperty Name="EncryptedId" ColumnName="EncryptedId" />
                 <ScalarProperty Name="CompanySettingId" ColumnName="CompanySettingId" />
                 <ScalarProperty Name="CompanyTypeId" ColumnName="CompanyTypeId" />
@@ -1721,6 +1731,8 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <EntitySetMapping Name="UserDetailDboes">
             <EntityTypeMapping TypeName="testDBModel.UserDetailDbo">
               <MappingFragment StoreEntitySet="UserDetails">
+                <ScalarProperty Name="ProfilePictureUrlMedium" ColumnName="ProfilePictureUrlMedium" />
+                <ScalarProperty Name="ProfilePictureUrlSmall" ColumnName="ProfilePictureUrlSmall" />
                 <ScalarProperty Name="EncryptedId" ColumnName="EncryptedId" />
                 <ScalarProperty Name="UserSettingId" ColumnName="UserSettingId" />
                 <ScalarProperty Name="UserRoleId" ColumnName="UserRoleId" />
