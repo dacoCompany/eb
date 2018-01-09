@@ -15,6 +15,7 @@ namespace Web.eBado.Models.Account
         }
 
         [ObjectValidator("RegisterUser", Ruleset = "RegisterUser")]
+        [ObjectValidator("RegisterContractor", Ruleset = "RegisterContractor")]
         public UserModel UserModel { get; private set; }
 
         //[CompanyRequired(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]

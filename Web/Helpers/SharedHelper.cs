@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Xml;
 using Web.eBado.IoC;
+using Web.eBado.Models.Account;
 using Web.eBado.Models.Company;
 using Web.eBado.Models.Shared;
 using WebAPIFactory.Caching.Core;
@@ -142,6 +143,25 @@ namespace Web.eBado.Helpers
                 }
             }
             return defaultId;
+        }
+
+        public string GetUserDisplayName(UserModel model)
+        {
+            if (string.IsNullOrEmpty(model.FirstName) || string.IsNullOrEmpty(model.Surname))
+            {
+                int index = model.Email.LastIndexOf("@");
+
+                if (index > 0)
+                {
+                    return model.Email.Substring(0, index);
+                }
+
+                throw new Exception("Invalid email format.");
+            }
+            else
+            {
+                return $"{model.FirstName} {model.Surname}";
+            }
         }
 
         public CompanySearchModel GetDefaultCountry(CompanySearchModel model)

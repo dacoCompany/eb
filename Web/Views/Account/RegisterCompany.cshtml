@@ -21,6 +21,7 @@
     function onSubmit(token) {
         document.getElementById("htmlForm").submit();
     }
+
 </script>
 
 @using (Html.BeginForm("RegisterCompany", "Account", FormMethod.Post, new { id = "htmlForm" }))
@@ -71,8 +72,7 @@
                                     <label class="label-form" for="email">
                                     </label>
                                 </div>
-                                <div class="form-group col-sm-6"></div>
-                                <div id="contractor" class="novisible">
+                                <div id="contractor" class="novisible col-sm-12 nopadding">
                                     <div class="form-group col-sm-6">
                                         @Html.EditorFor(model => model.UserModel.FirstName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = Resources.PHFirstname } })
                                         <label class="label-form" for="email">
@@ -86,13 +86,14 @@
                                         </label>
                                     </div>
                                     <div class="form-group col-sm-6">
-                                        @Html.EditorFor(model => model.UserModel.PostalCode, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = Resources.PHPostalCode } })
+                                        @Html.EditorFor(model => model.UserModel.PostalCode, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtPostalCode", @placeholder = @Resources.PHPostalCode } })
+                                        @Html.HiddenFor(model => model.UserModel.PostalCode, new { @id = "hiddenPostalCode" })
                                         <label class="label-form" for="email">
                                             @Html.ValidationMessageFor(model => model.UserModel.PostalCode)
                                         </label>
                                     </div>
                                 </div>
-                                <div id="company" class="novisible">
+                                <div id="company" class="novisible col-sm-12 nopadding">
                                     <div class="form-group col-sm-8">
                                         @Html.EditorFor(model => model.CompanyModel.CompanyName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHCompanyName } })
                                         <label class="label-form" for="email">
@@ -112,7 +113,7 @@
                                         </label>
                                     </div>
                                     <div class="form-group col-sm-6">
-                                        @Html.EditorFor(model => model.CompanyModel.CompanyPostalCode, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPostalCode } })
+                                        @Html.EditorFor(model => model.CompanyModel.CompanyPostalCode, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtCompanyPostalCode", @placeholder = @Resources.PHPostalCode } })
                                         @Html.HiddenFor(model => model.CompanyModel.CompanyPostalCode, new { @id = "hiddenCompanyPostalCode" })
                                         <label class="label-form" for="email">
                                             @Html.ValidationMessageFor(model => model.CompanyModel.CompanyPostalCode)
@@ -143,29 +144,41 @@
 
                                 <button id="MyButton" class="g-recaptcha form-btn col-sm-12" data-sitekey="@System.Configuration.ConfigurationManager.AppSettings["ReCaptcha_PublicKey"]" data-callback="onSubmit">@Resources.Register2</button>
                             </form>
-                            <script>
-                                $('.chosen-select').chosen({ width: '100%' });
 
-                                $('#companyType').on('change', function () {
-                                    if (this.value === '1') {
-                                        jQuery('.company').hide();
-                                        jQuery('.contractor').slideDown();
-                                    }
-                                    else if (this.value === '2' || this.value === '3') {
-                                        jQuery('.contractor').hide();
-                                        jQuery('.company').slideDown();
-                                    }
-                                    else {
-                                        jQuery('.novisible').slideUp();
-                                    }
-                                })
-
-                            </script>
-                            @Scripts.Render("~/bundles/postalCode")
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function () {
+            var registerType = @Html.Raw(Json.Encode(Model.CompanyModel.CompanyType));
+            if (registerType === 1) {
+                jQuery("#contractor").show();
+            }
+            else if (registerType === 2 || registerType === 3) {
+                jQuery("#company").show();
+            }
+        });
+
+        $('.chosen-select').chosen({ width: '100%' });
+
+        $('#companyType').on('change', function () {
+            if (this.value === '1') {
+                jQuery("#company").hide();
+                jQuery("#contractor").slideDown(500);
+            }
+            else if (this.value === '2' || this.value === '3') {
+                jQuery("#contractor").hide();
+                jQuery("#company").slideDown(500);
+            }
+            else {
+                jQuery('.novisible').slideUp();
+            }
+        })
+
+    </script>
+    @Scripts.Render("~/bundles/postalCode")
 }
+

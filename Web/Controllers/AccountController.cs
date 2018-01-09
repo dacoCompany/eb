@@ -23,6 +23,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Practices.EnterpriseLibrary.Validation;
+using Infrastructure.Common.Enums;
+using Infrastructure.Common;
 
 namespace Web.eBado.Controllers
 {
@@ -81,7 +83,6 @@ namespace Web.eBado.Controllers
         {
             RegistrationModel model = new RegistrationModel();
             accountHelper.InitializeData(model.CompanyModel, unitOfWork);
-            model.CompanyModel.CompanyLocation = sharedHelper.GetUserCountry();
 
             return View(model);
         }
@@ -300,7 +301,17 @@ namespace Web.eBado.Controllers
         {
             EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt (user & company) with e-mail address: {model.UserModel.Email}", diagnosticLogConstant);
 
-            var entlibValidationResult = Validation.Validate(model, new[] { "RegisterCompany", "RegisterUser" });
+            var ruleSets = new List<string> { RuleSets.User };
+            if(model.CompanyModel.CompanyType == CompanyType.PartTime)
+            {
+                ruleSets.Add(RuleSets.Contractor);
+            }
+            else
+            {
+                ruleSets.Add(RuleSets.Company);
+            }
+
+            var entlibValidationResult = Validation.Validate(model, ruleSets.ToArray());
 
             if (!entlibValidationResult.IsValid)
             {
@@ -332,8 +343,15 @@ namespace Web.eBado.Controllers
 
             if (AccountHelper.IsValidCaptcha())
             {
-                var userDetail = accountHelper.RegisterUser(unitOfWork, model.UserModel);
-                accountHelper.RegisterCompany(unitOfWork, model.CompanyModel, userDetail);
+                if (model.CompanyModel.CompanyType == CompanyType.PartTime)
+                {
+                    accountHelper.RegisterContractor(unitOfWork, model);
+                }
+                else
+                {
+                    var userDetail = accountHelper.RegisterUser(unitOfWork, model.UserModel);
+                    accountHelper.RegisterCompany(unitOfWork, model.CompanyModel, userDetail);
+                }
             }
 
             return RedirectToAction("Login", "Account");

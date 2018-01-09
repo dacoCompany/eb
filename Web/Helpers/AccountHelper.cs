@@ -66,6 +66,73 @@ namespace Web.eBado.Helpers
             return false;
         }
 
+        public void RegisterContractor(IUnitOfWork uow, RegistrationModel model)
+        {
+            var userModel = model.UserModel;
+            var companyModel = model.CompanyModel;
+            try
+            {
+                var userRole = uow.UserRoleRepository.FindFirstOrDefault(r => r.Name == UserRole.User.ToString());
+                string salt = GenerateSalt();
+                var userDetails = new UserDetailDbo
+                {
+                    Email = userModel.Email,
+                    Password = EncodePassword(userModel.Password, salt),
+                    Salt = salt,
+                    PhoneNumber = userModel.PhoneNumber,
+                    DisplayName = sharedHelper.GetUserDisplayName(userModel),
+                    UserRole = userRole,
+                    IsValidated = true
+                };
+
+                userDetails.UserSetting = new UserSettingDbo
+                {
+                    SearchInCZ = true,
+                    SearchInSK = true,
+                    SearchInHU = true,
+                    SearchRadius = 30,
+                    NotifyCommentOnContribution = true,
+                    NotifyCommentOnAccount = true
+                };
+
+                uow.UserDetailsRepository.Add(userDetails);
+
+                var companyTypeId = uow.CompanyTypeRepository.FindFirstOrDefault(ct => ct.Name == companyModel.CompanyType.ToString()).Id;
+                var companyRoleId = uow.CompanyRoleRepository.FindFirstOrDefault(cr => cr.Name == CompanyRole.Owner.ToString()).Id;
+                var categoriesIds = uow.SubCategoryRepository.FindWhere(a => a.Name.Equals(companyModel.Categories.SelectedCategories));
+
+                var companyDetails = new CompanyDetailDbo
+                {
+                    CompanyTypeId = companyTypeId,
+                    Name = sharedHelper.GetUserDisplayName(userModel)
+                };
+
+                companyDetails.CompanyDetails2UserDetails.Add(new CompanyDetails2UserDetailsDbo
+                {
+                    CompanyRoleId = companyRoleId,
+                    UserDetail = userDetails,
+                    EnableNotification = true
+                });
+
+                var selectedCategories = companyModel.Categories.SelectedCategories.ToList();
+                if (selectedCategories.Any())
+                {
+                    SetSelectedCategories(selectedCategories, companyDetails);
+                }
+
+                uow.CompanyDetailsRepository.Add(companyDetails);
+                uow.Commit();
+
+                EntlibLogger.LogInfo("Account", "Register", $"Successful registration with e-mail address: {userModel.Email}", new DiagnosticsLogging { DiagnosticsArea = "Helper", DiagnosticsCategory = "Register" });
+
+            }
+            catch (Exception ex)
+            {
+                EntlibLogger.LogError("Account", "Register", $"Failed registration with e-mail address: {userModel.Email}", new DiagnosticsLogging { DiagnosticsArea = "Helper", DiagnosticsCategory = "Register" }, ex);
+                throw;
+            }
+        }
+
         public UserDetailDbo RegisterUser(IUnitOfWork uow, UserModel model, bool canCommit = false)
         {
             try
@@ -78,7 +145,7 @@ namespace Web.eBado.Helpers
                     Password = EncodePassword(model.Password, salt),
                     Salt = salt,
                     PhoneNumber = model.PhoneNumber,
-                    DisplayName = GetUserDisplayName(model),
+                    DisplayName = sharedHelper.GetUserDisplayName(model),
                     UserRole = userRole,
                     IsValidated = true
                 };
@@ -416,27 +483,7 @@ namespace Web.eBado.Helpers
             allLanguages.AddRange(languages);
             return allLanguages.AsEnumerable();
         }
-
-        private string GetUserDisplayName(UserModel model)
-        {
-            if (string.IsNullOrEmpty(model.FirstName) || string.IsNullOrEmpty(model.Surname))
-            {
-                int index = model.Email.LastIndexOf("@");
-
-                if (index > 0)
-                {
-                    return model.Email.Substring(0, index);
-                }
-
-                throw new Exception("Invalid email format.");
-            }
-            else
-            {
-                return $"{model.FirstName} {model.Surname}";
-            }
-        }
-
-
+        
         private IEnumerable<SelectListItem> GetAllRoles(IUnitOfWork uow, int companyId)
         {
             List<SelectListItem> allRoles = new List<SelectListItem>();
