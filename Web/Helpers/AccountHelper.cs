@@ -415,7 +415,8 @@ namespace Web.eBado.Helpers
                 Street = address?.Street,
                 StreetNumber = address?.Number,
                 Surname = userDetails?.Surname,
-                Title = userDetails?.Title
+                Title = userDetails?.Title,
+                ProfileUrl = userDetails.ProfilePictureUrl
             };
             model.SearchModel = new SearchSettingsModel
             {
