@@ -304,7 +304,7 @@ namespace Web.eBado.Controllers
             EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt (user & company) with e-mail address: {model.UserModel.Email}", diagnosticLogConstant);
 
             var ruleSets = new List<string> { RuleSets.User };
-            if(model.CompanyModel.CompanyType == CompanyType.PartTime)
+            if (model.CompanyModel.CompanyType == CompanyType.PartTime)
             {
                 ruleSets.Add(RuleSets.Contractor);
             }
@@ -421,6 +421,7 @@ namespace Web.eBado.Controllers
         [ValidateAntiForgeryToken]
         [System.Web.Http.Authorize(Roles = "ChangeSettings, Read, Write")]
         [Route("ChangeSettings")]
+        [NoClientCache]
         public ActionResult ChangeSettings(AccountSettingsModel model)
         {
             var session = Session["User"] as SessionModel;

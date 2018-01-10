@@ -27,6 +27,7 @@ namespace Web.eBado.Helpers
                 HasCompany = userDetailDbo.CompanyDetails2UserDetails.Any(cd => cd.IsActive),
                 Name = userDetailDbo.DisplayName,
                 UserRole = userDetailDbo.UserRole.Name,
+                ProfileUrl = userDetailDbo.ProfilePictureUrlSmall,
                 UserPermissions = userDetailDbo.UserRole.UserRole2UserPermission.Select(ur => ur.UserPermission.Name)
             };
             CompanySessionModel companySession = null;
@@ -39,6 +40,7 @@ namespace Web.eBado.Helpers
                     Id = companyDetail.Id,
                     Name = companyDetail.Name,
                     CompanyRole = companyRole.Name,
+                    ProfileUrl = companyDetail.ProfilePictureUrlSmall,
                     CompanyPermissions = companyRole.CompanyRole2CompanyPermission.Select(cr => cr.CompanyPermission.Name)
                 };
                 newSession.Companies.Add(companySession);
@@ -52,6 +54,7 @@ namespace Web.eBado.Helpers
                 IsActive = true,
                 Name = companyDetailDbo.Name,
                 CompanyRole = companyRoleDbo.Name,
+                ProfileUrl = companyDetailDbo.ProfilePictureUrlSmall,
                 CompanyPermissions = companyRoleDbo.CompanyRole2CompanyPermission.Select(cr => cr.CompanyPermission.Name)
             };
             newSession.Companies.Add(companySession);
@@ -75,6 +78,7 @@ namespace Web.eBado.Helpers
                 IsActive = true,
                 Name = userDetailDbo.DisplayName,
                 UserRole = userRole.Name,
+                ProfileUrl = userDetailDbo.ProfilePictureUrlSmall,
                 UserPermissions = userRole.UserRole2UserPermission.Select(ur => ur.UserPermission.Name)
             };
             foreach (var company in userDetailDbo.CompanyDetails2UserDetails.Where(cd => cd.IsActive))
@@ -86,6 +90,7 @@ namespace Web.eBado.Helpers
                     Id = companyDetail.Id,
                     Name = companyDetail.Name,
                     CompanyRole = companyRole.Name,
+                    ProfileUrl = companyDetail.ProfilePictureUrlSmall,
                     CompanyPermissions = companyRole.CompanyRole2CompanyPermission.Select(cr => cr.CompanyPermission.Name)
                 };
                 newSession.Companies.Add(companySession);

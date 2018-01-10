@@ -10,6 +10,7 @@ namespace Web.eBado.Models.Shared
         public string Name { get; set; }
         public string Email { get; set; }
         public string CompanyRole { get; set; }
+        public string ProfileUrl { get; set; }
         public IEnumerable<string> CompanyPermissions { get; set; }
     }
 }

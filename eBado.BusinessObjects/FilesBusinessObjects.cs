@@ -136,7 +136,7 @@ namespace eBado.BusinessObjects
 
                 // TODO: add check if profile picture exists, then delete old
 
-                string fileThumb32;
+                string fileThumb128;
                 string fileThumb256;
                 string fileThumb512;
                 UserDetailDbo user = null;
@@ -144,7 +144,7 @@ namespace eBado.BusinessObjects
 
                 if (!string.IsNullOrEmpty(userId))
                 {
-                    fileThumb32 = $"{userId}_32.jpg";
+                    fileThumb128 = $"{userId}_128.jpg";
                     fileThumb256 = $"{userId}_256.jpg";
                     fileThumb512 = $"{userId}_512.jpg";
                     int userIdDecr = DecryptId(userId);
@@ -152,7 +152,7 @@ namespace eBado.BusinessObjects
                 }
                 else if (!string.IsNullOrEmpty(companyId))
                 {
-                    fileThumb32 = $"{companyId}_32.jpg";
+                    fileThumb128 = $"{companyId}_128.jpg";
                     fileThumb256 = $"{companyId}_256.jpg";
                     fileThumb512 = $"{companyId}_512.jpg";
                     int companyIdDecr = DecryptId(companyId);
@@ -165,17 +165,17 @@ namespace eBado.BusinessObjects
 
                 using (MemoryStream stream = new MemoryStream(file.Content))
                 {
-                    var thumbnail32 = new WebImage(stream).Resize(32, 32, true, true);
-                    thumbnail32.FileName = fileThumb32;
-                    byte[] thumb32 = thumbnail32.GetBytes("image/jpeg");
-                    CloudBlockBlob blockBlobThumb32 = container.GetBlockBlobReference($"profiles/{fileThumb32}");
-                    blockBlobThumb32.UploadFromByteArray(thumb32, 0, thumb32.Length);
-                    fileThumb32 = blockBlobThumb32.Uri.ToString();
+                    var thumbnail128 = new WebImage(stream).Resize(128, 128, true, true).Crop(1, 1);
+                    thumbnail128.FileName = fileThumb128;
+                    byte[] thumb128 = thumbnail128.GetBytes("image/jpeg");
+                    CloudBlockBlob blockBlobThumb128 = container.GetBlockBlobReference($"profiles/{fileThumb128}");
+                    blockBlobThumb128.UploadFromByteArray(thumb128, 0, thumb128.Length);
+                    fileThumb128 = blockBlobThumb128.Uri.ToString();
                 }
 
                 using (MemoryStream stream = new MemoryStream(file.Content))
                 {
-                    var thumbnail256 = new WebImage(stream).Resize(256, 256, true, true);
+                    var thumbnail256 = new WebImage(stream).Resize(256, 256, true, true).Crop(1, 1);
                     thumbnail256.FileName = fileThumb256;
                     byte[] thumb256 = thumbnail256.GetBytes("image/jpeg");
                     CloudBlockBlob blockBlobThumb256 = container.GetBlockBlobReference($"profiles/{fileThumb256}");
@@ -185,7 +185,7 @@ namespace eBado.BusinessObjects
 
                 using (MemoryStream stream = new MemoryStream(file.Content))
                 {
-                    var thumbnail512 = new WebImage(stream).Resize(512, 512, true, true);
+                    var thumbnail512 = new WebImage(stream).Resize(512, 512, true, true).Crop(1, 1);
                     thumbnail512.FileName = fileThumb512;
                     byte[] thumb512 = thumbnail512.GetBytes("image/jpeg");
                     CloudBlockBlob blockBlobThumb512 = container.GetBlockBlobReference($"profiles/{fileThumb512}");
@@ -195,10 +195,14 @@ namespace eBado.BusinessObjects
 
                 if (user != null)
                 {
+                    user.ProfilePictureUrlSmall = fileThumb128;
+                    user.ProfilePictureUrlMedium = fileThumb256;
                     user.ProfilePictureUrl = fileThumb512;
                 }
                 else if (company != null)
                 {
+                    company.ProfilePictureUrlSmall = fileThumb128;
+                    company.ProfilePictureUrlMedium = fileThumb256;
                     company.ProfilePictureUrl = fileThumb512;
                 }
 

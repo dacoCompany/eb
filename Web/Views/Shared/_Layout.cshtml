@@ -36,7 +36,7 @@
         </div>
         <div class="top-panel">
             <div class="container">
-                <div class="top-panel-img"></div>
+                <div class="top-panel-img" onclick="location.href='@Url.Action("Index", "Home")'"></div>
                 <div class="top-panel-drop">
 
                     @if (!string.IsNullOrEmpty(token) && session != null)
@@ -46,20 +46,63 @@
                                 <li>
                                     @if (session.IsActive == true)
                                     {
-                                        <a href="" onclick="return false" id="@session.Name"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Name<div id="down-triangle"></div></a>
+                                        <a href="" onclick="return false" id="@session.Name">
+                                            @if (string.IsNullOrEmpty(session.ProfileUrl))
+                                            {
+                                                <span class="glyphicon glyphicon-user"></span>
+                                            }
+                                            else
+                                            {
+                                                <img src="@session.ProfileUrl" style="height:24px" />
+                                            }
+                                            &nbsp;@session.Name<div id="down-triangle"></div>
+                                        </a>
                                     }
                                     else
                                     {
-                                        <a href="" onclick="return false" id="@session.Companies.FirstOrDefault(c => c.IsActive).Name"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Companies.FirstOrDefault(c => c.IsActive).Name<div id="down-triangle"></div></a>
+                                        var activeCompany = session.Companies.FirstOrDefault(c => c.IsActive);
+                                        <a href="" onclick="return false" id="@activeCompany.Name">
+                                            @if (string.IsNullOrEmpty(activeCompany.ProfileUrl))
+                                            {
+                                                <span class="glyphicon glyphicon-user"></span>
+                                            }
+                                            else
+                                            {
+                                                <img src="@activeCompany.ProfileUrl" style="height:24px" />
+                                            }
+                                            &nbsp;@activeCompany.Name<div id="down-triangle"></div>
+                                        </a>
                                     }
                                     <ul>
                                         @if (!session.IsActive)
                                         {
-                                            <li><a href="" class="accountLink" id="@session.Name"><span class="glyphicon glyphicon-user"></span>&nbsp;@session.Name<div class="circle"></div></a></li>
+                                            <li>
+                                                <a href="" class="accountLink" id="@session.Name">
+                                                    @if (string.IsNullOrEmpty(session.ProfileUrl))
+                                                    {
+                                                        <span class="glyphicon glyphicon-user"></span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="@session.ProfileUrl" style="height:24px" />
+                                                    }&nbsp;@session.Name<div class="circle"></div>
+                                                </a>
+                                            </li>
                                         }
                                         @foreach (var company in session.Companies.Where(c => !c.IsActive))
                                         {
-                                            <li><a href="" class="accountLink" id="@company.Name"><span class="glyphicon glyphicon-user"></span>&nbsp;@company.Name<div class="circle"></div></a></li>
+                                            <li>
+                                                <a href="" class="accountLink" id="@company.Name">
+                                                    @if (string.IsNullOrEmpty(company.ProfileUrl))
+                                                    {
+                                                        <span class="glyphicon glyphicon-user"></span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="@company.ProfileUrl" style="height:24px" />
+                                                    }&nbsp;@company.Name<div class="circle"></div>
+                                                </a>
+                                            </li>
                                         }
                                         <li><a href="#">Moje dopyty<div class="circle"></div></a></li>
                                         <li><a href="@Url.Action("ChangeSettings","Account")">Nastavenie<div class="circle"></div></a></li>
