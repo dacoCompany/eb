@@ -233,8 +233,9 @@ namespace Web.eBado.Controllers
                 }
                 else
                 {
+                    string content = await response.Content.ReadAsStringAsync();
                     model.ErrorMessage = "Authentication failed";
-                    EntlibLogger.LogInfo("Account", "Login", $"Failed login with e-mail address: {model.Email}. Authentication token cannot be issued.", diagnosticLogConstant);
+                    EntlibLogger.LogInfo("Account", "Login", $"Failed login with e-mail address: {model.Email}. Authentication token cannot be issued. \t {response.StatusCode} {response.ReasonPhrase}\r\n{content}\r\n{client.BaseAddress}\r\n{userDetail.Id}\t{userDetail.UserRoleId}", diagnosticLogConstant);
                     return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
                 }
 

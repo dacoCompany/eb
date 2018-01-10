@@ -12,6 +12,8 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Infrastructure.Common.DB;
 using WebApi.Authorization.Models;
+using WebAPIFactory.Logging.Core;
+using WebAPIFactory.Logging.Core.Diagnostics;
 
 namespace WebApi.Authorization.Controllers
 {
@@ -20,41 +22,50 @@ namespace WebApi.Authorization.Controllers
         [ResponseType(typeof(string))]
         public async Task<IHttpActionResult> GetLoginToken(string appId, int userRoleId, int companyRoleId)
         {
-            var tokenModel = new TokenValues();
-            tokenModel.Issuer = GetConfigValue("issuer", "http://localhost");
-            tokenModel.Audience = GetConfigValue("audience", "audience");
-            tokenModel.ExpiredDate = DateTime.Now.AddDays(GetConfigValue("expiration", 7));
-            tokenModel.Secret = GetConfigValue("secret", "This is a secret.");
-            
-            ICollection<string> permissions = new Collection<string>();
-
-            using (var uow = new UnitOfWork())
+            try
             {
-                if (userRoleId != 0)
+
+                var tokenModel = new TokenValues();
+                tokenModel.Issuer = GetConfigValue("issuer", "http://localhost");
+                tokenModel.Audience = GetConfigValue("audience", "audience");
+                tokenModel.ExpiredDate = DateTime.Now.AddDays(GetConfigValue("expiration", 7));
+                tokenModel.Secret = GetConfigValue("secret", "This is a secret.");
+
+                ICollection<string> permissions = new Collection<string>();
+
+                using (var uow = new UnitOfWork())
                 {
-                    var role = uow.UserRoleRepository.FindWhere(ur => ur.Id == userRoleId).Include(ur => ur.UserRole2UserPermission.Select(r2p => r2p.UserPermission)).FirstOrDefault();
-                    permissions = role.UserRole2UserPermission.Select(r2p => r2p.UserPermission.Name).ToList();
+                    if (userRoleId != 0)
+                    {
+                        var role = uow.UserRoleRepository.FindWhere(ur => ur.Id == userRoleId).Include(ur => ur.UserRole2UserPermission.Select(r2p => r2p.UserPermission)).FirstOrDefault();
+                        permissions = role.UserRole2UserPermission.Select(r2p => r2p.UserPermission.Name).ToList();
+                    }
+                    else if (companyRoleId != 0)
+                    {
+                        var role = uow.CompanyRoleRepository.FindWhere(cr => cr.Id == companyRoleId).Include(ur => ur.CompanyRole2CompanyPermission.Select(r2p => r2p.CompanyPermission)).FirstOrDefault();
+                        permissions = role.CompanyRole2CompanyPermission.Select(r2p => r2p.CompanyPermission.Name).ToList();
+                    }
                 }
-                else if (companyRoleId != 0)
+
+                if (permissions.Count == 0)
                 {
-                    var role = uow. CompanyRoleRepository.FindWhere(cr => cr.Id == companyRoleId).Include(ur => ur.CompanyRole2CompanyPermission.Select(r2p => r2p.CompanyPermission)).FirstOrDefault();
-                    permissions = role.CompanyRole2CompanyPermission.Select(r2p => r2p.CompanyPermission.Name).ToList();
+                    return Unauthorized();
                 }
-            }
 
-            if (permissions.Count == 0)
+                foreach (string permission in permissions)
+                {
+                    tokenModel.Claims.Add(new Claim("role", permission));
+                }
+
+                string jwtToken = await Generate(tokenModel);
+
+                return Ok(jwtToken);
+            }
+            catch (Exception e)
             {
-                return Unauthorized();
+                EntlibLogger.LogError("Authorization", e.Message, DiagnosticsLogging.Create("OAuth", "GetToken"), e);
+                return InternalServerError(e);
             }
-
-            foreach (string permission in permissions)
-            {
-                tokenModel.Claims.Add(new Claim("role", permission));
-            }
-
-            string jwtToken = await Generate(tokenModel);
-
-            return Ok(jwtToken);
         }
 
         public Task<string> Generate(TokenValues values)
@@ -65,7 +76,7 @@ namespace WebApi.Authorization.Controllers
             {
                 var credentials = new SigningCredentials(new InMemorySymmetricSecurityKey(Encoding.UTF8.GetBytes(values.Secret)),
                         SecurityAlgorithms.HmacSha256Signature, SecurityAlgorithms.Sha256Digest);
-                
+
                 JwtSecurityToken token = new JwtSecurityToken(values.Issuer, values.Audience, values.Claims, DateTime.Now, values.ExpiredDate, credentials);
 
                 tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
