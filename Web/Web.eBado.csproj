@@ -291,6 +291,7 @@
     <Compile Include="Models\Account\LanguagesModel.cs" />
     <Compile Include="Models\Shared\PostalCodeModel.cs" />
     <Compile Include="Models\Shared\SessionModel.cs" />
+    <Compile Include="Models\Shared\SubFileModel.cs" />
     <Compile Include="NoClientCacheAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
