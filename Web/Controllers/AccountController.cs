@@ -100,14 +100,12 @@ namespace Web.eBado.Controllers
         [NoClientCache]
         public ActionResult ChangeSettings()
         {
-            var currentUrl = Request.Url.ToString();
-            if (UserNotAuthenticated())
+            if (IsUserAuthnticated())
             {
-                return RedirectToAction("Login", "Account", new { returnUrl = currentUrl });
+                return RedirectToAction("Login", "Account", new { returnUrl = Request.Url.ToString() });
             }
             AccountSettingsModel model = new AccountSettingsModel();
             var session = Session["User"] as SessionModel;
-
             try
             {
                 if (session.IsActive)
@@ -140,10 +138,9 @@ namespace Web.eBado.Controllers
         [Route("EditAccountGallery")]
         public ActionResult EditAccountGallery(string batchId)
         {
-            var currentUrl = Request.Url.ToString();
-            if (UserNotAuthenticated())
+            if (IsUserAuthnticated())
             {
-                return RedirectToAction("Login", "Account", new { returnUrl = currentUrl });
+                return RedirectToAction("Login", "Account", new { returnUrl = Request.Url.ToString() });
             }
             var model = new AttachmentGalleryModel();
 
@@ -162,10 +159,9 @@ namespace Web.eBado.Controllers
         [Route("BatchAccountGallery")]
         public ActionResult BatchAccountGallery()
         {
-            var currentUrl = Request.Url.ToString();
-            if (UserNotAuthenticated())
+            if (IsUserAuthnticated())
             {
-                return RedirectToAction("Login", "Account", new { returnUrl = currentUrl });
+                return RedirectToAction("Login", "Account", new { returnUrl = Request.Url.ToString() });
             }
             try
             {
@@ -425,6 +421,11 @@ namespace Web.eBado.Controllers
         [NoClientCache]
         public ActionResult ChangeSettings(AccountSettingsModel model)
         {
+            if (IsUserAuthnticated())
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = Request.Url.ToString() });
+            }
+
             var session = Session["User"] as SessionModel;
             ChangePasswordModel passwordModel = model.PasswordModel;
             bool changePsw = false;
@@ -492,7 +493,7 @@ namespace Web.eBado.Controllers
 
         #region Private methods
 
-        private bool UserNotAuthenticated()
+        private bool IsUserAuthnticated()
         {
             var session = (SessionModel)Session["User"];
             return session == null;

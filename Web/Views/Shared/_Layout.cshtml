@@ -53,7 +53,7 @@
                                             }
                                             else
                                             {
-                                                <img src="@session.ProfileUrl" style="height:24px" />
+                                                <img src="@session.ProfileUrl?@DateTime.Now.Ticks.ToString()" style="height:24px" />
                                             }
                                             &nbsp;@session.Name<div id="down-triangle"></div>
                                         </a>
@@ -68,7 +68,7 @@
                                             }
                                             else
                                             {
-                                                <img src="@activeCompany.ProfileUrl" style="height:24px" />
+                                                <img src="@activeCompany.ProfileUrl?@DateTime.Now.Ticks.ToString()" style="height:24px" />
                                             }
                                             &nbsp;@activeCompany.Name<div id="down-triangle"></div>
                                         </a>
@@ -84,7 +84,7 @@
                                                     }
                                                     else
                                                     {
-                                                        <img src="@session.ProfileUrl" style="height:24px" />
+                                                        <img src="@session.ProfileUrl?@DateTime.Now.Ticks.ToString()" style="height:24px" />
                                                     }&nbsp;@session.Name<div class="circle"></div>
                                                 </a>
                                             </li>
@@ -99,7 +99,7 @@
                                                     }
                                                     else
                                                     {
-                                                        <img src="@company.ProfileUrl" style="height:24px" />
+                                                        <img src="@company.ProfileUrl?@DateTime.Now.Ticks.ToString()" style="height:24px" />
                                                     }&nbsp;@company.Name<div class="circle"></div>
                                                 </a>
                                             </li>

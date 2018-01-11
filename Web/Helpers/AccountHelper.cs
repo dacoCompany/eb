@@ -255,6 +255,8 @@ namespace Web.eBado.Helpers
             NotificationModel notificationModel = model.NotificationModel;
             ChangePasswordModel passwordModel = model.PasswordModel;
 
+            var userDetails = unitOfWork.UserDetailsRepository.FindById(session.Id);
+
             if (model.ProfilePicture != null)
             {
                 //TODO: upload image to blob and save to db
@@ -275,8 +277,11 @@ namespace Web.eBado.Helpers
                     model.UserModel.ProfileUrl = fileBo.UploadProfilePicture(picture, sharedHelper.EncryptId(session.Id, EncryptType.U), null);
                 }
             }
-
-            var userDetails = unitOfWork.UserDetailsRepository.FindById(session.Id);
+            else
+            {
+                userModel.ProfileUrl = userDetails.ProfilePictureUrl;
+            }
+            
             if (changePsw)
             {
                 userDetails.Password = EncodePassword(passwordModel.NewPassword, userDetails.Salt);
@@ -288,12 +293,14 @@ namespace Web.eBado.Helpers
             userDetails.Surname = userModel.Surname;
             userDetails.Title = userModel.Title;
 
-            var address = userDetails.Addresses.FirstOrDefault(ad => ad.IsBillingAddress.Value);
-            address.Street = userModel.Street;
-            address.Number = userModel.StreetNumber;
-            int locationId = sharedHelper.GetLocationByPostalCode(userModel.PostalCode);
-            address.LocationId = locationId;
-
+            if (userDetails.Addresses.Any())
+            {
+                var address = userDetails.Addresses.FirstOrDefault(ad => ad.IsBillingAddress.Value);
+                address.Street = userModel.Street;
+                address.Number = userModel.StreetNumber;
+                int locationId = sharedHelper.GetLocationByPostalCode(userModel.PostalCode);
+                address.LocationId = locationId;
+            }
             var userSettings = userDetails.UserSetting;
             userSettings.SearchInCZ = searchModel.SearchInCZ;
             userSettings.SearchInHU = searchModel.SearchInHU;
@@ -314,6 +321,8 @@ namespace Web.eBado.Helpers
             {
                 model = GetCompanySettings(unitOfWork, session);
             }
+
+            var companyDetails = unitOfWork.CompanyDetailsRepository.FindById(companyId);
 
             CompanyModel companyModel = model.CompanyModel;
             SearchSettingsModel searchModel = model.SearchModel;
@@ -339,8 +348,12 @@ namespace Web.eBado.Helpers
                     model.CompanyModel.ProfileUrl = fileBo.UploadProfilePicture(picture, null, sharedHelper.EncryptId(session.Companies.First(c => c.IsActive).Id, EncryptType.C));
                 }
             }
+            else
+            {
+                companyModel.ProfileUrl = companyDetails.ProfilePictureUrl;
+            }
 
-            var companyDetails = unitOfWork.CompanyDetailsRepository.FindById(companyId);
+            
 
             companyDetails.AdditionalPhoneNumber = companyModel.CompanyAdditionalPhoneNumber;
             companyDetails.Email = companyModel.CompanyEmail;
@@ -530,7 +543,7 @@ namespace Web.eBado.Helpers
             allLanguages.AddRange(languages);
             return allLanguages.AsEnumerable();
         }
-        
+
         private IEnumerable<SelectListItem> GetAllRoles(IUnitOfWork uow, int companyId)
         {
             List<SelectListItem> allRoles = new List<SelectListItem>();
