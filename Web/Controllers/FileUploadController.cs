@@ -27,7 +27,7 @@ namespace Web.eBado.Controllers
     public class FileUploadController : Controller
     {
         FilesHelper filesHelper;
-        
+
         private readonly IConfiguration configuration;
         private readonly IUnitOfWork unitOfWork;
         private readonly IFilesBusinessObjects filesBo;
@@ -57,18 +57,33 @@ namespace Web.eBado.Controllers
         {
             try
             {
-                var files = MapAttachmentsFromRequest();
+                var filesModel = MapAttachmentsFromRequest();
                 Mapper.Initialize(cfg =>
                 {
                     cfg.CreateMap<FileModel, FileEntity>();
                 });
 
-                var fileEntities = Mapper.Map<ICollection<FileEntity>>(files);
+                var fileEntities = Mapper.Map<ICollection<FileEntity>>(filesModel);
                 int companyId = GetActiveCompany();
 
                 int uploadedCount = filesBo.UploadFiles(fileEntities, batchId, companyId);
 
-                return files.Count == uploadedCount ? Json("Success", JsonRequestBehavior.AllowGet) : Json("Some files are not supported.", JsonRequestBehavior.AllowGet);
+                var subFiles = new Collection<SubFileModel>();
+                foreach (var item in filesModel)
+                {
+                    subFiles.Add(new SubFileModel
+                    {
+                        DeleteType = "DELETE",
+                        DeleteUrl = Request.Url.ToString(),
+                        Name = item.Name,
+                        Size = item.Size,
+                        ThumbnailUrl = item.ThumbnailUrl,
+                        Url = item.Url
+                    });
+                }
+                var response = new { files = subFiles };
+
+                return filesModel.Count == uploadedCount ? new JsonNetResult(response) : Json("Some files are not supported.", JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
