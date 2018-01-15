@@ -77,19 +77,22 @@ namespace Web.eBado.Helpers
             try
             {
                 var userRole = uow.UserRoleRepository.FindFirstOrDefault(r => r.Name == UserRole.User.ToString());
+                int postalCodeId = sharedHelper.GetLocationByPostalCode(model.UserModel.PostalCode);
                 string salt = GenerateSalt();
-                var userDetails = new UserDetailDbo
+                var userDetail = new UserDetailDbo
                 {
                     Email = userModel.Email,
                     Password = EncodePassword(userModel.Password, salt),
                     Salt = salt,
                     PhoneNumber = userModel.PhoneNumber,
+                    FirstName = userModel.FirstName,
+                    Surname = userModel.Surname,
                     DisplayName = sharedHelper.GetUserDisplayName(userModel),
                     UserRole = userRole,
                     IsValidated = true
                 };
 
-                userDetails.UserSetting = new UserSettingDbo
+                userDetail.UserSetting = new UserSettingDbo
                 {
                     SearchInCZ = true,
                     SearchInSK = true,
@@ -99,32 +102,58 @@ namespace Web.eBado.Helpers
                     NotifyCommentOnAccount = true
                 };
 
-                uow.UserDetailsRepository.Add(userDetails);
+                userDetail.Addresses.Add(new AddressDbo
+                {
+                    IsBillingAddress = true,
+                    LocationId = postalCodeId
+                });
+
+                uow.UserDetailsRepository.Add(userDetail);
 
                 var companyTypeId = uow.CompanyTypeRepository.FindFirstOrDefault(ct => ct.Name == companyModel.CompanyType.ToString()).Id;
                 var companyRoleId = uow.CompanyRoleRepository.FindFirstOrDefault(cr => cr.Name == CompanyRole.Owner.ToString()).Id;
-                var categoriesIds = uow.SubCategoryRepository.FindWhere(a => a.Name.Equals(companyModel.Categories.SelectedCategories));
 
-                var companyDetails = new CompanyDetailDbo
+                var companyDetail = new CompanyDetailDbo
                 {
+                    Name = sharedHelper.GetUserDisplayName(userModel),
+                    PhoneNumber = userModel.PhoneNumber,
                     CompanyTypeId = companyTypeId,
-                    Name = sharedHelper.GetUserDisplayName(userModel)
+                    Email = userModel.Email
                 };
 
-                companyDetails.CompanyDetails2UserDetails.Add(new CompanyDetails2UserDetailsDbo
+                companyDetail.Addresses.Add(new AddressDbo
+                {
+                    IsBillingAddress = true,
+                    LocationId = postalCodeId
+                });
+
+                companyDetail.CompanySetting = new CompanySettingDbo
+                {
+                    SearchInHU = true,
+                    SearchInSK = true,
+                    SearchInCZ = true,
+                    SearchRadius = 100
+                };
+
+                companyDetail.CompanyDetails2UserDetails.Add(new CompanyDetails2UserDetailsDbo
                 {
                     CompanyRoleId = companyRoleId,
-                    UserDetail = userDetails,
+                    UserDetail = userDetail,
                     EnableNotification = true
                 });
 
                 var selectedCategories = companyModel.Categories.SelectedCategories.ToList();
                 if (selectedCategories.Any())
                 {
-                    SetSelectedCategories(selectedCategories, companyDetails);
+                    SetSelectedCategories(selectedCategories, companyDetail);
                 }
 
-                uow.CompanyDetailsRepository.Add(companyDetails);
+                uow.CompanyDetailsRepository.Add(companyDetail);
+                uow.Commit();
+
+                userDetail.EncryptedId = sharedHelper.EncryptId(userDetail.Id, EncryptType.U);
+                companyDetail.EncryptedId = sharedHelper.EncryptId(companyDetail.Id, EncryptType.C);
+
                 uow.Commit();
 
                 EntlibLogger.LogInfo("Account", "Register", $"Successful registration with e-mail address: {userModel.Email}", new DiagnosticsLogging { DiagnosticsArea = "Helper", DiagnosticsCategory = "Register" });
@@ -188,14 +217,12 @@ namespace Web.eBado.Helpers
         {
             var companyTypeId = uow.CompanyTypeRepository.FindFirstOrDefault(ct => ct.Name == model.CompanyType.ToString()).Id;
             var companyRoleId = uow.CompanyRoleRepository.FindFirstOrDefault(cr => cr.Name == CompanyRole.Owner.ToString()).Id;
-            var categoriesIds = uow.SubCategoryRepository.FindWhere(a => a.Name.Equals(model.Categories.SelectedCategories));
             int postalCodeId = sharedHelper.GetLocationByPostalCode(model.CompanyPostalCode);
 
             var companyDetails = new CompanyDetailDbo
             {
                 Name = string.IsNullOrEmpty(model.CompanyName) ? "test company" : model.CompanyName,
                 PhoneNumber = model.CompanyPhoneNumber,
-                AdditionalPhoneNumber = model.CompanyAdditionalPhoneNumber,
                 Ico = model.CompanyIco,
                 Dic = model.CompanyDic,
                 CompanyTypeId = companyTypeId,
@@ -204,8 +231,6 @@ namespace Web.eBado.Helpers
 
             companyDetails.Addresses.Add(new AddressDbo
             {
-                Street = model.CompanyStreet,
-                Number = model.CompanyStreetNumber,
                 IsBillingAddress = true,
                 LocationId = postalCodeId
             });
@@ -281,7 +306,7 @@ namespace Web.eBado.Helpers
             {
                 userModel.ProfileUrl = userDetails.ProfilePictureUrl;
             }
-            
+
             if (changePsw)
             {
                 userDetails.Password = EncodePassword(passwordModel.NewPassword, userDetails.Salt);
@@ -298,8 +323,7 @@ namespace Web.eBado.Helpers
                 var address = userDetails.Addresses.FirstOrDefault(ad => ad.IsBillingAddress.Value);
                 address.Street = userModel.Street;
                 address.Number = userModel.StreetNumber;
-                int locationId = sharedHelper.GetLocationByPostalCode(userModel.PostalCode);
-                address.LocationId = locationId;
+                address.LocationId = sharedHelper.GetLocationByPostalCode(userModel.PostalCode);
             }
             var userSettings = userDetails.UserSetting;
             userSettings.SearchInCZ = searchModel.SearchInCZ;
@@ -345,7 +369,7 @@ namespace Web.eBado.Helpers
                             Size = byteFile.Length
                         };
                     }
-                    model.CompanyModel.ProfileUrl = fileBo.UploadProfilePicture(picture, null, sharedHelper.EncryptId(session.Companies.First(c => c.IsActive).Id, EncryptType.C));
+                    model.CompanyModel.ProfileUrl = fileBo.UploadProfilePicture(picture, null, sharedHelper.EncryptId(companyId, EncryptType.C));
                 }
             }
             else
@@ -353,7 +377,7 @@ namespace Web.eBado.Helpers
                 companyModel.ProfileUrl = companyDetails.ProfilePictureUrl;
             }
 
-            
+
 
             companyDetails.AdditionalPhoneNumber = companyModel.CompanyAdditionalPhoneNumber;
             companyDetails.Email = companyModel.CompanyEmail;
@@ -364,16 +388,20 @@ namespace Web.eBado.Helpers
             address.Street = companyModel.CompanyStreet;
             address.Number = companyModel.CompanyStreetNumber;
 
-            int locationId = sharedHelper.GetLocationByPostalCode(companyModel.CompanyPostalCode);
-            address.LocationId = locationId;
+            address.LocationId = sharedHelper.GetLocationByPostalCode(companyModel.CompanyPostalCode);
+
             var companySettings = companyDetails.CompanySetting;
             companySettings.SearchInCZ = searchModel.SearchInCZ;
             companySettings.SearchInHU = searchModel.SearchInHU;
             companySettings.SearchInSK = searchModel.SearchInSK;
             companySettings.SearchRadius = searchModel.SearchRadius;
-            companySettings.NotifyCommentOnAccount = notificationModel.NotifyCommentOnAccount;
-            companySettings.NotifyCommentOnContribution = notificationModel.NotifyCommentOnContribution;
-            companySettings.NotifyAllMember = notificationModel.NotifyAllMember;
+
+            if (!session.IsContractor)
+            {
+                companySettings.NotifyCommentOnAccount = notificationModel.NotifyCommentOnAccount;
+                companySettings.NotifyCommentOnContribution = notificationModel.NotifyCommentOnContribution;
+                companySettings.NotifyAllMember = notificationModel.NotifyAllMember;
+            }
 
             SetMembersNotification(notificationModel, companyDetails);
 
@@ -472,19 +500,22 @@ namespace Web.eBado.Helpers
                 UserRoles = GetUserRoles(companyDetails),
                 Permissions = new CompanyPermissionsModel()
             };
-            model.NotificationModel = new NotificationModel
+            if (!session.IsContractor)
             {
-                NotifyCommentOnAccount = companySettings.NotifyCommentOnAccount,
-                NotifyCommentOnContribution = companySettings.NotifyCommentOnContribution,
-                NotifyAllMember = companySettings.NotifyAllMember
-            };
-            model.SearchModel = new SearchSettingsModel
-            {
-                SearchInCZ = companySettings.SearchInCZ,
-                SearchInHU = companySettings.SearchInHU,
-                SearchInSK = companySettings.SearchInSK,
-                SearchRadius = companySettings.SearchRadius.Value
-            };
+                model.NotificationModel = new NotificationModel
+                {
+                    NotifyCommentOnAccount = companySettings.NotifyCommentOnAccount,
+                    NotifyCommentOnContribution = companySettings.NotifyCommentOnContribution,
+                    NotifyAllMember = companySettings.NotifyAllMember
+                };
+                model.SearchModel = new SearchSettingsModel
+                {
+                    SearchInCZ = companySettings.SearchInCZ,
+                    SearchInHU = companySettings.SearchInHU,
+                    SearchInSK = companySettings.SearchInSK,
+                    SearchRadius = companySettings.SearchRadius.Value
+                };
+            }
             model.CurrentCategories = GetCurrentCategories(companyDetails);
             model.CurrentLanguages = GetCurrentLanguages(companyDetails, uow);
 
@@ -522,7 +553,15 @@ namespace Web.eBado.Helpers
             var chars = new char[length];
             for (var i = 0; i <= length - 1; i++)
             {
-                chars[i] = AllowedChars[Convert.ToInt32((AllowedChars.Length) * randNum.NextDouble())];
+                int range = Convert.ToInt32((AllowedChars.Length) * randNum.NextDouble());
+                if (range > AllowedChars.Length - 1)
+                {
+                    chars[i] = AllowedChars[AllowedChars.Length - 1];
+                }
+                else
+                {
+                    chars[i] = AllowedChars[range];
+                }
             }
             return new string(chars);
         }

@@ -353,7 +353,7 @@ namespace Web.eBado.Controllers
                 }
             }
 
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("ChangeSettings", "Account");
         }
 
         [HttpPost]

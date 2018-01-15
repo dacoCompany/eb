@@ -160,7 +160,7 @@ namespace eBado.BusinessObjects
                 }
                 else
                 {
-                    throw new Exception();
+                    throw new ArgumentNullException();
                 }
 
                 using (MemoryStream stream = new MemoryStream(file.Content))
