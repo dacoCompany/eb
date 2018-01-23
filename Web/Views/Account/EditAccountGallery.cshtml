@@ -269,7 +269,7 @@
             url: "/FileUpload/DeleteFiles",
             type: "POST",
             data: JSON.stringify({ batchId: '@Model.Guid', file: name }),
-            dataType: "json",
+            dataType: "text",
             contentType: "application/json; charset=utf-8",
             success: function (data) {
                 var container = $("#" + id).parent().parent().parent().attr('id');
@@ -286,7 +286,7 @@
             url: "/FileUpload/DeleteVideo",
             type: "POST",
             data: JSON.stringify({ batchId: '@Model.Guid', name: name }),
-            dataType: "json",
+            dataType: "text",
             contentType: "application/json; charset=utf-8",
             success: function (data) {
                 var container = $("#" + id).parent().parent().attr('id');
@@ -315,7 +315,7 @@
             url: "/FileUpload/DeleteFiles",
             type: "POST",
             data: JSON.stringify({ batchId: '@Model.Guid', file: selectedImg }),
-            dataType: "json",
+            dataType: "text",
             contentType: "application/json; charset=utf-8",
             success: function (data) {
                 $.each(selectedId, function (key, value) {

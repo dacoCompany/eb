@@ -756,6 +756,7 @@ hr.transparent {
 .nopadding {
     padding: 0 !important;
 }
+
 @media(max-width:992px) {
     .nopadding_md {
         padding: 0 !important;

@@ -57,6 +57,7 @@ namespace Web.eBado.Models.Account
         public string CompanyCity { get; set; }
 
         [ObjectValidator("RegisterCompany", Ruleset = "RegisterCompany")]
+        [ObjectValidator("RegisterContractor", Ruleset = "RegisterContractor")]
         public CategoriesModel Categories { get; private set; }
 
         public LanguagesModel Languages { get; private set; }

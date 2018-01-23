@@ -23,9 +23,25 @@ namespace Web.eBado.Helpers
             sharedHelper = new SharedHelper(unitOfWork);
         }
 
-        public CompanySearchModel GetAllCompanies(CompanySearchModel model, IUnitOfWork unitOfWork, int? page = null)
+        public CompanySearchModel GetAllCompanies(CompanySearchModel model, IUnitOfWork unitOfWork, SessionModel session, int? page = null)
         {
-            model = sharedHelper.GetDefaultCountry(model);
+            if (session != null)
+            {
+                var companySesion = session.Companies.FirstOrDefault(c => c.IsActive);
+                if (session.IsActive)
+                {
+                    model = sharedHelper.GetUserSettings(unitOfWork, model, session.Id);
+                }
+                else if (companySesion != null)
+                {
+                    model = sharedHelper.GetCompanySettings(unitOfWork, model, companySesion.Id);
+                }
+            }
+            else
+            {
+                model = sharedHelper.GetDefaultCountry(model);
+            }  
+
             var postalCodeList = GetRelatedPostalCodes(model);
 
             var companyDetails = unitOfWork.CompanyDetailsRepository.FindAll()
@@ -47,7 +63,7 @@ namespace Web.eBado.Helpers
                     ProfileUrl = company.ProfilePictureUrl
                 });
 
-            model.CompanyModel = companyDetails.ToList().ToPagedList(model.Page ?? 1, 5);
+            model.CompanyModel = companyDetails.ToList().ToPagedList(model.Page ?? 1, 10);
             return model;
         }
 

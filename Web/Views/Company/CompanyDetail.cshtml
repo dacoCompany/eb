@@ -10,7 +10,7 @@
 {
     @Html.AntiForgeryToken()
     <div class="container">
-        @{var company = Model.CompanyModel;  }
+        @{var company = Model.CompanyModel; }
         <div class="col-sm-12 push_top_20">
             <div class="col-md-4 nopadding" style="text-align:left">
                 @if (company.ProfileUrl == null)
@@ -129,8 +129,8 @@
 
                                 @foreach (var batch in Model.Attachments)
                                 {
-                                    <div class="batch_name">@batch.BatchName</div>
-                                    <div class="batch_desc">@batch.BatchDescription</div>
+                                    <div class="col-sm-12 nopadding batch_name">@batch.BatchName</div>
+                                    <div class="col-sm-12 batch_desc">@batch.BatchDescription</div>
                                     foreach (var image in batch.Attachment.Where(a => a.AttachmentType != "video"))
                                     {
                                         <div class="img_container">
@@ -156,24 +156,24 @@
                                     <a onclick="playVideo('video_@index','youtube_@index')" style="background-image: url(@video.ThumbnailUrl);" class="zoomzoom"></a>
                                 </div>
 
-                                    <div id="video_@index" class="lightbox" onclick="hideVideo('video_@index','youtube_@index')">
-                                        <div class="lightbox-container">
-                                            <div class="lightbox-content">
+                                <div id="video_@index" class="lightbox" onclick="hideVideo('video_@index','youtube_@index')">
+                                    <div class="lightbox-container">
+                                        <div class="lightbox-content">
 
-                                                <button onclick="hideVideo('video_@index','youtube_@index')" class="lightbox-close">
-                                                    Close ✕
-                                                </button>
-                                                <div class="video-container">
-                                                    <iframe id="youtube_@index" width="960" height="540" src="@video.Url" frameborder="0" allowfullscreen></iframe>
-                                                </div>
-
+                                            <button onclick="hideVideo('video_@index','youtube_@index')" class="lightbox-close">
+                                                Close ✕
+                                            </button>
+                                            <div class="video-container">
+                                                <iframe id="youtube_@index" width="960" height="540" src="@video.Url" frameborder="0" allowfullscreen></iframe>
                                             </div>
+
                                         </div>
                                     </div>
+                                </div>
                                 ++index;
                             }
                         </div>
-                                }
+                    }
                     <div role="tabpanel" class="tab-pane" id="ratings">Uzivatel nema ziadne hodnotenia</div>
                 </div>
             </div>
@@ -181,7 +181,7 @@
 
         </div>
     </div>
-                                }
+}
 <script>
     $("#contactBtn").on('click', function () {
         jQuery("#contactForm").slideToggle(500);

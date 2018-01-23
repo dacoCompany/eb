@@ -132,6 +132,7 @@
     <Content Include="CodeMetrics.targets" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\eBadoAuthorization - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\ebadoauthorization2 - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

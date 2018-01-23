@@ -164,6 +164,27 @@ namespace Web.eBado.Helpers
             }
         }
 
+        public CompanySearchModel GetUserSettings(IUnitOfWork uow, CompanySearchModel model, int userId)
+        {
+            var settings = uow.UserDetailsRepository.FindById(userId).UserSetting;
+            model.DefaultRadius = settings.SearchRadius.Value;
+            model.SearchInSK = settings.SearchInSK;
+            model.SearchInCZ = settings.SearchInCZ;
+            model.SearchInHU = settings.SearchInHU;
+            return model;
+        }
+
+        public CompanySearchModel GetCompanySettings(IUnitOfWork uow, CompanySearchModel model, int companyId)
+        {
+            var settings = uow.CompanyDetailsRepository.FindById(companyId).CompanySetting;
+            model.DefaultRadius = settings.SearchRadius.Value;
+            model.SearchInSK = settings.SearchInSK;
+            model.SearchInCZ = settings.SearchInCZ;
+            model.SearchInHU = settings.SearchInHU;
+            return model;
+        }
+
+
         public CompanySearchModel GetDefaultCountry(CompanySearchModel model)
         {
             var currentCountry = GetUserCountry();

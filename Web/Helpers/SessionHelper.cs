@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Common.DB;
+using Infrastructure.Common.Enums;
 using System.Data.Entity;
 using System.Linq;
 using Web.eBado.Models.Shared;
@@ -24,7 +25,8 @@ namespace Web.eBado.Helpers
             {
                 Id = userDetailDbo.Id,
                 Email = userDetailDbo.Email,
-                HasCompany = userDetailDbo.CompanyDetails2UserDetails.AnyActive(),
+                HasCompany = userDetailDbo.CompanyDetails2UserDetails.Any(cd => cd.IsActive),
+                IsContractor = userDetailDbo.CompanyDetails2UserDetails.Any(cd => cd.CompanyDetail.CompanyType.Name == CompanyType.PartTime.ToString()),
                 Name = userDetailDbo.DisplayName,
                 UserRole = userDetailDbo.UserRole.Name,
                 ProfileUrl = userDetailDbo.ProfilePictureUrlSmall,
@@ -38,7 +40,8 @@ namespace Web.eBado.Helpers
                 companySession = new CompanySessionModel()
                 {
                     Id = companyDetail.Id,
-                    Name = companyDetail.Name,
+                    Name = companyDetail.Name == userDetailDbo.DisplayName ? $"{companyDetail.Name} (eBiznis)" : companyDetail.Name,
+                    CompanyType = companyDetail.CompanyType.Name,
                     CompanyRole = companyRole.Name,
                     ProfileUrl = companyDetail.ProfilePictureUrlSmall,
                     CompanyPermissions = companyRole.CompanyRole2CompanyPermission.Select(cr => cr.CompanyPermission.Name)
@@ -52,7 +55,8 @@ namespace Web.eBado.Helpers
             {
                 Id = companyDetailDbo.Id,
                 IsActive = true,
-                Name = companyDetailDbo.Name,
+                Name = companyDetailDbo.Name == userDetailDbo.DisplayName ? $"{companyDetailDbo.Name} (eBiznis)" : companyDetailDbo.Name,
+                CompanyType = companyDetailDbo.CompanyType.Name,
                 CompanyRole = companyRoleDbo.Name,
                 ProfileUrl = companyDetailDbo.ProfilePictureUrlSmall,
                 CompanyPermissions = companyRoleDbo.CompanyRole2CompanyPermission.Select(cr => cr.CompanyPermission.Name)
@@ -74,7 +78,8 @@ namespace Web.eBado.Helpers
             {
                 Id = userDetailDbo.Id,
                 Email = userDetailDbo.Email,
-                HasCompany = userDetailDbo.CompanyDetails2UserDetails.AnyActive(),
+                HasCompany = userDetailDbo.CompanyDetails2UserDetails.Any(cd => cd.IsActive),
+                IsContractor = userDetailDbo.CompanyDetails2UserDetails.Any(cd => cd.CompanyDetail.CompanyType.Name == CompanyType.PartTime.ToString()),
                 IsActive = true,
                 Name = userDetailDbo.DisplayName,
                 UserRole = userRole.Name,
@@ -88,8 +93,9 @@ namespace Web.eBado.Helpers
                 CompanySessionModel companySession = new CompanySessionModel()
                 {
                     Id = companyDetail.Id,
-                    Name = companyDetail.Name,
+                    Name = companyDetail.Name == userDetailDbo.DisplayName ? $"{companyDetail.Name} (eBiznis)" : companyDetail.Name,
                     CompanyRole = companyRole.Name,
+                    CompanyType = companyDetail.CompanyType.Name,
                     ProfileUrl = companyDetail.ProfilePictureUrlSmall,
                     CompanyPermissions = companyRole.CompanyRole2CompanyPermission.Select(cr => cr.CompanyPermission.Name)
                 };

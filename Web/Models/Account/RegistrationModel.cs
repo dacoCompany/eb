@@ -20,6 +20,7 @@ namespace Web.eBado.Models.Account
 
         //[CompanyRequired(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "RequiredField")]
         [ObjectValidator("RegisterCompany", Ruleset = "RegisterCompany")]
+        [ObjectValidator("RegisterContractor", Ruleset = "RegisterContractor")]
         public CompanyModel CompanyModel { get; private set; }
 
     }

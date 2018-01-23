@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Infrastructure.Common.Enums;
+using System.Collections.Generic;
 
 namespace Web.eBado.Models.Shared
 {
@@ -10,6 +11,7 @@ namespace Web.eBado.Models.Shared
         public string Name { get; set; }
         public string Email { get; set; }
         public string CompanyRole { get; set; }
+        public string CompanyType { get; set; }
         public string ProfileUrl { get; set; }
         public IEnumerable<string> CompanyPermissions { get; set; }
     }

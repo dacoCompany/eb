@@ -244,6 +244,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CompanyController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileUploadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -310,6 +311,7 @@
     <Content Include="Content\BaseContent\css\check_radio.css" />
     <Content Include="Content\BaseContent\css\batch-gallery.css" />
     <Content Include="Content\BaseContent\css\company.css" />
+    <Content Include="Content\BaseContent\css\error.css" />
     <Content Include="Content\BaseContent\css\user-settings.css" />
     <Content Include="Content\BaseContent\css\media-queries.css" />
     <Content Include="Content\BaseContent\css\reset.css" />
@@ -661,6 +663,7 @@
     </Content>
     <Content Include="CodeMetrics.targets" />
     <None Include="Properties\PublishProfiles\ebadoweb - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\ebadoweb2 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -700,10 +703,11 @@
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\Error401.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Index2.cshtml" />
@@ -723,6 +727,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Error\" />
     <Folder Include="Views\Manage\" />
   </ItemGroup>
   <ItemGroup>
