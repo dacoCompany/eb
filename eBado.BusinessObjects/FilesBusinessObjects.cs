@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Helpers;
@@ -342,18 +343,25 @@ namespace eBado.BusinessObjects
             bool deletedAll = true;
             int deletedCount = 0;
 
-            int batchDboId = unitOfWork.BatchAttachmentRepository.FindFirstOrDefault(ba => ba.GuId.Equals(batchId)).Id;
+            var batchDbo = unitOfWork.BatchAttachmentRepository.FindFirstOrDefault(ba => ba.GuId.Equals(batchId));
 
             foreach (string fileName in files)
             {
-                CloudBlockBlob blockBlob = container.GetBlockBlobReference($"photos/{batchId}/{fileName}");
+                string correctName = fileName;
+
+                if (fileName.StartsWith("btn"))
+                {
+                    correctName = fileName.Substring(3);
+                }
+
+                CloudBlockBlob blockBlob = container.GetBlockBlobReference($"photos/{batchId}/{correctName}");
                 bool result = blockBlob.DeleteIfExists(DeleteSnapshotsOption.IncludeSnapshots);
 
-                string thumbName = Path.GetFileNameWithoutExtension(fileName) + "_thumbImg.jpg";
+                string thumbName = Path.GetFileNameWithoutExtension(correctName) + "_thumbImg.jpg";
                 CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference($"photos/{batchId}/{thumbName}");
                 bool resultThumb = blockBlobThumb.DeleteIfExists(DeleteSnapshotsOption.IncludeSnapshots);
 
-                var attachment = unitOfWork.AttachmentRepository.FindFirstOrDefault(a => a.OriginalUrl.Contains(fileName) && a.BatchAttId == batchDboId);
+                var attachment = unitOfWork.AttachmentRepository.FindFirstOrDefault(a => a.OriginalUrl.Contains(correctName) && a.BatchAttId == batchDbo.Id);
                 bool dboDeleted = false;
 
                 if (attachment != null)
@@ -364,7 +372,7 @@ namespace eBado.BusinessObjects
 
                 if (!(result && resultThumb && dboDeleted))
                 {
-                    EntlibLogger.LogWarning("File", "Delete", $"File '{fileName}' in batch {batchId} cannot be deleted.", diagnosticLogConstant);
+                    EntlibLogger.LogWarning("File", "Delete", $"File '{correctName}' in batch {batchId} cannot be deleted.", diagnosticLogConstant);
                     deletedAll = false;
                 }
                 else
@@ -374,7 +382,8 @@ namespace eBado.BusinessObjects
             }
 
             unitOfWork.Commit();
-
+            batchDbo.ThumbnailUrl = batchDbo.Attachments.FirstActive()?.ThumbnailUrl;
+            unitOfWork.Commit();
             if (deletedAll)
                 EntlibLogger.LogVerbose("File", "Delete", $"Deleted {files.Count()} files.", diagnosticLogConstant);
             else
@@ -437,7 +446,7 @@ namespace eBado.BusinessObjects
                 Guid = batchDbo.GuId
             };
 
-            foreach (var dbo in batchDbo.Attachments.Where(a => a.IsActive))
+            foreach (var dbo in batchDbo.Attachments.WhereActive())
             {
                 result.Attachments.Add(new AttachmentEntity
                 {
@@ -491,8 +500,8 @@ namespace eBado.BusinessObjects
                     Name = batch.Name,
                     Guid = batch.GuId,
                     Description = batch.Description.Length > 100 ? batch.Description.Substring(0, 100) : batch.Description,
-                    AttachmentsCount = batch.Attachments.Count,
-                    BaseThumbUrl = batch.Attachments.Count > 0 ? batch.Attachments.First().ThumbnailUrl : null
+                    AttachmentsCount = batch.Attachments.CountActive(),
+                    BaseThumbUrl = batch.Attachments.CountActive() > 0 ? batch.Attachments.FirstActive().ThumbnailUrl : null
                 });
             }
 

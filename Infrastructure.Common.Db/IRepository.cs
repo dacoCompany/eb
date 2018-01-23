@@ -39,6 +39,12 @@ namespace Infrastructure.Common.DB
         bool AnyActive(Expression<Func<T, bool>> predicate);
 
         /// <summary>
+        /// Active items.
+        /// </summary>
+        /// <param name="predicate">The predicate.</param>
+        /// <returns>Active items.</returns>
+        IQueryable<T> WhereActive(Func<T, bool> predicate);
+        /// <summary>
         /// Firsts the or default.
         /// </summary>
         /// <param name="predicate">The predicate.</param>

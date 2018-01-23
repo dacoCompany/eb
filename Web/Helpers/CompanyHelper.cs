@@ -65,7 +65,7 @@ namespace Web.eBado.Helpers
                 CompanyDescription = company.Description,
                 CompanyDic = company.Dic,
                 CompanyEmail = company.Email,
-                CompanyIco = company.Ico,
+                CompanyIco = company.Ico.Value,
                 CompanyName = company.Name,
                 CompanyPhoneNumber = company.PhoneNumber,
                 CompanyPostalCode = companyLocation.PostalCode,
@@ -75,7 +75,7 @@ namespace Web.eBado.Helpers
                 ProfileUrl = company.ProfilePictureUrl
             };
 
-            var batches = company.BatchAttachments.Where(ba => ba.IsActive);
+            var batches = company.BatchAttachments.WhereActive();
             foreach (var batch in batches)
             {
                 var batchModel = new AllCompanyAttachmentsModel
@@ -83,7 +83,7 @@ namespace Web.eBado.Helpers
                     BatchName = batch.Name,
                     BatchDescription = batch.Description,
                 };
-                foreach (var attachment in batch.Attachments.Where(a => a.IsActive))
+                foreach (var attachment in batch.Attachments.WhereActive())
                 {
                     var attachmentModel = new AttachmentModel
                     {
@@ -106,9 +106,9 @@ namespace Web.eBado.Helpers
             }
             model.ImagesCount = imageCount;
             model.VideosCount = videoCount;
-            model.Languages = company.CompanyDetails2Languages.Where(cd => cd.IsActive).Select(cd => sharedHelper.GetFormattedLanguage(cd.Language)).ToList();
-            model.Categories = company.Category2CompanyDetails.Where(c => c.IsActive).Select(c => c.Category.Name)
-                    .Concat(company.SubCategory2CompanyDetails.Where(s => s.IsActive).Select(s => s.SubCategory.Name)).ToList();
+            model.Languages = company.CompanyDetails2Languages.WhereActive().Select(cd => sharedHelper.GetFormattedLanguage(cd.Language)).ToList();
+            model.Categories = company.Category2CompanyDetails.WhereActive().Select(c => c.Category.Name)
+                    .Concat(company.SubCategory2CompanyDetails.WhereActive().Select(s => s.SubCategory.Name)).ToList();
             if (session != null)
             {
                 model.CustomerEmail = session.Email;

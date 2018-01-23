@@ -24,14 +24,14 @@ namespace Web.eBado.Helpers
             {
                 Id = userDetailDbo.Id,
                 Email = userDetailDbo.Email,
-                HasCompany = userDetailDbo.CompanyDetails2UserDetails.Any(cd => cd.IsActive),
+                HasCompany = userDetailDbo.CompanyDetails2UserDetails.AnyActive(),
                 Name = userDetailDbo.DisplayName,
                 UserRole = userDetailDbo.UserRole.Name,
                 ProfileUrl = userDetailDbo.ProfilePictureUrlSmall,
                 UserPermissions = userDetailDbo.UserRole.UserRole2UserPermission.Select(ur => ur.UserPermission.Name)
             };
             CompanySessionModel companySession = null;
-            foreach (var company in userDetailDbo.CompanyDetails2UserDetails.Where(cd => cd.IsActive && cd.CompanyDetail != companyDetailDbo))
+            foreach (var company in userDetailDbo.CompanyDetails2UserDetails.WhereActive(cd => cd.CompanyDetail != companyDetailDbo))
             {
                 var companyDetail = company.CompanyDetail;
                 var companyRole = company.CompanyRole;
@@ -46,7 +46,7 @@ namespace Web.eBado.Helpers
                 newSession.Companies.Add(companySession);
             }
             var companyRoleDbo = companyDetailDbo.CompanyDetails2UserDetails
-                .FirstOrDefault(cd => cd.IsActive && cd.UserDetail == userDetailDbo && cd.CompanyDetail == companyDetailDbo).CompanyRole;
+                .FirstActive(cd => cd.UserDetail == userDetailDbo && cd.CompanyDetail == companyDetailDbo)?.CompanyRole;
 
             companySession = new CompanySessionModel()
             {
@@ -74,14 +74,14 @@ namespace Web.eBado.Helpers
             {
                 Id = userDetailDbo.Id,
                 Email = userDetailDbo.Email,
-                HasCompany = userDetailDbo.CompanyDetails2UserDetails.Any(cd => cd.IsActive),
+                HasCompany = userDetailDbo.CompanyDetails2UserDetails.AnyActive(),
                 IsActive = true,
                 Name = userDetailDbo.DisplayName,
                 UserRole = userRole.Name,
                 ProfileUrl = userDetailDbo.ProfilePictureUrlSmall,
                 UserPermissions = userRole.UserRole2UserPermission.Select(ur => ur.UserPermission.Name)
             };
-            foreach (var company in userDetailDbo.CompanyDetails2UserDetails.Where(cd => cd.IsActive))
+            foreach (var company in userDetailDbo.CompanyDetails2UserDetails.WhereActive())
             {
                 var companyDetail = company.CompanyDetail;
                 var companyRole = company.CompanyRole;

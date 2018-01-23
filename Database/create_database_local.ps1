@@ -28,7 +28,7 @@ Import-Module sqlps -DisableNameChecking
 $CreatePath = Join-Path $BasePath "Create\create_script.sql"
 $CreateDbPath = Join-Path $BasePath "Create\create_db_user.sql"
 
-Invoke-Sqlcmd -ServerInstance . -Database master -InputFile $CreateDbPath
+Invoke-Sqlcmd -ServerInstance $Server -InputFile $CreateDbPath -Verbose
 If (!($?))
 {
   Log -isError $True -text "Creating database failed."
@@ -40,7 +40,7 @@ Else
 	Log $false "Database creation successful."
 }
 
-Invoke-Sqlcmd -ServerInstance . -Database testDB -InputFile $CreatePath
+Invoke-Sqlcmd -ServerInstance $Server -Database testDB -InputFile $CreatePath -Verbose
 If (!($?))
 {
   Log $True, "Creating tables failed."
@@ -60,7 +60,7 @@ for($i=0; $i -lt $files.Count; $i++)
 {
 	$file = $files[$i].FullName;
 	$fileName = $files[$i].Name;
-	Invoke-Sqlcmd -ServerInstance . -Database testDB -InputFile $file
+	Invoke-Sqlcmd -ServerInstance $Server -Database testDB -InputFile $file -Verbose
 	If (!($?))
 	{
 	  Log $True, "Script" + $files[$i].Name + "failed."

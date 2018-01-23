@@ -52,7 +52,7 @@ namespace Web.eBado.Controllers
 
         [HttpPost]
         [Route("Upload")]
-        [System.Web.Http.Authorize(Roles = "AddAttachments")]
+        [EbadoMvcAuthorization(Roles = "AddAttachments")]
         public JsonResult Upload(string batchId)
         {
             try
@@ -92,32 +92,8 @@ namespace Web.eBado.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("Upload2")]
-        [System.Web.Http.Authorize(Roles = "AddAttachments")]
-        public JsonResult Upload2()
-        {
-            var resultList = new List<ViewDataUploadFilesResult>();
-
-            var CurrentContext = HttpContext;
-
-            var filesHelper = new FilesHelper(null, null, null, null, null);
-            filesHelper.UploadAndShowResults(CurrentContext, resultList);
-            JsonFiles files = new JsonFiles(resultList);
-
-            bool isEmpty = !resultList.Any();
-            if (isEmpty)
-            {
-                return Json("Error ");
-            }
-            else
-            {
-                return Json(files);
-            }
-        }
-
         [Route("GetFileList")]
-        [System.Web.Http.Authorize(Roles = "AddAttachments")]
+        [EbadoMvcAuthorization(Roles = "AddAttachments, RemoveAttachments")]
         public JsonResult GetFileList(string batchId)
         {
             var model = new AttachmentGalleryModel();
@@ -135,17 +111,17 @@ namespace Web.eBado.Controllers
 
         [HttpPost]
         [Route("DeleteFiles")]
-        [System.Web.Http.Authorize(Roles = "RemoveAttachments")]
-        public ActionResult DeleteFiles(string batchId, ICollection<string> file)
+        [EbadoMvcAuthorization(Roles = "RemoveAttachments")]
+        public JsonResult DeleteFiles(string batchId, ICollection<string> file)
         {
             bool deleted = filesBo.DeleteFiles(file, batchId);
 
-            return deleted ? new HttpStatusCodeResult(HttpStatusCode.OK) : new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "Some files cannot be deleted. Please try again later.");
+            return deleted ? new JsonNetResult("OK") : new JsonNetResult(HttpStatusCode.InternalServerError, "Some files cannot be deleted. Please try again later.");
         }
 
         [HttpPost]
         [Route("DeleteBatch")]
-        [System.Web.Http.Authorize(Roles = "RemoveGallery")]
+        [EbadoMvcAuthorization(Roles = "RemoveGallery")]
         public ActionResult DeleteBatch(string batchId)
         {
             bool deleted = filesBo.DeleteBatch(batchId);
@@ -155,7 +131,7 @@ namespace Web.eBado.Controllers
 
         [HttpPost]
         [Route("UploadVideo")]
-        [System.Web.Http.Authorize(Roles = "AddAttachments")]
+        [EbadoMvcAuthorization(Roles = "AddAttachments")]
         public JsonResult UploadVideo(string url, string batchId)
         {
             bool result = filesBo.UploadVideo(url, batchId, GetActiveCompany());
@@ -165,22 +141,12 @@ namespace Web.eBado.Controllers
 
         [HttpPost]
         [Route("DeleteVideo")]
-        [System.Web.Http.Authorize(Roles = "RemoveAttachments")]
+        [EbadoMvcAuthorization(Roles = "RemoveAttachments")]
         public JsonResult DeleteVideo(string batchId, string name)
         {
             bool deleted = filesBo.DeleteVideo(batchId, name);
 
             return deleted ? new JsonNetResult("OK") : new JsonNetResult("Error");
-        }
-
-        [HttpGet]
-        [Route("DeleteFileAzure")]
-        [System.Web.Http.Authorize(Roles = "RemoveAttachments")]
-        public ActionResult DeleteFileAzure(string fileName)
-        {
-            bool deleted = filesBo.DeleteFile(fileName);
-
-            return deleted ? new HttpStatusCodeResult(HttpStatusCode.OK) : new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
         }
 
         private ICollection<FileModel> MapAttachmentsFromRequest()

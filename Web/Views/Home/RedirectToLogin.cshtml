@@ -1,0 +1,18 @@
+﻿@model Web.eBado.Models.Shared.RedirectModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Redirecting...</title>
+</head>
+<body>
+    @{
+        Response.Redirect(Model.RedirectUrl);
+    }
+</body>
+</html>

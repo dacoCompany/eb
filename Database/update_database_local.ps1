@@ -34,7 +34,7 @@ $UpdatePath = Join-Path $BasePath "Update"
 Log $False $True "Reading applied scripts..."
 $AppliedScripts = New-Object System.Collections.ArrayList
 # Select all script names from database table SCRIPT_AUDIT
-$OutputVariable = Invoke-Sqlcmd -ServerInstance . -Database testDB -Query "select ScriptName from ScriptAudit order by ScriptName" | Out-String
+$OutputVariable = Invoke-Sqlcmd -ServerInstance $Server -Database testDB -Query "select ScriptName from ScriptAudit order by ScriptName" | Out-String
 If (!($?))
 {
   Log -isError $True -printDefault $False -text "Reading applied scripts failed."
@@ -74,22 +74,22 @@ for($i=0; $i -lt $SourceScripts.Count; $i++)
 	Else
 	{
 		# Execution of update script.
-		Log $False $True "Applying script $($fileName)."
-		Invoke-Sqlcmd -ServerInstance . -Database testDB -InputFile $file
+		Log $False $True "`r`nApplying script $($fileName).`r`n"
+		Invoke-Sqlcmd -ServerInstance $Server -Database testDB -InputFile $file -Verbose
 		If (!($?))
 		{
 		  Log $True $False "Script" + $files[$i].Name + "was not applied successfully."
 
 		  # Updating script status in database.
 		  Log $False $True "Marking script $($fileName) as 'FAILED'."
-		  Invoke-Sqlcmd -ServerInstance . -Database testDB -Query "insert into ScriptAudit (ScriptName, ScriptStatus) values ('$filename', 'FAILED')"
+		  Invoke-Sqlcmd -ServerInstance $Server -Database testDB -Query "insert into ScriptAudit (ScriptName, ScriptStatus) values ('$filename', 'FAILED')"
 		  [System.Data.SqlClient.SqlConnection]::ClearAllPools()
 		  Exit $LASTEXITCODE
 		}
 		Else
 		{
 			Log $false $False "Script $($fileName) was applied successfully."
-			Invoke-Sqlcmd -ServerInstance . -Database testDB -Query "insert into ScriptAudit (ScriptName, ScriptStatus) values ('$fileName', 'SUCCESS')"
+			Invoke-Sqlcmd -ServerInstance $Server -Database testDB -Query "insert into ScriptAudit (ScriptName, ScriptStatus) values ('$fileName', 'SUCCESS')"
 		}
 	}
 	

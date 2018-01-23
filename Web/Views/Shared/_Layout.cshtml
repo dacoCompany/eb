@@ -14,17 +14,20 @@
     @RenderSection("scripts", required: false)
 </head>
 
+@{
+    var language = Request.Cookies["lang"]?.Value;
+    string token = Request.Cookies["tokenCookie"]?.Value;
+    if (!string.IsNullOrEmpty(token))
+    {
+        Request.Headers.Add("Authorization", $"Bearer {token}");
+        //HttpContext.Current.Request.Headers.Add("Authorization", $"Bearer {token}");
+    }
+}
+
 <body>
     <div class="page-wrap">
         @{ var session = (Web.eBado.Models.Shared.SessionModel)Session["User"]; }
-        @{
-            var language = Request.Cookies["lang"]?.Value;
-            string token = Request.Cookies["tokenCookie"]?.Value;
-            if (!string.IsNullOrEmpty(token))
-            {
-                HttpContext.Current.Request.Headers.Add("Authorization", $"Bearer {token}");
-            }
-        }
+        
         <!-- Top panel -->
         <div class="container">
             <div class="lang-panel">
@@ -168,9 +171,16 @@
                         data: { accountName: accountName },
                         dataType: "text",
                         statusCode: {
-                            302: setTimeout(function () {
-                                window.location.reload();
-                            }, 100)
+                            200: (function () {
+                                var url = window.location.href;
+                                $.ajax({
+                                    url: '@Url.Action("RedirectToLogin", "Home")',
+                                    data: { returnUrl: url },
+                                    success: setTimeout(function () {
+                                        window.location.reload();
+                                    }, 100)
+                                });
+                            })
                         }
                     });
                 });

@@ -102,8 +102,8 @@ for($i=0; $i -lt $SourceScripts.Count; $i++)
 	Else
 	{
 		# Execution of update script.
-		Log $False $True "Applying script $($fileName)."
-		Invoke-Sqlcmd -ServerInstance $Server -Database testDB -UserName $Username -Password $Password -InputFile $file
+		Log $False $True "`r`nApplying script $($fileName).`r`n"
+		Invoke-Sqlcmd -ServerInstance $Server -Database testDB -UserName $Username -Password $Password -InputFile $file -Verbose
 		If (!($?))
 		{
 		  Log $True $False "Script" + $files[$i].Name + "was not applied successfully."

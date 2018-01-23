@@ -118,7 +118,7 @@ namespace Web.eBado.Helpers
         {
             var locations = GetCachedLocations();
 
-            return locations.FirstOrDefault(x => x.PostalCode.Equals(postalCode)
+            return locations.FirstOrDefault(x => x.PostalCode.Equals(postalCode.Split('-').First()?.Trim())
                    || x.PostalCode.Replace(" ", "").Equals(postalCode.Replace(" ", ""))
                    || x.City.StartsWith(postalCode, StringComparison.OrdinalIgnoreCase)
                    || x.CityAlias.StartsWith(postalCode, StringComparison.OrdinalIgnoreCase)

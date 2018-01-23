@@ -442,7 +442,7 @@ namespace Web.eBado.Helpers
                 CompanyAdditionalPhoneNumber = companyDetails.AdditionalPhoneNumber,
                 CompanyDic = companyDetails.Dic,
                 CompanyEmail = companyDetails.Email,
-                CompanyIco = companyDetails.Ico,
+                CompanyIco = companyDetails.Ico.Value,
                 CompanyName = companyDetails.Name,
                 CompanyPhoneNumber = companyDetails.PhoneNumber,
                 CompanyStreet = address.Street,
@@ -530,7 +530,7 @@ namespace Web.eBado.Helpers
             allLanguages.AddRange(languages);
             return allLanguages.AsEnumerable();
         }
-        
+
         private IEnumerable<SelectListItem> GetAllRoles(IUnitOfWork uow, int companyId)
         {
             List<SelectListItem> allRoles = new List<SelectListItem>();
@@ -588,8 +588,8 @@ namespace Web.eBado.Helpers
         private IEnumerable<string> GetCurrentCategories(CompanyDetailDbo companyDetails, List<string> selectedCategories = null)
         {
             var allCategories = new List<string>();
-            var categories = companyDetails.Category2CompanyDetails.Where(c => c.IsActive).Select(c => c.Category.Name);
-            var subCategories = companyDetails.SubCategory2CompanyDetails.Where(c => c.IsActive).Select(c => c.SubCategory.Name);
+            var categories = companyDetails.Category2CompanyDetails.WhereActive().Select(c => c.Category.Name);
+            var subCategories = companyDetails.SubCategory2CompanyDetails.WhereActive().Select(c => c.SubCategory.Name);
             allCategories.AddRange(categories.Concat(subCategories));
             if (selectedCategories != null)
             {
@@ -620,8 +620,8 @@ namespace Web.eBado.Helpers
 
             var categoryIds = cachedCategories.Where(c => selectedCategories.Contains(c.CategoryName)).Select(c => c.Id);
             var subCategoryIds = cachedCategories.Where(c => selectedCategories.Contains(c.SubCategories.SelectMany(s => s.SubCategoryName))).Select(c => c.Id);
-            var currentCategoriesId = companyDetails.Category2CompanyDetails.Where(c => c.IsActive).Select(c => c.CategoryId);
-            var currentSubCategoriesId = companyDetails.SubCategory2CompanyDetails.Where(c => c.IsActive).Select(c => c.SubCategoryId);
+            var currentCategoriesId = companyDetails.Category2CompanyDetails.WhereActive().Select(c => c.CategoryId);
+            var currentSubCategoriesId = companyDetails.SubCategory2CompanyDetails.WhereActive().Select(c => c.SubCategoryId);
 
             foreach (var categoryId in categoryIds)
             {
@@ -661,7 +661,7 @@ namespace Web.eBado.Helpers
             }
 
             var alLanguagesIds = cachedLanguages.Where(c => selecteLanguages.Contains(c.Code)).Select(c => c.Id);
-            var currentLanguagesId = companyDetails.CompanyDetails2Languages.Where(c => c.IsActive).Select(c => c.LanguageId);
+            var currentLanguagesId = companyDetails.CompanyDetails2Languages.WhereActive().Select(c => c.LanguageId);
 
             foreach (var languageId in alLanguagesIds)
             {

@@ -95,7 +95,7 @@ namespace Web.eBado.Controllers
             return View();
         }
 
-        [System.Web.Http.Authorize(Roles = "ChangeSettings, Read, Write")]
+        [EbadoMvcAuthorization(Roles = "ChangeSettings, Read, Write")]
         [Route("ChangeSettings")]
         [NoClientCache]
         public ActionResult ChangeSettings()
@@ -136,7 +136,7 @@ namespace Web.eBado.Controllers
             return View();
         }
 
-        [System.Web.Http.Authorize(Roles = "AddGallery,RemoveGallery,AddAttachments,RemoveAttachments")]
+        [EbadoMvcAuthorization(Roles = "AddGallery,RemoveGallery,AddAttachments,RemoveAttachments")]
         [Route("EditAccountGallery")]
         public ActionResult EditAccountGallery(string batchId)
         {
@@ -158,7 +158,7 @@ namespace Web.eBado.Controllers
             return View(model);
         }
 
-        [System.Web.Http.Authorize(Roles = "AddGallery,RemoveGallery,AddAttachments,RemoveAttachments")]
+        [EbadoMvcAuthorization(Roles = "AddGallery,RemoveGallery,AddAttachments,RemoveAttachments")]
         [Route("BatchAccountGallery")]
         public ActionResult BatchAccountGallery()
         {
@@ -230,6 +230,7 @@ namespace Web.eBado.Controllers
 
                     var authCookie = new HttpCookie("tokenCookie", content.Replace("\"", string.Empty)) { HttpOnly = true };
                     HttpContext.Response.AppendCookie(authCookie);
+                    HttpContext.Response.AppendHeader("Authorization", $"Bearer {authCookie}");
                 }
                 else
                 {
@@ -241,12 +242,17 @@ namespace Web.eBado.Controllers
 
                 if (returnUrl != null)
                 {
-                    return Redirect(returnUrl);
+                    EntlibLogger.LogVerbose("Account", "Login", $"Successful login with e-mail address: {model.Email}", diagnosticLogConstant);
+                    model.ReturnUrl = returnUrl;
+                    model.ShouldRedirect = true;
+                    return View(model);
                 }
                 else
                 {
                     EntlibLogger.LogVerbose("Account", "Login", $"Successful login with e-mail address: {model.Email}", diagnosticLogConstant);
-                    return RedirectToAction("Index", "Home");
+                    model.ReturnUrl = "~/Home/Index";
+                    model.ShouldRedirect = true;
+                    return View(model);
                 }
             }
             else
@@ -420,7 +426,7 @@ namespace Web.eBado.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [System.Web.Http.Authorize(Roles = "ChangeSettings, Read, Write")]
+        [EbadoMvcAuthorization(Roles = "ChangeSettings, Read, Write")]
         [Route("ChangeSettings")]
         [NoClientCache]
         public ActionResult ChangeSettings(AccountSettingsModel model)
@@ -466,6 +472,7 @@ namespace Web.eBado.Controllers
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [Route("BatchAccountGallery")]
+        [EbadoMvcAuthorization(Roles = "AddGallery,RemoveGallery,AddAttachments,RemoveAttachments")]
         public ActionResult BatchAccountGallery(BatchGalleryModel model)
         {
             return View(model);
@@ -475,6 +482,7 @@ namespace Web.eBado.Controllers
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [Route("CreateBatch")]
+        [EbadoMvcAuthorization(Roles = "AddGallery")]
         public ActionResult CreateBatch(BatchGalleryModel model)
         {
             int? companyId = GetActiveCompany();

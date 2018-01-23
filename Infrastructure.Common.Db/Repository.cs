@@ -70,7 +70,7 @@ namespace Infrastructure.Common.DB
         {
             return dataEntity.Where(entity => entity.Id == id).FirstOrDefault(entity => entity.IsActive);
         }
-        
+
         /// <summary>
         /// Saves the specified instance.
         /// </summary>
@@ -157,6 +157,11 @@ namespace Infrastructure.Common.DB
         public bool AnyActive(Expression<Func<T, bool>> predicate)
         {
             return dataEntity.Where(predicate).Any(de => de.IsActive);
+        }
+
+        public IQueryable<T> WhereActive(Func<T, bool> predicate)
+        {
+            return dataEntity.Where(predicate).Where(de => de.IsActive).AsQueryable();
         }
 
         #endregion

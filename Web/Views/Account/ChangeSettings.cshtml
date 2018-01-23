@@ -30,6 +30,14 @@
 @using (Html.BeginForm("ChangeSettings", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
+    {
+         string token = Request.Cookies["tokenCookie"]?.Value;
+         if (!string.IsNullOrEmpty(token))
+         {
+             Request.Headers.Add("Authorization", $"Bearer {token}");
+             //HttpContext.Current.Request.Headers.Add("Authorization", $"Bearer {token}");
+         }
+     }
     <div class="container">
         <div class="responsive push_top_10">
             @{

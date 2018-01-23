@@ -55,7 +55,7 @@ Import-Module sqlps -DisableNameChecking
 
 $CreatePath = Join-Path $BasePath "Create\create_script.sql"
 
-Invoke-Sqlcmd -ServerInstance $Server -Database testDB -UserName $Username -Password $Password -InputFile $CreatePath
+Invoke-Sqlcmd -ServerInstance $Server -Database testDB -UserName $Username -Password $Password -InputFile $CreatePath -Verbose
 If (!($?))
 {
   Log $True "Creating tables failed."
@@ -75,7 +75,7 @@ for($i=0; $i -lt $files.Count; $i++)
 {
 	$file = $files[$i].FullName;
 	$fileName = $files[$i].Name;
-	Invoke-Sqlcmd -ServerInstance $Server -Database testDB -UserName $Username -Password $Password -InputFile $file
+	Invoke-Sqlcmd -ServerInstance $Server -Database testDB -UserName $Username -Password $Password -InputFile $file -Verbose
 	If (!($?))
 	{
 	  Log $True, "Script" + $file + "failed."

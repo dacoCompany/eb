@@ -39,14 +39,14 @@ namespace Web.eBado
             app.UseJwtBearerAuthentication(new JwtBearerAuthenticationOptions
             {
                 AuthenticationMode = AuthenticationMode.Active,
-                AllowedAudiences = new [] { audience },
+                AllowedAudiences = new[] { audience },
                 IssuerSecurityTokenProviders = new IIssuerSecurityTokenProvider[]
                 {
-                    new SymmetricKeyIssuerSecurityTokenProvider(issuer, secret), 
+                    new SymmetricKeyIssuerSecurityTokenProvider(issuer, secret),
                 }
             });
 
-            SetLanguageCookie();
+            //SetLanguageCookie();
         }
 
         private void SetLanguageCookie()
@@ -75,7 +75,7 @@ namespace Web.eBado
                     ci = GetCultureInfo(lang);
                 }
 
-                langCookie = new HttpCookie("lang", ci.Name) {HttpOnly = true};
+                langCookie = new HttpCookie("lang", ci.Name) { HttpOnly = true };
 
                 HttpContext.Current.Response.AppendCookie(langCookie);
             }

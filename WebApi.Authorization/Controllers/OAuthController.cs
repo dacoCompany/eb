@@ -28,7 +28,7 @@ namespace WebApi.Authorization.Controllers
                 var tokenModel = new TokenValues();
                 tokenModel.Issuer = GetConfigValue("issuer", "http://localhost");
                 tokenModel.Audience = GetConfigValue("audience", "audience");
-                tokenModel.ExpiredDate = DateTime.Now.AddDays(GetConfigValue("expiration", 7));
+                tokenModel.ExpiredDate = DateTime.Now.AddHours(GetConfigValue("expiration", 7));
                 tokenModel.Secret = GetConfigValue("secret", "This is a secret.");
 
                 ICollection<string> permissions = new Collection<string>();

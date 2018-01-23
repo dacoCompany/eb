@@ -15,12 +15,12 @@ namespace Web.eBado
     {
         protected void Application_Start()
         {
-            DependencyResolver.SetResolver(new NinjectResolver());
-            AreaRegistration.RegisterAllAreas();
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
-            DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory());
+            //DependencyResolver.SetResolver(new NinjectResolver());
+            //AreaRegistration.RegisterAllAreas();
+            //FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            //RouteConfig.RegisterRoutes(RouteTable.Routes);
+            //BundleConfig.RegisterBundles(BundleTable.Bundles);
+            //DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory());
         }
 
         protected void Application_AcquireRequestState(object sender, EventArgs e)
@@ -37,7 +37,7 @@ namespace Web.eBado
             else
             {
                 string[] requestLang = HttpContext.Current.Request.UserLanguages;
-                
+
                 if (requestLang == null || !requestLang.Any())
                 {
                     string langName = "en-US";
@@ -53,7 +53,7 @@ namespace Web.eBado
 
                 HttpContext.Current.Response.AppendCookie(langCookie);
             }
-            
+
 
             Thread.CurrentThread.CurrentUICulture = ci;
             Thread.CurrentThread.CurrentCulture = ci;

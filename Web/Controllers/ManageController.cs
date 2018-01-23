@@ -98,11 +98,11 @@ namespace Web.eBado.Controllers
             }
             Session.Remove("User");
             Session["User"] = newSession;
-            return new HttpStatusCodeResult(HttpStatusCode.Redirect);
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
         [HttpPost]
-        [System.Web.Http.Authorize(Roles = "ChangeSettings")]
+        [EbadoMvcAuthorization(Roles = "ChangeSettings")]
         [Route("DeleteCategory")]
         public JsonResult DeleteCategory(string category)
         {
@@ -134,7 +134,7 @@ namespace Web.eBado.Controllers
         }
 
         [HttpPost]
-        [System.Web.Http.Authorize(Roles = "ChangeSettings")]
+        [EbadoMvcAuthorization(Roles = "ChangeSettings")]
         [Route("DeleteLanguage")]
         public JsonResult DeleteLanguage(string code)
         {
@@ -142,7 +142,7 @@ namespace Web.eBado.Controllers
             var session = Session["User"] as SessionModel;
             int companyId = session.Companies.FirstOrDefault(c => c.IsActive).Id;
             var companyDetails = unitOfWork.CompanyDetailsRepository.FindFirstOrDefault(cd => cd.Id == companyId);
-            var languageDbo = companyDetails.CompanyDetails2Languages.FirstOrDefault(c => c.IsActive && c.Language.Code == code);
+            var languageDbo = companyDetails.CompanyDetails2Languages.FirstActive(c => c.Language.Code == code);
 
             if (languageDbo == null)
             {
@@ -156,7 +156,7 @@ namespace Web.eBado.Controllers
         }
 
         [HttpGet]
-        [System.Web.Http.Authorize(Roles = "AddMember")]
+        [EbadoMvcAuthorization(Roles = "AddMember")]
         [Route("AddMemberToCompany")]
         public JsonResult AddMemberToCompany(string email, string selectedRole)
         {
@@ -200,7 +200,7 @@ namespace Web.eBado.Controllers
         }
 
         [HttpPost]
-        [System.Web.Http.Authorize(Roles = "RemoveMember")]
+        [EbadoMvcAuthorization(Roles = "RemoveMember")]
         [Route("DeleteMember")]
         public JsonResult DeleteMember(string email)
         {
@@ -229,7 +229,7 @@ namespace Web.eBado.Controllers
 
 
         [HttpPost]
-        [System.Web.Http.Authorize(Roles = "AddMember, RemoveMember")]
+        [EbadoMvcAuthorization(Roles = "AddMember, RemoveMember")]
         [Route("ChangeMemberRole")]
         public JsonResult ChangeMemberRole(string user, string role)
         {
@@ -252,7 +252,7 @@ namespace Web.eBado.Controllers
         }
 
         [HttpPost]
-        [System.Web.Http.Authorize(Roles = "AddMember, RemoveMember")]
+        [EbadoMvcAuthorization(Roles = "AddMember, RemoveMember")]
         [Route("AddCustomRoleToCompany")]
         public JsonResult AddCustomRoleToCompany(string roleName, List<string> permissions)
         {
