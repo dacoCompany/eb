@@ -25,7 +25,7 @@ namespace Web.eBado.Helpers
             {
                 Id = userDetailDbo.Id,
                 Email = userDetailDbo.Email,
-                HasCompany = userDetailDbo.CompanyDetails2UserDetails.Any(cd => cd.IsActive),
+                HasCompany = userDetailDbo.CompanyDetails2UserDetails.AnyActive(),
                 IsContractor = userDetailDbo.CompanyDetails2UserDetails.Any(cd => cd.CompanyDetail.CompanyType.Name == CompanyType.PartTime.ToString()),
                 Name = userDetailDbo.DisplayName,
                 UserRole = userDetailDbo.UserRole.Name,
@@ -78,7 +78,7 @@ namespace Web.eBado.Helpers
             {
                 Id = userDetailDbo.Id,
                 Email = userDetailDbo.Email,
-                HasCompany = userDetailDbo.CompanyDetails2UserDetails.Any(cd => cd.IsActive),
+                HasCompany = userDetailDbo.CompanyDetails2UserDetails.AnyActive(),
                 IsContractor = userDetailDbo.CompanyDetails2UserDetails.Any(cd => cd.CompanyDetail.CompanyType.Name == CompanyType.PartTime.ToString()),
                 IsActive = true,
                 Name = userDetailDbo.DisplayName,
