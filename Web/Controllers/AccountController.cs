@@ -502,7 +502,7 @@ namespace Web.eBado.Controllers
         private int? GetActiveCompany()
         {
             var session = Session["User"] as SessionModel;
-            return session.Companies.First(c => c.IsActive)?.Id;
+            return session.Companies.FirstOrDefault(c => c.IsActive)?.Id;
         }
 
         private ICollection<FileModel> MapAttachmentsFromRequest()

@@ -33,7 +33,7 @@ namespace Web.eBado.Controllers
             {
                 model.SelectedMainCategory = model.SelectedCategory;
             }
-            model = companyHelper.GetAllCompanies(model, unitOfWork);
+            model = companyHelper.GetAllCompanies(model, unitOfWork,session);
             model = companyHelper.InitializeCompanyData(session, model);
 
             return View(model);
