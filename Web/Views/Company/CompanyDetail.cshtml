@@ -129,14 +129,18 @@
 
                                 @foreach (var batch in Model.Attachments)
                                 {
+                                    if (batch.Attachment.Any(a => a.AttachmentType != "video"))
+                                    {
+                                        <div class="col-sm-12" style="float:left">
                                     <div class="col-sm-12 nopadding batch_name">@batch.BatchName</div>
                                     <div class="col-sm-12 batch_desc">@batch.BatchDescription</div>
-                                    foreach (var image in batch.Attachment.Where(a => a.AttachmentType != "video"))
-                                    {
+                                        @foreach (var image in batch.Attachment.Where(a => a.AttachmentType != "video"))
+                                        {
                                         <div class="img_container">
                                             <a target="_blank" href="@image.Url" style="background-image: url(@image.ThumbnailUrl);" class="zoomzoom"></a>
                                         </div>
-
+                                        }
+                                    </div>
                                     }
                                 }
                             </div>
