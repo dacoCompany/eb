@@ -126,7 +126,7 @@ namespace Web.eBado.Controllers
         {
             bool deleted = filesBo.DeleteBatch(batchId);
 
-            return deleted ? new HttpStatusCodeResult(HttpStatusCode.OK) : new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "The gallery cannot be deleted. Please try again later.");
+            return deleted ? new JsonNetResult("OK") : new JsonNetResult(HttpStatusCode.InternalServerError, "The gallery cannot be deleted. Please try again later.");
         }
 
         [HttpPost]
