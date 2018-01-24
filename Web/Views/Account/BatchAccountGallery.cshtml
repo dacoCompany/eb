@@ -8,6 +8,15 @@
 @Styles.Render("~/Content/batch")
 
 <script>
+    $(document).ready(function() {
+        var modelError = @Html.Raw(Json.Encode(Model.HasError));
+
+        if (modelError) {
+            $("#addBatch").text("Close");
+            $("#batchArea").show();
+        }
+    });
+
     function onSubmit(token) {
         document.getElementById("htmlForm").submit();
     }

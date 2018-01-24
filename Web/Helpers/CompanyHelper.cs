@@ -40,7 +40,7 @@ namespace Web.eBado.Helpers
             else
             {
                 model = sharedHelper.GetDefaultCountry(model);
-            }  
+            }
 
             var postalCodeList = GetRelatedPostalCodes(model);
 
@@ -99,6 +99,7 @@ namespace Web.eBado.Helpers
                     BatchName = batch.Name,
                     BatchDescription = batch.Description,
                 };
+
                 foreach (var attachment in batch.Attachments.WhereActive())
                 {
                     var attachmentModel = new AttachmentModel
@@ -108,6 +109,7 @@ namespace Web.eBado.Helpers
                         ThumbnailUrl = attachment.ThumbnailUrl,
                         Url = attachment.OriginalUrl
                     };
+
                     if (attachment.FileType == "video")
                     {
                         videoCount++;
