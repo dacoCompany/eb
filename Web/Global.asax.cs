@@ -8,6 +8,8 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Microsoft.Practices.EnterpriseLibrary.Data;
 using Web.eBado.IoC;
+using WebAPIFactory.Logging.Core;
+using WebAPIFactory.Logging.Core.Diagnostics;
 
 namespace Web.eBado
 {
@@ -21,6 +23,16 @@ namespace Web.eBado
             //RouteConfig.RegisterRoutes(RouteTable.Routes);
             //BundleConfig.RegisterBundles(BundleTable.Bundles);
             //DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory());
+        }
+
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            var exception = Server.GetLastError();
+            var httpException = exception as HttpException;
+            if (httpException.ErrorCode == 404)
+            {
+                EntlibLogger.LogError("GlobalError", httpException.Message, DiagnosticsLogging.Create("Global", "ApplicationError"), httpException);
+            }
         }
 
         protected void Application_AcquireRequestState(object sender, EventArgs e)

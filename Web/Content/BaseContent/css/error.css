@@ -1,12 +1,12 @@
 body{
     background-color:#F9F9F9;
 }
+
 .form-control {
     border-radius: 0px;
     margin: 12px 3px;
     height: 40px;
 }
-
 
 .footer a {
     color: #000;
@@ -90,23 +90,3 @@ body{
         background-color:#0880af;
         outline: none;
     }
-
-.forGotPassword {
-    background-color: #F1F1F1;
-    padding: 15px 0px;
-    text-align: center;
-}
-
-    .forGotPassword:hover {
-        box-shadow: 0 10px 10px -2px rgba(0,0,0,0.12);
-    }
-
-    .forGotPassword a {
-        color: #000;
-        outline: none;
-    }
-
-        .forGotPassword a:hover, .forGotPassword a:active, .forGotPassword a:focus {
-            text-decoration: none;
-            outline: none;
-        }

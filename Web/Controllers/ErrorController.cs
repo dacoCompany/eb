@@ -14,6 +14,23 @@ namespace Web.eBado.Controllers
         [AllowAnonymous]
         public ActionResult Error401()
         {
+            Response.StatusCode = 401;
+            return View();
+        }
+
+        [Route("Error404")]
+        [AllowAnonymous]
+        public ActionResult Error404()
+        {
+            Response.StatusCode = 404;
+            return View();
+        }
+
+        [Route("Error500")]
+        [AllowAnonymous]
+        public ActionResult Error500()
+        {
+            Response.StatusCode = 500;
             return View();
         }
     }
