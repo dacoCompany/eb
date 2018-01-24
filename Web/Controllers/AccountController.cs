@@ -493,6 +493,26 @@ namespace Web.eBado.Controllers
                 return new HttpUnauthorizedResult();
             }
 
+            var entlibValidationResult = Validation.Validate(model, "CreateBatch");
+
+            if (!entlibValidationResult.IsValid)
+            {
+                var entities = fileBo.GetBatches(companyId.Value);
+
+                Mapper.Initialize(cfg =>
+                {
+                    cfg.CreateMap<BatchModel, BatchEntity>().ReverseMap();
+                });
+
+                var fileEntities = Mapper.Map<Collection<BatchModel>>(entities);
+                model.Batch = fileEntities;
+                model.HasError = true;
+
+                this.ModelState.AddValidationErrors(entlibValidationResult);
+                return View("BatchAccountGallery", model);
+            }
+
+            model.HasError = false;
             string batchUniqueId = fileBo.CreateBatch(model.Name, model.Description, companyId.Value);
             EntlibLogger.LogInfo("File", "Create Batch", $"Created new batch with id: {batchUniqueId}", diagnosticLogConstant);
             return RedirectToAction("EditAccountGallery", new { batchId = batchUniqueId });

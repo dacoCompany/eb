@@ -492,14 +492,14 @@ namespace eBado.BusinessObjects
 
             var resposne = new Collection<BatchEntity>();
 
-            foreach (var batch in companyDbo.BatchAttachments)
+            foreach (var batch in companyDbo.BatchAttachments.WhereActive())
             {
                 resposne.Add(new BatchEntity
                 {
                     Id = batch.Id,
                     Name = batch.Name,
                     Guid = batch.GuId,
-                    Description = batch.Description.Length > 100 ? batch.Description.Substring(0, 100) : batch.Description,
+                    Description = !string.IsNullOrEmpty(batch.Description) && batch.Description.Length > 100 ? batch.Description.Substring(0, 100) : batch.Description,
                     AttachmentsCount = batch.Attachments.CountActive(),
                     BaseThumbUrl = batch.Attachments.CountActive() > 0 ? batch.Attachments.FirstActive().ThumbnailUrl : null
                 });
