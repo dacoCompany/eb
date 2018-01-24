@@ -79,12 +79,14 @@ namespace Web.eBado
             {
                 EntlibLogger.LogError("Attribute", "Authorize", "Cookie 'tokenCookie' is missing from the request.", DiagnosticsLogging.Create("Attribute", "Authorization"));
                 filterContext.Result = new RedirectResult(loginUrl, false);
+                return;
             }
 
             if (string.IsNullOrEmpty(authHeader.Value))
             {
                 EntlibLogger.LogError("Attribute", "Authorize", "Cookie 'tokenCookie' does not have a value.", DiagnosticsLogging.Create("Attribute", "Authorization"));
                 filterContext.Result = new RedirectResult(loginUrl, false);
+                return;
             }
 
             string headerToken = authHeader.Value.Replace("\"", string.Empty);
