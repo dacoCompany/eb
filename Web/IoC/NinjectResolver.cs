@@ -1,12 +1,14 @@
-﻿using Infrastructure.Common.DB;
+﻿using BackgroundProcessing.Common;
+using BackgroundProcessing.Hangfire;
+using eBado.BusinessObjects;
+using Infrastructure.Common.DB;
 using Messaging.Email;
 using Ninject;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using eBado.BusinessObjects;
-using WebAPIFactory.Configuration.Core;
 using WebAPIFactory.Caching.Core;
+using WebAPIFactory.Configuration.Core;
 
 namespace Web.eBado.IoC
 {
@@ -48,6 +50,13 @@ namespace Web.eBado.IoC
         }
 
         /// <summary>
+        /// Gets the kernel.
+        /// </summary>
+        /// <returns>
+        /// Standard kernel
+        /// </returns>
+        public IKernel Kernel { get { return kernel; } }
+        /// <summary>
         /// Gets the instance.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -64,11 +73,12 @@ namespace Web.eBado.IoC
         /// </summary>
         private void AddBindings()
         {
-            kernel.Bind<IEmailSender>().To<SmtpEmailSender>().InSingletonScope();
+            kernel.Bind<IEmailSender>().To<SmtpEmailSender>();
             kernel.Bind<IUnitOfWork>().To<UnitOfWork>();
             kernel.Bind<IConfiguration>().To<Configuration>();
             kernel.Bind<IFilesBusinessObjects>().To<FilesBusinessObjects>();
             kernel.Bind<ICache>().To<HttpCacheHelper>();
+            kernel.Bind<IJobClient>().To<HangfireJobClient>();
         }
     }
 }

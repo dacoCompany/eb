@@ -55,6 +55,8 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Hangfire.Core, Version=1.6.17.0, Culture=neutral, PublicKeyToken=null" />
+    <Reference Include="Hangfire.SqlServer, Version=1.6.17.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="Microsoft.Azure.KeyVault.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll</HintPath>
     </Reference>
@@ -273,7 +275,6 @@
     <Compile Include="Models\Company\CompanySearchModel.cs" />
     <Compile Include="Models\Shared\AllCategoriesModel.cs" />
     <Compile Include="Models\Shared\SearchParametersModel.cs" />
-    <Compile Include="Models\Email\RegisterEmailModel.cs" />
     <Compile Include="Models\MvcExtensions\ModelStateExtensions.cs" />
     <Compile Include="Models\Shared\AttachmentGalleryModel.cs" />
     <Compile Include="Models\Shared\AttachmentModel.cs" />
@@ -721,6 +722,14 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BackgroundProcessing.Common\BackgroundProcessing.Common.csproj">
+      <Project>{ECA5194A-02D1-4884-A99D-BEE2E643568C}</Project>
+      <Name>BackgroundProcessing.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BackgroundProcessing.Hangfire\BackgroundProcessing.Hangfire.csproj">
+      <Project>{D90AFC1B-2965-4CD7-ADF1-1BD215C1D551}</Project>
+      <Name>BackgroundProcessing.Hangfire</Name>
+    </ProjectReference>
     <ProjectReference Include="..\eBado.BusinessObjects\eBado.BusinessObjects.csproj">
       <Project>{0C9B2CB1-F730-4DE3-A0CD-7E05421C45D6}</Project>
       <Name>eBado.BusinessObjects</Name>
