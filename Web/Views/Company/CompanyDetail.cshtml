@@ -1,4 +1,5 @@
-﻿@model Web.eBado.Models.Company.CompanyDetailModel
+﻿@using Infrastructure.Resources
+@model Web.eBado.Models.Company.CompanyDetailModel
 
 @{
     ViewBag.Title = "CompanyDetail";
@@ -25,23 +26,23 @@
             <div class="col-md-8 nopadding">
                 <div class="col-md-12 company_name nopadding">@company.CompanyName</div>
                 <div class="col-md-12 text-left nopadding">
-                    <span class="company_label push_right_5">Typ: <span class="company_detail_value">@company.CompanyType</span></span>
-                    <span class="company_label push_right_5">ICO: <span class="company_detail_value">@company.CompanyIco</span></span>
-                    <span class="company_label push_right_5">DIC: <span class="company_detail_value">@company.CompanyDic</span></span>
+                    <span class="company_label push_right_5">@Resources.CompanyType: <span class="company_detail_value">@company.CompanyType</span></span>
+                    <span class="company_label push_right_5">@Resources.PHCompanyNumber.Replace("*", string.Empty): <span class="company_detail_value">@company.CompanyIco</span></span>
+                    <span class="company_label push_right_5">@Resources.PHTaxnumber: <span class="company_detail_value">@company.CompanyDic</span></span>
                 </div>
                 <div class="col-md-12 company_label push_top_10 nopadding">
                     <span class="glyphicon glyphicon-map-marker font_16"></span>
                     <span class="company_label">
                         @company.CompanyStreet @company.CompanyStreetNumber, @company.CompanyPostalCode @company.CompanyCity&nbsp;&nbsp;
                         <span class="glyphicon glyphicon-search navigation_link"></span>
-                        <a target="_blank" class="navigation_link" href="@Model.MapUrl">mapa</a>
+                        <a target="_blank" class="navigation_link" href="@Model.MapUrl">@Resources.Map</a>
                     </span>
                 </div>
                 <div class="col-xs-12 nopadding push_top_10">
                     <div class="tags_glyph"><span class="glyphicon glyphicon-bullhorn font_16"></span></div>
                     @if (Model.Languages.Count == 0)
                     {
-                        <div class="company_detail_value">Uzivatel nema vyplneny jazyk</div>
+                    <div class="company_detail_value">@Resources.LanguageNotProvided</div>
                     }
                     else
                     {
@@ -64,44 +65,44 @@
                 </div>
 
                 <div class="col-xs-12 nopadding push_top_10">
-                    <div id="contactBtn" class="green-btn"><span class="glyphicon glyphicon-envelope"></span> Kontaktovat dodavatela</div>
+                    <div id="contactBtn" class="green-btn"><span class="glyphicon glyphicon-envelope"></span> @Resources.ContactSupplier</div>
                 </div>
                 <div id="contactForm" class="col-xs-12 nopadding" style="display:none">
                     <div class="col-sm-4 col-xs-12 push_top_10">
-                        @Html.EditorFor(model => model.CustomerEmail, new { htmlAttributes = new { @class = "form-control", @placeholder = "Email" } })
+                        @Html.EditorFor(model => model.CustomerEmail, new { htmlAttributes = new { @class = "form-control", @placeholder = @Resources.PHLoginEmail } })
                         <label class="label-form" for="email">
                             @Html.ValidationMessageFor(model => model.CustomerEmail)
                         </label>
                     </div>
                     <div class="col-sm-6 col-xs-12 resp_top_10">
-                        @Html.EditorFor(model => model.Subject, new { htmlAttributes = new { @class = "form-control", @placeholder = "Subject" } })
+                        @Html.EditorFor(model => model.Subject, new { htmlAttributes = new { @class = "form-control", @placeholder = @Resources.Subject } })
                         <label class="label-form" for="email">
                             @Html.ValidationMessageFor(model => model.Subject)
                         </label>
                     </div>
                     <div class="col-sm-10 col-xs-12">
-                        @Html.EditorFor(model => model.Message, new { htmlAttributes = new { @class = "form-control", @rows = "5", @placeholder = "Message" } })
+                        @Html.EditorFor(model => model.Message, new { htmlAttributes = new { @class = "form-control", @rows = "5", @placeholder = @Resources.Message } })
                         <label class="label-form" for="email">
                             @Html.ValidationMessageFor(model => model.Message)
                         </label>
                     </div>
                     <div class="col-sm-10 col-xs-12">
-                        <input type="submit" value="Odoslat" class="green-border-btn" />
+                        <input type="submit" value="@Resources.Send" class="green-border-btn" />
                     </div>
                 </div>
             </div>
 
             <div class="col-xs-12 nopadding push_top_20">
                 <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#description" aria-controls="description" role="tab" data-toggle="tab">Popis</a></li>
-                    <li role="presentation"><a href="#foto" aria-controls="foto" role="tab" data-toggle="tab">Obrazky (@Model.ImagesCount)</a></li>
-                    <li role="presentation"><a href="#video" aria-controls="video" role="tab" data-toggle="tab">Videa (@Model.VideosCount)</a></li>
-                    <li role="presentation"><a href="#ratings" aria-controls="ratings" role="tab" data-toggle="tab">Hodnotenia</a></li>
+                    <li role="presentation" class="active"><a href="#description" aria-controls="description" role="tab" data-toggle="tab">@Resources.Description</a></li>
+                    <li role="presentation"><a href="#foto" aria-controls="foto" role="tab" data-toggle="tab">@Resources.Pictures (@Model.ImagesCount)</a></li>
+                    <li role="presentation"><a href="#video" aria-controls="video" role="tab" data-toggle="tab">@Resources.Videos (@Model.VideosCount)</a></li>
+                    <li role="presentation"><a href="#ratings" aria-controls="ratings" role="tab" data-toggle="tab">@Resources.Ratings</a></li>
                 </ul>
                 <div class="tab-content">
                     @if (string.IsNullOrEmpty(company.CompanyDescription))
                     {
-                        <div role="tabpanel" class="tab-pane active" id="description">Uzivatel nema blizsi popis</div>
+                    <div role="tabpanel" class="tab-pane active" id="description">@Resources.NoDetailDescription</div>
                     }
                     else
                     {
@@ -109,7 +110,7 @@
                     }
                     @if (Model.ImagesCount == 0)
                     {
-                        <div role="tabpanel" class="tab-pane" id="foto">Uzivatel nema ziadne obrazky</div>
+                        <div role="tabpanel" class="tab-pane" id="foto">@Resources.NoPictures</div>
 
                     }
                     else
@@ -148,7 +149,7 @@
                     }
                     @if (Model.VideosCount == 0)
                     {
-                        <div role="tabpanel" class="tab-pane" id="video">Uzivatel nema ziadne videa</div>
+                        <div role="tabpanel" class="tab-pane" id="video">@Resources.NoVideos</div>
                     }
                     else
                     {
@@ -178,7 +179,7 @@
                             }
                         </div>
                     }
-                    <div role="tabpanel" class="tab-pane" id="ratings">Uzivatel nema ziadne hodnotenia</div>
+                        <div role="tabpanel" class="tab-pane" id="ratings">@Resources.NoRatings</div>
                 </div>
             </div>
 

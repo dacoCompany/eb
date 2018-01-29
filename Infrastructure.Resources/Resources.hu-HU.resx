@@ -156,6 +156,9 @@
   <data name="AddVideo" xml:space="preserve">
     <value>Videó hozzáadása</value>
   </data>
+  <data name="AdvancedSearch" xml:space="preserve">
+    <value>Részletes keresés</value>
+  </data>
   <data name="Back" xml:space="preserve">
     <value>Vissza</value>
   </data>
@@ -176,6 +179,9 @@
   </data>
   <data name="CancelUpload" xml:space="preserve">
     <value>Feltöltés megszakítása</value>
+  </data>
+  <data name="Categories" xml:space="preserve">
+    <value>Kategóriák</value>
   </data>
   <data name="Change" xml:space="preserve">
     <value>MÓDOSÍT</value>
@@ -198,6 +204,15 @@
   <data name="ChangeSettings" xml:space="preserve">
     <value>Beállítások megváltoztatása</value>
   </data>
+  <data name="ChooseBusinessArea" xml:space="preserve">
+    <value>Válassza ki üzleti területét</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>Város</value>
+  </data>
+  <data name="CityOrPostalCode" xml:space="preserve">
+    <value>Város vagy irányítószám</value>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Bezár</value>
   </data>
@@ -210,11 +225,17 @@
   <data name="CompanyInfo" xml:space="preserve">
     <value>Céginformáció</value>
   </data>
+  <data name="CompanyType" xml:space="preserve">
+    <value>Típus</value>
+  </data>
   <data name="ContactDetails" xml:space="preserve">
     <value>Elérhetőség</value>
   </data>
   <data name="ContactPerson" xml:space="preserve">
     <value>Kapcsolattartó személy</value>
+  </data>
+  <data name="ContactSupplier" xml:space="preserve">
+    <value>Lépjen kapcsolatba a beszállítóval</value>
   </data>
   <data name="ContactUs" xml:space="preserve">
     <value>Írjon nekünk</value>
@@ -273,11 +294,20 @@
   <data name="EnableSearchInSK" xml:space="preserve">
     <value>Engedélyezze a hirdetések és keresletek keresését Szlovákiában</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>Hiba</value>
+  </data>
   <data name="Faq" xml:space="preserve">
     <value>GYIK</value>
   </data>
   <data name="Feedback" xml:space="preserve">
     <value>Visszajelzés</value>
+  </data>
+  <data name="FirstPage" xml:space="preserve">
+    <value>Első</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Elfelejtett jelszó</value>
   </data>
   <data name="ForgotUsernamePassword" xml:space="preserve">
     <value>Elfelejtette a felhasználónevét / jelszavát?</value>
@@ -285,8 +315,23 @@
   <data name="Gallery" xml:space="preserve">
     <value>Galéria</value>
   </data>
+  <data name="GotoMainPage" xml:space="preserve">
+    <value>Ugrás a főoldalra</value>
+  </data>
+  <data name="InternalServerError" xml:space="preserve">
+    <value>Belső szerverhiba</value>
+  </data>
+  <data name="InternalServerErrorMessage" xml:space="preserve">
+    <value>Sajnáljuk, úgy tűnik, hogy a kért oldal belső kiszolgálóhiba miatt nem érhető el. Próbáljon frissíteni.</value>
+  </data>
+  <data name="LanguageNotProvided" xml:space="preserve">
+    <value>Nincs megadva nyelv</value>
+  </data>
   <data name="Languages" xml:space="preserve">
     <value>Nyelvek</value>
+  </data>
+  <data name="LastPage" xml:space="preserve">
+    <value>Utolsó</value>
   </data>
   <data name="ListOfMembers" xml:space="preserve">
     <value>Tagok listája</value>
@@ -300,6 +345,12 @@
   <data name="LogOut" xml:space="preserve">
     <value>Kijelentkezés</value>
   </data>
+  <data name="Map" xml:space="preserve">
+    <value>térkép</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Üzenet</value>
+  </data>
   <data name="MyAds" xml:space="preserve">
     <value>Hirdetéseim</value>
   </data>
@@ -309,8 +360,29 @@
   <data name="MyRatings" xml:space="preserve">
     <value>Értékeléseim</value>
   </data>
+  <data name="NextPage" xml:space="preserve">
+    <value>Következő</value>
+  </data>
+  <data name="NoDetailDescription" xml:space="preserve">
+    <value>A beszállítónak nincs részletes leírása.</value>
+  </data>
   <data name="NoMembersAtm" xml:space="preserve">
     <value>Jelenleg nincsenek tagjai</value>
+  </data>
+  <data name="NoPictures" xml:space="preserve">
+    <value>A beszállítónak nincsenek képei.</value>
+  </data>
+  <data name="NoRatings" xml:space="preserve">
+    <value>A beszállítónak nincsenek értékelései.</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Nem található</value>
+  </data>
+  <data name="NotFoundMessage" xml:space="preserve">
+    <value>A keresett oldalt áthelyezték, eltávolították, átnevezték, vagy soha nem létezett.</value>
+  </data>
+  <data name="NoVideos" xml:space="preserve">
+    <value>A beszállítónak nincsenek videói.</value>
   </data>
   <data name="PHAddress" xml:space="preserve">
     <value>Lakóhely</value>
@@ -375,6 +447,12 @@
   <data name="PHTitle" xml:space="preserve">
     <value>Cím</value>
   </data>
+  <data name="Pictures" xml:space="preserve">
+    <value>Képek</value>
+  </data>
+  <data name="PreviousPage" xml:space="preserve">
+    <value>Előző</value>
+  </data>
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Adatvédelmi szabályzat</value>
   </data>
@@ -383,6 +461,15 @@
   </data>
   <data name="Profile" xml:space="preserve">
     <value>Profil</value>
+  </data>
+  <data name="Radius" xml:space="preserve">
+    <value>Sugár</value>
+  </data>
+  <data name="Ratings" xml:space="preserve">
+    <value>Értékelések</value>
+  </data>
+  <data name="Redirecting" xml:space="preserve">
+    <value>Átirányítás...</value>
   </data>
   <data name="Register" xml:space="preserve">
     <value>REGISZTRÁCIÓ</value>
@@ -405,8 +492,23 @@
   <data name="RoleName" xml:space="preserve">
     <value>Hozzáférés neve</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>Keresés</value>
+  </data>
+  <data name="SearchInCZ" xml:space="preserve">
+    <value>Keresés Csehországban</value>
+  </data>
+  <data name="SearchInHU" xml:space="preserve">
+    <value>Keresés Magyarországon</value>
+  </data>
+  <data name="SearchInSK" xml:space="preserve">
+    <value>Keresés Szlovákiában</value>
+  </data>
   <data name="SearchRadius" xml:space="preserve">
     <value>Keresési sugár (km)</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Küld</value>
   </data>
   <data name="SendNotificationsToAllMembers" xml:space="preserve">
     <value>Értesítés küldése minden tagnak</value>
@@ -420,14 +522,29 @@
   <data name="StartUpload" xml:space="preserve">
     <value>Feltöltés indítása</value>
   </data>
+  <data name="Subject" xml:space="preserve">
+    <value>Tárgy</value>
+  </data>
   <data name="Submit" xml:space="preserve">
     <value>Bejelentkezés</value>
+  </data>
+  <data name="SubmitSend" xml:space="preserve">
+    <value>Küld</value>
   </data>
   <data name="SupplierList" xml:space="preserve">
     <value>BESZÁLLÍTÓLISTA</value>
   </data>
+  <data name="SupplierName" xml:space="preserve">
+    <value>Beszállító neve</value>
+  </data>
   <data name="TermsOfUse" xml:space="preserve">
     <value>Általános felhasználási feltételek</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>Jogosulatlan működés</value>
+  </data>
+  <data name="UnauthorizedMessage" xml:space="preserve">
+    <value>A kiszolgáló nem tudta ellenőrizni, hogy jogosult-e a kért dokumentum elérésére. Vagy hibás hitelesítő adatokat (például rossz jelszót) adott meg, vagy a böngésző nem érti, hogyan kell megadni a szükséges hitelesítő adatokat.</value>
   </data>
   <data name="Upload" xml:space="preserve">
     <value>Feltöltés</value>
@@ -440,6 +557,9 @@
   </data>
   <data name="Validate" xml:space="preserve">
     <value>Érvényesítés</value>
+  </data>
+  <data name="Videos" xml:space="preserve">
+    <value>Videók</value>
   </data>
   <data name="YouAreTheOnlyMember" xml:space="preserve">
     <value>Ön jelenleg az egyetlen tag</value>

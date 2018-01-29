@@ -243,6 +243,9 @@
   <data name="AddVideo" xml:space="preserve">
     <value>Pridať video</value>
   </data>
+  <data name="AdvancedSearch" xml:space="preserve">
+    <value>Rozšírené vyhľadávanie</value>
+  </data>
   <data name="Back" xml:space="preserve">
     <value>Naspäť</value>
   </data>
@@ -257,6 +260,9 @@
   </data>
   <data name="CancelUpload" xml:space="preserve">
     <value>Zrušiť nahrávanie</value>
+  </data>
+  <data name="Categories" xml:space="preserve">
+    <value>Kategórie</value>
   </data>
   <data name="Change" xml:space="preserve">
     <value>ZMENIŤ</value>
@@ -279,11 +285,26 @@
   <data name="ChangeSettings" xml:space="preserve">
     <value>Zmeniť nastavenia</value>
   </data>
+  <data name="ChooseBusinessArea" xml:space="preserve">
+    <value>Vyberte svoju oblasť podnikania</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>Mesto</value>
+  </data>
+  <data name="CityOrPostalCode" xml:space="preserve">
+    <value>Mesto alebo PSČ</value>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Zavrieť</value>
   </data>
   <data name="Comment" xml:space="preserve">
     <value>Komentovať</value>
+  </data>
+  <data name="CompanyType" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="ContactSupplier" xml:space="preserve">
+    <value>Kontaktovať dodávateľa</value>
   </data>
   <data name="ContactUs" xml:space="preserve">
     <value>Kontaktujte nás</value>
@@ -339,11 +360,20 @@
   <data name="EnableSearchInSK" xml:space="preserve">
     <value>Povoliť vyhľadávanie inzerátov a dopytov na území Slovenska</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>Chyba</value>
+  </data>
   <data name="Faq" xml:space="preserve">
     <value>FAQ</value>
   </data>
   <data name="Feedback" xml:space="preserve">
     <value>Spätná väzba</value>
+  </data>
+  <data name="FirstPage" xml:space="preserve">
+    <value>Prvá</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Zabudnuté heslo</value>
   </data>
   <data name="ForgotUsernamePassword" xml:space="preserve">
     <value>Zabudli ste používateľské meno / heslo?</value>
@@ -351,14 +381,35 @@
   <data name="Gallery" xml:space="preserve">
     <value>Galéria</value>
   </data>
+  <data name="GotoMainPage" xml:space="preserve">
+    <value>Prejsť na hlavnú stránku</value>
+  </data>
+  <data name="InternalServerError" xml:space="preserve">
+    <value>Interná chyba servera</value>
+  </data>
+  <data name="InternalServerErrorMessage" xml:space="preserve">
+    <value>Je nám ľúto, zdá sa, že došlo k internej chybe servera so stránkou, ktorú ste požadovali. Skúste obnoviť.</value>
+  </data>
+  <data name="LanguageNotProvided" xml:space="preserve">
+    <value>Nie sú špecifikované žiadne jazyky</value>
+  </data>
   <data name="Languages" xml:space="preserve">
     <value>Jazyky</value>
+  </data>
+  <data name="LastPage" xml:space="preserve">
+    <value>Posledná</value>
   </data>
   <data name="ListOfMembers" xml:space="preserve">
     <value>Zoznam členov</value>
   </data>
   <data name="LogOut" xml:space="preserve">
     <value>Odhlásenie</value>
+  </data>
+  <data name="Map" xml:space="preserve">
+    <value>mapa</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Správa</value>
   </data>
   <data name="MyAds" xml:space="preserve">
     <value>Moje Inzeráty</value>
@@ -369,8 +420,29 @@
   <data name="MyRatings" xml:space="preserve">
     <value>Moje Hodnotenia</value>
   </data>
+  <data name="NextPage" xml:space="preserve">
+    <value>Ďalšia</value>
+  </data>
+  <data name="NoDetailDescription" xml:space="preserve">
+    <value>Dodávateľ nemá uvedený bližší popis.</value>
+  </data>
   <data name="NoMembersAtm" xml:space="preserve">
     <value>Momentálne nemáte žiadnych členov</value>
+  </data>
+  <data name="NoPictures" xml:space="preserve">
+    <value>Dodávateľ nemá žiadne obrázky.</value>
+  </data>
+  <data name="NoRatings" xml:space="preserve">
+    <value>Dodávateľ nemá žiadne hodnotenia.</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Nenájdené</value>
+  </data>
+  <data name="NotFoundMessage" xml:space="preserve">
+    <value>Stránka, ktorú hľadáte, bola presunutá, odstránená, premenovaná alebo nikdy neexistovala.</value>
+  </data>
+  <data name="NoVideos" xml:space="preserve">
+    <value>Dodávateľ nemá žiadne videá.</value>
   </data>
   <data name="PHAddress" xml:space="preserve">
     <value>Bydlisko</value>
@@ -399,6 +471,12 @@
   <data name="PHTaxnumber" xml:space="preserve">
     <value>Dič</value>
   </data>
+  <data name="Pictures" xml:space="preserve">
+    <value>Obrázky</value>
+  </data>
+  <data name="PreviousPage" xml:space="preserve">
+    <value>Predchádzajúca</value>
+  </data>
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Zásady ochrany osobných údajov</value>
   </data>
@@ -407,6 +485,15 @@
   </data>
   <data name="Profile" xml:space="preserve">
     <value>Profil</value>
+  </data>
+  <data name="Radius" xml:space="preserve">
+    <value>Okolie</value>
+  </data>
+  <data name="Ratings" xml:space="preserve">
+    <value>Hodnotenia</value>
+  </data>
+  <data name="Redirecting" xml:space="preserve">
+    <value>Presmerovanie...</value>
   </data>
   <data name="RemoveAttachments" xml:space="preserve">
     <value>Odstráňiť prílohy</value>
@@ -420,8 +507,23 @@
   <data name="RoleName" xml:space="preserve">
     <value>Názov role</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>Hľadať</value>
+  </data>
+  <data name="SearchInCZ" xml:space="preserve">
+    <value>Vyhľadávanie v Česku</value>
+  </data>
+  <data name="SearchInHU" xml:space="preserve">
+    <value>Search in Hungary</value>
+  </data>
+  <data name="SearchInSK" xml:space="preserve">
+    <value>Vyhľadávanie na Slovensku</value>
+  </data>
   <data name="SearchRadius" xml:space="preserve">
     <value>Rádius hľadania (km)</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Odoslať</value>
   </data>
   <data name="SendNotificationsToAllMembers" xml:space="preserve">
     <value>Posielať notifikácie všetkým členom</value>
@@ -435,14 +537,29 @@
   <data name="StartUpload" xml:space="preserve">
     <value>Spustiť nahrávanie</value>
   </data>
+  <data name="Subject" xml:space="preserve">
+    <value>Predmet</value>
+  </data>
   <data name="Submit" xml:space="preserve">
     <value>Prihlásiť</value>
+  </data>
+  <data name="SubmitSend" xml:space="preserve">
+    <value>Odoslať</value>
   </data>
   <data name="SupplierList" xml:space="preserve">
     <value>ZOZNAM DODÁVATEĽOV</value>
   </data>
+  <data name="SupplierName" xml:space="preserve">
+    <value>Názov dodávateľa</value>
+  </data>
   <data name="TermsOfUse" xml:space="preserve">
     <value>Podmienky používania</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>Neoprávnená prevádzka</value>
+  </data>
+  <data name="UnauthorizedMessage" xml:space="preserve">
+    <value>Server nemohol overiť, či máte oprávnenie na prístup k požadovanému dokumentu. Buď ste zadali nesprávne poverenia (napríklad zlé heslo) alebo váš prehliadač nerozumie, ako dodať požadované poverenia.</value>
   </data>
   <data name="Upload" xml:space="preserve">
     <value>Nahrať</value>
@@ -452,6 +569,9 @@
   </data>
   <data name="UserEmail" xml:space="preserve">
     <value>E-mail používateľa</value>
+  </data>
+  <data name="Videos" xml:space="preserve">
+    <value>Videá</value>
   </data>
   <data name="YouAreTheOnlyMember" xml:space="preserve">
     <value>Momentálne ste jediným členom</value>

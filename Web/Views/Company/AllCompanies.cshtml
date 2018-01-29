@@ -1,4 +1,5 @@
 ﻿@model Web.eBado.Models.Company.CompanySearchModel
+@using Infrastructure.Resources
 @using PagedList.Mvc;
 @{
     ViewBag.Title = "AllCompanies";
@@ -11,22 +12,22 @@
     <div class="container">
         <div class="search_panel">
             <div class="search_textBox-xlg">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Nazov dodavatela" } })
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = @Resources.SupplierName } })
             </div>
             <div class="search_textBox-lg">
                 @Html.DropDownListFor(model => model.SelectedMainCategory, Model.AllMainCategories, "All categories", new { @class = "form-control", onchange = "UpdateFilter()", id = "categoryDropDown" })
             </div>
-            <div class="search_text">Mesto:</div>
+            <div class="search_text">@Resources.City:</div>
             <div class="search_textBox-md">
-                <input type="text" class="form-control" id="txtPostalCode" placeholder="Mesto alebo PSC" />
+                <input type="text" class="form-control" id="txtPostalCode" placeholder="@Resources.CityOrPostalCode" />
                 @Html.HiddenFor(model => model.PostalCode, new { @id = "hiddenPostalCode" })
             </div>
-            <div class="search_text">Okolie:</div>
+            <div class="search_text">@Resources.Radius:</div>
             <div class="search_textBox-sm">
                 @Html.EditorFor(model => model.Radius, new { htmlAttributes = new { @class = "form-control", @placeholder = "km", @Value=Model.DefaultRadius } })
             </div>
             <div class="search_button">
-                <button id="searchBtn" type="submit" class="white-border-btn search_btn_resp"><i class="glyphicon glyphicon-search"></i> Hladat</button>
+                <button id="searchBtn" type="submit" class="white-border-btn search_btn_resp"><i class="glyphicon glyphicon-search"></i> @Resources.Search</button>
             </div>
         </div>
 
@@ -36,11 +37,11 @@
         <div class="main_container">
             <div class="col-md-3 nopadding category_container">
 
-                <div class="search_head"><span id="searchSpan" class="glyphicon glyphicon-minus"></span>  Advanced search:</div>
+                <div class="search_head"><span id="searchSpan" class="glyphicon glyphicon-minus"></span>  @Resources.AdvancedSearch:</div>
                 <div id="search_container">
                     <div class="search_body">
                         <div class="settings_wrapper">
-                            <div class="text_div">Search in Slovakia:</div>
+                            <div class="text_div">@Resources.SearchInSK:</div>
                             <div class="toggle_div">
                                 <label class="switch_small">
                                     @Html.CheckBoxFor(m => m.SearchInSK, new { @class = "form-control" })
@@ -49,7 +50,7 @@
                             </div>
                         </div>
                         <div class="settings_wrapper">
-                            <div class="text_div">Search in Czechia:</div>
+                            <div class="text_div">@Resources.SearchInCZ:</div>
                             <div class="toggle_div">
                                 <label class="switch_small">
                                     @Html.CheckBoxFor(m => m.SearchInCZ, new { @class = "form-control" })
@@ -59,7 +60,7 @@
                             </div>
                         </div>
                         <div class="settings_wrapper">
-                            <div class="text_div">Search in Hungary:</div>
+                            <div class="text_div">@Resources.SearchInHU:</div>
                             <div class="toggle_div">
                                 <label class="switch_small">
                                     @Html.CheckBoxFor(m => m.SearchInHU, new { @class = "form-control" })
@@ -80,7 +81,7 @@
                 }
                 @if (Model.SelectedMainCategory == null)
                 {
-                    <div class="category_head"><span id="categorySpan" class="glyphicon glyphicon-minus"></span>  Categories:</div>
+                <div class="category_head"><span id="categorySpan" class="glyphicon glyphicon-minus"></span>  @Resources.Categories:</div>
                     <div id="cat_container">
                         @foreach (var cat in Model.AllCategories)
                         {
@@ -119,7 +120,7 @@
                                 }
                             </a>
                         </div>
-                        @{ var description = company.CompanyDescription == null ? "Dodavatel nema uvedeny blizsi popis ..."
+                        @{ var description = company.CompanyDescription == null ? @Resources.NoDetailDescription
                                 : company.CompanyDescription.Length <= 350 ? company.CompanyDescription : company.CompanyDescription.Substring(0, 350) + "..."; }
                         <div class="col-md-8 nopadding resp_push_top_10 push_bottom_5_resp">
                             <div class="col-md-12 text-left head_text"><a href='@Url.Action("CompanyDetail","Company", new {id = company.CompanyId })'>@company.CompanyName</a></div>
@@ -127,7 +128,7 @@
                                 @description
                             </div>
                             <div class="col-md-12 push" style="display: table-cell;">
-                                <div class="company_head_text head_text ">Kategorie:</div>
+                                <div class="company_head_text head_text ">@Resources.Categories:</div>
                                 @foreach (var category in company.AllSelectedCategories)
                                 {
                                     <div class="company_tags push_bottom_5">@category</div>
@@ -162,10 +163,10 @@
            DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
            DisplayLinkToNextPage = PagedListDisplayMode.Always,
            DisplayEllipsesWhenNotShowingAllPageNumbers = true,
-           LinkToFirstPageFormat = "First",
-           LinkToPreviousPageFormat = "Previous",
-           LinkToNextPageFormat = "Next",
-           LinkToLastPageFormat = "Last",
+           LinkToFirstPageFormat = @Resources.FirstPage,
+           LinkToPreviousPageFormat = @Resources.PreviousPage,
+           LinkToNextPageFormat = @Resources.NextPage,
+           LinkToLastPageFormat = @Resources.LastPage,
            MaximumPageNumbersToDisplay = 8
        })
         </div>
