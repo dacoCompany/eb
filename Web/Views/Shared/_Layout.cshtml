@@ -107,9 +107,9 @@
                                                 </a>
                                             </li>
                                         }
-                                        <li><a href="#">Moje dopyty<div class="circle"></div></a></li>
-                                        <li><a href="@Url.Action("ChangeSettings","Account")">Nastavenie<div class="circle"></div></a></li>
-                                        <li><a href="@Url.Action("Logout","Account")">Odhlásiť sa<div class="circle"></div></a></li>
+                                        <li><a href="#">@Resources.MyDemands<div class="circle"></div></a></li>
+                                        <li><a href="@Url.Action("ChangeSettings","Account")">@Resources.Settings<div class="circle"></div></a></li>
+                                        <li><a href="@Url.Action("Logout","Account")">@Resources.LogOut<div class="circle"></div></a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -128,10 +128,10 @@
         <div class="submenu" id="SubMenuId">
             <div class="container">
                 <div class="position">
-                    <a class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active_menu" : "")" href="@Url.Action("Index", "Home")">bazár</a>
-                    <a class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index2" ? "active_menu" : "")" href="@Url.Action("Index2", "Home")">dopyt</a>
-                    <a href="#contact">faq</a>
-                    <a class="@(ViewContext.RouteData.Values["Action"].ToString() == "AllCompanies" ? "active_menu" : "")" href="@Url.Action("AllCompanies", "Company")">zoznam dodavatelov</a>
+                    <a class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active_menu" : "")" href="@Url.Action("Index", "Home")">@Resources.Bazaar</a>
+                    <a class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index2" ? "active_menu" : "")" href="@Url.Action("Index2", "Home")">@Resources.Demand</a>
+                    <a href="#contact">@Resources.ContactUs</a>
+                    <a class="@(ViewContext.RouteData.Values["Action"].ToString() == "AllCompanies" ? "active_menu" : "")" href="@Url.Action("AllCompanies", "Company")">@Resources.SupplierList</a>
                 </div>
                 <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
             </div>
@@ -190,7 +190,7 @@
         @RenderBody()
     </div>
     <footer class="site-footer">
-        <p>&copy; @DateTime.Now.Year - eBado Application</p>
+        <p>&copy; @DateTime.Now.Year - eBado Application - @Resources.Copyright</p>
     </footer>
 
 </body>

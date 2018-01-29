@@ -1,4 +1,5 @@
 ﻿@model Web.eBado.Models.Shared.AttachmentGalleryModel
+@using Infrastructure.Resources
 @using Web.eBado.Helpers
 @using Web.eBado.Models.Shared
 @{
@@ -37,7 +38,7 @@
         var index = 1;
         jQuery.each(response, function (index, item) {
             if (item.attachmentType !== "video") {
-            jQuery("#imagesContainer").append('<div id="imgContainer' + index + '" class="polaroid zoom over-flow-hidden"><div style="overflow: hidden;"> <a target="_blank" href="' + item.url + '" style="background-image: url(' + item.thumbnailUrl + ');" class="zoomzoom"></a></div><div class="btm"><div class="chBox"><input type="checkbox" onchange="enableDeleteBtn()" id="btn' + index + '" value="btn' + item.name + '" /></div><div style="float:right"><button id="btn' + index + '" onclick="btnClick(\'' + item.name + '\', \'btn' + index + '\')" class="form-btn btn-space-5">Delete</button></div></div></div>');
+            jQuery("#imagesContainer").append('<div id="imgContainer' + index + '" class="polaroid zoom over-flow-hidden"><div style="overflow: hidden;"> <a target="_blank" href="' + item.url + '" style="background-image: url(' + item.thumbnailUrl + ');" class="zoomzoom"></a></div><div class="btm"><div class="chBox"><input type="checkbox" onchange="enableDeleteBtn()" id="btn' + index + '" value="btn' + item.name + '" /></div><div style="float:right"><button id="btn' + index + '" onclick="btnClick(\'' + item.name + '\', \'btn' + index + '\')" class="form-btn btn-space-5">@Resources.Delete</button></div></div></div>');
             index++;
             }
         });
@@ -52,7 +53,7 @@
         @AccountHelper.SettingsMenu(Url, ViewContext.RouteData.Values["Action"].ToString(), session)
         <div class="tabcontent-gallery push_top_10">
             <div class="btn-position">
-                <button type="submit" class="form-btn col-lg-2" style="float:left" onclick="location.href='@Url.Action("BatchAccountGallery", "Account")'"><span class="glyphicon glyphicon-arrow-left push_right_5"></span>Naspat</button>
+                <button type="submit" class="form-btn col-lg-2" style="float:left" onclick="location.href='@Url.Action("BatchAccountGallery", "Account")'"><span class="glyphicon glyphicon-arrow-left push_right_5"></span>@Resources.Back</button>
             </div>
 
 
@@ -61,24 +62,24 @@
                     <div class="col-lg-10" style="margin:0 auto">
                         <span class="btn form-btn-transparent fileinput-button">
                             <i class="glyphicon glyphicon-picture"></i>
-                            <span>Add images</span>
+                            <span>@Resources.AddImages</span>
                             <input id="addButton" type="file" name="files[]" multiple>
                         </span>
                         <button id="addVideo" class="btn form-btn-transparent cancel">
                             <i class="glyphicon glyphicon-facetime-video"></i>
-                            <span>Add video</span>
+                            <span>@Resources.AddVideo</span>
                         </button>
                         <button type="submit" class="btn form-btn-transparent start">
                             <i class="glyphicon glyphicon-upload"></i>
-                            <span>Start upload</span>
+                            <span>@Resources.StartUpload</span>
                         </button>
                         <button type="reset" class="btn form-btn-transparent cancel">
                             <i class="glyphicon glyphicon-ban-circle"></i>
-                            <span>Cancel upload</span>
+                            <span>@Resources.CancelUpload</span>
                         </button>
                         <button id="deleteSelected" type="button" class="btn form-btn-transparent delete" disabled>
                             <i class="glyphicon glyphicon-trash"></i>
-                            <span>Delete</span>
+                            <span>@Resources.Delete</span>
                         </button>
                         @*<input type="checkbox" class="toggle">*@
                         <span class="fileupload-process"></span>
@@ -134,20 +135,20 @@
                         <strong class="error text-danger"></strong>
                     </td>
                     <td>
-                        <p class="size">Processing...</p>
+                        <p class="size">@Resources.Processing</p>
                         <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
                     </td>
                     <td>
                         {% if (!i && !o.options.autoUpload) { %}
                         <button class="btn form-btn-transparent start" disabled>
                             <i class="glyphicon glyphicon-upload"></i>
-                            <span>Start</span>
+                            <span>@Resources.Upload</span>
                         </button>
                         {% } %}
                         {% if (!i) { %}
                         <button class="btn form-btn-transparent cancel">
                             <i class="glyphicon glyphicon-trash"></i>
-                            <span>Remove</span>
+                            <span>@Resources.Delete</span>
                         </button>
                         {% } %}
                     </td>
@@ -183,13 +184,13 @@
                         {% if (file.deleteUrl) { %}
                         <button class="btn form-btn-transparent delete no_margin" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}" {% if (file.deletewithcredentials) { %} data-xhr-fields='{"withCredentials":true}' {% } %}>
                             <i class="glyphicon glyphicon-trash"></i>
-                            <span>Delete</span>
+                            <span>@Resources.Delete</span>
                         </button>
                         <input type="checkbox" name="delete" value="1" class="toggle">
                         {% } else { %}
                         <button class="btn btn-warning cancel">
                             <i class="glyphicon glyphicon-ban-circle"></i>
-                            <span>Cancel</span>
+                            <span>@Resources.Cancel</span>
                         </button>
                         {% } %}
                     </td>
@@ -209,7 +210,7 @@
                         <a onclick="playVideo('video_@index','youtube_@index')" style="background-image: url(@video.ThumbnailUrl);" class="zoomzoom"></a>
                     </div>
                     <div class="btm">
-                        <button id="btnVideo_@index" onclick="btnDeleteVideo('@video.Name','btnVideo_@index')" class="form-btn btn-space-5">Delete</button>
+                        <button id="btnVideo_@index" onclick="btnDeleteVideo('@video.Name','btnVideo_@index')" class="form-btn btn-space-5">@Resources.Delete</button>
                     </div>
                 </div>
 
