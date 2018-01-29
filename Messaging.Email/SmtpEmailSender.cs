@@ -1,9 +1,12 @@
-﻿using Infrastructure.Common.DB;
+﻿using BackgroundProcessing.Common;
+using Hangfire;
+using Infrastructure.Common.DB;
 using Infrastructure.Common.Enums;
 using Infrastructure.Configuration;
 using Messaging.Email.Models;
 using RazorEngine.Templating;
 using System;
+using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Net.Mail;
@@ -14,44 +17,41 @@ namespace Messaging.Email
     {
         private MailMessage message;
         private SmtpClient client;
+        private IJobClient jobClient;
+
         private bool disposed = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SmtpEmailSender"/> class.
         /// </summary>
-        public SmtpEmailSender()
+        public SmtpEmailSender(IJobClient jobClient)
         {
+            this.jobClient = jobClient;
+
             client = new SmtpClient();
+            message = new MailMessage();
             Configure();
         }
 
         /// <summary>
-        /// Creates and configure email message instance.
+        /// Sends email message
         /// </summary>
-        /// <param name="type">The type.</param>
-        /// <param name="userAccount">The user account.</param>
-        public void CreateMessage(MailMessageType type, UserDetailDbo userAccount)
+        public void Send(MailMessageType messageType, UserDetailDbo userDetail)
         {
-            message = new MailMessage();
-            BuildMessage(type, userAccount);
+            jobClient.Enqueue(() => SendToQueue(messageType, userDetail));
         }
 
         /// <summary>
-        /// Sends email message synchronously
+        /// Sends to queue.
         /// </summary>
-        public void Send()
+        /// <param name="messageType">Type of the message.</param>
+        /// <param name="userDetail">The user detail.</param>
+        [Queue("messaging")]
+        public void SendToQueue(MailMessageType messageType, UserDetailDbo userDetail)
         {
+            CreateMessage(messageType, userDetail);
             client.Send(message);
         }
-
-        /// <summary>
-        /// Sends email message asynchronously
-        /// </summary>
-        public void SendAsync()
-        {
-            client.SendAsync(message, null);
-        }
-
 
         // Public implementation of Dispose pattern callable by consumers.
         public void Dispose()
@@ -70,6 +70,7 @@ namespace Messaging.Email
             {
                 message.Dispose();
                 client.Dispose();
+                jobClient = null;
             }
 
             // Free any unmanaged objects here.
@@ -81,39 +82,42 @@ namespace Messaging.Email
         /// </summary>
         private void Configure()
         {
-            client.Host = EbadoConfiguration.AppSettings.Get(ConfigurationKeys.EmailServer);
-            client.Port = EbadoConfiguration.AppSettings.Get<int>(ConfigurationKeys.EmailPort);
+            client.Host = ConfigurationManager.AppSettings.Get(ConfigurationKeys.EmailServer);
+            client.Port = ConfigurationManager.AppSettings.Get<int>(ConfigurationKeys.EmailPort);
             client.UseDefaultCredentials = false;
             client.Credentials = new NetworkCredential
             {
-                UserName = EbadoConfiguration.AppSettings.Get(ConfigurationKeys.EmailLogin),
-                Password = EbadoConfiguration.AppSettings.Get(ConfigurationKeys.EmailPassword)
+                UserName = ConfigurationManager.AppSettings.Get(ConfigurationKeys.EmailLogin),
+                Password = ConfigurationManager.AppSettings.Get(ConfigurationKeys.EmailPassword)
             };
-            client.EnableSsl = EbadoConfiguration.AppSettings.Get<bool>(ConfigurationKeys.EmailUseSsl);
+            client.EnableSsl = ConfigurationManager.AppSettings.Get<bool>(ConfigurationKeys.EmailUseSsl);
         }
 
         /// <summary>
-        /// Builds the message.
+        /// Creates and configure email message instance.
         /// </summary>
         /// <param name="type">The type.</param>
         /// <param name="userAccount">The user account.</param>
-        /// TODO Need to create additional message types
-        private void BuildMessage(MailMessageType messageType, UserDetailDbo userAccount, params object[] additionalParams)
+        private void CreateMessage(MailMessageType messageType, UserDetailDbo userAccount)
         {
-            string addressFrom = EbadoConfiguration.AppSettings.Get(ConfigurationKeys.EmailFrom);
-            string displayName = EbadoConfiguration.AppSettings.Get(ConfigurationKeys.EmailDisplayName);
+            string displayName = ConfigurationManager.AppSettings.Get(ConfigurationKeys.EmailDisplayName);
+            string from = ConfigurationManager.AppSettings.Get(ConfigurationKeys.EmailFrom);
 
-            message.From = new MailAddress(addressFrom, displayName);
-            message.To.Add(new MailAddress(userAccount.Email));
+            MailAddress sender = new MailAddress(from, displayName);
+            MailAddress recepient = new MailAddress(userAccount.Email);
+
+            message.From = sender;
+            message.To.Add(recepient);
             message.IsBodyHtml = true;
 
             switch (messageType)
             {
                 case MailMessageType.ForgotPassword:
-                    var model = CreateForgotPasswordModel(userAccount);
-                    message.Body = GetHtmlBodyString(messageType, model);
                     break;
-                case MailMessageType.RegisterConfirmation:
+                case MailMessageType.Registration:
+                    var model = CreateRegistrationCompleteModel(userAccount);
+                    message.Body = GetHtmlBodyString(messageType, model);
+                    message.Subject = "Registracia";
 
                     break;
             }
@@ -127,11 +131,16 @@ namespace Messaging.Email
         /// Model
         /// </returns>
 
-        private ForgotPasswordModel CreateForgotPasswordModel(UserDetailDbo userAccount)
+        private RegisterEmailModel CreateRegistrationCompleteModel(UserDetailDbo userAccount)
         {
-            return new ForgotPasswordModel
+            return new RegisterEmailModel
             {
-                Name = "DummyName"
+                CompanyName = userAccount.ToString(),
+                FirstName = userAccount.FirstName,
+                LastName = userAccount.Surname,
+                Login = userAccount.Email,
+                Password = userAccount.Password,
+                Title = userAccount.Title
             };
         }
 

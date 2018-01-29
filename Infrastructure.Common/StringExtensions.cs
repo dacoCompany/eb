@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace Infrastructure.Common
 {
@@ -16,6 +12,16 @@ namespace Infrastructure.Common
             }
 
             return false;
+        }
+
+        public static string IsNullOrEmptyWithDefault(this string input, string defaultValue)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return defaultValue;
+            }
+
+            return input;
         }
     }
 }

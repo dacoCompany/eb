@@ -1,17 +1,20 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Optimization;
-using System.Web.Routing;
+﻿using BackgroundProcessing.Hangfire;
+using Infrastructure.Common.DB;
+using Infrastructure.Common.Enums;
+using Messaging.Email;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Jwt;
 using Microsoft.Practices.EnterpriseLibrary.Data;
 using Owin;
+using System;
+using System.Globalization;
+using System.Linq;
+using System.Threading;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Optimization;
+using System.Web.Routing;
 using Web.eBado.IoC;
 
 [assembly: OwinStartup(typeof(Web.eBado.Startup))]
@@ -24,13 +27,26 @@ namespace Web.eBado
         {
             // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=316888
 
-            DependencyResolver.SetResolver(new NinjectResolver());
+            var resolver = new NinjectResolver();
+            DependencyResolver.SetResolver(resolver);
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             DatabaseFactory.ClearDatabaseProviderFactory();
             DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory());
+            ViewEngines.Engines.Clear();
+            ViewEngines.Engines.Add(new RazorViewEngine());
+
+            var hangfireConfiguration = new HangfireConfiguration(resolver.Kernel);
+            app.UseHangfireJobServer(hangfireConfiguration.ServerOptions);
+            app.UseHangfireJobDashboard("/hangfire", hangfireConfiguration.DashboardOptions);
+
+
+            using (var email = NinjectResolver.GetInstance<IEmailSender>())
+            {
+                email.Send(MailMessageType.Registration, new UserDetailDbo { Email = "lukasko.simon@gmail.com" });
+            }
 
             string issuer = "http://ebadoauthorization.azurewebsites.net/";
             string audience = "eBado";
