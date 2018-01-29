@@ -283,7 +283,6 @@
     <Compile Include="Models\Company\CompanySearchModel.cs" />
     <Compile Include="Models\Shared\AllCategoriesModel.cs" />
     <Compile Include="Models\Shared\AllCompanyAttachmentsModel.cs" />
-    <Compile Include="Models\Email\RegisterEmailModel.cs" />
     <Compile Include="Models\MvcExtensions\ModelStateExtensions.cs" />
     <Compile Include="Models\Shared\AttachmentGalleryModel.cs" />
     <Compile Include="Models\Shared\AttachmentModel.cs" />

@@ -1,11 +1,9 @@
 ﻿using BackgroundProcessing.Hangfire;
-using Infrastructure.Common.DB;
-using Infrastructure.Common.Enums;
-using Messaging.Email;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Jwt;
 using Microsoft.Practices.EnterpriseLibrary.Data;
+using Microsoft.Practices.EnterpriseLibrary.Logging;
 using Owin;
 using System;
 using System.Globalization;
@@ -37,16 +35,11 @@ namespace Web.eBado
             DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory());
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
+            Logger.SetLogWriter(new LogWriterFactory().Create());
 
             var hangfireConfiguration = new HangfireConfiguration(resolver.Kernel);
             app.UseHangfireJobServer(hangfireConfiguration.ServerOptions);
             app.UseHangfireJobDashboard("/hangfire", hangfireConfiguration.DashboardOptions);
-
-
-            using (var email = NinjectResolver.GetInstance<IEmailSender>())
-            {
-                email.Send(MailMessageType.Registration, new UserDetailDbo { Email = "lukasko.simon@gmail.com" });
-            }
 
             string issuer = "http://ebadoauthorization.azurewebsites.net/";
             string audience = "eBado";
