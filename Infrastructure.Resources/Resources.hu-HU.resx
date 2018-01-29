@@ -126,11 +126,83 @@
   <data name="AccountTypeSelfEmployed" xml:space="preserve">
     <value>Egyéni vállalkozó</value>
   </data>
+  <data name="Add" xml:space="preserve">
+    <value>Hozzáad</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Fiók hozzáadása</value>
+  </data>
+  <data name="AddAdditionalLanguages" xml:space="preserve">
+    <value>További nyelvek hozzáadása</value>
+  </data>
+  <data name="AddAttachments" xml:space="preserve">
+    <value>Mellékletek hozzáadása</value>
+  </data>
+  <data name="AddBusinessArea" xml:space="preserve">
+    <value>Üzleti terület hozzáadása</value>
+  </data>
+  <data name="AddGallery" xml:space="preserve">
+    <value>Galéria hozzáadása</value>
+  </data>
+  <data name="AddImages" xml:space="preserve">
+    <value>Fotók hozzáadása</value>
+  </data>
+  <data name="AddMember" xml:space="preserve">
+    <value>Új tag hozzáadása</value>
+  </data>
+  <data name="AddRole" xml:space="preserve">
+    <value>Új hozzáférés hozzádasa</value>
+  </data>
+  <data name="AddVideo" xml:space="preserve">
+    <value>Videó hozzáadása</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Vissza</value>
+  </data>
   <data name="BasicAccount" xml:space="preserve">
     <value>Alap fiók</value>
   </data>
+  <data name="Bazaar" xml:space="preserve">
+    <value>BAZÁR</value>
+  </data>
   <data name="BusinessArea" xml:space="preserve">
     <value>Üzleti terület</value>
+  </data>
+  <data name="BusinessAreas" xml:space="preserve">
+    <value>Az Ön üzleti területei:</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Mégse</value>
+  </data>
+  <data name="CancelUpload" xml:space="preserve">
+    <value>Feltöltés megszakítása</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>MÓDOSÍT</value>
+  </data>
+  <data name="ChangeAccountProfile" xml:space="preserve">
+    <value>Fiók módosítása</value>
+  </data>
+  <data name="ChangeAdvancedAccountSettings" xml:space="preserve">
+    <value>Kiegészítő beállítások módosítása</value>
+  </data>
+  <data name="ChangeBusinessAccountProfile" xml:space="preserve">
+    <value>eBiznisz fiók módosítása</value>
+  </data>
+  <data name="ChangeBusinessAccountSettings" xml:space="preserve">
+    <value>eBiznisz fiók beállítások módosítása</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Jelszó módosítása</value>
+  </data>
+  <data name="ChangeSettings" xml:space="preserve">
+    <value>Beállítások megváltoztatása</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Bezár</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Hozzászólás</value>
   </data>
   <data name="CompanyAccount" xml:space="preserve">
     <value>Vállalati fiók</value>
@@ -144,8 +216,80 @@
   <data name="ContactPerson" xml:space="preserve">
     <value>Kapcsolattartó személy</value>
   </data>
+  <data name="ContactUs" xml:space="preserve">
+    <value>Írjon nekünk</value>
+  </data>
+  <data name="Copyright" xml:space="preserve">
+    <value>Minden jog fenntartva</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Létrehoz</value>
+  </data>
+  <data name="CreateDemand" xml:space="preserve">
+    <value>Kereslet létrehozása</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Töröl</value>
+  </data>
+  <data name="DeleteDemand" xml:space="preserve">
+    <value>Kereslet törlése</value>
+  </data>
+  <data name="DeleteGallery" xml:space="preserve">
+    <value>Galéria törlése</value>
+  </data>
+  <data name="Demand" xml:space="preserve">
+    <value>KERESLET</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Leírás</value>
+  </data>
   <data name="DontHaveCopanyNumber" xml:space="preserve">
     <value>Nincs cégjegyzékszám</value>
+  </data>
+  <data name="DontHaveProfilePicture" xml:space="preserve">
+    <value>Jelenleg nincs profilképe</value>
+  </data>
+  <data name="DoYouWantToContinue" xml:space="preserve">
+    <value>Szeretné folytatni?</value>
+  </data>
+  <data name="EditBusinessAccountMembers" xml:space="preserve">
+    <value>eBiznisz fiók tagok módosítása</value>
+  </data>
+  <data name="EditDemand" xml:space="preserve">
+    <value>Kereslet szerkesztése</value>
+  </data>
+  <data name="EnableNotificationsForPosts" xml:space="preserve">
+    <value>Hirdetések értesítésének engedélyezése</value>
+  </data>
+  <data name="EnableNotificationsForTheAccount" xml:space="preserve">
+    <value>Fiók értesítések engedélyezése</value>
+  </data>
+  <data name="EnableSearchInCZ" xml:space="preserve">
+    <value>Engedélyezze a hirdetések és keresletek keresését Csehországban</value>
+  </data>
+  <data name="EnableSearchInHU" xml:space="preserve">
+    <value>Engedélyezze a hirdetések és keresletek keresését Magyarországon</value>
+  </data>
+  <data name="EnableSearchInSK" xml:space="preserve">
+    <value>Engedélyezze a hirdetések és keresletek keresését Szlovákiában</value>
+  </data>
+  <data name="Faq" xml:space="preserve">
+    <value>GYIK</value>
+  </data>
+  <data name="Feedback" xml:space="preserve">
+    <value>Visszajelzés</value>
+  </data>
+  <data name="ForgotUsernamePassword" xml:space="preserve">
+    <value>Elfelejtette a felhasználónevét / jelszavát?</value>
+  </data>
+  <data name="Gallery" xml:space="preserve">
+    <value>Galéria</value>
+  </data>
+  <data name="Languages" xml:space="preserve">
+    <value>Nyelvek</value>
+  </data>
+  <data name="ListOfMembers" xml:space="preserve">
+    <value>Tagok listája</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>BEJELENTKEZÉS</value>
@@ -153,11 +297,35 @@
   <data name="LoginInfo" xml:space="preserve">
     <value>Bejelentkezési adatok</value>
   </data>
+  <data name="LogOut" xml:space="preserve">
+    <value>Kijelentkezés</value>
+  </data>
+  <data name="MyAds" xml:space="preserve">
+    <value>Hirdetéseim</value>
+  </data>
+  <data name="MyDemands" xml:space="preserve">
+    <value>Keresleteim</value>
+  </data>
+  <data name="MyRatings" xml:space="preserve">
+    <value>Értékeléseim</value>
+  </data>
+  <data name="NoMembersAtm" xml:space="preserve">
+    <value>Jelenleg nincsenek tagjai</value>
+  </data>
+  <data name="PHAddress" xml:space="preserve">
+    <value>Lakóhely</value>
+  </data>
+  <data name="PHAddress2" xml:space="preserve">
+    <value>Cím</value>
+  </data>
   <data name="PHCompanyName" xml:space="preserve">
     <value>Cég neve</value>
   </data>
   <data name="PHCompanyNumber" xml:space="preserve">
     <value>Cégjegyzékszám*</value>
+  </data>
+  <data name="PHDescriptionOfActivities" xml:space="preserve">
+    <value>tevékenységek leírása</value>
   </data>
   <data name="PHEmail" xml:space="preserve">
     <value>E-mail*</value>
@@ -167,6 +335,21 @@
   </data>
   <data name="PHLastName" xml:space="preserve">
     <value>Vezetéknév*</value>
+  </data>
+  <data name="PHLoginEmail" xml:space="preserve">
+    <value>E-mail cím</value>
+  </data>
+  <data name="PHLoginPassword" xml:space="preserve">
+    <value>Jelszó</value>
+  </data>
+  <data name="PHName" xml:space="preserve">
+    <value>Név</value>
+  </data>
+  <data name="PHNewPassword" xml:space="preserve">
+    <value>Új jelszó</value>
+  </data>
+  <data name="PHOldPassword" xml:space="preserve">
+    <value>Régi jelszó</value>
   </data>
   <data name="PHPassword" xml:space="preserve">
     <value>Jelszó*</value>
@@ -186,8 +369,20 @@
   <data name="PHStreetNumber" xml:space="preserve">
     <value>Házszám*</value>
   </data>
+  <data name="PHTaxnumber" xml:space="preserve">
+    <value>Adószám</value>
+  </data>
   <data name="PHTitle" xml:space="preserve">
     <value>Cím</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Adatvédelmi szabályzat</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Feldolgozás...</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>Profil</value>
   </data>
   <data name="Register" xml:space="preserve">
     <value>REGISZTRÁCIÓ</value>
@@ -195,10 +390,61 @@
   <data name="Register2" xml:space="preserve">
     <value>REGISZTRÁLOK</value>
   </data>
+  <data name="RemoveAttachments" xml:space="preserve">
+    <value>Mellékletek törlése</value>
+  </data>
+  <data name="RemoveGallery" xml:space="preserve">
+    <value>Galéria törlése</value>
+  </data>
+  <data name="RemoveMember" xml:space="preserve">
+    <value>Tag törlése</value>
+  </data>
   <data name="RequiredField" xml:space="preserve">
     <value>Kötelező mező</value>
   </data>
+  <data name="RoleName" xml:space="preserve">
+    <value>Hozzáférés neve</value>
+  </data>
+  <data name="SearchRadius" xml:space="preserve">
+    <value>Keresési sugár (km)</value>
+  </data>
+  <data name="SendNotificationsToAllMembers" xml:space="preserve">
+    <value>Értesítés küldése minden tagnak</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Beállítások</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Bejelentkezés</value>
+  </data>
+  <data name="StartUpload" xml:space="preserve">
+    <value>Feltöltés indítása</value>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>Bejelentkezés</value>
+  </data>
+  <data name="SupplierList" xml:space="preserve">
+    <value>BESZÁLLÍTÓLISTA</value>
+  </data>
+  <data name="TermsOfUse" xml:space="preserve">
+    <value>Általános felhasználási feltételek</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Feltöltés</value>
+  </data>
+  <data name="UploadProfilePicture" xml:space="preserve">
+    <value>Profilkép feltöltése</value>
+  </data>
+  <data name="UserEmail" xml:space="preserve">
+    <value>Felhasználói e-mail</value>
+  </data>
   <data name="Validate" xml:space="preserve">
     <value>Érvényesítés</value>
+  </data>
+  <data name="YouAreTheOnlyMember" xml:space="preserve">
+    <value>Ön jelenleg az egyetlen tag</value>
+  </data>
+  <data name="YourLanguages" xml:space="preserve">
+    <value>Beszélt nyelvek:</value>
   </data>
 </root>

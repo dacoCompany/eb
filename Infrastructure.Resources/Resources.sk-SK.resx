@@ -213,4 +213,250 @@
   <data name="Validate" xml:space="preserve">
     <value>Overiť</value>
   </data>
+  <data name="Add" xml:space="preserve">
+    <value>Pridať</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Pridať účet</value>
+  </data>
+  <data name="AddAdditionalLanguages" xml:space="preserve">
+    <value>Pridať ďalšie jazyky</value>
+  </data>
+  <data name="AddAttachments" xml:space="preserve">
+    <value>Pridať prílohy</value>
+  </data>
+  <data name="AddBusinessArea" xml:space="preserve">
+    <value>Pridať oblast podnikania</value>
+  </data>
+  <data name="AddGallery" xml:space="preserve">
+    <value>Pridať galériu</value>
+  </data>
+  <data name="AddImages" xml:space="preserve">
+    <value>Pridať obrázky</value>
+  </data>
+  <data name="AddMember" xml:space="preserve">
+    <value>Pridať člena</value>
+  </data>
+  <data name="AddRole" xml:space="preserve">
+    <value>Pridať rolu</value>
+  </data>
+  <data name="AddVideo" xml:space="preserve">
+    <value>Pridať video</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Naspäť</value>
+  </data>
+  <data name="Bazaar" xml:space="preserve">
+    <value>BAZÁR</value>
+  </data>
+  <data name="BusinessAreas" xml:space="preserve">
+    <value>Vaše oblasti podnikania:</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Zrušiť</value>
+  </data>
+  <data name="CancelUpload" xml:space="preserve">
+    <value>Zrušiť nahrávanie</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>ZMENIŤ</value>
+  </data>
+  <data name="ChangeAccountProfile" xml:space="preserve">
+    <value>Zmeniť profil účtu</value>
+  </data>
+  <data name="ChangeAdvancedAccountSettings" xml:space="preserve">
+    <value>Zmeniť rozšírené nastavenia účtu</value>
+  </data>
+  <data name="ChangeBusinessAccountProfile" xml:space="preserve">
+    <value>Zmeniť profil eBiznis účtu</value>
+  </data>
+  <data name="ChangeBusinessAccountSettings" xml:space="preserve">
+    <value>Zmeniť nastavenia eBiznis účtu</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Zmeniť heslo</value>
+  </data>
+  <data name="ChangeSettings" xml:space="preserve">
+    <value>Zmeniť nastavenia</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Zavrieť</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Komentovať</value>
+  </data>
+  <data name="ContactUs" xml:space="preserve">
+    <value>Kontaktujte nás</value>
+  </data>
+  <data name="Copyright" xml:space="preserve">
+    <value>Všetky práva vyhradené</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Vytvoriť</value>
+  </data>
+  <data name="CreateDemand" xml:space="preserve">
+    <value>Vytvoriť dopyt</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Vymazať</value>
+  </data>
+  <data name="DeleteDemand" xml:space="preserve">
+    <value>Odstrániť dopyt</value>
+  </data>
+  <data name="DeleteGallery" xml:space="preserve">
+    <value>Vymazať galériu</value>
+  </data>
+  <data name="Demand" xml:space="preserve">
+    <value>DOPYT</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Popis</value>
+  </data>
+  <data name="DontHaveProfilePicture" xml:space="preserve">
+    <value>Zatiaľ nemáte profilovú fotku</value>
+  </data>
+  <data name="DoYouWantToContinue" xml:space="preserve">
+    <value>Chcete pokračovať?</value>
+  </data>
+  <data name="EditBusinessAccountMembers" xml:space="preserve">
+    <value>Upraviť členov eBiznis účtu</value>
+  </data>
+  <data name="EditDemand" xml:space="preserve">
+    <value>Upraviť dopyt</value>
+  </data>
+  <data name="EnableNotificationsForPosts" xml:space="preserve">
+    <value>Povoliť notifikácie pre príspevky</value>
+  </data>
+  <data name="EnableNotificationsForTheAccount" xml:space="preserve">
+    <value>Povoliť notifikácie pre účet</value>
+  </data>
+  <data name="EnableSearchInCZ" xml:space="preserve">
+    <value>Povoliť vyhľadávanie inzerátov a dopytov na území Česka</value>
+  </data>
+  <data name="EnableSearchInHU" xml:space="preserve">
+    <value>Povoliť vyhľadávanie inzerátov a dopytov na území Maďarska</value>
+  </data>
+  <data name="EnableSearchInSK" xml:space="preserve">
+    <value>Povoliť vyhľadávanie inzerátov a dopytov na území Slovenska</value>
+  </data>
+  <data name="Faq" xml:space="preserve">
+    <value>FAQ</value>
+  </data>
+  <data name="Feedback" xml:space="preserve">
+    <value>Spätná väzba</value>
+  </data>
+  <data name="ForgotUsernamePassword" xml:space="preserve">
+    <value>Zabudli ste používateľské meno / heslo?</value>
+  </data>
+  <data name="Gallery" xml:space="preserve">
+    <value>Galéria</value>
+  </data>
+  <data name="Languages" xml:space="preserve">
+    <value>Jazyky</value>
+  </data>
+  <data name="ListOfMembers" xml:space="preserve">
+    <value>Zoznam členov</value>
+  </data>
+  <data name="LogOut" xml:space="preserve">
+    <value>Odhlásenie</value>
+  </data>
+  <data name="MyAds" xml:space="preserve">
+    <value>Moje Inzeráty</value>
+  </data>
+  <data name="MyDemands" xml:space="preserve">
+    <value>Moje dopyty</value>
+  </data>
+  <data name="MyRatings" xml:space="preserve">
+    <value>Moje Hodnotenia</value>
+  </data>
+  <data name="NoMembersAtm" xml:space="preserve">
+    <value>Momentálne nemáte žiadnych členov</value>
+  </data>
+  <data name="PHAddress" xml:space="preserve">
+    <value>Bydlisko</value>
+  </data>
+  <data name="PHAddress2" xml:space="preserve">
+    <value>Adresa</value>
+  </data>
+  <data name="PHDescriptionOfActivities" xml:space="preserve">
+    <value>popis činností</value>
+  </data>
+  <data name="PHLoginEmail" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="PHLoginPassword" xml:space="preserve">
+    <value>Heslo</value>
+  </data>
+  <data name="PHName" xml:space="preserve">
+    <value>Meno</value>
+  </data>
+  <data name="PHNewPassword" xml:space="preserve">
+    <value>Nové heslo</value>
+  </data>
+  <data name="PHOldPassword" xml:space="preserve">
+    <value>Staré heslo</value>
+  </data>
+  <data name="PHTaxnumber" xml:space="preserve">
+    <value>Dič</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Zásady ochrany osobných údajov</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Spracovanie...</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="RemoveAttachments" xml:space="preserve">
+    <value>Odstráňiť prílohy</value>
+  </data>
+  <data name="RemoveGallery" xml:space="preserve">
+    <value>Odstráňiť galériu</value>
+  </data>
+  <data name="RemoveMember" xml:space="preserve">
+    <value>Odstráňiť člena</value>
+  </data>
+  <data name="RoleName" xml:space="preserve">
+    <value>Názov role</value>
+  </data>
+  <data name="SearchRadius" xml:space="preserve">
+    <value>Rádius hľadania (km)</value>
+  </data>
+  <data name="SendNotificationsToAllMembers" xml:space="preserve">
+    <value>Posielať notifikácie všetkým členom</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Nastavenia</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Prihlásenie</value>
+  </data>
+  <data name="StartUpload" xml:space="preserve">
+    <value>Spustiť nahrávanie</value>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>Prihlásiť</value>
+  </data>
+  <data name="SupplierList" xml:space="preserve">
+    <value>ZOZNAM DODÁVATEĽOV</value>
+  </data>
+  <data name="TermsOfUse" xml:space="preserve">
+    <value>Podmienky používania</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Nahrať</value>
+  </data>
+  <data name="UploadProfilePicture" xml:space="preserve">
+    <value>Nahrať profilovú fotku</value>
+  </data>
+  <data name="UserEmail" xml:space="preserve">
+    <value>E-mail používateľa</value>
+  </data>
+  <data name="YouAreTheOnlyMember" xml:space="preserve">
+    <value>Momentálne ste jediným členom</value>
+  </data>
+  <data name="YourLanguages" xml:space="preserve">
+    <value>Vaše jazyky:</value>
+  </data>
 </root>

@@ -213,4 +213,250 @@
   <data name="Validate" xml:space="preserve">
     <value>Validate</value>
   </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Add Account</value>
+  </data>
+  <data name="AddAdditionalLanguages" xml:space="preserve">
+    <value>Add additional languages</value>
+  </data>
+  <data name="AddAttachments" xml:space="preserve">
+    <value>Add attachments</value>
+  </data>
+  <data name="AddBusinessArea" xml:space="preserve">
+    <value>Add a business area</value>
+  </data>
+  <data name="AddGallery" xml:space="preserve">
+    <value>Add gallery</value>
+  </data>
+  <data name="AddImages" xml:space="preserve">
+    <value>Add images</value>
+  </data>
+  <data name="AddMember" xml:space="preserve">
+    <value>Add member</value>
+  </data>
+  <data name="AddRole" xml:space="preserve">
+    <value>Add role</value>
+  </data>
+  <data name="AddVideo" xml:space="preserve">
+    <value>Add video</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Bazaar" xml:space="preserve">
+    <value>BAZAAR</value>
+  </data>
+  <data name="BusinessAreas" xml:space="preserve">
+    <value>Your business areas:</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="CancelUpload" xml:space="preserve">
+    <value>Cancel upload</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>MODIFY</value>
+  </data>
+  <data name="ChangeAccountProfile" xml:space="preserve">
+    <value>Change account profile</value>
+  </data>
+  <data name="ChangeAdvancedAccountSettings" xml:space="preserve">
+    <value>Change advanced account settings</value>
+  </data>
+  <data name="ChangeBusinessAccountProfile" xml:space="preserve">
+    <value>Change eBusiness account profile</value>
+  </data>
+  <data name="ChangeBusinessAccountSettings" xml:space="preserve">
+    <value>Change eBusiness account settings</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+  <data name="ChangeSettings" xml:space="preserve">
+    <value>Change settings</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="ContactUs" xml:space="preserve">
+    <value>Contact us</value>
+  </data>
+  <data name="Copyright" xml:space="preserve">
+    <value>All rights reserved</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="CreateDemand" xml:space="preserve">
+    <value>Create demand</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DeleteDemand" xml:space="preserve">
+    <value>Delete demand</value>
+  </data>
+  <data name="DeleteGallery" xml:space="preserve">
+    <value>Delete gallery</value>
+  </data>
+  <data name="Demand" xml:space="preserve">
+    <value>DEMAND</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="DontHaveProfilePicture" xml:space="preserve">
+    <value>You do not have a profile picture</value>
+  </data>
+  <data name="DoYouWantToContinue" xml:space="preserve">
+    <value>Do you want to continue?</value>
+  </data>
+  <data name="EditBusinessAccountMembers" xml:space="preserve">
+    <value>Edit eBusiness account members</value>
+  </data>
+  <data name="EditDemand" xml:space="preserve">
+    <value>Edit demand</value>
+  </data>
+  <data name="EnableNotificationsForPosts" xml:space="preserve">
+    <value>Enable notifications for posts</value>
+  </data>
+  <data name="EnableNotificationsForTheAccount" xml:space="preserve">
+    <value>Enable notifications for the account</value>
+  </data>
+  <data name="EnableSearchInCZ" xml:space="preserve">
+    <value>Enable ads and demands search in Czechia</value>
+  </data>
+  <data name="EnableSearchInHU" xml:space="preserve">
+    <value>Enable ads and demands search in Hungary</value>
+  </data>
+  <data name="EnableSearchInSK" xml:space="preserve">
+    <value>Enable ads and demands search in Slovakia</value>
+  </data>
+  <data name="Faq" xml:space="preserve">
+    <value>FAQ</value>
+  </data>
+  <data name="Feedback" xml:space="preserve">
+    <value>Feedback</value>
+  </data>
+  <data name="ForgotUsernamePassword" xml:space="preserve">
+    <value>Forgot username / password?</value>
+  </data>
+  <data name="Gallery" xml:space="preserve">
+    <value>Gallery</value>
+  </data>
+  <data name="Languages" xml:space="preserve">
+    <value>Languages</value>
+  </data>
+  <data name="ListOfMembers" xml:space="preserve">
+    <value>List of members</value>
+  </data>
+  <data name="LogOut" xml:space="preserve">
+    <value>Log Out</value>
+  </data>
+  <data name="MyAds" xml:space="preserve">
+    <value>My Ads</value>
+  </data>
+  <data name="MyDemands" xml:space="preserve">
+    <value>My demands</value>
+  </data>
+  <data name="MyRatings" xml:space="preserve">
+    <value>My Ratings</value>
+  </data>
+  <data name="NoMembersAtm" xml:space="preserve">
+    <value>There are no members at the moment</value>
+  </data>
+  <data name="PHAddress" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="PHAddress2" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="PHDescriptionOfActivities" xml:space="preserve">
+    <value>description of activities</value>
+  </data>
+  <data name="PHLoginEmail" xml:space="preserve">
+    <value>E-mail address</value>
+  </data>
+  <data name="PHLoginPassword" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="PHName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="PHNewPassword" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="PHOldPassword" xml:space="preserve">
+    <value>Old password</value>
+  </data>
+  <data name="PHTaxnumber" xml:space="preserve">
+    <value>Tax number</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Privacy Policy</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Processing...</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="RemoveAttachments" xml:space="preserve">
+    <value>Remove attachments</value>
+  </data>
+  <data name="RemoveGallery" xml:space="preserve">
+    <value>Remove gallery</value>
+  </data>
+  <data name="RemoveMember" xml:space="preserve">
+    <value>Remove member</value>
+  </data>
+  <data name="RoleName" xml:space="preserve">
+    <value>Role name</value>
+  </data>
+  <data name="SearchRadius" xml:space="preserve">
+    <value>Search radius (km)</value>
+  </data>
+  <data name="SendNotificationsToAllMembers" xml:space="preserve">
+    <value>Send notifications to all members</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Sign In</value>
+  </data>
+  <data name="StartUpload" xml:space="preserve">
+    <value>Start upload</value>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="SupplierList" xml:space="preserve">
+    <value>SUPPLIER LIST</value>
+  </data>
+  <data name="TermsOfUse" xml:space="preserve">
+    <value>Terms of use</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="UploadProfilePicture" xml:space="preserve">
+    <value> Upload profile picture</value>
+  </data>
+  <data name="UserEmail" xml:space="preserve">
+    <value>User email</value>
+  </data>
+  <data name="YouAreTheOnlyMember" xml:space="preserve">
+    <value>You are currently the only member</value>
+  </data>
+  <data name="YourLanguages" xml:space="preserve">
+    <value>Your languages:</value>
+  </data>
 </root>
