@@ -62,7 +62,7 @@ namespace Web.eBado
                 }
             });
 
-            SetLanguageCookie();
+            //SetLanguageCookie();
         }
 
         private void SetLanguageCookie()

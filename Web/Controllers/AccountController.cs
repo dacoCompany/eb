@@ -18,20 +18,23 @@ using System.Linq;
 using System.Web.Security;
 using System.Collections.Generic;
 using System.Globalization;
-using Infrastructure.Common.Enums;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Practices.EnterpriseLibrary.Validation;
+using System.IO;
+using Infrastructure.Common.Enums;
+using Infrastructure.Common;
 
 namespace Web.eBado.Controllers
 {
     [RoutePrefix("Account")]
     public class AccountController : Controller
     {
-        AccountHelper accountHelper;
-        SessionHelper sessionHelper;
+        private readonly AccountHelper accountHelper;
+        private readonly SessionHelper sessionHelper;
+        private readonly SharedHelper sharedHelper;
         private readonly IConfiguration configuration;
         private readonly IUnitOfWork unitOfWork;
         private readonly IFilesBusinessObjects fileBo;
@@ -39,8 +42,9 @@ namespace Web.eBado.Controllers
 
         public AccountController(IConfiguration configuration, IUnitOfWork unitOfWork, IFilesBusinessObjects fileBo)
         {
-            accountHelper = new AccountHelper(unitOfWork);
-            sessionHelper = new SessionHelper();
+            accountHelper = new AccountHelper(unitOfWork, fileBo);
+            sessionHelper = new SessionHelper(unitOfWork);
+            sharedHelper = new SharedHelper(unitOfWork);
             this.configuration = configuration;
             this.unitOfWork = unitOfWork;
             this.fileBo = fileBo;
@@ -80,7 +84,6 @@ namespace Web.eBado.Controllers
         {
             RegistrationModel model = new RegistrationModel();
             accountHelper.InitializeData(model.CompanyModel, unitOfWork);
-            model.CompanyModel.CompanyLocation = accountHelper.GetCountryByIP();
 
             return View(model);
         }
@@ -92,25 +95,32 @@ namespace Web.eBado.Controllers
             return View();
         }
 
-        [System.Web.Http.Authorize(Roles = "ChangeSettings, Read, Write")]
+        [EbadoMvcAuthorization(Roles = "ChangeSettings, Read, Write")]
         [Route("ChangeSettings")]
+        [NoClientCache]
         public ActionResult ChangeSettings()
         {
-            var currentUrl = Request.Url.ToString();
-            if (UserNotAuthenticated())
+            if (IsUserAuthnticated())
             {
-                return RedirectToAction("Login", "Account", new { returnUrl = currentUrl });
+                return RedirectToAction("Login", "Account", new { returnUrl = Request.Url.ToString() });
             }
             AccountSettingsModel model = new AccountSettingsModel();
             var session = Session["User"] as SessionModel;
-
-            if (session.IsActive)
+            try
             {
-                model = accountHelper.GetUserSettings(unitOfWork, session);
+                if (session.IsActive)
+                {
+                    model = accountHelper.GetUserSettings(unitOfWork, session);
+                }
+                else
+                {
+                    model = accountHelper.GetCompanySettings(unitOfWork, session);
+                }
             }
-            else
+            catch (Exception e)
             {
-                model = accountHelper.GetCompanySettings(unitOfWork, session);
+                EntlibLogger.LogError("Account", "ChangeSettings-GET", e.Message, diagnosticLogConstant, e);
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
             }
 
 
@@ -124,14 +134,13 @@ namespace Web.eBado.Controllers
             return View();
         }
 
-        [System.Web.Http.Authorize]
+        [EbadoMvcAuthorization(Roles = "AddGallery,RemoveGallery,AddAttachments,RemoveAttachments")]
         [Route("EditAccountGallery")]
         public ActionResult EditAccountGallery(string batchId)
         {
-            var currentUrl = Request.Url.ToString();
-            if (UserNotAuthenticated())
+            if (IsUserAuthnticated())
             {
-                return RedirectToAction("Login", "Account", new { returnUrl = currentUrl });
+                return RedirectToAction("Login", "Account", new { returnUrl = Request.Url.ToString() });
             }
             var model = new AttachmentGalleryModel();
 
@@ -146,14 +155,13 @@ namespace Web.eBado.Controllers
             return View(model);
         }
 
-        [System.Web.Http.Authorize]
+        [EbadoMvcAuthorization(Roles = "AddGallery,RemoveGallery,AddAttachments,RemoveAttachments")]
         [Route("BatchAccountGallery")]
         public ActionResult BatchAccountGallery()
         {
-            var currentUrl = Request.Url.ToString();
-            if (UserNotAuthenticated())
+            if (IsUserAuthnticated())
             {
-                return RedirectToAction("Login", "Account", new { returnUrl = currentUrl });
+                return RedirectToAction("Login", "Account", new { returnUrl = Request.Url.ToString() });
             }
             try
             {
@@ -201,7 +209,7 @@ namespace Web.eBado.Controllers
             if (ModelState.IsValid)
             {
                 var userDetail = unitOfWork.UserDetailsRepository.FindFirstOrDefault(ud => ud.Email.ToLower().Equals(model.Email.ToLower()));
-                var session = sessionHelper.SetUserSession(userDetail.Id, unitOfWork);
+                var session = sessionHelper.SetUserSession(userDetail.Id);
 
                 //FormsAuthentication.SetAuthCookie(session.Email, true);
                 Session["User"] = session;
@@ -218,22 +226,29 @@ namespace Web.eBado.Controllers
 
                     var authCookie = new HttpCookie("tokenCookie", content.Replace("\"", string.Empty)) { HttpOnly = true };
                     HttpContext.Response.AppendCookie(authCookie);
+                    HttpContext.Response.AppendHeader("Authorization", $"Bearer {authCookie}");
                 }
                 else
                 {
+                    string content = await response.Content.ReadAsStringAsync();
                     model.ErrorMessage = "Authentication failed";
-                    EntlibLogger.LogInfo("Account", "Login", $"Failed login with e-mail address: {model.Email}. Authentication token cannot be issued.", diagnosticLogConstant);
+                    EntlibLogger.LogInfo("Account", "Login", $"Failed login with e-mail address: {model.Email}. Authentication token cannot be issued. \t {response.StatusCode} {response.ReasonPhrase}\r\n{content}\r\n{client.BaseAddress}\r\n{userDetail.Id}\t{userDetail.UserRoleId}", diagnosticLogConstant);
                     return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
                 }
 
                 if (returnUrl != null)
                 {
-                    return Redirect(returnUrl);
+                    EntlibLogger.LogVerbose("Account", "Login", $"Successful login with e-mail address: {model.Email}", diagnosticLogConstant);
+                    model.ReturnUrl = returnUrl;
+                    model.ShouldRedirect = true;
+                    return View(model);
                 }
                 else
                 {
                     EntlibLogger.LogVerbose("Account", "Login", $"Successful login with e-mail address: {model.Email}", diagnosticLogConstant);
-                    return RedirectToAction("Index", "Home");
+                    model.ReturnUrl = "~/Home/Index";
+                    model.ShouldRedirect = true;
+                    return View(model);
                 }
             }
             else
@@ -280,7 +295,7 @@ namespace Web.eBado.Controllers
                 }
             }
 
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("ChangeSettings", "Account");
         }
 
         [HttpPost]
@@ -291,7 +306,17 @@ namespace Web.eBado.Controllers
         {
             EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt (user & company) with e-mail address: {model.UserModel.Email}", diagnosticLogConstant);
 
-            var entlibValidationResult = Validation.Validate(model, new[] { "RegisterCompany", "RegisterUser" });
+            var ruleSets = new List<string> { RuleSets.User };
+            if (model.CompanyModel.CompanyType == CompanyType.PartTime)
+            {
+                ruleSets.Add(RuleSets.Contractor);
+            }
+            else
+            {
+                ruleSets.Add(RuleSets.Company);
+            }
+
+            var entlibValidationResult = Validation.Validate(model, ruleSets.ToArray());
 
             if (!entlibValidationResult.IsValid)
             {
@@ -323,11 +348,18 @@ namespace Web.eBado.Controllers
 
             if (AccountHelper.IsValidCaptcha())
             {
-                var userDetail = accountHelper.RegisterUser(unitOfWork, model.UserModel);
-                accountHelper.RegisterCompany(unitOfWork, model.CompanyModel, userDetail);
+                if (model.CompanyModel.CompanyType == CompanyType.PartTime)
+                {
+                    accountHelper.RegisterContractor(unitOfWork, model);
+                }
+                else
+                {
+                    var userDetail = accountHelper.RegisterUser(unitOfWork, model.UserModel);
+                    accountHelper.RegisterCompany(unitOfWork, model.CompanyModel, userDetail);
+                }
             }
 
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("ChangeSettings", "Account");
         }
 
         [HttpPost]
@@ -390,10 +422,16 @@ namespace Web.eBado.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [System.Web.Http.Authorize(Roles = "ChangeSettings, Read, Write")]
+        [EbadoMvcAuthorization(Roles = "ChangeSettings, Read, Write")]
         [Route("ChangeSettings")]
+        [NoClientCache]
         public ActionResult ChangeSettings(AccountSettingsModel model)
         {
+            if (IsUserAuthnticated())
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = Request.Url.ToString() });
+            }
+
             var session = Session["User"] as SessionModel;
             ChangePasswordModel passwordModel = model.PasswordModel;
             bool changePsw = false;
@@ -409,13 +447,22 @@ namespace Web.eBado.Controllers
             // TODO: entlib validation before modelState check
             //if (ModelState.IsValid)
             //{
-            if (session.IsActive)
+
+            try
             {
-                model = accountHelper.UpdateUserSettings(unitOfWork, model, changePsw, session);
+                if (session.IsActive)
+                {
+                    model = accountHelper.UpdateUserSettings(unitOfWork, model, changePsw, session);
+                }
+                else
+                {
+                    model = accountHelper.UpdateCompanySettings(unitOfWork, model, session);
+                }
             }
-            else
+            catch (Exception e)
             {
-                model = accountHelper.UpdateCompanySettings(unitOfWork, model, session);
+                EntlibLogger.LogError("Account", "ChangeSettings-POST", e.Message, diagnosticLogConstant, e);
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
             }
             //}
             accountHelper.InitializeData(model.CompanyModel, unitOfWork);
@@ -426,6 +473,7 @@ namespace Web.eBado.Controllers
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [Route("BatchAccountGallery")]
+        [EbadoMvcAuthorization(Roles = "AddGallery,RemoveGallery,AddAttachments,RemoveAttachments")]
         public ActionResult BatchAccountGallery(BatchGalleryModel model)
         {
             return View(model);
@@ -435,6 +483,7 @@ namespace Web.eBado.Controllers
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [Route("CreateBatch")]
+        [EbadoMvcAuthorization(Roles = "AddGallery")]
         public ActionResult CreateBatch(BatchGalleryModel model)
         {
             int? companyId = GetActiveCompany();
@@ -444,6 +493,26 @@ namespace Web.eBado.Controllers
                 return new HttpUnauthorizedResult();
             }
 
+            var entlibValidationResult = Validation.Validate(model, "CreateBatch");
+
+            if (!entlibValidationResult.IsValid)
+            {
+                var entities = fileBo.GetBatches(companyId.Value);
+
+                Mapper.Initialize(cfg =>
+                {
+                    cfg.CreateMap<BatchModel, BatchEntity>().ReverseMap();
+                });
+
+                var fileEntities = Mapper.Map<Collection<BatchModel>>(entities);
+                model.Batch = fileEntities;
+                model.HasError = true;
+
+                this.ModelState.AddValidationErrors(entlibValidationResult);
+                return View("BatchAccountGallery", model);
+            }
+
+            model.HasError = false;
             string batchUniqueId = fileBo.CreateBatch(model.Name, model.Description, companyId.Value);
             EntlibLogger.LogInfo("File", "Create Batch", $"Created new batch with id: {batchUniqueId}", diagnosticLogConstant);
             return RedirectToAction("EditAccountGallery", new { batchId = batchUniqueId });
@@ -452,7 +521,7 @@ namespace Web.eBado.Controllers
 
         #region Private methods
 
-        private bool UserNotAuthenticated()
+        private bool IsUserAuthnticated()
         {
             var session = (SessionModel)Session["User"];
             return session == null;
@@ -461,7 +530,37 @@ namespace Web.eBado.Controllers
         private int? GetActiveCompany()
         {
             var session = Session["User"] as SessionModel;
-            return session.Companies.First(c => c.IsActive)?.Id;
+            return session.Companies.FirstOrDefault(c => c.IsActive)?.Id;
+        }
+
+        private ICollection<FileModel> MapAttachmentsFromRequest()
+        {
+            HttpRequestBase currentRequest = HttpContext.Request;
+            ICollection<FileModel> fileCollection = new Collection<FileModel>();
+
+            if (currentRequest.Files.Count <= 0)
+                return fileCollection;
+
+            foreach (string file in currentRequest.Files)
+            {
+                var httpPostedFile = currentRequest.Files[file] as HttpPostedFileBase;
+                if (httpPostedFile.ContentLength == 0)
+                    continue;
+
+                using (BinaryReader reader = new BinaryReader(httpPostedFile.InputStream))
+                {
+                    var byteFile = reader.ReadBytes(httpPostedFile.ContentLength);
+                    fileCollection.Add(new FileModel
+                    {
+                        Name = new FileInfo(httpPostedFile.FileName).Name,
+                        ContentType = httpPostedFile.ContentType,
+                        Content = byteFile,
+                        Size = byteFile.Length
+                    });
+                }
+            }
+
+            return fileCollection;
         }
 
         #endregion

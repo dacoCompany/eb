@@ -1,8 +1,11 @@
 ﻿using Infrastructure.Common.Enums;
 using System.ComponentModel.DataAnnotations;
+using Infrastructure.Common.DB;
 using Infrastructure.Resources;
 using Microsoft.Practices.EnterpriseLibrary.Validation;
 using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
+using Web.eBado.IoC;
+using System.Collections.Generic;
 
 namespace Web.eBado.Models.Account
 {
@@ -14,6 +17,8 @@ namespace Web.eBado.Models.Account
             Categories = new CategoriesModel();
             Languages = new LanguagesModel();
         }
+
+        public string CompanyId { get; set; }
 
         public CompanyType CompanyType { get; set; }
 
@@ -29,7 +34,9 @@ namespace Web.eBado.Models.Account
         [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Inclusive, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "RequiredField", Ruleset = "RegisterCompany")]
         public string CompanyEmail { get; set; }
 
-        public int? CompanyIco { get; set; }
+        [RangeValidator(1, RangeBoundaryType.Inclusive, 10, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "RequiredField", Ruleset = "RegisterCompany")]
+        [RangeValidator(1, RangeBoundaryType.Inclusive, 999999999, RangeBoundaryType.Inclusive, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "Must be 9 characters long.", Ruleset = "RegisterCompany")]
+        public int CompanyIco { get; set; }
 
         public int? CompanyDic { get; set; }
 
@@ -38,8 +45,6 @@ namespace Web.eBado.Models.Account
         [DataType(DataType.PhoneNumber)]
         public string CompanyPhoneNumber { get; set; }
 
-        [IgnoreNulls(Ruleset = "RegisterCompany")]
-        [StringLengthValidator(10, RangeBoundaryType.Inclusive, 10, RangeBoundaryType.Inclusive, MessageTemplate = "Must be exactly 10 characters", Ruleset = "RegisterCompany")]
         public string CompanyAdditionalPhoneNumber { get; set; }
 
         public string CompanyStreet { get; set; }
@@ -49,10 +54,15 @@ namespace Web.eBado.Models.Account
         [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "RequiredField", Ruleset = "RegisterCompany")]
         public string CompanyPostalCode { get; set; }
 
+        public string CompanyCity { get; set; }
+
         [ObjectValidator("RegisterCompany", Ruleset = "RegisterCompany")]
+        [ObjectValidator("RegisterContractor", Ruleset = "RegisterContractor")]
         public CategoriesModel Categories { get; private set; }
 
         public LanguagesModel Languages { get; private set; }
+
+        public IEnumerable<string> AllSelectedCategories { get; set; }
 
         public string ProfileUrl { get; set; }
 
@@ -76,6 +86,19 @@ namespace Web.eBado.Models.Account
                 if (!string.IsNullOrEmpty(CompanyStreetNumber))
                 {
                     results.AddResult(new Microsoft.Practices.EnterpriseLibrary.Validation.ValidationResult(Resources.RequiredField, this, nameof(CompanyStreetNumber), null, null));
+                }
+            }
+
+            if (CompanyType != CompanyType.PartTime)
+            {
+                using (var uow = NinjectResolver.GetInstance<IUnitOfWork>())
+                {
+                    var company = uow.CompanyDetailsRepository.FindFirstOrDefault(cd => cd.Ico == CompanyIco);
+
+                    if (company != null)
+                    {
+                        results.AddResult(new Microsoft.Practices.EnterpriseLibrary.Validation.ValidationResult("Company already exists.", this, nameof(CompanyIco), null, null));
+                    }
                 }
             }
         }

@@ -25,9 +25,6 @@ namespace Web.eBado
             bundles.Add(new ScriptBundle("~/bundles/chosen")
                .Include("~/Scripts/chosen.jquery.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/register")
-               .Include("~/Scripts/register.js"));
-
             bundles.Add(new ScriptBundle("~/bundles/categories")
               .Include("~/Scripts/categories.js"));
 
@@ -55,6 +52,9 @@ namespace Web.eBado
             bundles.Add(new StyleBundle("~/Content/login")
                 .Include("~/Content/BaseContent/css/login.css", new CssRewriteUrlTransform()));
 
+            bundles.Add(new StyleBundle("~/Content/error")
+               .Include("~/Content/BaseContent/css/error.css", new CssRewriteUrlTransform()));
+
             bundles.Add(new StyleBundle("~/Content/batch")
                .Include("~/Content/BaseContent/css/batch-gallery.css", new CssRewriteUrlTransform()));
 
@@ -66,6 +66,9 @@ namespace Web.eBado
 
             bundles.Add(new StyleBundle("~/Content/company")
                .Include("~/Content/BaseContent/css/company.css", new CssRewriteUrlTransform()));
+
+            bundles.Add(new StyleBundle("~/Content/companyDetail")
+              .Include("~/Content/BaseContent/css/company-detail.css", new CssRewriteUrlTransform()));
 
             bundles.Add(new StyleBundle("~/Content/settings")
                .Include("~/Content/BaseContent/css/user-settings.css", new CssRewriteUrlTransform()));

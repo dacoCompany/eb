@@ -1,63 +1,72 @@
 ﻿using Infrastructure.Common.DB;
-using System;
-using System.Collections.Generic;
+using Infrastructure.Common.Enums;
 using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using Web.eBado.Models.Shared;
 
 namespace Web.eBado.Helpers
 {
     public class SessionHelper
     {
-        public SessionModel SetCompanySession(string accountName, SessionModel currentSession, IUnitOfWork unitOfWork)
+        private readonly IUnitOfWork unitOfWork;
+
+        public SessionHelper(IUnitOfWork unitOfWork)
         {
-            SessionModel newSession;
+            this.unitOfWork = unitOfWork;
+        }
+
+        public SessionModel SetCompanySession(string accountName, SessionModel currentSession)
+        {
             int companyId = currentSession.Companies.FirstOrDefault(c => c.Name == accountName).Id;
             var companyDetailDbo = unitOfWork.CompanyDetailsRepository.FindById(companyId);
-            var userDetailDbo = companyDetailDbo.CompanyDetails2UserDetails.FirstOrDefault(cd=>cd.UserDetailsId == currentSession.Id).UserDetail;
+            var userDetailDbo = companyDetailDbo.CompanyDetails2UserDetails.FirstOrDefault(cd => cd.UserDetailsId == currentSession.Id).UserDetail;
 
-            newSession = new SessionModel
+            var newSession = new SessionModel
             {
                 Id = userDetailDbo.Id,
                 Email = userDetailDbo.Email,
-                HasCompany = userDetailDbo.CompanyDetails2UserDetails.Any(cd => cd.IsActive),
+                HasCompany = userDetailDbo.CompanyDetails2UserDetails.AnyActive(),
+                IsContractor = userDetailDbo.CompanyDetails2UserDetails.Any(cd => cd.CompanyDetail.CompanyType.Name == CompanyType.PartTime.ToString()),
                 Name = userDetailDbo.DisplayName,
                 UserRole = userDetailDbo.UserRole.Name,
+                ProfileUrl = userDetailDbo.ProfilePictureUrlSmall,
                 UserPermissions = userDetailDbo.UserRole.UserRole2UserPermission.Select(ur => ur.UserPermission.Name)
             };
             CompanySessionModel companySession = null;
-            foreach (var company in userDetailDbo.CompanyDetails2UserDetails.Where(cd => cd.IsActive && cd.CompanyDetail != companyDetailDbo))
+            foreach (var company in userDetailDbo.CompanyDetails2UserDetails.WhereActive(cd => cd.CompanyDetail != companyDetailDbo))
             {
                 var companyDetail = company.CompanyDetail;
                 var companyRole = company.CompanyRole;
                 companySession = new CompanySessionModel()
                 {
                     Id = companyDetail.Id,
-                    Name = companyDetail.Name,
+                    Name = companyDetail.Name == userDetailDbo.DisplayName ? $"{companyDetail.Name} (eBiznis)" : companyDetail.Name,
+                    CompanyType = companyDetail.CompanyType.Name,
                     CompanyRole = companyRole.Name,
+                    ProfileUrl = companyDetail.ProfilePictureUrlSmall,
                     CompanyPermissions = companyRole.CompanyRole2CompanyPermission.Select(cr => cr.CompanyPermission.Name)
                 };
                 newSession.Companies.Add(companySession);
             }
             var companyRoleDbo = companyDetailDbo.CompanyDetails2UserDetails
-                .FirstOrDefault(cd => cd.IsActive && cd.UserDetail == userDetailDbo && cd.CompanyDetail == companyDetailDbo).CompanyRole;
+                .FirstActive(cd => cd.UserDetail == userDetailDbo && cd.CompanyDetail == companyDetailDbo)?.CompanyRole;
 
             companySession = new CompanySessionModel()
             {
                 Id = companyDetailDbo.Id,
                 IsActive = true,
-                Name = companyDetailDbo.Name,
+                Name = companyDetailDbo.Name == userDetailDbo.DisplayName ? $"{companyDetailDbo.Name} (eBiznis)" : companyDetailDbo.Name,
+                CompanyType = companyDetailDbo.CompanyType.Name,
                 CompanyRole = companyRoleDbo.Name,
+                ProfileUrl = companyDetailDbo.ProfilePictureUrlSmall,
                 CompanyPermissions = companyRoleDbo.CompanyRole2CompanyPermission.Select(cr => cr.CompanyPermission.Name)
             };
             newSession.Companies.Add(companySession);
             return newSession;
         }
 
-        public SessionModel SetUserSession(int userId, IUnitOfWork unitOfWork)
+        public SessionModel SetUserSession(int userId)
         {
-            SessionModel newSession;
             var userDetailDbo = unitOfWork.UserDetailsRepository.FindWhere(ud => ud.Id == userId)
                  .Include(ud => ud.UserRole.UserRole2UserPermission.Select(ur => ur.UserPermission))
                  .Include(ud => ud.CompanyDetails2UserDetails.Select(cd => cd.CompanyDetail))
@@ -65,25 +74,29 @@ namespace Web.eBado.Helpers
                  .Select(cr => cr.CompanyPermission))).FirstOrDefault();
 
             var userRole = userDetailDbo.UserRole;
-            newSession = new SessionModel
+            var newSession = new SessionModel
             {
                 Id = userDetailDbo.Id,
                 Email = userDetailDbo.Email,
-                HasCompany = userDetailDbo.CompanyDetails2UserDetails.Any(cd => cd.IsActive),
+                HasCompany = userDetailDbo.CompanyDetails2UserDetails.AnyActive(),
+                IsContractor = userDetailDbo.CompanyDetails2UserDetails.Any(cd => cd.CompanyDetail.CompanyType.Name == CompanyType.PartTime.ToString()),
                 IsActive = true,
                 Name = userDetailDbo.DisplayName,
                 UserRole = userRole.Name,
+                ProfileUrl = userDetailDbo.ProfilePictureUrlSmall,
                 UserPermissions = userRole.UserRole2UserPermission.Select(ur => ur.UserPermission.Name)
             };
-            foreach (var company in userDetailDbo.CompanyDetails2UserDetails.Where(cd => cd.IsActive))
+            foreach (var company in userDetailDbo.CompanyDetails2UserDetails.WhereActive())
             {
                 var companyDetail = company.CompanyDetail;
                 var companyRole = company.CompanyRole;
                 CompanySessionModel companySession = new CompanySessionModel()
                 {
                     Id = companyDetail.Id,
-                    Name = companyDetail.Name,
+                    Name = companyDetail.Name == userDetailDbo.DisplayName ? $"{companyDetail.Name} (eBiznis)" : companyDetail.Name,
                     CompanyRole = companyRole.Name,
+                    CompanyType = companyDetail.CompanyType.Name,
+                    ProfileUrl = companyDetail.ProfilePictureUrlSmall,
                     CompanyPermissions = companyRole.CompanyRole2CompanyPermission.Select(cr => cr.CompanyPermission.Name)
                 };
                 newSession.Companies.Add(companySession);

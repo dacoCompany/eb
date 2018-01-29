@@ -13,7 +13,7 @@ namespace Infrastructure.Common.DB
     {
 
         private DbContext context = new EBADOEntitiesTest(@"metadata=res://*/EBADOModel.csdl|res://*/EBADOModel.ssdl|res://*/EBADOModel.msl;provider=System.Data.SqlClient;provider connection string='data source=ebadodbsrv.database.windows.net;initial catalog=testDB;persist security info=True;user id=ebadoadmin;password=ebado.159;MultipleActiveResultSets=True;App=EntityFramework'");
-        //private DbContext context = new EBADOEntitiesTest(@"metadata=res://*/EBADOModel.csdl|res://*/EBADOModel.ssdl|res://*/EBADOModel.msl;provider=System.Data.SqlClient;provider connection string='data source=.;initial catalog=testDB;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework'");
+        //private DbContext context = new EBADOEntitiesTest(@"metadata=res://*/EBADOModel.csdl|res://*/EBADOModel.ssdl|res://*/EBADOModel.msl;provider=System.Data.SqlClient;provider connection string='data source=.\EBADO;initial catalog=testDB;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework'");
         private bool disposed = false;
         private Repository<CompanyTypeDbo> companyTypeRepository;
         private Repository<AddressDbo> addressRepository;
@@ -131,25 +131,25 @@ namespace Infrastructure.Common.DB
             companyDetails2UserDetailsRespository ?? (companyDetails2UserDetailsRespository = new Repository<CompanyDetails2UserDetailsDbo>(context));
 
         public IRepository<Category2CompanyDetailsDbo> Category2CompanyDetailsRepository =>
-            category2CompanyDetailsRespository ?? (category2CompanyDetailsRespository= new Repository<Category2CompanyDetailsDbo>(context));
+            category2CompanyDetailsRespository ?? (category2CompanyDetailsRespository = new Repository<Category2CompanyDetailsDbo>(context));
 
         public IRepository<CompanyRoleDbo> CompanyRoleRepository =>
-            companyRoleRespository ?? (companyRoleRespository= new Repository<CompanyRoleDbo>(context));
+            companyRoleRespository ?? (companyRoleRespository = new Repository<CompanyRoleDbo>(context));
 
         public IRepository<CompanyRole2CompanyPermissionDbo> CompanyRole2CompanyPermissionsRepository =>
-            companyRole2CompanyPermissionsRespository?? (companyRole2CompanyPermissionsRespository = new Repository<CompanyRole2CompanyPermissionDbo>(context));
+            companyRole2CompanyPermissionsRespository ?? (companyRole2CompanyPermissionsRespository = new Repository<CompanyRole2CompanyPermissionDbo>(context));
 
         public IRepository<SubCategory2CompanyDetailsDbo> SubCategory2CompanyDetailsRepository =>
-            subCategory2CompanyDetailsRespository ?? (subCategory2CompanyDetailsRespository= new Repository<SubCategory2CompanyDetailsDbo>(context));
+            subCategory2CompanyDetailsRespository ?? (subCategory2CompanyDetailsRespository = new Repository<SubCategory2CompanyDetailsDbo>(context));
 
         public IRepository<CompanyPermissionDbo> CompanyPermissionsRepository =>
             companyPermissionsRespository ?? (companyPermissionsRespository = new Repository<CompanyPermissionDbo>(context));
 
         public IRepository<UserPermissionDbo> UserPermissionsRepository =>
-            userPermissionsRespository ?? (userPermissionsRespository= new Repository<UserPermissionDbo>(context));
+            userPermissionsRespository ?? (userPermissionsRespository = new Repository<UserPermissionDbo>(context));
 
         public IRepository<UserRole2UserPermissionDbo> UserRole2UserPermissionsRepository =>
-            userRole2UserPermissionsRespository ?? (userRole2UserPermissionsRespository= new Repository<UserRole2UserPermissionDbo>(context));
+            userRole2UserPermissionsRespository ?? (userRole2UserPermissionsRespository = new Repository<UserRole2UserPermissionDbo>(context));
 
         public IRepository<LanguageDbo> LanguageRepository =>
            languageRespository ?? (languageRespository = new Repository<LanguageDbo>(context));

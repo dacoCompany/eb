@@ -1,5 +1,4 @@
 ﻿using Infrastructure.Common.DB;
-using Infrastructure.Common.Enums;
 using Infrastructure.Common.Validations;
 using System;
 using Web.eBado.Helpers;
@@ -14,7 +13,6 @@ namespace Web.eBado.Validators
         public static void ValidateUserRegistration(IUnitOfWork uow, ValidationResultCollection collection, UserModel model)
         {
             ValidateEmailNotExist(uow, collection, model.Email, nameof(model.Email));
-            ValidatePasswordEquality(uow, collection, model.Password, model.RepeatPassword, nameof(model.RepeatPassword));
         }
 
         public static void ValidateChangeSettings(IUnitOfWork uow, ValidationResultCollection collection, ChangePasswordModel model, int userID)
@@ -46,15 +44,7 @@ namespace Web.eBado.Validators
             }
         }
 
-        private static void ValidatePasswordEquality(IUnitOfWork uow, ValidationResultCollection collection, string password, string repeatPassword, string parameterName)
-        {
-            if (!password.Equals(repeatPassword))
-            {
-                ValidationHelpers.AddValidationResult(collection, parameterName, ValidationErrors.PasswordsAreNotEqual);
-            }
-        }
-
-        private static void ValidateUserCredentials(IUnitOfWork uow, ValidationResultCollection collection, LoginModel model)
+       private static void ValidateUserCredentials(IUnitOfWork uow, ValidationResultCollection collection, LoginModel model)
         {
             var userDetails = uow.UserDetailsRepository.FindFirstOrDefault(ud => ud.Email.ToLower().Equals(model.Email.ToLower()));
             if (userDetails != null)
@@ -91,6 +81,7 @@ namespace Web.eBado.Validators
                 }
             }
         }
+
         #endregion
     }
 }

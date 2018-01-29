@@ -27,12 +27,12 @@ namespace Infrastructure.Common.DB
         public string CityAlias { get; set; }
         public string County { get; set; }
         public string District { get; set; }
+        public string DistrictAlias { get; set; }
         public Nullable<decimal> Lat { get; set; }
         public Nullable<decimal> Lon { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
-        public string DistrictAlias { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AddressDbo> Addresses { get; set; }

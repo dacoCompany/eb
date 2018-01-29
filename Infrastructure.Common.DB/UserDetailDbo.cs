@@ -41,6 +41,9 @@ namespace Infrastructure.Common.DB
         public Nullable<System.DateTime> DateModified { get; set; }
         public int UserRoleId { get; set; }
         public int UserSettingId { get; set; }
+        public string EncryptedId { get; set; }
+        public string ProfilePictureUrlSmall { get; set; }
+        public string ProfilePictureUrlMedium { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AddressDbo> Addresses { get; set; }

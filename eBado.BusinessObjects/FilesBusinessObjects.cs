@@ -4,6 +4,9 @@ using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web;
 using System.Web.Helpers;
 using System.Web.Hosting;
 using ByteSizeLib;
@@ -12,6 +15,7 @@ using Infrastructure.Common.DB;
 using Microsoft.Practices.EnterpriseLibrary.Common.Utility;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Newtonsoft.Json;
 using WebAPIFactory.Configuration.Core;
 using WebAPIFactory.Logging.Core;
 using WebAPIFactory.Logging.Core.Diagnostics;
@@ -102,7 +106,8 @@ namespace eBado.BusinessObjects
                         OriginalUrl = file.Url,
                         ThumbnailUrl = file.ThumbnailUrl,
                         Name = file.Name,
-                        Size = file.Size
+                        Size = file.Size,
+                        FileType = "file"
                     };
                     batch.Attachments.Add(attachment);
                     ++fileCount;
@@ -117,6 +122,194 @@ namespace eBado.BusinessObjects
             catch (Exception ex)
             {
                 EntlibLogger.LogError("File", "Upload", $"Upload failed. - {ex.Message}", diagnosticLogConstant, ex);
+                throw;
+            }
+        }
+
+        public string UploadProfilePicture(FileEntity file, string userId, string companyId)
+        {
+            try
+            {
+                if (!supportedImageTypes.Contains(file.ContentType))
+                    throw new InvalidDataException("File type not supported.");
+
+                var container = GetAzureBlobContainer();
+
+                // TODO: add check if profile picture exists, then delete old
+
+                string fileThumb128;
+                string fileThumb256;
+                string fileThumb512;
+                UserDetailDbo user = null;
+                CompanyDetailDbo company = null;
+
+                if (!string.IsNullOrEmpty(userId))
+                {
+                    fileThumb128 = $"{userId}_128.jpg";
+                    fileThumb256 = $"{userId}_256.jpg";
+                    fileThumb512 = $"{userId}_512.jpg";
+                    int userIdDecr = DecryptId(userId);
+                    user = unitOfWork.UserDetailsRepository.FindById(userIdDecr);
+                }
+                else if (!string.IsNullOrEmpty(companyId))
+                {
+                    fileThumb128 = $"{companyId}_128.jpg";
+                    fileThumb256 = $"{companyId}_256.jpg";
+                    fileThumb512 = $"{companyId}_512.jpg";
+                    int companyIdDecr = DecryptId(companyId);
+                    company = unitOfWork.CompanyDetailsRepository.FindById(companyIdDecr);
+                }
+                else
+                {
+                    throw new ArgumentNullException();
+                }
+
+                using (MemoryStream stream = new MemoryStream(file.Content))
+                {
+                    var thumbnail128 = new WebImage(stream).Resize(128, 128, true, true).Crop(1, 1);
+                    thumbnail128.FileName = fileThumb128;
+                    byte[] thumb128 = thumbnail128.GetBytes("image/jpeg");
+                    CloudBlockBlob blockBlobThumb128 = container.GetBlockBlobReference($"profiles/{fileThumb128}");
+                    blockBlobThumb128.UploadFromByteArray(thumb128, 0, thumb128.Length);
+                    fileThumb128 = blockBlobThumb128.Uri.ToString();
+                }
+
+                using (MemoryStream stream = new MemoryStream(file.Content))
+                {
+                    var thumbnail256 = new WebImage(stream).Resize(256, 256, true, true).Crop(1, 1);
+                    thumbnail256.FileName = fileThumb256;
+                    byte[] thumb256 = thumbnail256.GetBytes("image/jpeg");
+                    CloudBlockBlob blockBlobThumb256 = container.GetBlockBlobReference($"profiles/{fileThumb256}");
+                    blockBlobThumb256.UploadFromByteArray(thumb256, 0, thumb256.Length);
+                    fileThumb256 = blockBlobThumb256.Uri.ToString();
+                }
+
+                using (MemoryStream stream = new MemoryStream(file.Content))
+                {
+                    var thumbnail512 = new WebImage(stream).Resize(512, 512, true, true).Crop(1, 1);
+                    thumbnail512.FileName = fileThumb512;
+                    byte[] thumb512 = thumbnail512.GetBytes("image/jpeg");
+                    CloudBlockBlob blockBlobThumb512 = container.GetBlockBlobReference($"profiles/{fileThumb512}");
+                    blockBlobThumb512.UploadFromByteArray(thumb512, 0, thumb512.Length);
+                    fileThumb512 = blockBlobThumb512.Uri.ToString();
+                }
+
+                if (user != null)
+                {
+                    user.ProfilePictureUrlSmall = fileThumb128;
+                    user.ProfilePictureUrlMedium = fileThumb256;
+                    user.ProfilePictureUrl = fileThumb512;
+                }
+                else if (company != null)
+                {
+                    company.ProfilePictureUrlSmall = fileThumb128;
+                    company.ProfilePictureUrlMedium = fileThumb256;
+                    company.ProfilePictureUrl = fileThumb512;
+                }
+
+                unitOfWork.Commit();
+                EntlibLogger.LogVerbose("File", "UploadProfilePicture", $"Uploaded profile picture for user {userId}.", diagnosticLogConstant);
+
+                return fileThumb512;
+            }
+            catch (Exception ex)
+            {
+                EntlibLogger.LogError("File", "UploadProfilePicture", $"Upload failed. - {ex.Message}", diagnosticLogConstant, ex);
+                throw;
+            }
+        }
+
+        public int DecryptId(string id)
+        {
+            int encryptConstant = 5168;
+            int multiplyContstant = 42;
+
+            var decryptedId = Convert.ToInt32(new String(id.Where(Char.IsDigit).ToArray()));
+            return (decryptedId / multiplyContstant) - encryptConstant;
+        }
+
+        public bool UploadVideo(string url, string batchId, int companyId)
+        {
+            string videoId = HttpUtility.ParseQueryString(url).Get(0);
+
+            if (string.IsNullOrEmpty(videoId))
+            {
+                return false;
+            }
+
+            string embedUrl = $"https://www.youtube.com/embed/{videoId}?rel=0";
+
+            var client = new HttpClient();
+            client.BaseAddress = new Uri("http://www.youtube.com/");
+            var response = client.GetAsync($"oembed?url=http://www.youtube.com/watch?v={videoId}&format=json").Result;
+
+            Dictionary<string, string> values = new Dictionary<string, string>();
+            if (response.IsSuccessStatusCode)
+            {
+                string result = response.Content.ReadAsStringAsync().Result;
+
+                values = JsonConvert.DeserializeObject<Dictionary<string, string>>(result);
+            }
+            else
+            {
+                return false;
+            }
+
+            try
+            {
+                var batch = unitOfWork.BatchAttachmentRepository.FindFirstOrDefault(ba => ba.GuId == batchId && ba.CompanyDetailsId == companyId);
+
+                var videoAttachment = new AttachmentDbo
+                {
+                    BatchAttId = batch.Id,
+                    Name = values["title"],
+                    FileType = "video",
+                    ThumbnailUrl = values["thumbnail_url"],
+                    Size = 0,
+                    OriginalUrl = embedUrl
+                };
+
+                batch.Attachments.Add(videoAttachment);
+
+                unitOfWork.Commit();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                EntlibLogger.LogError("File", "Video Upload", $"Video upload failed. - {ex.Message}", diagnosticLogConstant, ex);
+                throw;
+            }
+        }
+
+        public bool DeleteVideo(string batchId, string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return false;
+            }
+
+            try
+            {
+                var batch = unitOfWork.BatchAttachmentRepository.FindFirstOrDefault(ba => ba.GuId == batchId);
+                var attachment = unitOfWork.AttachmentRepository.FindFirstOrDefault(a => a.Name == name && a.BatchAttId == batch.Id);
+
+                if (attachment != null)
+                {
+                    attachment.IsActive = false;
+                }
+                else
+                {
+                    return false;
+                }
+
+                unitOfWork.Commit();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                EntlibLogger.LogError("File", "Delete Video", $"Video delete failed. - {ex.Message}", diagnosticLogConstant, ex);
                 throw;
             }
         }
@@ -150,18 +343,25 @@ namespace eBado.BusinessObjects
             bool deletedAll = true;
             int deletedCount = 0;
 
-            int batchDboId = unitOfWork.BatchAttachmentRepository.FindFirstOrDefault(ba => ba.GuId.Equals(batchId)).Id;
+            var batchDbo = unitOfWork.BatchAttachmentRepository.FindFirstOrDefault(ba => ba.GuId.Equals(batchId));
 
             foreach (string fileName in files)
             {
-                CloudBlockBlob blockBlob = container.GetBlockBlobReference($"photos/{batchId}/{fileName}");
+                string correctName = fileName;
+
+                if (fileName.StartsWith("btn"))
+                {
+                    correctName = fileName.Substring(3);
+                }
+
+                CloudBlockBlob blockBlob = container.GetBlockBlobReference($"photos/{batchId}/{correctName}");
                 bool result = blockBlob.DeleteIfExists(DeleteSnapshotsOption.IncludeSnapshots);
 
-                string thumbName = Path.GetFileNameWithoutExtension(fileName) + "_thumbImg.jpg";
+                string thumbName = Path.GetFileNameWithoutExtension(correctName) + "_thumbImg.jpg";
                 CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference($"photos/{batchId}/{thumbName}");
                 bool resultThumb = blockBlobThumb.DeleteIfExists(DeleteSnapshotsOption.IncludeSnapshots);
 
-                var attachment = unitOfWork.AttachmentRepository.FindFirstOrDefault(a => a.OriginalUrl.Contains(fileName) && a.BatchAttId == batchDboId);
+                var attachment = unitOfWork.AttachmentRepository.FindFirstOrDefault(a => a.OriginalUrl.Contains(correctName) && a.BatchAttId == batchDbo.Id);
                 bool dboDeleted = false;
 
                 if (attachment != null)
@@ -172,7 +372,7 @@ namespace eBado.BusinessObjects
 
                 if (!(result && resultThumb && dboDeleted))
                 {
-                    EntlibLogger.LogWarning("File", "Delete", $"File '{fileName}' in batch {batchId} cannot be deleted.", diagnosticLogConstant);
+                    EntlibLogger.LogWarning("File", "Delete", $"File '{correctName}' in batch {batchId} cannot be deleted.", diagnosticLogConstant);
                     deletedAll = false;
                 }
                 else
@@ -182,7 +382,8 @@ namespace eBado.BusinessObjects
             }
 
             unitOfWork.Commit();
-
+            batchDbo.ThumbnailUrl = batchDbo.Attachments.FirstActive()?.ThumbnailUrl;
+            unitOfWork.Commit();
             if (deletedAll)
                 EntlibLogger.LogVerbose("File", "Delete", $"Deleted {files.Count()} files.", diagnosticLogConstant);
             else
@@ -245,7 +446,7 @@ namespace eBado.BusinessObjects
                 Guid = batchDbo.GuId
             };
 
-            foreach (var dbo in batchDbo.Attachments.Where(a => a.IsActive))
+            foreach (var dbo in batchDbo.Attachments.WhereActive())
             {
                 result.Attachments.Add(new AttachmentEntity
                 {
@@ -253,7 +454,8 @@ namespace eBado.BusinessObjects
                     Size = ByteSize.FromBytes(dbo.Size).KiloBytes.ToString("N2"),
                     ThumbnailUrl = dbo.ThumbnailUrl,
                     Url = dbo.OriginalUrl,
-                    Batch = batchDbo.GuId
+                    Batch = batchDbo.GuId,
+                    AttachmentType = dbo.FileType
                 });
             }
 
@@ -290,16 +492,16 @@ namespace eBado.BusinessObjects
 
             var resposne = new Collection<BatchEntity>();
 
-            foreach (var batch in companyDbo.BatchAttachments)
+            foreach (var batch in companyDbo.BatchAttachments.WhereActive())
             {
                 resposne.Add(new BatchEntity
                 {
                     Id = batch.Id,
                     Name = batch.Name,
                     Guid = batch.GuId,
-                    Description = batch.Description.Length > 100 ? batch.Description.Substring(0, 100) : batch.Description,
-                    AttachmentsCount = batch.Attachments.Count,
-                    BaseThumbUrl = batch.Attachments.Count > 0 ? batch.Attachments.First().ThumbnailUrl : null
+                    Description = !string.IsNullOrEmpty(batch.Description) && batch.Description.Length > 100 ? batch.Description.Substring(0, 100) : batch.Description,
+                    AttachmentsCount = batch.Attachments.CountActive(),
+                    BaseThumbUrl = batch.Attachments.CountActive() > 0 ? batch.Attachments.FirstActive().ThumbnailUrl : null
                 });
             }
 

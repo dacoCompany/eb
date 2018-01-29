@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Web.eBado.Models.Shared;
 
 namespace Web.eBado.Controllers
 {
@@ -36,16 +37,13 @@ namespace Web.eBado.Controllers
             return "Welcome";
         }
 
-        /// <summary>
-        /// Just testing automatic build
-        /// </summary>
-        /// <returns></returns>
         [HttpGet]
-        [Route("Index5")]
+        [Route("RedirectToLogin")]
         [AllowAnonymous]
-        public string Index5()
+        public ActionResult RedirectToLogin(string returnUrl)
         {
-            return "Welcome";
+            var model = new RedirectModel { RedirectUrl = returnUrl };
+            return View(model);
         }
     }
 }

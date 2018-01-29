@@ -8,6 +8,15 @@
 @Styles.Render("~/Content/batch")
 
 <script>
+    $(document).ready(function() {
+        var modelError = @Html.Raw(Json.Encode(Model.HasError));
+
+        if (modelError) {
+            $("#addBatch").text("Close");
+            $("#batchArea").show();
+        }
+    });
+
     function onSubmit(token) {
         document.getElementById("htmlForm").submit();
     }
@@ -69,6 +78,7 @@
                 var index = 1;
                 foreach (var batch in Model.Batch)
                 {
+                    string tumbnailUrl = string.IsNullOrEmpty(batch.BaseThumbUrl) ? "/Content/BaseContent/img/no_photo.jpg" : batch.BaseThumbUrl;
                     <div id="batchContainer_@index" class="polaroid-batch zoom over-flow-hidden">
                         <div class="head">
                             <div class="name">@batch.Name</div>
@@ -76,7 +86,7 @@
                         </div>
                         <div style="overflow: hidden;">
                             <a href="@Url.Action("EditAccountGallery","Account",new { batchId = batch.Guid })"
-                               style="background-image: url(@batch.BaseThumbUrl);" class="zoomzoom"></a>
+                               style="background-image: url(@tumbnailUrl);" class="zoomzoom"></a>
                         </div>
                         <div class="btm-desc">
                             <p class="desc">@batch.Description</p>

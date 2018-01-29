@@ -15,10 +15,12 @@ namespace Web.eBado.Models.Account
 
         [IgnoreNulls(Ruleset = "RegisterUser")]
         [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Inclusive, MessageTemplate = "Too long (max. 50 characters)", Ruleset = "RegisterUser")]
+        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Inclusive, MessageTemplate = "Too long (max. 50 characters)", Ruleset = "RegisterContractor")]
         public string FirstName { get; set; }
 
         [IgnoreNulls(Ruleset = "RegisterUser")]
         [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Inclusive, MessageTemplate = "Too long (max. 50 characters)", Ruleset = "RegisterUser")]
+        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Inclusive, MessageTemplate = "Too long (max. 50 characters)", Ruleset = "RegisterContractor")]
         public string Surname { get; set; }
 
         [StringLengthValidator(1, RangeBoundaryType.Inclusive, 100, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "RequiredField", Ruleset = "RegisterUser")]
@@ -55,7 +57,9 @@ namespace Web.eBado.Models.Account
         [StringLengthValidator(1, RangeBoundaryType.Inclusive, 10, RangeBoundaryType.Ignore, MessageTemplate = "Too long (max. 10 characters)", Ruleset = "RegisterUser")]
         public string StreetNumber { get; set; }
 
+        [IgnoreNulls(Ruleset = "RegisterUser")]
         [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = ErrorMessages.RequiredFieldResources, Ruleset = "RegisterUser")]
+        [StringLengthValidator(1, RangeBoundaryType.Inclusive, 50, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = ErrorMessages.RequiredFieldResources, Ruleset = "RegisterContractor")]
         public string PostalCode { get; set; }
 
         public string ProfileUrl { get; set; }

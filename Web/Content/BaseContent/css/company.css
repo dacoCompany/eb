@@ -1,4 +1,18 @@
-﻿.search_panel {
+﻿.category_container a:link, .category_container a:visited {
+    color: #888;
+}
+
+.category_container a:hover {
+    color: #000;
+}
+
+.active_text {
+    color: #000;
+    text-decoration: underline;
+    font-size: 13px !important;
+}
+
+.search_panel {
     position: relative;
     margin-top: 30px;
     border-radius: 3px;
@@ -44,39 +58,276 @@
     float: right;
     margin-top: 6px;
 }
+
 .search_btn_resp {
     width: 150px;
 }
 
-.main_container{
+.main_container {
     margin-top: 30px;
-    width:100%;
-    display:block;
+    width: 100%;
+    display: block;
 }
+
 .category_container {
-    float: left;
-    width: 20%;
     background-color: #f9f9f9;
-    margin-right: 30px;
+    margin-bottom: 10px;
 }
-.company_container{
-    width:100%;
-    text-align:left
+
+.company_container {
+    width: auto;
+    margin-left: 22%;
 }
-.category_head{
-    background-color:#f1f1f1;
-    width:100%;
-    height:35px;
-    text-align:left;
-    font-size:14px;
+
+.category_head, .search_head {
+    background-color: #f1f1f1;
+    width: 100%;
+    height: 35px;
+    text-align: left;
+    font-size: 14px;
     padding: 8px 0 0 5px;
+    cursor: pointer;
 }
+
 .category_body {
     width: 100%;
     text-align: left;
     font-size: 12px;
     padding: 3px 0 3px 10px;
 }
+
+.search_body {
+    width: 100%;
+    text-align: left;
+    font-size: 13px;
+    padding: 5px 0 5px 10px;
+}
+
+.company_area {
+    padding: 3px 0 3px 0;
+    border-top: 1px solid #e0ecff;
+}
+
+    .company_area:hover {
+        background-color: #e0ecff;
+    }
+
+.company_tags {
+    float: left;
+    height: 20px;
+    margin-right: 10px;
+    color: #19acff;
+    border: 1px solid #19acff;
+    padding-bottom: 5px;
+    padding: 0 3px 0 3px;
+}
+
+.company_head_text {
+    float: left;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.head_text {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.body_text {
+    text-align: justify;
+    min-height: 50px;
+}
+
+.space_10 {
+    background-color: #fff;
+    width: 100%;
+    height: 10px;
+}
+
+.settings_wrapper {
+    overflow: hidden;
+    width: 97%;
+    margin-left: 5px;
+}
+
+.text_div {
+    font-size: 12px;
+    margin-top: 8px;
+    float: left;
+}
+
+.toggle_div {
+    overflow: hidden;
+    margin: 2px;
+    height: 30px;
+}
+
+.cat_list, .subCat_list {
+    font-size: 12px;
+    text-align: left;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+    .cat_list:hover {
+        color: #000;
+    }
+
+/*************Company Detail*****************/
+
+.company_name {
+    font-size: 24px;
+    font-weight: 700;
+    text-align: left;
+}
+
+.company_label {
+    font-size: 14px;
+    font-weight: 700;
+    text-align: left;
+}
+
+.batch_name{
+    font-size:20px;
+    font-weight:700;
+    text-align:left;
+}
+
+.company_detail_value {
+    font-size: 14px;
+    font-weight: 400;
+    text-align: left;
+}
+
+.batch_desc {
+    font-size: 14px;
+    font-weight: 400;
+    text-align: left;
+    margin-bottom:20px;
+}
+
+.navigation_link {
+    font-weight: 400;
+    font-size: 12px;
+    color: #19acff;
+}
+
+.tags_glyph {
+    float: left;
+    margin-right: 10px;
+}
+
+.text-right_resp {
+    text-align: right;
+}
+
+.text-left_resp {
+    text-align: left;
+}
+
+.contact_detail {
+    float: left;
+    margin: 5px 30px 0 0;
+    font-size: 16px;
+}
+
+
+.nav-tabs {
+    border-bottom: 2px solid #DDD;
+}
+
+    .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+        border-width: 0;
+    }
+
+    .nav-tabs > li > a {
+        font-size: 18px;
+        border: none;
+        color: #666;
+    }
+
+        .nav-tabs > li.active > a, .nav-tabs > li > a:hover {
+            border: none;
+            color: #19acff !important;
+            background: transparent;
+        }
+
+        .nav-tabs > li > a::after {
+            content: "";
+            background: #19acff;
+            height: 2px;
+            position: absolute;
+            width: 100%;
+            left: 0px;
+            bottom: -1px;
+            transition: all 250ms ease 0s;
+            transform: scale(0);
+        }
+
+    .nav-tabs > li.active > a::after, .nav-tabs > li:hover > a::after {
+        transform: scale(1);
+    }
+
+.tab-nav > li > a::after {
+    background: #21527d none repeat scroll 0% 0%;
+    color: #fff;
+}
+
+.tab-pane {
+    padding: 15px 0;
+}
+
+.tab-content {
+    padding: 20px
+}
+
+.zoomzoom {
+    width: 100%;
+    display: block;
+    height: 150px;
+    background-size: cover;
+    background-position-x: 50%;
+    background-position-y: 50%;
+    -webkit-transition: all 1s ease; /* Safari and Chrome */
+    -moz-transition: all 1s ease; /* Firefox */
+    -o-transition: all 1s ease; /* IE 9 */
+    -ms-transition: all 1s ease; /* Opera */
+    transition: all 1s ease;
+}
+
+    .zoomzoom:hover {
+        -webkit-transform: scale(1.25); /* Safari and Chrome */
+        -moz-transform: scale(1.25); /* Firefox */
+        -ms-transform: scale(1.25); /* IE 9 */
+        -o-transform: scale(1.25); /* Opera */
+        transform: scale(1.25);
+    }
+
+.img_container {
+    float: left;
+    width: 130px;
+    height: 98px;
+    overflow: hidden;
+    margin: 0 10px 10px 0
+}
+
+.resp_top_10 {
+    margin-top:10px;
+}
+
+@media screen and (max-width: 768px) {
+    .text-right_resp {
+        text-align: center;
+    }
+
+    .text-left_resp {
+        text-align: center;
+    }
+    .resp_top_10 {
+        margin: 0 auto;
+    }
+}
+
 
 /**************RESPONSIVE****************/
 @media screen and (max-width: 1200px) {
@@ -107,7 +358,7 @@
 }
 
 @media screen and (max-width: 1000px) {
-      .search_textBox-md {
+    .search_textBox-md {
         width: 30%;
         margin-right: 20px;
     }
@@ -117,8 +368,16 @@
     }
 }
 
-
 @media screen and (max-width: 800px) {
+    .category_container {
+        width: 100%;
+    }
+
+    .company_container {
+        width: 100%;
+        margin: 0;
+    }
+
     .search_panel {
         height: 136px;
     }
@@ -132,6 +391,7 @@
         margin-left: 0;
     }
 }
+
 
 @media screen and (max-width: 620px) {
     .search_panel {
@@ -163,8 +423,8 @@
         width: 20%;
         float: right;
     }
-    
-    .search_button{
-        float:left;
-    }
+
+    .search_button {
+        float: left;
+    }   
 }

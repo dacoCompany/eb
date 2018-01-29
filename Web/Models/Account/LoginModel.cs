@@ -16,5 +16,9 @@ namespace Web.eBado.Models.Account
 
         [Display(Name = "ErrorMessage")]
         public string ErrorMessage { get; set; }
+
+        public string ReturnUrl { get; set; }
+
+        public bool ShouldRedirect { get; set; }
     }
 }

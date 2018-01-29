@@ -20,7 +20,11 @@
     <body>
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
         <div class="main">
-
+            @{
+                if (Model != null && Model.ShouldRedirect)
+                {
+                    Response.Redirect(Model.ReturnUrl);
+                }}
 
             <div class="container">
                 <div class="col-lg-4 col-md-3 col-sm-2"></div>

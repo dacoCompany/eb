@@ -17,6 +17,8 @@ namespace Web.eBado.Models.Shared
         public bool IsExternalLogin { get; set; }
         public IEnumerable<string> UserPermissions { get; set; }
         public bool HasCompany { get; set; }
+        public bool IsContractor { get; set; }
+        public string ProfileUrl { get; set; }
         public ICollection<CompanySessionModel> Companies { get; set; }
 
     }

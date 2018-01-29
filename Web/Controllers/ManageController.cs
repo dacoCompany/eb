@@ -1,41 +1,37 @@
 ﻿using System;
 using Infrastructure.Common.DB;
-using Infrastructure.Common.Enums;
 using Infrastructure.Configuration;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Web.eBado.Helpers;
-using Web.eBado.IoC;
-using Web.eBado.Models.Account;
 using Web.eBado.Models.Shared;
 using WebAPIFactory.Configuration.Core;
-using WebAPIFactory.Caching.Core;
 using Infrastructure.Common;
 
 namespace Web.eBado.Controllers
 {
     [RoutePrefix("Manage")]
     public class ManageController : Controller
-    {        
+    {
         private readonly IUnitOfWork unitOfWork;
         private readonly IConfiguration configuration;
-        SessionHelper sessionHelper;
+        private readonly SessionHelper sessionHelper;
+        private readonly SharedHelper sharedHelper;
 
         public ManageController(IUnitOfWork unitOfWork, IConfiguration configuration)
         {
             this.unitOfWork = unitOfWork;
             this.configuration = configuration;
-            sessionHelper = new SessionHelper();
+            sessionHelper = new SessionHelper(unitOfWork);
+            sharedHelper = new SharedHelper(unitOfWork);
         }
 
         [AllowAnonymous]
@@ -69,7 +65,7 @@ namespace Web.eBado.Controllers
 
             if (isUserAccount)
             {
-                newSession = sessionHelper.SetUserSession(currentSession.Id, unitOfWork);
+                newSession = sessionHelper.SetUserSession(currentSession.Id);
 
                 int userRoleId = 0;
 
@@ -85,7 +81,7 @@ namespace Web.eBado.Controllers
             }
             else
             {
-                newSession = sessionHelper.SetCompanySession(accountName, currentSession, unitOfWork);
+                newSession = sessionHelper.SetCompanySession(accountName, currentSession);
 
                 int companyRoleId = 0;
 
@@ -102,11 +98,11 @@ namespace Web.eBado.Controllers
             }
             Session.Remove("User");
             Session["User"] = newSession;
-            return new HttpStatusCodeResult(HttpStatusCode.Redirect);
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
         [HttpPost]
-        [System.Web.Http.Authorize(Roles = "ChangeSettings")]
+        [EbadoMvcAuthorization(Roles = "ChangeSettings")]
         [Route("DeleteCategory")]
         public JsonResult DeleteCategory(string category)
         {
@@ -138,7 +134,7 @@ namespace Web.eBado.Controllers
         }
 
         [HttpPost]
-        [System.Web.Http.Authorize(Roles = "ChangeSettings")]
+        [EbadoMvcAuthorization(Roles = "ChangeSettings")]
         [Route("DeleteLanguage")]
         public JsonResult DeleteLanguage(string code)
         {
@@ -146,22 +142,21 @@ namespace Web.eBado.Controllers
             var session = Session["User"] as SessionModel;
             int companyId = session.Companies.FirstOrDefault(c => c.IsActive).Id;
             var companyDetails = unitOfWork.CompanyDetailsRepository.FindFirstOrDefault(cd => cd.Id == companyId);
-            var languageDbo = companyDetails.CompanyDetails2Languages.FirstOrDefault(c => c.IsActive && c.Language.Code == code);
+            var languageDbo = companyDetails.CompanyDetails2Languages.FirstActive(c => c.Language.Code == code);
 
-            if (languageDbo != null)
+            if (languageDbo == null)
             {
-                languageDbo.IsActive = false;
+                return new JsonNetResult(ErrorMessages.SomethingWrong);
             }
-            else
-            {
-                response = ErrorMessages.SomethingWrong;
-            }
+
+            languageDbo.IsActive = false;
             unitOfWork.Commit();
+
             return new JsonNetResult(response);
         }
 
         [HttpGet]
-        [System.Web.Http.Authorize(Roles = "AddMember")]
+        [EbadoMvcAuthorization(Roles = "AddMember")]
         [Route("AddMemberToCompany")]
         public JsonResult AddMemberToCompany(string email, string selectedRole)
         {
@@ -183,14 +178,16 @@ namespace Web.eBado.Controllers
                     var roleId = GetRoleIdByName(selectedRole, companyId);
                     if (roleId == null)
                     {
-                        // TODO: add custom jsonResulType
+                        return new JsonNetResult("Role does not exist.");
                     }
+
                     companyDetail.CompanyDetails2UserDetails.Add(new CompanyDetails2UserDetailsDbo
                     {
                         CompanyDetailsId = companyId,
                         UserDetailsId = userDetails.Id,
                         CompanyRoleId = roleId.Value
                     });
+
                     unitOfWork.Commit();
                 }
             }
@@ -198,14 +195,20 @@ namespace Web.eBado.Controllers
             {
                 response = ErrorMessages.WrongEmail;
             }
+
             return new JsonNetResult(response);
         }
 
         [HttpPost]
-        [System.Web.Http.Authorize(Roles = "RemoveMember")]
+        [EbadoMvcAuthorization(Roles = "RemoveMember")]
         [Route("DeleteMember")]
         public JsonResult DeleteMember(string email)
         {
+            if (string.IsNullOrEmpty(email))
+            {
+                return new JsonNetResult("Email cannot be empty.");
+            }
+
             int companyId = GetCompanyId();
             string response = ErrorMessages.SuccessResponse;
 
@@ -214,20 +217,19 @@ namespace Web.eBado.Controllers
 
             if (company2UserDbo == null)
             {
-                // TODO: add custom jsonResulType
+                return new JsonNetResult("Member not found.");
             }
-            else
-            {
-                company2UserDbo.IsActive = false;
-                unitOfWork.Commit();
-            }
+
+            company2UserDbo.IsActive = false;
+            unitOfWork.Commit();
+
             return new JsonNetResult(response);
         }
 
 
 
         [HttpPost]
-        [System.Web.Http.Authorize(Roles = "AddMember, RemoveMember")]
+        [EbadoMvcAuthorization(Roles = "AddMember, RemoveMember")]
         [Route("ChangeMemberRole")]
         public JsonResult ChangeMemberRole(string user, string role)
         {
@@ -237,24 +239,38 @@ namespace Web.eBado.Controllers
             var companyRole = unitOfWork.CompanyRoleRepository.FindFirstOrDefault(cr => cr.Name == role);
             var user2Company = unitOfWork.CompanyDetails2UserDetailsRepository
                 .FindFirstOrDefault(cd => cd.UserDetail.Email == user && cd.CompanyDetailsId == companyId);
-            user2Company.CompanyRoleId = companyRole.Id;
 
             if (companyRole == null || user2Company == null)
             {
-                // TODO: add custom jsonResulType
+                return new JsonNetResult("Member or role does not exist.");
             }
 
+            user2Company.CompanyRoleId = companyRole.Id;
             unitOfWork.Commit();
+
             return new JsonNetResult(response);
         }
 
         [HttpPost]
-        [System.Web.Http.Authorize(Roles = "AddMember, RemoveMember")]
+        [EbadoMvcAuthorization(Roles = "AddMember, RemoveMember")]
         [Route("AddCustomRoleToCompany")]
         public JsonResult AddCustomRoleToCompany(string roleName, List<string> permissions)
         {
-            int companyId = GetCompanyId();
             string response = ErrorMessages.SuccessResponse;
+
+            if (string.IsNullOrEmpty(roleName))
+            {
+                response = "Role name cannot be empty.";
+                return new JsonNetResult(response);
+            }
+
+            if (!permissions.Any())
+            {
+                response = "At least one permission must be set.";
+                return new JsonNetResult(response);
+            }
+
+            int companyId = GetCompanyId();
 
             var companyRole = unitOfWork.CompanyRoleRepository.FindWhere(cr => cr.CreatedByCompId == companyId);
             bool roleNameExist = companyRole.Any(cr => cr.Name == roleName && cr.IsActive);
@@ -299,17 +315,9 @@ namespace Web.eBado.Controllers
         [Route("GetPostalCodes")]
         public JsonResult GetPostalCodes(string prefix)
         {
-            var cache = NinjectResolver.GetInstance<ICache>();
-            var cachedPostalCodes = cache.GetData<List<LocationDbo>>(CacheKeys.PostalCodeKey);
+            var allLocations = sharedHelper.GetCachedLocations();
 
-            if (cachedPostalCodes == null)
-            {
-                var cacheSettings = new CacheSettings("cacheDurationKey", "cacheExpirationKey");
-                cachedPostalCodes = unitOfWork.LocationRepository.FindAll().ToList();
-                cache.Insert(CacheKeys.PostalCodeKey, cachedPostalCodes, null, cacheSettings);
-            }
-
-            var location = cachedPostalCodes.Where(x => x.PostalCode.StartsWith(prefix)
+            var locations = allLocations.Where(x => x.PostalCode.StartsWith(prefix)
                 || x.PostalCode.Replace(" ", "").StartsWith(prefix.Replace(" ", "")) || x.City.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)
                 || x.CityAlias.StartsWith(prefix, StringComparison.OrdinalIgnoreCase) || x.DistrictAlias.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
                 .Take(10).AsEnumerable()
@@ -319,7 +327,7 @@ namespace Web.eBado.Controllers
                     label = $"{loc.PostalCode} - {loc.District} - {loc.City}"
                 }).ToList();
 
-            return Json(location, JsonRequestBehavior.AllowGet);
+            return Json(locations, JsonRequestBehavior.AllowGet);
         }
 
         private async Task<bool> GetToken(int userRoleId = 0, int companyRoleId = 0)

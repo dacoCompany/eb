@@ -23,7 +23,8 @@ namespace Web.eBado.Models.Account
         /// </summary>
         /// <param name="results">Results of the validation.</param>
         [SelfValidation(Ruleset = "RegisterCompany")]
-        public void ValidatePasswordMatch(ValidationResults results)
+        [SelfValidation(Ruleset = "RegisterContractor")]
+        public void ValidateSelectedCategories(ValidationResults results)
         {
             if (results == null)
                 return;
