@@ -123,6 +123,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EBADOModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="EmailTemplateDbo.cs">
+      <DependentUpon>EBADOModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityObjectExtensions.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="IRepository.cs" />
