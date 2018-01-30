@@ -5,21 +5,21 @@
 {
 var company = session.Companies.FirstOrDefault(c => c.IsActive);
 <div class="tab push_bottom_10">
-    <button type="button" name="btn" class="@(viewType == "MyAdvertisements" ? "active" : "")" onclick="location.href='@Url.Action("MyAdvertisements", "Account")'">MOJE INZERATY<span class="badge badge_color pull-right">1</span></button>
-    <button type="button" name="btn" class="@(viewType == "MyAdvertisements" ? "active" : "")" onclick="location.href='@Url.Action("MyAdvertisements", "Account")'">MOJE DOPYTY<span class="badge badge_color pull-right">1</span></button>
+    <button type="button" name="btn" class="@(viewType == "MyAdvertisements" ? "active" : "")" onclick="location.href='@Url.Action("MyAdvertisements", "Account")'">@Resources.MyAds.ToUpper()<span class="badge badge_color pull-right">1</span></button>
+    <button type="button" name="btn" class="@(viewType == "MyAdvertisements" ? "active" : "")" onclick="location.href='@Url.Action("MyAdvertisements", "Account")'">@Resources.MyDemands.ToUpper()<span class="badge badge_color pull-right">1</span></button>
     @if (company != null)
     {
-        <button type="button" name="btn" class="@(viewType == "MyAdvertisements" ? "active" : "")" onclick="location.href='@Url.Action("MyAdvertisements", "Account")'">MOJE HODNOTENIA<span class="badge badge_color pull-right">1</span></button>
+    <button type="button" name="btn" class="@(viewType == "MyAdvertisements" ? "active" : "")" onclick="location.href='@Url.Action("MyAdvertisements", "Account")'">@Resources.MyRatings.ToUpper()<span class="badge badge_color pull-right">1</span></button>
     }
     @if (company == null)
     {
-        <button type="button" name="btn" class="@(viewType == "MyAdvertisements" ? "active" : "")" onclick="location.href='@Url.Action("MyAdvertisements", "Account")'">PRIDAT UCET</button>
+    <button type="button" name="btn" class="@(viewType == "MyAdvertisements" ? "active" : "")" onclick="location.href='@Url.Action("MyAdvertisements", "Account")'">@Resources.AddAccount.ToUpper()</button>
     }
     @if (company != null)
     {
-        <button type="button" name="btn" class="@(viewType == "BatchAccountGallery" ? "active" : "")" onclick="location.href='@Url.Action("BatchAccountGallery", "Account")'">GALERIA<span class="badge badge_color pull-right">1</span></button>
+    <button type="button" name="btn" class="@(viewType == "BatchAccountGallery" ? "active" : "")" onclick="location.href='@Url.Action("BatchAccountGallery", "Account")'">@Resources.Gallery.ToUpper()<span class="badge badge_color pull-right">1</span></button>
     }
-    <button type="button" name="btn" class="@(viewType == "ChangeSettings" ? "active" : "")" onclick="location.href='@Url.Action("ChangeSettings", "Account")'">NASTAVENIA</button>
+    <button type="button" name="btn" class="@(viewType == "ChangeSettings" ? "active" : "")" onclick="location.href='@Url.Action("ChangeSettings", "Account")'">@Resources.Settings.ToUpper()</button>
 </div>
 }
 

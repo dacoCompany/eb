@@ -1,4 +1,5 @@
 ﻿@model Web.eBado.Models.Account.BatchGalleryModel
+@using Infrastructure.Resources
 @using Web.eBado.Helpers
 @{
     ViewBag.Title = "BatchAccountGallery";
@@ -12,7 +13,7 @@
         var modelError = @Html.Raw(Json.Encode(Model.HasError));
 
         if (modelError) {
-            $("#addBatch").text("Close");
+            $("#addBatch").text("@Html.Raw(@Resources.Close)");
             $("#batchArea").show();
         }
     });
@@ -26,15 +27,15 @@
     <div class="modal-dialog" style="max-width:500px;height:200px;margin:0 auto">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title" id="myModalLabel">Vymazat galeriu: <span id="galName" style="font-weight:700"></span>?</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="@Resources.Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title" id="myModalLabel">@Resources.DeleteGallery: <span id="galName" style="font-weight:700"></span>?</h3>
             </div>
             <div class="modal-body" style="text-align:left">
-                <h4>zmazes vsetko debil tak citaj az do konca!</h4>
+                <h4>@Resources.DoYouWantToContinue</h4>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="modalNo">Zrusit</button>
-                <button type="button" class="btn btn-danger" id="modalYes">Vymazat</button>
+                <button type="button" class="btn btn-primary" id="modalNo">@Resources.Cancel</button>
+                <button type="button" class="btn btn-danger" id="modalYes">@Resources.Delete</button>
             </div>
         </div>
     </div>
@@ -46,7 +47,7 @@
         @AccountHelper.SettingsMenu(Url, ViewContext.RouteData.Values["Action"].ToString(), session)
         <div class="tabcontent-gallery push_top_10">
             <div class="btn-position">
-                <button id="addBatch" class="form-btn col-lg-2" style="float:left">Create</button>
+                <button id="addBatch" class="form-btn col-lg-2" style="float:left">@Resources.Create</button>
             </div>
             @using (Html.BeginForm("CreateBatch", "Account", new { id = "htmlForm" }))
             {
@@ -55,19 +56,19 @@
                     <div id="batchArea" class="col-lg-12" style="margin-bottom:30px; display:none">
                         <div class="form-group">
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Name" } })
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = Resources.PHName } })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })</div>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Description" } })
+                                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = Resources.Description } })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })</div>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-lg-10">
-                                <button id="MyButton" class="form-btn" data-callback="onSubmit">Create</button>
+                                <button id="MyButton" class="form-btn" data-callback="onSubmit">@Resources.Create</button>
                             </div>
                         </div>
                     </div>
@@ -92,7 +93,7 @@
                             <p class="desc">@batch.Description</p>
                         </div>
                         <div class="btm">
-                            <button id="@index" onclick="btnClick('@batch.Guid', '@index', '@batch.Name')" class="form-btn btn-space-5">Delete</button>
+                            <button id="@index" onclick="btnClick('@batch.Guid', '@index', '@batch.Name')" class="form-btn btn-space-5">@Resources.Delete</button>
                         </div>
                     </div>
                     index++;
@@ -134,7 +135,7 @@
     $(function () {
         $("#addBatch").click(function () {
             $(this).text(function (i, text) {
-                return text === "Create" ? "Close" : "Create";
+                return text === "@Html.Raw(Resources.Create)" ? "@Html.Raw(Resources.Close)" : "@Html.Raw(Resources.Create)";
             })
             $("#batchArea").slideToggle();
         });

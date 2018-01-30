@@ -7,6 +7,6 @@
     public enum MailMessageType
     {
         ForgotPassword = 1,
-        RegisterConfirmation,
+        Registration,
     }
 }

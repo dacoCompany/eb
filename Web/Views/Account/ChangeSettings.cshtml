@@ -1,5 +1,6 @@
 ﻿@model Web.eBado.Models.Account.AccountSettingsModel
 @using Infrastructure.Common.Enums
+@using Infrastructure.Resources
 
 @{
     ViewBag.Title = "ChangeSettings";
@@ -52,19 +53,19 @@
                 {
 
                     <div class="accordion-toggle push_top_5">
-                        <div class="accordion-main">Zmenit profil uctu</div>
+                        <div class="accordion-main">@Resources.ChangeAccountProfile</div>
                     </div>
                     <div class="accordion-content">
                         @if (!session.IsExternalLogin)
                         {
                             <div class="row">
-                                <div class="col-sm-12 set-font">Profil</div>
+                                <div class="col-sm-12 set-font">@Resources.Profile</div>
                             </div>
                             <div class="row">
                                 @if (Model.UserModel.ProfileUrl == null)
                                 {
                                     <div class="col-lg-6">
-                                        <div class="tags_text">Zatial nemate profilovu fotku</div>
+                                        <div class="tags_text">@Resources.DontHaveProfilePicture</div>
                                     </div>
                                 }
                                 else
@@ -77,14 +78,14 @@
                             <div class="row">
                                 <div class=" col-lg-6">
                                     <div class="fileContainer push_top_5 push_bottom_10">
-                                        <span class="glyphicon glyphicon-plus eb_blue"></span> <span id="fileNameU">Nahrat profilovu fotku</span>
+                                        <span class="glyphicon glyphicon-plus eb_blue"></span> <span id="fileNameU">@Resources.UploadProfilePicture</span>
                                         <input type="file" name="ProfilePicture" />
                                     </div>
                                 </div>
                             </div>
                         }
                         <div class="row">
-                            <div class="col-sm-12 set-font">Kontaktne udaje</div>
+                            <div class="col-sm-12 set-font">@Resources.ContactDetails</div>
                         </div>
                         <div class="row">
                             <div class="col-lg-4">
@@ -93,92 +94,92 @@
                             </div>
 
                             <div class="col-lg-4">
-                                @Html.EditorFor(model => model.UserModel.PhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg" } })
+                                @Html.EditorFor(model => model.UserModel.PhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPhoneNumber } })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.UserModel.PhoneNumber, "", new { @class = "text-danger" })</div>
                             </div>
 
                             <div class="col-lg-4">
-                                @Html.EditorFor(model => model.UserModel.AdditionalPhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Tel. Cislo" } })
+                                @Html.EditorFor(model => model.UserModel.AdditionalPhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPhoneNumber.Replace("*", string.Empty) } })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.UserModel.AdditionalPhoneNumber, "", new { @class = "text-danger" })</div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-12 set-font">Meno</div>
+                            <div class="col-sm-12 set-font">@Resources.PHName</div>
                         </div>
                         <div class="row">
                             <div class="col-lg-3">
-                                @Html.EditorFor(model => model.UserModel.Title, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Titul" } })
+                                @Html.EditorFor(model => model.UserModel.Title, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHTitle } })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.UserModel.Title, "", new { @class = "text-danger" })</div>
                             </div>
 
                             <div class="col-lg-4">
-                                @Html.EditorFor(model => model.UserModel.FirstName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Meno" } })
+                                @Html.EditorFor(model => model.UserModel.FirstName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHFirstname } })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.UserModel.FirstName, "", new { @class = "text-danger" })</div>
                             </div>
 
                             <div class="col-lg-5">
-                                @Html.EditorFor(model => model.UserModel.Surname, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Priezvisko" } })
+                                @Html.EditorFor(model => model.UserModel.Surname, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHLastName } })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.UserModel.Surname, "", new { @class = "text-danger" })</div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-12 set-font">Bydlisko</div>
+                            <div class="col-sm-12 set-font">@Resources.PHAddress</div>
                         </div>
                         <div class="row">
                             <div class="col-md-3">
-                                <input type="text" class="form-control txt-lg" id="txtPostalCode" placeholder="PSC" value="@Model.UserModel.PostalCode" />
+                                <input type="text" class="form-control txt-lg" id="txtPostalCode" placeholder="@Resources.PHPostalCode" value="@Model.UserModel.PostalCode" />
                                 @Html.HiddenFor(model => model.UserModel.PostalCode, new { @id = "hiddenPostalCode" })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.UserModel.PostalCode, "", new { @class = "text-danger" })</div>
                             </div>
 
                             <div class="col-md-6">
-                                @Html.EditorFor(model => model.UserModel.Street, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Ulica" } })
+                                @Html.EditorFor(model => model.UserModel.Street, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetName } })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.UserModel.Street, "", new { @class = "text-danger" })</div>
                             </div>
 
                             <div class="col-md-3">
-                                @Html.EditorFor(model => model.UserModel.StreetNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Cislo" } })
+                                @Html.EditorFor(model => model.UserModel.StreetNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetNumber } })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.UserModel.StreetNumber, "", new { @class = "text-danger" })</div>
                             </div>
                         </div>
 
                     </div>
                     <div class="accordion-toggle">
-                        <div class="accordion-main">Zmenit heslo</div>
+                        <div class="accordion-main">@Resources.ChangePassword</div>
                     </div>
                     <div class="hidden-toggle accordion-content">
                         <div class="row">
                             <div class="col-md-5">
-                                @Html.EditorFor(model => model.PasswordModel.OldPassword, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Stare heslo* " } })
+                                @Html.EditorFor(model => model.PasswordModel.OldPassword, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHOldPassword } })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.PasswordModel.OldPassword, "", new { @class = "text-danger" })</div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-5">
-                                @Html.EditorFor(model => model.PasswordModel.NewPassword, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Nove heslo* " } })
+                                @Html.EditorFor(model => model.PasswordModel.NewPassword, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHOldPassword } })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.PasswordModel.NewPassword, "", new { @class = "text-danger" })</div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-5">
-                                @Html.EditorFor(model => model.PasswordModel.RepeatNewPassword, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Nove heslo* " } })
+                                @Html.EditorFor(model => model.PasswordModel.RepeatNewPassword, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHNewPassword } })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.PasswordModel.RepeatNewPassword, "", new { @class = "text-danger" })</div>
                             </div>
                         </div>
                     </div>
                     <div class="accordion-toggle">
-                        <div class="accordion-main">rozsirene nastavenia uctu</div>
+                        <div class="accordion-main">@Resources.ChangeAdvancedAccountSettings</div>
                     </div>
                     <div class="hidden-toggle accordion-content">
                         <div class="settings_wrapper">
-                            <div class="text_div font_16">Radius vyhladavania (km):</div>
+                            <div class="text_div font_16">@Resources.SearchRadius</div>
                             <div class="box_div">
                                 @Html.EditorFor(model => model.SearchModel.SearchRadius, new { htmlAttributes = new { @class = "form-control" } })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.SearchModel.SearchRadius, "", new { @class = "text-danger" })</div>
                             </div>
                         </div>
                         <div class="settings_wrapper">
-                            <div class="text_div font_16">Povolit vyhladavanie inzeratov a dopytov na uzemi Slovenska</div>
+                            <div class="text_div font_16">@Resources.EnableSearchInSK</div>
                             <div class="toggle_div">
                                 <label class="switch">
                                     @Html.CheckBoxFor(m => m.SearchModel.SearchInSK, new { @class = "form-control" })
@@ -187,7 +188,7 @@
                             </div>
                         </div>
                         <div class="settings_wrapper">
-                            <div class="text_div font_16">Povolit vyhladavanie inzeratov a dopytov na uzemi Ceska</div>
+                            <div class="text_div font_16">@Resources.EnableSearchInCZ</div>
                             <div class="toggle_div">
                                 <label class="switch">
                                     @Html.CheckBoxFor(m => m.SearchModel.SearchInCZ, new { @class = "form-control" })
@@ -196,7 +197,7 @@
                             </div>
                         </div>
                         <div class="settings_wrapper">
-                            <div class="text_div font_16">Povolit vyhladavanie inzeratov a dopytov na uzemi Madarska</div>
+                            <div class="text_div font_16">@Resources.EnableSearchInHU</div>
                             <div class="toggle_div">
                                 <label class="switch">
                                     @Html.CheckBoxFor(m => m.SearchModel.SearchInHU, new { @class = "form-control" })
@@ -227,17 +228,17 @@
                     }
 
                     <div class="accordion-toggle @push">
-                        <div class="accordion-main">zmenit profil firmy</div>
+                        <div class="accordion-main">@Resources.ChangeBusinessAccountProfile</div>
                     </div>
                     <div id="companyProfileDiv" class="@hiddenClass accordion-content">
                         <div class="row">
-                            <div class="col-sm-12 set-font">Profil</div>
+                            <div class="col-sm-12 set-font">@Resources.Profile</div>
                         </div>
                         <div class="row">
                             @if (Model.CompanyModel.ProfileUrl == null)
                             {
                                 <div class="col-lg-6">
-                                    <div class="tags_text">Zatial nemate profilovu fotku</div>
+                                    <div class="tags_text">@Resources.DontHaveProfilePicture</div>
                                 </div>
                             }
                             else
@@ -250,7 +251,7 @@
                         <div class="row">
                             <div class=" col-lg-6">
                                 <div class="fileContainer push_top_5 push_bottom_20">
-                                    <span class="glyphicon glyphicon-plus eb_blue"></span> <span id="fileNameC">Nahrat profilovu fotku</span>
+                                    <span class="glyphicon glyphicon-plus eb_blue"></span> <span id="fileNameC">@Resources.UploadProfilePicture</span>
                                     <input type="file" name="ProfilePicture" />
                                 </div>
                             </div>
@@ -267,61 +268,61 @@
                             </div>
 
                             <div class="col-lg-3">
-                                @Html.EditorFor(model => model.CompanyModel.CompanyDic, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Dic", @readonly = "readonly" } })
+                                @Html.EditorFor(model => model.CompanyModel.CompanyDic, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHTaxnumber, @readonly = "readonly" } })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyDic, "", new { @class = "text-danger" })</div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-12 set-font">Adresa</div>
+                            <div class="col-sm-12 set-font">@Resources.PHAddress2</div>
                         </div>
                         <div class="row">
                             <div class="col-md-3">
-                                <input type="text" class="form-control txt-lg" id="txtCompanyPostalCode" placeholder="PSC" value="@Model.CompanyModel.CompanyPostalCode" />
+                                <input type="text" class="form-control txt-lg" id="txtCompanyPostalCode" placeholder="@Resources.PHPostalCode" value="@Model.CompanyModel.CompanyPostalCode" />
                                 @Html.HiddenFor(model => model.CompanyModel.CompanyPostalCode, new { @id = "hiddenCompanyPostalCode" })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyPostalCode, "", new { @class = "text-danger" })</div>
                             </div>
 
                             <div class="col-lg-6">
-                                @Html.EditorFor(model => model.CompanyModel.CompanyStreet, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Ulica" } })
+                                @Html.EditorFor(model => model.CompanyModel.CompanyStreet, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetName } })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyStreet, "", new { @class = "text-danger" })</div>
                             </div>
 
                             <div class="col-lg-3">
-                                @Html.EditorFor(model => model.CompanyModel.CompanyStreetNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Cislo" } })
+                                @Html.EditorFor(model => model.CompanyModel.CompanyStreetNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHStreetNumber } })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyStreetNumber, "", new { @class = "text-danger" })</div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-12 set-font">Kontaktne udaje</div>
+                            <div class="col-sm-12 set-font">@Resources.ContactDetails</div>
                         </div>
                         <div class="row">
                             <div class="col-md-4">
-                                @Html.EditorFor(model => model.CompanyModel.CompanyEmail, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Email" } })
+                                @Html.EditorFor(model => model.CompanyModel.CompanyEmail, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHEmail } })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyEmail, "", new { @class = "text-danger" })</div>
                             </div>
                             <div class="col-md-4">
-                                @Html.EditorFor(model => model.CompanyModel.CompanyPhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Mobil" } })
+                                @Html.EditorFor(model => model.CompanyModel.CompanyPhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPhoneNumber } })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyPhoneNumber, "", new { @class = "text-danger" })</div>
                             </div>
 
                             <div class="col-md-4">
-                                @Html.EditorFor(model => model.CompanyModel.CompanyAdditionalPhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = "Pevna linka" } })
+                                @Html.EditorFor(model => model.CompanyModel.CompanyAdditionalPhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPhoneNumber.Replace("*", string.Empty) } })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyAdditionalPhoneNumber, "", new { @class = "text-danger" })</div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-12 set-font">Oblast podnikania</div>
+                            <div class="col-sm-12 set-font">@Resources.BusinessArea</div>
                         </div>
                         <div class="row">
                             <div class="col-md-8">
-                                @Html.EditorFor(model => model.CompanyModel.CompanyDescription, new { htmlAttributes = new { @class = "form-control txt-lg", @rows = "6", @placeholder = "Popis cinnosti" } })
+                                @Html.EditorFor(model => model.CompanyModel.CompanyDescription, new { htmlAttributes = new { @class = "form-control txt-lg", @rows = "6", @placeholder = @Resources.PHDescriptionOfActivities } })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.CompanyModel.CompanyDescription, "", new { @class = "text-danger" })</div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 resp_push_bottom_10">
                                 <div class="val-message hidden_div" id="categoryValidation"></div>
-                                <div class="tags_text">Vasa oblast podnikania:</div>
+                                <div class="tags_text">@Resources.BusinessAreas</div>
                                 @{ int categoryId = 1;}
                                 @foreach (var category in Model.CurrentCategories)
                                 {
@@ -334,12 +335,12 @@
                             </div>
                         </div>
                         <div class="edit_container push_bottom_20">
-                            <span class="glyphicon glyphicon-plus eb_blue"><input type="button" id="newCategoryBtn" value="Pridat oblast podnikania" class="btn-no-border" /></span>
+                            <span class="glyphicon glyphicon-plus eb_blue"><input type="button" id="newCategoryBtn" value="@Resources.AddBusinessArea" class="btn-no-border" /></span>
                         </div>
                         <div class="edit_container">
                             <div id="categoryDiv" class="col-md-8 hidden_div">
                                 <div class="row">
-                                    <div class="tags_text">Vyberte novu kategoriu:</div>
+                                    <div class="tags_text">@Resources.AddBusinessArea</div>
                                 </div>
                                 <div class="row">
                                     @Html.DropDownListFor(m => m.CompanyModel.Categories.SelectedCategories, Model.CompanyModel.Categories.AllCategories, new { @class = "form-control chosen-select", @multiple = "true" })
@@ -349,12 +350,12 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-sm-12 set-font">Jazyky</div>
+                            <div class="col-sm-12 set-font">@Resources.Languages</div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 resp_push_bottom_10">
                                 <div class="val-message hidden_div" id="languageValidation"></div>
-                                <div class="tags_text">Vase jazyky:</div>
+                                <div class="tags_text">@Resources.YourLanguages</div>
                                 @{ int languageId = 1;}
                                 @foreach (var language in Model.CurrentLanguages)
                                 {
@@ -367,12 +368,12 @@
                             </div>
                         </div>
                         <div class="edit_container push_bottom_20">
-                            <span class="glyphicon glyphicon-plus eb_blue"><input type="button" id="newLanguageBtn" value="Pridat dalsie jazyky" class="btn-no-border" /></span>
+                            <span class="glyphicon glyphicon-plus eb_blue"><input type="button" id="newLanguageBtn" value="@Resources.AddAdditionalLanguages" class="btn-no-border" /></span>
                         </div>
                         <div class="edit_container">
                             <div id="languageDiv" class="col-md-8 hidden_div">
                                 <div class="row">
-                                    <div class="tags_text">Vyberte novy jazyk:</div>
+                                    <div class="tags_text">@Resources.AddAdditionalLanguages</div>
                                 </div>
                                 <div class="row">
                                     @Html.DropDownListFor(m => m.CompanyModel.Languages.SelectedLanguages, Model.CompanyModel.Languages.AllLanguages, new { @class = "form-control chosen-select", @multiple = "true" })
@@ -383,18 +384,18 @@
                     </div>
 
                     <div class="accordion-toggle">
-                        <div class="accordion-main">nastavenia firemneho uctu</div>
+                        <div class="accordion-main">@Resources.ChangeBusinessAccountSettings</div>
                     </div>
                     <div class="hidden-toggle accordion-content">
                         <div class="settings_wrapper">
-                            <div class="text_div font_16">Radius vyhladavania (km):</div>
+                            <div class="text_div font_16">@Resources.SearchRadius</div>
                             <div class="box_div">
                                 @Html.EditorFor(model => model.SearchModel.SearchRadius, new { htmlAttributes = new { @class = "form-control" } })
                                 <div class="val-message">@Html.ValidationMessageFor(model => model.SearchModel.SearchRadius, "", new { @class = "text-danger" })</div>
                             </div>
                         </div>
                         <div class="settings_wrapper">
-                            <div class="text_div font_16">Povolit vyhladavanie inzeratov a dopytov na uzemi Slovenska</div>
+                            <div class="text_div font_16">@Resources.EnableSearchInSK</div>
                             <div class="toggle_div">
                                 <label class="switch">
                                     @Html.CheckBoxFor(m => m.SearchModel.SearchInSK, new { @class = "form-control" })
@@ -403,7 +404,7 @@
                             </div>
                         </div>
                         <div class="settings_wrapper">
-                            <div class="text_div font_16">Povolit vyhladavanie inzeratov a dopytov na uzemi Ceska</div>
+                            <div class="text_div font_16">@Resources.EnableSearchInCZ</div>
                             <div class="toggle_div">
                                 <label class="switch">
                                     @Html.CheckBoxFor(m => m.SearchModel.SearchInCZ, new { @class = "form-control" })
@@ -412,7 +413,7 @@
                             </div>
                         </div>
                         <div class="settings_wrapper">
-                            <div class="text_div font_16">Povolit vyhladavanie inzeratov a dopytov na uzemi Madarska</div>
+                            <div class="text_div font_16">@Resources.EnableSearchInHU</div>
                             <div class="toggle_div">
                                 <label class="switch">
                                     @Html.CheckBoxFor(m => m.SearchModel.SearchInHU, new { @class = "form-control" })
@@ -422,7 +423,7 @@
                         </div>
                         <div class="@visible">
                             <div class="settings_wrapper">
-                                <div class="text_div font_16">Povolit notifikacie pre ucet</div>
+                                <div class="text_div font_16">@Resources.EnableNotificationsForTheAccount</div>
                                 <div class="toggle_div">
                                     <label class="switch">
                                         @Html.CheckBoxFor(m => m.NotificationModel.NotifyCommentOnAccount, new { @class = "form-control" })
@@ -431,7 +432,7 @@
                                 </div>
                             </div>
                             <div class="settings_wrapper">
-                                <div class="text_div font_16">Povolit notifikacie pre prispevky</div>
+                                <div class="text_div font_16">@Resources.EnableNotificationsForPosts</div>
                                 <div class="toggle_div">
                                     <label class="switch">
                                         @Html.CheckBoxFor(m => m.NotificationModel.NotifyCommentOnContribution, new { @class = "form-control" })
@@ -440,7 +441,7 @@
                                 </div>
                             </div>
                             <div class="settings_wrapper">
-                                <div class="text_div font_16">Posielat notifikacie vsetky clenom</div>
+                                <div class="text_div font_16">@Resources.SendNotificationsToAllMembers</div>
                                 <div class="toggle_div">
                                     <label class="switch">
                                         @Html.CheckBoxFor(m => m.NotificationModel.NotifyAllMember, new { @class = "form-control" })
@@ -475,17 +476,17 @@
                     {
                         <div class="@visible">
                             <div class="accordion-toggle">
-                                <div class="accordion-main">Editovat clenov firemneho uctu</div>
+                                <div class="accordion-main">@Resources.EditBusinessAccountMembers</div>
                             </div>
 
                             <div id="editMemberDiv" class="hidden-toggle accordion-content">
                                 <div class="edit_container">
-                                    <input type="button" id="newMemberBtn" value="Pridat clena" class="form-btn-transparent" />
-                                    <input type="button" id="newRoleBtn" value="Pridat rolu" class="form-btn-transparent" />
+                                    <input type="button" id="newMemberBtn" value="@Resources.AddMember" class="form-btn-transparent" />
+                                    <input type="button" id="newRoleBtn" value="@Resources.AddRole" class="form-btn-transparent" />
                                 </div>
                                 <div id="newMember" class="edit_container hidden_div push_top_20 push_bottom_20">
                                     <div class="col-md-4">
-                                        @Html.EditorFor(model => model.EditMembersAndRolesModel.MemberEmail, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "newMemberText", @placeholder = "Email pouzivatela" } })
+                                        @Html.EditorFor(model => model.EditMembersAndRolesModel.MemberEmail, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "newMemberText", @placeholder = @Resources.UserEmail } })
                                         <div class="val-message text-danger" id="memberValidation"></div>
                                     </div>
                                     <div class="col-md-4">
@@ -493,13 +494,13 @@
                                         <div class="val-message"></div>
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="button" value="Pridat" onclick="AddNewMember()" class="form-btn" />
+                                        <input type="button" value="@Resources.Add" onclick="AddNewMember()" class="form-btn" />
                                     </div>
                                 </div>
 
                                 <div id="newRole" class="edit_container hidden_div push_top_20 push_bottom_20">
                                     <div class="col-md-4">
-                                        @Html.EditorFor(model => model.EditMembersAndRolesModel.RoleName, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "newRoleName", @placeholder = "Nazov role" } })
+                                        @Html.EditorFor(model => model.EditMembersAndRolesModel.RoleName, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "newRoleName", @placeholder = @Resources.RoleName } })
                                         <div class="val-message">@Html.ValidationMessageFor(model => model.EditMembersAndRolesModel.RoleName, "", new { @class = "text-danger" })</div>
                                     </div>
                                     <div class="col-md-3">
@@ -510,7 +511,7 @@
                                                     <span class="slider_small"></span>
                                                 </label>
                                             </div>
-                                            <div class="role_text_div font_14">Add attachments</div>
+                                            <div class="role_text_div font_14">@Resources.AddAttachments</div>
                                         </div>
                                         <div class="role_settings_wrapper">
                                             <div class="role_toggle_div">
@@ -519,7 +520,7 @@
                                                     <span class="slider_small"></span>
                                                 </label>
                                             </div>
-                                            <div class="role_text_div font_14">Add gallery</div>
+                                            <div class="role_text_div font_14">@Resources.AddGallery</div>
                                         </div>
                                         <div class="role_settings_wrapper">
                                             <div class="role_toggle_div">
@@ -528,7 +529,7 @@
                                                     <span class="slider_small"></span>
                                                 </label>
                                             </div>
-                                            <div class="role_text_div font_14">Add member</div>
+                                            <div class="role_text_div font_14">@Resources.AddMember</div>
                                         </div>
                                         <div class="role_settings_wrapper">
                                             <div class="role_toggle_div">
@@ -537,7 +538,7 @@
                                                     <span class="slider_small"></span>
                                                 </label>
                                             </div>
-                                            <div class="role_text_div font_14">Comment</div>
+                                            <div class="role_text_div font_14">@Resources.Comment</div>
                                         </div>
                                         <div class="role_settings_wrapper">
                                             <div class="role_toggle_div">
@@ -546,7 +547,7 @@
                                                     <span class="slider_small"></span>
                                                 </label>
                                             </div>
-                                            <div class="role_text_div font_14">Create demand</div>
+                                            <div class="role_text_div font_14">@Resources.CreateDemand</div>
                                         </div>
                                         <div class="role_settings_wrapper">
                                             <div class="role_toggle_div">
@@ -555,7 +556,7 @@
                                                     <span class="slider_small"></span>
                                                 </label>
                                             </div>
-                                            <div class="role_text_div font_14">Change settings</div>
+                                            <div class="role_text_div font_14">@Resources.ChangeSettings</div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -566,7 +567,7 @@
                                                     <span class="slider_small"></span>
                                                 </label>
                                             </div>
-                                            <div class="role_text_div font_14">Delete demand</div>
+                                            <div class="role_text_div font_14">@Resources.DeleteDemand</div>
                                         </div>
                                         <div class="role_settings_wrapper">
                                             <div class="role_toggle_div">
@@ -575,7 +576,7 @@
                                                     <span class="slider_small"></span>
                                                 </label>
                                             </div>
-                                            <div class="role_text_div font_14">Edit demand</div>
+                                            <div class="role_text_div font_14">@Resources.EditDemand</div>
                                         </div>
                                         <div class="role_settings_wrapper">
                                             <div class="role_toggle_div">
@@ -584,7 +585,7 @@
                                                     <span class="slider_small"></span>
                                                 </label>
                                             </div>
-                                            <div class="role_text_div font_14">Remove attachments</div>
+                                            <div class="role_text_div font_14">@Resources.RemoveAttachments</div>
                                         </div>
                                         <div class="role_settings_wrapper">
                                             <div class="role_toggle_div">
@@ -593,7 +594,7 @@
                                                     <span class="slider_small"></span>
                                                 </label>
                                             </div>
-                                            <div class="role_text_div font_14">Remove gallery</div>
+                                            <div class="role_text_div font_14">@Resources.RemoveGallery</div>
                                         </div>
                                         <div class="role_settings_wrapper">
                                             <div class="role_toggle_div">
@@ -602,15 +603,15 @@
                                                     <span class="slider_small"></span>
                                                 </label>
                                             </div>
-                                            <div class="role_text_div font_14">Remove member</div>
+                                            <div class="role_text_div font_14">@Resources.RemoveMember</div>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <input type="button" onclick="AddNewRole()" value="Pridat" class="form-btn" />
+                                        <input type="button" onclick="AddNewRole()" value="@Resources.Add" class="form-btn" />
                                     </div>
                                 </div>
                                 <div class="member_list_text">
-                                    Zoznam clenov:
+                                    @Resources.ListOfMembers
                                 </div>
                                 @if (Model.EditMembersAndRolesModel.UserRoles.Count() > 0)
                                 {
@@ -628,7 +629,7 @@
                                                 @if (@companySession.CompanyPermissions.Contains(CompanyPermission.RemoveMember.ToString()))
                                                 {
                                                     <div class="member_blocks member_right">
-                                                        <input type="button" onclick="DeleteMember('@Model.EditMembersAndRolesModel.UserRoles[i].UserEmail')" value="Zmazat" class="form-btn" />
+                                                        <input type="button" onclick="DeleteMember('@Model.EditMembersAndRolesModel.UserRoles[i].UserEmail')" value="@Resources.Delete" class="form-btn" />
                                                     </div>
                                                 }
                                             </div>
@@ -637,21 +638,21 @@
                                         {
                                             if (Model.EditMembersAndRolesModel.UserRoles.Count() == 1)
                                             {
-                                                <h4>Momentalne ste jediny clen</h4>
+                                                <h4>@Resources.YouAreTheOnlyMember</h4>
                                             }
                                         }
                                     }
                                 }
                                 else
                                 {
-                                    <h4>Momentalne nemate ziadnych clenov</h4>
+                                                <h4>@Resources.NoMembersAtm</h4>
                                 }
                             </div>
                         </div>
                     }
                 }
                 <div class="accordion-content push_top_20 push_bottom_20">
-                    <input type="submit" value="ZMENIT" class="form-btn-transparent" style="width:200px" />
+                    <input type="submit" value="@Resources.Change" class="form-btn-transparent" style="width:200px" />
                 </div>
             </div>
         </div>
