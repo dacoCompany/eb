@@ -16,7 +16,6 @@
         <EntityTypeShape EntityType="testDBModel.CompanyPermissionDbo" Width="1.5" PointX="6" PointY="36" />
         <EntityTypeShape EntityType="testDBModel.CompanyRoleDbo" Width="1.5" PointX="3" PointY="3.875" />
         <EntityTypeShape EntityType="testDBModel.CompanyRole2CompanyPermissionDbo" Width="1.5" PointX="8.25" PointY="3.875" />
-        <EntityTypeShape EntityType="testDBModel.CompanySettingDbo" Width="1.5" PointX="0.75" PointY="9.375" />
         <EntityTypeShape EntityType="testDBModel.CompanyTypeDbo" Width="1.5" PointX="0.75" PointY="13.875" />
         <EntityTypeShape EntityType="testDBModel.LanguageDbo" Width="1.5" PointX="3" PointY="28.875" />
         <EntityTypeShape EntityType="testDBModel.LocationDbo" Width="1.5" PointX="6" PointY="0.75" />
@@ -26,7 +25,6 @@
         <EntityTypeShape EntityType="testDBModel.UserPermissionDbo" Width="1.5" PointX="6.75" PointY="28.25" />
         <EntityTypeShape EntityType="testDBModel.UserRoleDbo" Width="1.5" PointX="3.75" PointY="25.125" />
         <EntityTypeShape EntityType="testDBModel.UserRole2UserPermissionDbo" Width="1.5" PointX="9" PointY="25" />
-        <EntityTypeShape EntityType="testDBModel.UserSettingDbo" Width="1.5" PointX="3.75" PointY="21.25" />
         <EntityTypeShape EntityType="testDBModel.AllDeviceDbo" Width="1.5" PointX="10.75" PointY="3.25" />
         <AssociationConnector Association="testDBModel.FKAddressCompanyDetailsId" />
         <AssociationConnector Association="testDBModel.FKAddressLocationId" />
@@ -38,7 +36,6 @@
         <AssociationConnector Association="testDBModel.FKCategory2CompanyDetailsCompanyDetails" />
         <AssociationConnector Association="testDBModel.FKCompanyDetails" />
         <AssociationConnector Association="testDBModel.FKCompanyDetails2LanguagesCompanyDetail" />
-        <AssociationConnector Association="testDBModel.FKCompanySettings" />
         <AssociationConnector Association="testDBModel.FKCompanyType" />
         <AssociationConnector Association="testDBModel.FKSubCategory2CompanyDetailsCompanyDetails" />
         <AssociationConnector Association="testDBModel.FKLanguageCompanyDetails2Languages" />
@@ -48,9 +45,13 @@
         <AssociationConnector Association="testDBModel.FKCompanyRole" />
         <AssociationConnector Association="testDBModel.FKSubCategory2CompanyDetailsSubCategory" />
         <AssociationConnector Association="testDBModel.FKUserDetailsUserRole" />
-        <AssociationConnector Association="testDBModel.FKUserSettings" />
         <AssociationConnector Association="testDBModel.FKUserPermission" />
         <AssociationConnector Association="testDBModel.FKUserRole" />
+        <EntityTypeShape EntityType="testDBModel.CompanySettingDbo" Width="1.5" PointX="0.75" PointY="9.25" />
+        <EntityTypeShape EntityType="testDBModel.EmailTemplateDbo" Width="1.5" PointX="10.375" PointY="11.75" />
+        <EntityTypeShape EntityType="testDBModel.UserSettingDbo" Width="1.5" PointX="10.375" PointY="7" />
+        <AssociationConnector Association="testDBModel.FKCompanySettings" />
+        <AssociationConnector Association="testDBModel.FKUserSettings" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -12,22 +12,20 @@ namespace Infrastructure.Common.DB
     using System;
     using System.Collections.Generic;
     
-    public partial class AddressDbo : IEntity
+    public partial class EmailTemplateDbo : IEntity
     {
         public int Id { get; set; }
-        public string Street { get; set; }
-        public string Number { get; set; }
-        public Nullable<bool> IsDeliveryAddress { get; set; }
-        public Nullable<bool> IsBillingAddress { get; set; }
+        public string Type { get; set; }
+        public string SkSubject { get; set; }
+        public string SkBody { get; set; }
+        public string CzSubject { get; set; }
+        public string CzBody { get; set; }
+        public string HuSubject { get; set; }
+        public string HuBody { get; set; }
+        public string EnSubject { get; set; }
+        public string EnBody { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
-        public int LocationId { get; set; }
-        public Nullable<int> UserDetailsId { get; set; }
-        public Nullable<int> CompanyDetailsId { get; set; }
-    
-        public virtual CompanyDetailDbo CompanyDetail { get; set; }
-        public virtual LocationDbo Location { get; set; }
-        public virtual UserDetailDbo UserDetail { get; set; }
     }
 }

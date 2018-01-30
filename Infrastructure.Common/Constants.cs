@@ -11,6 +11,7 @@ namespace Infrastructure.Common
         public const string SlovakiaShortCode = "SK";
         public const string CzechiaShortCode = "CZ";
         public const string HungaryShortCode = "HU";
+        public const string EnglishCultureInfo = "en-US";
         public const int DefaultRadius = 30;
     }
 }

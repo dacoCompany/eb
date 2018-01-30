@@ -49,6 +49,13 @@ namespace Web.eBado.Controllers
                     var requestCookie = Request.Cookies["lang"];
                     requestCookie.Value = language;
                     Response.SetCookie(requestCookie);
+                    var currentSession = Session["User"] as SessionModel;
+                    //set new language in user settings if user is logged in
+                    if (currentSession != null)
+                    {
+                        unitOfWork.UserDetailsRepository.FindFirstOrDefault(ud => ud.Id == currentSession.Id).UserSetting.Language = language;
+                        unitOfWork.Commit();
+                    }
                     return new HttpStatusCodeResult(HttpStatusCode.Redirect);
                 }
             }

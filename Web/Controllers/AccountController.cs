@@ -211,6 +211,9 @@ namespace Web.eBado.Controllers
                 var userDetail = unitOfWork.UserDetailsRepository.FindFirstOrDefault(ud => ud.Email.ToLower().Equals(model.Email.ToLower()));
                 var session = sessionHelper.SetUserSession(userDetail.Id);
 
+                string language = userDetail.UserSetting.Language;
+                sharedHelper.GetCultureInfo(language ?? Constants.EnglishCultureInfo);
+
                 //FormsAuthentication.SetAuthCookie(session.Email, true);
                 Session["User"] = session;
 
