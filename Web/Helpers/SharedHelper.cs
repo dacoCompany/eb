@@ -5,6 +5,7 @@ using Infrastructure.Common.Models;
 using Infrastructure.Common.Models.Cache;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -253,6 +254,23 @@ namespace Web.eBado.Helpers
             var city = !string.IsNullOrEmpty(location.District) ? location.District : location.City;
             return $"{baseMapUrl}{address.Street}+{address.Number},+{location.PostalCode.Replace(" ", "+")}+{city}";
         }
+
+        public CultureInfo GetCultureInfo(string lang)
+        {
+            CultureInfo ci;
+            try
+            {
+                ci = new CultureInfo(lang);
+            }
+            catch (CultureNotFoundException exception)
+            {
+                Console.WriteLine(exception);
+                string langName = "en-US";
+                ci = new CultureInfo(langName);
+            }
+            return ci;
+        }
+
         private List<CachedAllCategoriesModel> GetCachedCategoriesInListItem()
         {
             var cachedCategories = httpCache.GetData<List<CachedAllCategoriesModel>>(CacheKeys.CategoryKey);

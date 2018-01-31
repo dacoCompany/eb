@@ -35,7 +35,6 @@ namespace Infrastructure.Common.DB
         public virtual DbSet<CompanyPermissionDbo> CompanyPermissionDboes { get; set; }
         public virtual DbSet<CompanyRoleDbo> CompanyRoleDboes { get; set; }
         public virtual DbSet<CompanyRole2CompanyPermissionDbo> CompanyRole2CompanyPermissionDbo { get; set; }
-        public virtual DbSet<CompanySettingDbo> CompanySettingDboes { get; set; }
         public virtual DbSet<CompanyTypeDbo> CompanyTypeDboes { get; set; }
         public virtual DbSet<LanguageDbo> LanguageDboes { get; set; }
         public virtual DbSet<LocationDbo> LocationDboes { get; set; }
@@ -45,7 +44,9 @@ namespace Infrastructure.Common.DB
         public virtual DbSet<UserPermissionDbo> UserPermissionDboes { get; set; }
         public virtual DbSet<UserRoleDbo> UserRoleDboes { get; set; }
         public virtual DbSet<UserRole2UserPermissionDbo> UserRole2UserPermissionDbo { get; set; }
-        public virtual DbSet<UserSettingDbo> UserSettingDboes { get; set; }
         public virtual DbSet<AllDeviceDbo> AllDeviceDboes { get; set; }
+        public virtual DbSet<CompanySettingDbo> CompanySettingDboes { get; set; }
+        public virtual DbSet<EmailTemplateDbo> EmailTemplateDboes { get; set; }
+        public virtual DbSet<UserSettingDbo> UserSettingDboes { get; set; }
     }
 }

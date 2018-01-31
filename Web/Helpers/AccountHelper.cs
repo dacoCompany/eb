@@ -92,6 +92,8 @@ namespace Web.eBado.Helpers
                     IsValidated = true
                 };
 
+                var language = HttpContext.Current.Request.Cookies["lang"];
+
                 userDetail.UserSetting = new UserSettingDbo
                 {
                     SearchInCZ = true,
@@ -99,7 +101,8 @@ namespace Web.eBado.Helpers
                     SearchInHU = true,
                     SearchRadius = 30,
                     NotifyCommentOnContribution = true,
-                    NotifyCommentOnAccount = true
+                    NotifyCommentOnAccount = true,
+                    Language = language.Value ?? Constants.EnglishCultureInfo
                 };
 
                 userDetail.Addresses.Add(new AddressDbo
@@ -132,7 +135,8 @@ namespace Web.eBado.Helpers
                     SearchInHU = true,
                     SearchInSK = true,
                     SearchInCZ = true,
-                    SearchRadius = 100
+                    SearchRadius = 100,
+                    Language = language.Value ?? Constants.EnglishCultureInfo
                 };
 
                 companyDetail.CompanyDetails2UserDetails.Add(new CompanyDetails2UserDetailsDbo
@@ -183,6 +187,8 @@ namespace Web.eBado.Helpers
                     IsValidated = true
                 };
 
+                var language = HttpContext.Current.Request.Cookies["lang"];
+
                 userDetails.UserSetting = new UserSettingDbo
                 {
                     SearchInCZ = true,
@@ -190,7 +196,8 @@ namespace Web.eBado.Helpers
                     SearchInHU = true,
                     SearchRadius = 30,
                     NotifyCommentOnContribution = true,
-                    NotifyCommentOnAccount = true
+                    NotifyCommentOnAccount = true,
+                    Language = language.Value ?? Constants.EnglishCultureInfo
                 };
 
                 uow.UserDetailsRepository.Add(userDetails);
@@ -247,6 +254,8 @@ namespace Web.eBado.Helpers
                 SetSelectedCategories(selectedCategories, companyDetails);
             }
 
+            var language = HttpContext.Current.Request.Cookies["lang"];
+
             companyDetails.CompanySetting = new CompanySettingDbo
             {
                 NotifyCommentOnAccount = true,
@@ -255,7 +264,8 @@ namespace Web.eBado.Helpers
                 SearchInHU = true,
                 SearchInSK = true,
                 SearchInCZ = true,
-                SearchRadius = 100
+                SearchRadius = 100,
+                Language = language.Value ?? Constants.EnglishCultureInfo
             };
 
             uow.CompanyDetailsRepository.Add(companyDetails);
