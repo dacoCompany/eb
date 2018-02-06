@@ -63,7 +63,7 @@ namespace Web.eBado.Helpers
                     ProfileUrl = company.ProfilePictureUrl
                 });
 
-            model.CompanyModel = companyDetails.ToList().ToPagedList(model.Page ?? 1, 10);
+            model.CompanyModel = companyDetails.ToPagedList(model.Page ?? 1, 10);
             return model;
         }
 
