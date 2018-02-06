@@ -26,8 +26,6 @@ namespace Web.eBado.Controllers
     [RoutePrefix("FileUpload")]
     public class FileUploadController : Controller
     {
-        FilesHelper filesHelper;
-
         private readonly IConfiguration configuration;
         private readonly IUnitOfWork unitOfWork;
         private readonly IFilesBusinessObjects filesBo;
@@ -37,17 +35,6 @@ namespace Web.eBado.Controllers
             this.configuration = configuration;
             this.unitOfWork = unitOfWork;
             this.filesBo = filesBo;
-        }
-
-        public FilesViewModel Show()
-        {
-            JsonFiles ListOfFiles = filesHelper.GetFileList();
-            var model = new FilesViewModel()
-            {
-                Files = ListOfFiles.files
-            };
-
-            return model;
         }
 
         [HttpPost]
