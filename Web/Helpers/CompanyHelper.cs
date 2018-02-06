@@ -60,10 +60,11 @@ namespace Web.eBado.Helpers
                     : company.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value).Location.City,
                     AllSelectedCategories = company.Category2CompanyDetails.Where(c => c.IsActive).Select(c => c.Category.Name)
                     .Concat(company.SubCategory2CompanyDetails.Where(s => s.IsActive).Select(s => s.SubCategory.Name)),
-                    ProfileUrl = company.ProfilePictureUrl
+                    ProfileUrl = company.ProfilePictureUrl,
+                    DateRegistered = company.DateCreated.Value
                 });
 
-            model.CompanyModel = companyDetails.ToPagedList(model.Page ?? 1, 10);
+            model.CompanyModel = companyDetails.OrderBy(cd=>cd.DateRegistered).ToPagedList(model.Page ?? 1, 10);
             return model;
         }
 
@@ -88,7 +89,8 @@ namespace Web.eBado.Helpers
                 CompanyStreet = companyAddress.Street,
                 CompanyStreetNumber = companyAddress.Number,
                 CompanyType = sharedHelper.GetCompanyType(company.CompanyType.Name),
-                ProfileUrl = company.ProfilePictureUrl
+                ProfileUrl = company.ProfilePictureUrl,
+                DateRegistered = company.DateCreated.Value
             };
 
             var batches = company.BatchAttachments.WhereActive();

@@ -315,6 +315,11 @@
     margin-top:10px;
 }
 
+.register_text{
+font-size:11px;
+font-style:italic
+}
+
 @media screen and (max-width: 768px) {
     .text-right_resp {
         text-align: center;
