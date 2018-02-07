@@ -3,10 +3,13 @@
 @model Web.eBado.Models.Account.RegistrationModel
 
 @{
-    ViewBag.Title = "RegisterUser";
+    Layout = null;
 }
 
-@Scripts.Render("~/bundles/jquery_autocomplete")
+@Styles.Render("~/Content/css")
+@Scripts.Render("~/bundles/jquery_base")
+@Styles.Render("~/Content/login")
+
 <script src='https://www.google.com/recaptcha/api.js'></script>
 <script>
     function onSubmit(token) {
@@ -17,55 +20,83 @@
 @using (Html.BeginForm("RegisterUser", "Account", FormMethod.Post, new { id = "htmlForm" }))
 {
     @Html.AntiForgeryToken()
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@ViewBag.Title - My ASP.NET Application</title>
+    </head>
+    <body>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <div class="main">
+            <div class="container">
+                <div class="col-lg-3 col-md-3 col-sm-2"></div>
+                <div class="col-lg-7 col-md-7 col-sm-8">
+                    <div class="logo">
+                        <img src="https://orig00.deviantart.net/2991/f/2013/211/e/5/skype_logo___tsubasa_guild_by_tiesiy-d6ftdie.png" alt="Logo">
+                    </div>
+                    <div class="row loginbox">
+                        <div class="col-lg-12 centerSign">
+                            <span class="singtext">Registracia</span>
+                        </div>
+                        <div class="col-sm-12 fixed_height_15"></div>
+                        <div class="card">
+                            @AccountHelper.RegisterMenu(Url, ViewContext.RouteData.Values["Action"].ToString())
+                            <!-- Tab panes -->
+                            <div class="col-sm-12 fixed_height_10"></div>
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="basic">
+                                    <form>
+                                        <div class="form-group col-sm-6">
+                                            @Html.EditorFor(model => model.UserModel.Email, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHEmail } })
+                                            <label class="label-form" for="email">
+                                                @Html.ValidationMessageFor(model => model.UserModel.Email)
+                                            </label>
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            @Html.EditorFor(model => model.UserModel.PhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPhoneNumber } })
+                                            <label class="label-form" for="email">
+                                                @Html.ValidationMessagesFor(model => model.UserModel.PhoneNumber)
+                                            </label>
+                                        </div>
 
-    <div class="container push_top_30">
-        <div class="col-md-2"></div>
-        <div class="row">
-            <div class="col-md-7">
-                <div class="card">
-                    @AccountHelper.RegisterMenu(Url, ViewContext.RouteData.Values["Action"].ToString())
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="basic">
-                            <form>
-                                <div class="col-sm-12 reg-font">@Resources.LoginInfo</div>
-                                <hr class="col-sm-12 transparent" />
-                                <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.UserModel.Email, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHEmail } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessageFor(model => model.UserModel.Email)
-                                    </label>
+                                        <div class="col-sm-12 reg-font"></div>
+                                        <div class="form-group col-sm-6">
+                                            @Html.EditorFor(model => model.UserModel.Password, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPassword } })
+                                            <label class="label-form" for="email">
+                                                @Html.ValidationMessagesFor(model => model.UserModel.Password)
+                                            </label>
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            @Html.EditorFor(model => model.UserModel.RepeatPassword, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHRepeatPassword } })
+                                            <label class="label-form" for="email">
+                                                @Html.ValidationMessagesFor(model => model.UserModel.RepeatPassword)
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-12 text-center">
+                                            <button id="MyButton" class="g-recaptcha form-btn col-sm-4" data-sitekey="@System.Configuration.ConfigurationManager.AppSettings["ReCaptcha_PublicKey"]" data-callback="onSubmit">@Resources.Register2</button>
+                                        </div>
+                                    </form>
                                 </div>
-                                <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.UserModel.PhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPhoneNumber } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessagesFor(model => model.UserModel.PhoneNumber)
-                                    </label>
-                                </div>
-
-                                <div class="col-sm-12 reg-font"></div>
-                                <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.UserModel.Password, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPassword } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessagesFor(model => model.UserModel.Password)
-                                    </label>
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.UserModel.RepeatPassword, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHRepeatPassword } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessagesFor(model => model.UserModel.RepeatPassword)
-                                    </label>
-                                </div>
-                               
-                                <button id="MyButton" class="g-recaptcha form-btn col-sm-12" data-sitekey="@System.Configuration.ConfigurationManager.AppSettings["ReCaptcha_PublicKey"]" data-callback="onSubmit">@Resources.Register2</button>
-                            </form>
+                            </div>
                         </div>
                     </div>
+                    <div class="row forGotPassword">
+                        <a href="@Url.Action("Login","Account")">Uz mam vytvoreny ucet, chcem sa <span class="sign_color">prihlasit</span></a>
+                    </div>
+                    <br>
+                    <br>
+                    <footer class="footer">
+                        <a href='#'>@Resources.TermsOfUse</a> | 
+                        <a href='#'>@Resources.PrivacyPolicy</a> | 
+                        <a href='#'>@Resources.ContactUs</a>
+                        <p>&copy; @DateTime.Now.Year - eBado Company - @Resources.Copyright</p>
+                    </footer>
                 </div>
+                <div class="col-lg-3 col-md-3 col-sm-2"></div>
             </div>
         </div>
-    </div>
-
-   @Scripts.Render("~/bundles/postalCode")
+    </body>
+</html>
 }
 

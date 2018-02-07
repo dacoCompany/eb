@@ -2,35 +2,37 @@
 @using Infrastructure.Resources
 @using Web.eBado
 @helper SettingsMenu(UrlHelper Url, string viewType, Web.eBado.Models.Shared.SessionModel session)
-{
-var company = session.Companies.FirstOrDefault(c => c.IsActive);
-<div class="tab push_bottom_10">
-    <button type="button" name="btn" class="@(viewType == "MyAdvertisements" ? "active" : "")" onclick="location.href='@Url.Action("MyAdvertisements", "Account")'">@Resources.MyAds.ToUpper()<span class="badge badge_color pull-right">1</span></button>
-    <button type="button" name="btn" class="@(viewType == "MyAdvertisements" ? "active" : "")" onclick="location.href='@Url.Action("MyAdvertisements", "Account")'">@Resources.MyDemands.ToUpper()<span class="badge badge_color pull-right">1</span></button>
-    @if (company != null)
     {
-    <button type="button" name="btn" class="@(viewType == "MyAdvertisements" ? "active" : "")" onclick="location.href='@Url.Action("MyAdvertisements", "Account")'">@Resources.MyRatings.ToUpper()<span class="badge badge_color pull-right">1</span></button>
-    }
-    @if (company == null)
-    {
-    <button type="button" name="btn" class="@(viewType == "MyAdvertisements" ? "active" : "")" onclick="location.href='@Url.Action("MyAdvertisements", "Account")'">@Resources.AddAccount.ToUpper()</button>
-    }
-    @if (company != null)
-    {
-    <button type="button" name="btn" class="@(viewType == "BatchAccountGallery" ? "active" : "")" onclick="location.href='@Url.Action("BatchAccountGallery", "Account")'">@Resources.Gallery.ToUpper()<span class="badge badge_color pull-right">1</span></button>
-    }
-    <button type="button" name="btn" class="@(viewType == "ChangeSettings" ? "active" : "")" onclick="location.href='@Url.Action("ChangeSettings", "Account")'">@Resources.Settings.ToUpper()</button>
-</div>
+        var company = session.Companies.FirstOrDefault(c => c.IsActive);
+        <div class="tab push_bottom_10">
+            <button type="button" name="btn" class="@(viewType == "MyAdvertisements" ? "active" : "")" onclick="location.href='@Url.Action("MyAdvertisements", "Account")'">@Resources.MyAds.ToUpper()<span class="badge badge_color pull-right">1</span></button>
+            <button type="button" name="btn" class="@(viewType == "MyAdvertisements" ? "active" : "")" onclick="location.href='@Url.Action("MyAdvertisements", "Account")'">@Resources.MyDemands.ToUpper()<span class="badge badge_color pull-right">1</span></button>
+            @if (company != null)
+            {
+                <button type="button" name="btn" class="@(viewType == "MyAdvertisements" ? "active" : "")" onclick="location.href='@Url.Action("MyAdvertisements", "Account")'">@Resources.MyRatings.ToUpper()<span class="badge badge_color pull-right">1</span></button>
+            }
+            @if (company == null)
+            {
+                <button type="button" name="btn" class="@(viewType == "MyAdvertisements" ? "active" : "")" onclick="location.href='@Url.Action("MyAdvertisements", "Account")'">@Resources.AddAccount.ToUpper()</button>
+            }
+            @if (company != null)
+            {
+                <button type="button" name="btn" class="@(viewType == "BatchAccountGallery" ? "active" : "")" onclick="location.href='@Url.Action("BatchAccountGallery", "Account")'">@Resources.Gallery.ToUpper()<span class="badge badge_color pull-right">1</span></button>
+            }
+            <button type="button" name="btn" class="@(viewType == "ChangeSettings" ? "active" : "")" onclick="location.href='@Url.Action("ChangeSettings", "Account")'">@Resources.Settings.ToUpper()</button>
+        </div>
 }
 
 @helper RegisterMenu(UrlHelper Url, string viewType)
-{
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="@(viewType == "RegisterUser" ? "active" : "")">
-            <a href="@Url.Action("RegisterUser", "Account")" aria-controls="home" style="font-size:15px;">@Resources.BasicAccount</a>
-        </li>
-        <li role="presentation" class="@(viewType == "RegisterCompany" ? "active" : "")">
-            <a href='@Url.Action("RegisterCompany", "Account")' aria-controls="settings" style="font-size:15px;">@Resources.CompanyAccount</a>
-        </li>
-    </ul>
+    {
+        <div class="gridProducts_box">
+            <ul class="nav nav-pills" role="tablist">
+                <li role="presentation" class="@(viewType == "RegisterUser" ? "active" : "") gridProducts_box__items">
+                    <a href="@Url.Action("RegisterUser", "Account")" aria-controls="home" style="font-size:15px;">@Resources.BasicAccount</a>
+                </li>
+                <li role="presentation" class="@(viewType == "RegisterCompany" ? "active" : "") gridProducts_box__items">
+                    <a href='@Url.Action("RegisterCompany", "Account")' aria-controls="settings" style="font-size:15px;">@Resources.CompanyAccount</a>
+                </li>
+            </ul>
+        </div>
 }

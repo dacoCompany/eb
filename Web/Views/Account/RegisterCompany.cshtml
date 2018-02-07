@@ -5,12 +5,12 @@
 @using Web.eBado.App_Code
 
 @{
-    ViewBag.Title = "RegisterCompany";
+    Layout = null;
 }
 
-@*<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>*@
-@*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">*@
-
+@Styles.Render("~/Content/css")
+@Scripts.Render("~/bundles/jquery_base")
+@Styles.Render("~/Content/login")
 @Scripts.Render("~/bundles/chosen")
 @Styles.Render("~/Content/chosen")
 @Styles.Render("~/Content/check-radio")
@@ -27,131 +27,161 @@
 @using (Html.BeginForm("RegisterCompany", "Account", FormMethod.Post, new { id = "htmlForm" }))
 {
     @Html.AntiForgeryToken()
-    <div class="container push_top_30">
-        <div class="col-md-2"></div>
-        <div class="row">
-            <div class="col-md-7">
-                <div class="card">
-                    @AccountHelper.RegisterMenu(Url, ViewContext.RouteData.Values["Action"].ToString())
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="basic">
-                            <form>
-                                <div class="col-sm-12 reg-font">@Resources.LoginInfo</div>
-                                <hr class="col-sm-12 transparent" />
-                                <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.UserModel.Email, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHEmail } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessageFor(model => model.UserModel.Email)
-                                    </label>
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.UserModel.PhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPhoneNumber } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessagesFor(model => model.UserModel.PhoneNumber)
-                                    </label>
-                                </div>
-                                <div class="col-sm-12 reg-font"></div>
-                                <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.UserModel.Password, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPassword } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessagesFor(model => model.UserModel.Password)
-                                    </label>
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    @Html.EditorFor(model => model.UserModel.RepeatPassword, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHRepeatPassword } })
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessagesFor(model => model.UserModel.RepeatPassword)
-                                    </label>
-                                </div>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@ViewBag.Title - My ASP.NET Application</title>
+    </head>
+    <body>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <div class="main">
+            <div class="container">
+                <div class="col-lg-3 col-md-3 col-sm-2"></div>
+                <div class="col-lg-7 col-md-7 col-sm-8">
+                    <div class="logo">
+                        <img src="https://orig00.deviantart.net/2991/f/2013/211/e/5/skype_logo___tsubasa_guild_by_tiesiy-d6ftdie.png" alt="Logo">
+                    </div>
+                    <div class="row loginbox">
+                        <div class="col-lg-12 centerSign">
+                            <span class="singtext">Registracia</span>
+                        </div>
+                        <div class="col-sm-12 fixed_height_15"></div>
+                        <div class="card">
+                            @AccountHelper.RegisterMenu(Url, ViewContext.RouteData.Values["Action"].ToString())
+                            <!-- Tab panes -->
+                            <div class="col-sm-12 fixed_height_10"></div>
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="basic">
+                                    <form>
+                                        <div class="col-sm-12 reg-font">@Resources.LoginInfo</div>
+                                        <div class="form-group col-sm-6">
+                                            @Html.EditorFor(model => model.UserModel.Email, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHEmail } })
+                                            <label class="label-form" for="email">
+                                                @Html.ValidationMessageFor(model => model.UserModel.Email)
+                                            </label>
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            @Html.EditorFor(model => model.UserModel.PhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPhoneNumber } })
+                                            <label class="label-form" for="email">
+                                                @Html.ValidationMessagesFor(model => model.UserModel.PhoneNumber)
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-12 reg-font"></div>
+                                        <div class="form-group col-sm-6">
+                                            @Html.EditorFor(model => model.UserModel.Password, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHPassword } })
+                                            <label class="label-form" for="email">
+                                                @Html.ValidationMessagesFor(model => model.UserModel.Password)
+                                            </label>
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            @Html.EditorFor(model => model.UserModel.RepeatPassword, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHRepeatPassword } })
+                                            <label class="label-form" for="email">
+                                                @Html.ValidationMessagesFor(model => model.UserModel.RepeatPassword)
+                                            </label>
+                                        </div>
 
-                                <div class="col-sm-12 reg-font">@Resources.CompanyInfo</div>
-                                <hr class="col-sm-12 transparent" />
-                                <div class="form-group col-sm-6">
-                                    @Html.DropDownListFor(model => model.CompanyModel.CompanyType, EnumHelper.GetSelectList(typeof(CompanyType)), "Select", new { @class = "form-control txt-lg", @id = "companyType" })
-                                    <label class="label-form" for="email">
-                                    </label>
-                                </div>
-                                <div id="contractor" class="novisible col-sm-12 nopadding">
-                                    <div class="form-group col-sm-6">
-                                        @Html.EditorFor(model => model.UserModel.FirstName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = Resources.PHFirstname } })
-                                        <label class="label-form" for="email">
-                                            @Html.ValidationMessageFor(model => model.UserModel.FirstName)
-                                        </label>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        @Html.EditorFor(model => model.UserModel.Surname, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = Resources.PHLastName } })
-                                        <label class="label-form" for="email">
-                                            @Html.ValidationMessageFor(model => model.UserModel.Surname)
-                                        </label>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        @Html.EditorFor(model => model.UserModel.PostalCode, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtPostalCode", @placeholder = @Resources.PHPostalCode } })
-                                        @Html.HiddenFor(model => model.UserModel.PostalCode, new { @id = "hiddenPostalCode" })
-                                        <label class="label-form" for="email">
-                                            @Html.ValidationMessageFor(model => model.UserModel.PostalCode)
-                                        </label>
-                                    </div>
-                                </div>
-                                <div id="company" class="novisible col-sm-12 nopadding">
-                                    <div class="form-group col-sm-8">
-                                        @Html.EditorFor(model => model.CompanyModel.CompanyName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHCompanyName } })
-                                        <label class="label-form" for="email">
-                                            @Html.ValidationMessageFor(model => model.CompanyModel.CompanyName)
-                                        </label>
-                                    </div>
-                                    <div class="form-group col-sm-4">
-                                        @Html.EditorFor(model => model.CompanyModel.CompanyIco, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHCompanyNumber } })
-                                        <label class="label-form" for="email">
-                                            @Html.ValidationMessageFor(model => model.CompanyModel.CompanyIco)
-                                        </label>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        @Html.EditorFor(model => model.CompanyModel.CompanyDic, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHTaxnumber } })
-                                        <label class="label-form" for="email">
-                                            @Html.ValidationMessageFor(model => model.CompanyModel.CompanyDic)
-                                        </label>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        @Html.EditorFor(model => model.CompanyModel.CompanyPostalCode, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtCompanyPostalCode", @placeholder = @Resources.PHPostalCode } })
-                                        @Html.HiddenFor(model => model.CompanyModel.CompanyPostalCode, new { @id = "hiddenCompanyPostalCode" })
-                                        <label class="label-form" for="email">
-                                            @Html.ValidationMessageFor(model => model.CompanyModel.CompanyPostalCode)
-                                        </label>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        @Html.EditorFor(model => model.CompanyModel.CompanyEmail, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHEmail } })
-                                        <label class="label-form" for="email">
-                                            @Html.ValidationMessageFor(model => model.CompanyModel.CompanyEmail)
-                                        </label>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        @Html.EditorFor(model => model.CompanyModel.CompanyPhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = Resources.PHPhoneNumber.Replace("*", string.Empty) } })
-                                        <label class="label-form" for="email">
-                                            @Html.ValidationMessageFor(model => model.CompanyModel.CompanyPhoneNumber)
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 reg-font">@Resources.BusinessArea</div>
-                                <hr class="col-sm-12 transparent" />
-                                <div class="form-group col-sm-12">
-                                    @Html.DropDownListFor(m => m.CompanyModel.Categories.SelectedCategories, Model.CompanyModel.Categories.AllCategories, new { @class = "form-control chosen-select", @multiple = "true", data_placeholder = Resources.ChooseBusinessArea })
+                                        <div class="col-sm-12 reg-font">@Resources.CompanyInfo</div>
+                                        <div class="form-group col-sm-6">
+                                            @Html.DropDownListFor(model => model.CompanyModel.CompanyType, EnumHelper.GetSelectList(typeof(CompanyType)), "Select", new { @class = "form-control txt-lg", @id = "companyType" })
+                                            <label class="label-form" for="email">
+                                            </label>
+                                        </div>
+                                        <div id="contractor" class="novisible col-sm-12 nopadding">
+                                            <div class="form-group col-sm-6">
+                                                @Html.EditorFor(model => model.UserModel.FirstName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = Resources.PHFirstname } })
+                                                <label class="label-form" for="email">
+                                                    @Html.ValidationMessageFor(model => model.UserModel.FirstName)
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                @Html.EditorFor(model => model.UserModel.Surname, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = Resources.PHLastName } })
+                                                <label class="label-form" for="email">
+                                                    @Html.ValidationMessageFor(model => model.UserModel.Surname)
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                @Html.EditorFor(model => model.UserModel.PostalCode, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtPostalCode", @placeholder = @Resources.PHPostalCode } })
+                                                @Html.HiddenFor(model => model.UserModel.PostalCode, new { @id = "hiddenPostalCode" })
+                                                <label class="label-form" for="email">
+                                                    @Html.ValidationMessageFor(model => model.UserModel.PostalCode)
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div id="company" class="novisible col-sm-12 nopadding">
+                                            <div class="form-group col-sm-8">
+                                                @Html.EditorFor(model => model.CompanyModel.CompanyName, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHCompanyName } })
+                                                <label class="label-form" for="email">
+                                                    @Html.ValidationMessageFor(model => model.CompanyModel.CompanyName)
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                @Html.EditorFor(model => model.CompanyModel.CompanyIco, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHCompanyNumber } })
+                                                <label class="label-form" for="email">
+                                                    @Html.ValidationMessageFor(model => model.CompanyModel.CompanyIco)
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                @Html.EditorFor(model => model.CompanyModel.CompanyDic, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHTaxnumber } })
+                                                <label class="label-form" for="email">
+                                                    @Html.ValidationMessageFor(model => model.CompanyModel.CompanyDic)
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                @Html.EditorFor(model => model.CompanyModel.CompanyPostalCode, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtCompanyPostalCode", @placeholder = @Resources.PHPostalCode } })
+                                                @Html.HiddenFor(model => model.CompanyModel.CompanyPostalCode, new { @id = "hiddenCompanyPostalCode" })
+                                                <label class="label-form" for="email">
+                                                    @Html.ValidationMessageFor(model => model.CompanyModel.CompanyPostalCode)
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                @Html.EditorFor(model => model.CompanyModel.CompanyEmail, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHEmail } })
+                                                <label class="label-form" for="email">
+                                                    @Html.ValidationMessageFor(model => model.CompanyModel.CompanyEmail)
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                @Html.EditorFor(model => model.CompanyModel.CompanyPhoneNumber, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = Resources.PHPhoneNumber.Replace("*", string.Empty) } })
+                                                <label class="label-form" for="email">
+                                                    @Html.ValidationMessageFor(model => model.CompanyModel.CompanyPhoneNumber)
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 reg-font">@Resources.BusinessArea</div>
+                                        <div class="form-group col-sm-12">
+                                            @Html.DropDownListFor(m => m.CompanyModel.Categories.SelectedCategories, Model.CompanyModel.Categories.AllCategories, new { @class = "form-control chosen-select", @multiple = "true", data_placeholder = Resources.ChooseBusinessArea })
 
-                                    <label class="label-form" for="email">
-                                        @Html.ValidationMessagesFor(model => model.CompanyModel.Categories.SelectedCategories)
-                                    </label>
+                                            <label class="label-form" for="email">
+                                                @Html.ValidationMessagesFor(model => model.CompanyModel.Categories.SelectedCategories)
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-12 text-center">
+                                            <button id="MyButton" class="g-recaptcha form-btn col-sm-4" data-sitekey="@System.Configuration.ConfigurationManager.AppSettings["ReCaptcha_PublicKey"]" data-callback="onSubmit">@Resources.Register2</button>
+                                        </div>
+                                    </form>
+
                                 </div>
-
-                                <button id="MyButton" class="g-recaptcha form-btn col-sm-12" data-sitekey="@System.Configuration.ConfigurationManager.AppSettings["ReCaptcha_PublicKey"]" data-callback="onSubmit">@Resources.Register2</button>
-                            </form>
-
+                            </div>
                         </div>
                     </div>
+                    <div class="row forGotPassword">
+                        <a href="@Url.Action("Login","Account")">Uz mam vytvoreny ucet, chcem sa <span class="sign_color">prihlasit</span></a>
+                    </div>
+                    <br>
+                    <br>
+                    <footer class="footer">
+                        <a href='#'>@Resources.TermsOfUse</a> | 
+                        <a href='#'>@Resources.PrivacyPolicy</a> | 
+                        <a href='#'>@Resources.ContactUs</a>
+                        <p>&copy; @DateTime.Now.Year - eBado Company - @Resources.Copyright</p>
+                    </footer>
                 </div>
+                <div class="col-lg-3 col-md-3 col-sm-2"></div>
             </div>
         </div>
-    </div>
-    <script>
+    </body>
+</html>
+<script>
         $(document).ready(function () {
             var registerType = @Html.Raw(Json.Encode(Model.CompanyModel.CompanyType));
             if (registerType === 1) {
@@ -178,7 +208,7 @@
             }
         })
 
-    </script>
-    @Scripts.Render("~/bundles/postalCode")
+</script>
+@Scripts.Render("~/bundles/postalCode")
 }
 
