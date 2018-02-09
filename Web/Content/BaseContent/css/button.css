@@ -106,7 +106,6 @@ background-color:#fff;
 float:none;
 background-color:#00b6ff;
   border: 2px #00b6ff solid;
-  font-family: Arial;
   color: #fff;
   font-size: 15px;
   padding: 6px 14px 6px 14px;
@@ -121,3 +120,20 @@ background-color:#00b6ff;
   color: #fff;
 }
 
+.form-btn-search {
+    width:100%;
+    float: none;
+    background-color: #00b6ff;
+    border: 1px #00b6ff solid;
+    border-radius:0;
+    font-family: Arial;
+    color: #fff;
+    font-size: 15px;
+    padding: 0px 5px 0px 5px;
+    text-decoration: none;
+}
+
+    .form-btn-search:hover {
+        background: #3498db;
+        border: 1px #3498db solid;
+    }   

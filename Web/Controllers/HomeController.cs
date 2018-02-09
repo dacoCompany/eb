@@ -10,10 +10,11 @@ namespace Web.eBado.Controllers
         [Route("~/")]
         [Route("Index")]
         [AllowAnonymous]
-        public ActionResult Index()
+        public ActionResult Index(SiteAreaBaseModel<SiteItemModel> model)
         {
-            return View();
-        }
+            model = model ?? new SiteAreaBaseModel<SiteItemModel>();
+            return View(model);
+        }      
 
         [Route("Index2")]
         [AllowAnonymous]

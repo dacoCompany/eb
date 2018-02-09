@@ -28,10 +28,12 @@ namespace Web.eBado
         protected void Application_Error(object sender, EventArgs e)
         {
             var exception = Server.GetLastError();
-            var httpException = exception as HttpException;
-            if (httpException.ErrorCode == 404)
+            if (exception is HttpException httpEx)
             {
-                EntlibLogger.LogError("GlobalError", httpException.Message, DiagnosticsLogging.Create("Global", "ApplicationError"), httpException);
+                if (httpEx.ErrorCode == 404)
+                {
+                    EntlibLogger.LogError("GlobalError", httpEx.Message, DiagnosticsLogging.Create("Global", "ApplicationError"), httpEx);
+                }
             }
         }
 
