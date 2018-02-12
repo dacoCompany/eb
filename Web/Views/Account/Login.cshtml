@@ -46,8 +46,11 @@
                                 @Html.ValidationMessageFor(model => model.Password)
                             </label>
                         </div>
-                        <div class="col-lg-12  col-md-12 col-sm-12">
+                        <div class="col-sm-12">
                             <input type="submit" value="@Resources.Submit" class="btn submitButton" />
+                        </div>
+                        <div class="col-sm-12 text-center">
+                            <a href="@Url.Action("RegisterUser","Account")" class="no_account">Vytvorit novy ucet</a>
                         </div>
                     </div>
                     <div class="row forGotPassword">
@@ -58,10 +61,9 @@
                     <footer class="footer">
                         <a href='#'>@Resources.TermsOfUse</a> | 
                         <a href='#'>@Resources.PrivacyPolicy</a> | 
-                        <a href='#'>@Resources.ContactUs</a> | 
-                        <a href='#'>@Resources.Feedback</a>
+                        <a href='#'>@Resources.ContactUs</a>
                         <p>&copy; @DateTime.Now.Year - eBado Company - @Resources.Copyright</p>
-                    </footer> <!--footer Section ends-->
+                    </footer>
                 </div>
                 <div class="col-lg-4 col-md-3 col-sm-2"></div>
             </div>

@@ -47,6 +47,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Enums\AccountType.cs" />
+    <Compile Include="Enums\SiteArea.cs" />
     <Compile Include="Enums\Countries.cs" />
     <Compile Include="Enums\EncryptType.cs" />
     <Compile Include="Enums\UserPermission.cs" />

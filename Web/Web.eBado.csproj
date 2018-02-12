@@ -291,9 +291,13 @@
     <Compile Include="Models\Shared\FileModel.cs" />
     <Compile Include="Models\Shared\FilesViewModel.cs" />
     <Compile Include="Models\Account\LanguagesModel.cs" />
+    <Compile Include="Models\Shared\OfferingItemModel.cs" />
+    <Compile Include="Models\Shared\OfferingSiteAreaModel.cs" />
     <Compile Include="Models\Shared\PostalCodeModel.cs" />
     <Compile Include="Models\Shared\RedirectModel.cs" />
     <Compile Include="Models\Shared\SessionModel.cs" />
+    <Compile Include="Models\Shared\SiteAreaBaseModel.cs" />
+    <Compile Include="Models\Shared\SiteItemModel.cs" />
     <Compile Include="Models\Shared\SubFileModel.cs" />
     <Compile Include="NoClientCacheAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -313,6 +317,7 @@
     <Content Include="Content\BaseContent\css\batch-gallery.css" />
     <Content Include="Content\BaseContent\css\company.css" />
     <Content Include="Content\BaseContent\css\error.css" />
+    <Content Include="Content\BaseContent\css\site-area.css" />
     <Content Include="Content\BaseContent\css\user-settings.css" />
     <Content Include="Content\BaseContent\css\media-queries.css" />
     <Content Include="Content\BaseContent\css\reset.css" />

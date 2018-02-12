@@ -69,11 +69,11 @@
                             <i class="glyphicon glyphicon-facetime-video"></i>
                             <span>@Resources.AddVideo</span>
                         </button>
-                        <button type="submit" class="btn form-btn-transparent start">
+                        <button id="startBtn" type="submit" class="btn form-btn-transparent start">
                             <i class="glyphicon glyphicon-upload"></i>
                             <span>@Resources.StartUpload</span>
                         </button>
-                        <button type="reset" class="btn form-btn-transparent cancel">
+                        <button id="cancelBtn" type="reset" class="btn form-btn-transparent cancel">
                             <i class="glyphicon glyphicon-ban-circle"></i>
                             <span>@Resources.CancelUpload</span>
                         </button>
@@ -88,7 +88,7 @@
                 <div id="videoArea" class="col-lg-12" style="margin-top:30px; display:none">
                     <div class="form-group">
                         <div class="col-md-10">
-                            <input type="text" class = "form-control txt-lg" placeholder = "Youtube Url" id="videoUrlTxt" />
+                            <input type="text" class="form-control txt-lg" placeholder="Youtube Url" id="videoUrlTxt" />
                             <div id="validateUrl" class="val-message"></div>
                         </div>
                     </div>
@@ -198,10 +198,30 @@
                 {% } %}
             </script>
 
+            @{
+                var imgCount = Model.Attachments.Where(att => att.AttachmentType != "video").Count();
+            }
+
+            @if (imgCount > 0)
+            {
+                <div id="imgBlock" class="col-sm-12 head_text">
+                    Foto (<a class="head_text" id="imgNumber">@imgCount</a>/10)
+                </div>
+            }
             <div id="links" style="float:left; width:auto; margin:0 auto">
                 <div id="imagesContainer">
                 </div>
             </div>
+            @{
+                var videoCount = Model.Attachments.Where(att => att.AttachmentType == "video").Count();
+            }
+
+            @if (videoCount > 0)
+            {
+                <div id="videoBlock" class="col-sm-12 head_text">
+                    Video (<a class="head_text" id="videoNumber">@videoCount</a>/3)
+                </div>
+            }
             @{ int index = 1; }
             @foreach (var video in Model.Attachments.Where(att => att.AttachmentType == "video"))
             {
@@ -237,6 +257,21 @@
 
 @Scripts.Render("~/bundles/jQuery-File-Upload")
 <script>
+    $(document).ready(function () {
+        if ($("#addButton").get(0).files.length === 0) {
+            $("#startBtn").hide();
+            $("#cancelBtn").hide();
+        }
+    })
+
+    $("#addButton").on('change', function () {
+        $("#startBtn").show();
+    })
+
+    $("#startBtn").on('click', function () {
+        $("#cancelBtn").show();
+    })
+
     function enableDeleteBtn() {
         $("#deleteSelected").prop("disabled", !$('input:checked').length);
     }
@@ -257,7 +292,7 @@
                 } else {
                     $("#validateUrl").text(response);
                 }
-                
+
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(xhr.responseText);
@@ -275,6 +310,13 @@
             success: function (data) {
                 var container = $("#" + id).parent().parent().parent().attr('id');
                 $("#" + container).hide(250);
+                var imgNumber = $("#imgNumber").text() - 1;
+                if (imgNumber === 0) {
+                    $("#imgBlock").hide();
+                }
+                else {
+                    $("#imgNumber").text(imgNumber);
+                }
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(xhr.responseText);
@@ -292,6 +334,13 @@
             success: function (data) {
                 var container = $("#" + id).parent().parent().attr('id');
                 $("#" + container).hide(250);
+                var videoNumber = $("#videoNumber").text() - 1;
+                if (videoNumber === 0) {
+                    $("#videoBlock").hide();
+                }
+                else {
+                    $("#videoNumber").text(videoNumber);
+                }
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(xhr.responseText);
@@ -321,8 +370,15 @@
             success: function (data) {
                 $.each(selectedId, function (key, value) {
                     var container = $("#" + selectedId[key]).parent().parent().parent().attr('id');
-                $("#" + container).hide(250);
+                    $("#" + container).hide(250);
                 });
+                var imgNumber = $("#imgNumber").text() - selectedId.length;
+                if (imgNumber === 0) {
+                    $("#imgBlock").hide();
+                }
+                else {
+                    $("#imgNumber").text(imgNumber);
+                }
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(xhr.responseText);

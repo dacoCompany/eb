@@ -1,6 +1,7 @@
-body{
-    background-color:#F9F9F9;
+body {
+    background-color: #F9F9F9;
 }
+
 .form-control {
     border-radius: 0px;
     margin: 12px 3px;
@@ -10,7 +11,7 @@ body{
 .logo {
     margin: auto;
     text-align: center;
-    padding-top: 20%;
+    padding-top: 30px;
 }
 
     .logo img {
@@ -30,10 +31,54 @@ body{
 .label-form {
     margin: 0 auto;
     color: red;
+    font-size: 12px;
 }
 
-.centerSign{
-    text-align:center;
+.centerSign {
+    text-align: center;
+}
+
+.novisible {
+    display: none;
+}
+
+.reg-font {
+    font-size: 20px;
+    font-weight: 300;
+    margin: 0 auto;
+    text-align: left;
+    color: #808080;
+}
+
+.gridProducts_box > ul.nav.nav-pills {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+    .gridProducts_box > ul.nav.nav-pills > li {
+        float: none;
+        display: table-cell;
+    }
+
+        .gridProducts_box > ul.nav.nav-pills > li > a {
+            text-align: center;
+        }
+
+.gridProducts_box__items {
+    width: 100% !important;
+}
+
+.fixed_height_10 {
+    height: 10px !important;
+}
+
+.fixed_height_15 {
+    height: 15px !important;
+}
+
+.transparent {
+    border: 1px solid #ffffff;
 }
 
 .grayBody {
@@ -55,6 +100,12 @@ body{
     letter-spacing: 1px;
 }
 
+.no_account {
+    font-size: 14px;
+    color: #00b6ff;
+    font-weight: 500;
+}
+
 .submitButton {
     background-color: #00b6ff;
     color: #fff;
@@ -70,12 +121,19 @@ body{
 
     .submitButton:hover, .submitButton:focus {
         color: #fff;
-        background-color:#0880af;
+        background-color: #0880af;
         outline: none;
     }
 
+.sign_color {
+    color: #00b6ff;
+    font-size: 12px;
+    font-weight: 600;
+}
+
 .forGotPassword {
-    background-color: #F1F1F1;
+    font-size:11px;
+    background-color: #E9E9E9;
     padding: 15px 0px;
     text-align: center;
 }

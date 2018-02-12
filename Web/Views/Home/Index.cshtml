@@ -1,5 +1,34 @@
-﻿@{
+﻿@model Web.eBado.Models.Shared.SiteAreaBaseModel<Web.eBado.Models.Shared.SiteItemModel>
+@using Infrastructure.Common.Enums
+
+@{
     ViewBag.Title = "Home Page";
 }
 
-<h2>toto je index1</h2>
+@Styles.Render("~/Content/site_area")
+
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="container push_top_30">
+
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <div class="search_area">
+                <div class="search_element drop_size">
+                    @Html.DropDownListFor(model => model.SelectedArea, EnumHelper.GetSelectList(typeof(SiteArea)), new { @class = "form-control input-lg site_drop" })
+                </div>
+                <div class="search_element">
+                    <input type="text" value="" class="form-control input-lg radius_0" name="text" placeholder="Vyhladavanie">
+                </div>
+
+                <div class="search_element">
+                    <button type="submit" class="form-btn-search input-lg"><span class="glyphicon glyphicon-search"></span> Search</button>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+}

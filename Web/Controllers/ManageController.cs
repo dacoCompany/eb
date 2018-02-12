@@ -43,25 +43,29 @@ namespace Web.eBado.Controllers
             {
                 if (!(language == Request.Cookies["lang"].Value))
                 {
-                    CultureInfo ci = new CultureInfo(language);
-                    Thread.CurrentThread.CurrentCulture = ci;
-                    Thread.CurrentThread.CurrentUICulture = ci;
-                    var requestCookie = Request.Cookies["lang"];
-                    requestCookie.Value = language;
-                    Response.SetCookie(requestCookie);
-                    var currentSession = Session["User"] as SessionModel;
-                    //set new language in user settings if user is logged in
-                    if (currentSession != null)
+                    SetCultureInfo(language);
+                    var session = Session["User"] as SessionModel;
+                    var companySession = session?.Companies.FirstOrDefault(c => c.IsActive);
+
+                    if (session != null)
                     {
-                        unitOfWork.UserDetailsRepository.FindFirstOrDefault(ud => ud.Id == currentSession.Id).UserSetting.Language = language;
-                        unitOfWork.Commit();
+                        if (session.IsActive)
+                        {
+                            unitOfWork.UserDetailsRepository.FindFirstOrDefault(ud => ud.Id == session.Id).UserSetting.Language = language;
+                            unitOfWork.Commit();
+                        }
+                        else if (companySession != null)
+                        {
+                            unitOfWork.CompanyDetailsRepository.FindFirstOrDefault(cd => cd.Id == companySession.Id).CompanySetting.Language = language;
+                            unitOfWork.Commit();
+                        }
                     }
                     return new HttpStatusCodeResult(HttpStatusCode.Redirect);
                 }
             }
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
-
+       
         [System.Web.Http.Authorize]
         [Route("SetAccount")]
         public async Task<ActionResult> SetAccount(string accountName)
@@ -74,11 +78,11 @@ namespace Web.eBado.Controllers
             {
                 newSession = sessionHelper.SetUserSession(currentSession.Id);
 
-                int userRoleId = 0;
+                var userDetail = unitOfWork.UserDetailsRepository.FindById(newSession.Id);
 
-                userRoleId = unitOfWork.UserDetailsRepository.FindById(newSession.Id).UserRoleId;
+                SetCultureInfo(userDetail.UserSetting.Language);
 
-                bool result = await GetToken(userRoleId, 0);
+                bool result = await GetToken(userDetail.UserRoleId, 0);
 
                 if (!result)
                 {
@@ -94,6 +98,8 @@ namespace Web.eBado.Controllers
 
                 string companyRole = newSession.Companies.First(c => c.IsActive).CompanyRole;
                 companyRoleId = unitOfWork.CompanyRoleRepository.FindFirstOrDefault(cr => cr.Name == companyRole).Id;
+                var companyLanguage = unitOfWork.CompanyDetailsRepository.FindById(newSession.Companies.FirstOrDefault(c => c.IsActive).Id).CompanySetting.Language;
+                SetCultureInfo(companyLanguage);
 
                 bool result = await GetToken(0, companyRoleId);
 
@@ -375,5 +381,16 @@ namespace Web.eBado.Controllers
             int companyId = session.Companies.FirstOrDefault(c => c.IsActive).Id;
             return companyId;
         }
+
+        private void SetCultureInfo(string language)
+        {
+            CultureInfo ci = new CultureInfo(language);
+            Thread.CurrentThread.CurrentCulture = ci;
+            Thread.CurrentThread.CurrentUICulture = ci;
+            var requestCookie = Request.Cookies["lang"];
+            requestCookie.Value = language;
+            Response.SetCookie(requestCookie);
+        }
+
     }
 }

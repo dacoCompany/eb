@@ -51,6 +51,7 @@
 	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('2','7')
 	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('2','8')
 	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('2','9')
+	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('2','11')
 	INSERT INTO CompanyRole2CompanyPermission(CompanyRoleId,CompanyPermissionId) VALUES ('3','12')
 	PRINT'Insert CompanyRole2CompanyPermission completed'
 

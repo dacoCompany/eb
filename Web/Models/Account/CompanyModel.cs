@@ -6,6 +6,7 @@ using Microsoft.Practices.EnterpriseLibrary.Validation;
 using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
 using Web.eBado.IoC;
 using System.Collections.Generic;
+using System;
 
 namespace Web.eBado.Models.Account
 {
@@ -65,6 +66,8 @@ namespace Web.eBado.Models.Account
         public IEnumerable<string> AllSelectedCategories { get; set; }
 
         public string ProfileUrl { get; set; }
+
+        public DateTime DateRegistered { get; set; }
 
         /// <summary>
         /// Validation of whether the company address is filled.

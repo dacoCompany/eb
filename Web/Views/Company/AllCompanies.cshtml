@@ -8,7 +8,7 @@
 @Styles.Render("~/Content/company")
 @Scripts.Render("~/bundles/jquery_autocomplete")
 @using (Html.BeginForm(null, null, FormMethod.Get, new { id = "allCompaniesForm" }))
-            {
+{
     <div class="container">
         <div class="search_panel">
             <div class="search_textBox-xlg">
@@ -24,7 +24,7 @@
             </div>
             <div class="search_text">@Resources.Radius:</div>
             <div class="search_textBox-sm">
-                @Html.EditorFor(model => model.Radius, new { htmlAttributes = new { @class = "form-control", @placeholder = "km", @Value=Model.DefaultRadius } })
+                @Html.EditorFor(model => model.Radius, new { htmlAttributes = new { @class = "form-control", @placeholder = "km", @Value = Model.DefaultRadius } })
             </div>
             <div class="search_button">
                 <button id="searchBtn" type="submit" class="white-border-btn search_btn_resp"><i class="glyphicon glyphicon-search"></i> @Resources.Search</button>
@@ -81,7 +81,7 @@
                 }
                 @if (Model.SelectedMainCategory == null)
                 {
-                <div class="category_head"><span id="categorySpan" class="glyphicon glyphicon-minus"></span>  @Resources.Categories:</div>
+                    <div class="category_head"><span id="categorySpan" class="glyphicon glyphicon-minus"></span>  @Resources.Categories:</div>
                     <div id="cat_container">
                         @foreach (var cat in Model.AllCategories)
                         {
@@ -104,75 +104,83 @@
                     </div>
                 }
             </div>
-            <div class="col-md-9 nopadding_md">
-                @foreach (var company in Model.CompanyModel)
-                {
-                    <div class="col-md-12 push_bottom_20 company_area">
-                        <div class="col-sm-2 nopadding">
-                            <a href='@Url.Action("CompanyDetail", "Company", new { id = company.CompanyId })'>
-                                @if (company.ProfileUrl == null)
-                                {
-                                    <img src="~/Content/BaseContent/img/no_photo.jpg" />
-                                }
-                                else
-                                {
-                                    <img src="@company.ProfileUrl" />
-                                }
-                            </a>
-                        </div>
-                        @{ var description = company.CompanyDescription == null ? @Resources.NoDetailDescription
-                                : company.CompanyDescription.Length <= 350 ? company.CompanyDescription : company.CompanyDescription.Substring(0, 350) + "..."; }
-                        <div class="col-md-8 nopadding resp_push_top_10 push_bottom_5_resp">
-                            <div class="col-md-12 text-left head_text"><a href='@Url.Action("CompanyDetail","Company", new {id = company.CompanyId })'>@company.CompanyName</a></div>
-                            <div class="col-md-12 text-left body_text resp_push_top_10 push_bottom_10_resp">
-                                @description
+            @if (Model.CompanyModel.Any())
+            {
+                <div class="col-md-9 nopadding_md">
+                    @foreach (var company in Model.CompanyModel)
+                    {
+                        <div class="col-md-12 push_bottom_20 company_area">
+                            <div class="col-sm-2 nopadding">
+                                <a href='@Url.Action("CompanyDetail", "Company", new { id = company.CompanyId })'>
+                                    @if (company.ProfileUrl == null)
+                                    {
+                                        <img src="~/Content/BaseContent/img/no_photo.jpg" />
+                                    }
+                                    else
+                                    {
+                                        <img src="@company.ProfileUrl" />
+                                    }
+                                </a>
                             </div>
-                            <div class="col-md-12 push" style="display: table-cell;">
-                                <div class="company_head_text head_text ">@Resources.Categories:</div>
-                                @foreach (var category in company.AllSelectedCategories)
-                                {
-                                    <div class="company_tags push_bottom_5">@category</div>
-                                }
+                            @{ var description = company.CompanyDescription == null ? @Resources.NoDetailDescription
+                                          : company.CompanyDescription.Length <= 350 ? company.CompanyDescription : company.CompanyDescription.Substring(0, 350) + "..."; }
+                            <div class="col-md-8 nopadding resp_push_top_10 push_bottom_5_resp">
+                                <div class="col-md-12 text-left head_text"><a href='@Url.Action("CompanyDetail", "Company", new { id = company.CompanyId })'>@company.CompanyName</a></div>
+                                <div class="col-md-12 text-left body_text resp_push_top_10 push_bottom_10_resp">
+                                    @description
+                                </div>
+                                <div class="col-md-12 push" style="display: table-cell;">
+                                    <div class="company_head_text head_text ">@Resources.Categories:</div>
+                                    @foreach (var category in company.AllSelectedCategories)
+                                    {
+                                        <div class="company_tags push_bottom_5">@category</div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="col-sm-12 head_text">@company.CompanyPostalCode</div>
+                                <div class="col-sm-12 head_text">@company.CompanyCity</div>
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <div class="col-sm-12 head_text">@company.CompanyPostalCode</div>
-                            <div class="col-sm-12 head_text">@company.CompanyCity</div>
-                        </div>
-                    </div>
-                }
-            </div>
-        </div>
-
-        <div class="container">
-            @Html.PagedListPager(Model.CompanyModel, page => Url.Action("AllCompanies", new
-       {
-           Page = page,
-           Name = Model.Name,
-           PostalCode = Model.PostalCode,
-           Radius = Model.Radius,
-           SearchInSK = Model.SearchInSK,
-           SearchInCZ = Model.SearchInCZ,
-           SearchInHU = Model.SearchInHU,
-           SelectedMainCategory = Model.SelectedMainCategory ?? Model.SelectedCategory,
-           SelectedSubCategory = Model.SelectedSubCategory
-       }), new PagedListRenderOptions
-       {
-           DisplayLinkToFirstPage = PagedListDisplayMode.Always,
-           DisplayLinkToLastPage = PagedListDisplayMode.Always,
-           DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
-           DisplayLinkToNextPage = PagedListDisplayMode.Always,
-           DisplayEllipsesWhenNotShowingAllPageNumbers = true,
-           LinkToFirstPageFormat = @Resources.FirstPage,
-           LinkToPreviousPageFormat = @Resources.PreviousPage,
-           LinkToNextPageFormat = @Resources.NextPage,
-           LinkToLastPageFormat = @Resources.LastPage,
-           MaximumPageNumbersToDisplay = 8
-       })
-        </div>
-
-    </div>
                     }
+                </div>
+
+                <div class="container">
+                    @Html.PagedListPager(Model.CompanyModel, page => Url.Action("AllCompanies", new
+                    {
+                        Page = page,
+                        Name = Model.Name,
+                        PostalCode = Model.PostalCode,
+                        Radius = Model.Radius,
+                        SearchInSK = Model.SearchInSK,
+                        SearchInCZ = Model.SearchInCZ,
+                        SearchInHU = Model.SearchInHU,
+                        SelectedMainCategory = Model.SelectedMainCategory ?? Model.SelectedCategory,
+                        SelectedSubCategory = Model.SelectedSubCategory
+                    }), new PagedListRenderOptions
+                    {
+                        DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+                        DisplayLinkToLastPage = PagedListDisplayMode.Always,
+                        DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+                        DisplayLinkToNextPage = PagedListDisplayMode.Always,
+                        DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+                        LinkToFirstPageFormat = @Resources.FirstPage,
+                        LinkToPreviousPageFormat = @Resources.PreviousPage,
+                        LinkToNextPageFormat = @Resources.NextPage,
+                        LinkToLastPageFormat = @Resources.LastPage,
+                        MaximumPageNumbersToDisplay = 8
+                    })
+                </div>
+            }
+            else
+            {
+                <div class="col-md-9 nopadding_md">
+                    <div class="col-sm-12 head_text text-center">Ziadne vysledky</div>
+                </div>
+            }
+        </div>
+    </div>
+}
 <script>
     $(document).ready(function () {
         CatContainerShowHide();

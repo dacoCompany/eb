@@ -26,6 +26,7 @@ using Microsoft.Practices.EnterpriseLibrary.Validation;
 using System.IO;
 using Infrastructure.Common.Enums;
 using Infrastructure.Common;
+using System.Threading;
 
 namespace Web.eBado.Controllers
 {
@@ -212,7 +213,7 @@ namespace Web.eBado.Controllers
                 var session = sessionHelper.SetUserSession(userDetail.Id);
 
                 string language = userDetail.UserSetting.Language;
-                sharedHelper.GetCultureInfo(language ?? Constants.EnglishCultureInfo);
+                SetCultureInfo(language ?? Constants.EnglishCultureInfo);
 
                 //FormsAuthentication.SetAuthCookie(session.Email, true);
                 Session["User"] = session;
@@ -523,6 +524,16 @@ namespace Web.eBado.Controllers
         #endregion
 
         #region Private methods
+
+        private void SetCultureInfo(string language)
+        {
+            CultureInfo ci = new CultureInfo(language);
+            Thread.CurrentThread.CurrentCulture = ci;
+            Thread.CurrentThread.CurrentUICulture = ci;
+            var requestCookie = Request.Cookies["lang"];
+            requestCookie.Value = language;
+            Response.SetCookie(requestCookie);
+        }
 
         private bool IsUserAuthnticated()
         {
