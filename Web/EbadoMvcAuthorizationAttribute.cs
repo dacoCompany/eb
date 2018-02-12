@@ -104,6 +104,11 @@ namespace Web.eBado
                     return;
                 }
 
+                if (rolesSplit.Length == 0)
+                {
+                    return;
+                }
+
                 var claims = token.Claims.Where(t => t.Type == "role").Select(t => new { t.Value });
 
                 bool rolesMatch = claims.Any(c => rolesSplit.Any(r => r == c.Value));
