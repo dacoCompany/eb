@@ -9,19 +9,20 @@
 }
 
 @Styles.Render("~/Content/css")
-@Scripts.Render("~/bundles/jquery_base")
 @Styles.Render("~/Content/login")
-@Scripts.Render("~/bundles/chosen")
 @Styles.Render("~/Content/chosen")
-@Styles.Render("~/Content/check-radio")
+@Scripts.Render("~/bundles/jquery_base")
+@Scripts.Render("~/bundles/jquery_ui")
+@Scripts.Render("~/bundles/chosen")
 @Scripts.Render("~/bundles/jquery_autocomplete")
+@Scripts.Render("~/bundles/postalCode")
+
 
 <script src='https://www.google.com/recaptcha/api.js'></script>
 <script>
     function onSubmit(token) {
         document.getElementById("htmlForm").submit();
     }
-
 </script>
 
 @using (Html.BeginForm("RegisterCompany", "Account", FormMethod.Post, new { id = "htmlForm" }))
@@ -101,8 +102,10 @@
                                                 </label>
                                             </div>
                                             <div class="form-group col-sm-6">
-                                                @Html.EditorFor(model => model.UserModel.PostalCode, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtPostalCode", @placeholder = @Resources.PHPostalCode } })
+                                                <input type="text" class="form-control txt-lg" id="txtPostalCode" placeholder="@Resources.PHPostalCode" />
                                                 @Html.HiddenFor(model => model.UserModel.PostalCode, new { @id = "hiddenPostalCode" })
+                                                @*@Html.EditorFor(model => model.UserModel.PostalCode, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtPostalCode", @placeholder = @Resources.PHPostalCode } })
+                                                    @Html.HiddenFor(model => model.UserModel.PostalCode, new { @id = "hiddenPostalCode" })*@
                                                 <label class="label-form" for="email">
                                                     @Html.ValidationMessageFor(model => model.UserModel.PostalCode)
                                                 </label>
@@ -209,6 +212,5 @@
         })
 
 </script>
-@Scripts.Render("~/bundles/postalCode")
 }
 

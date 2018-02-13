@@ -16,26 +16,40 @@
     width: 180px
 }
 
+.btn_size {
+    width: 120px;
+}
+
 .radius_0 {
-    border-radius: 0 !important;
+    border-radius: 0;
 }
 .novisible{
-    display:none !important;
+    display:none;
+}
+
+.left_5{
+    margin-left:5px;
 }
 
 /******Check responsive*******/
 @media only screen and (max-width: 700px) {
     .search_area {
-        width: 100%;
         display: inline;
     }
 
     .search_element {
         display: inline;
-        width:100%
     }
     .drop_size {
         width: 100%
     }
+    .left_5 {
+        margin-left: 0px;
+    }
+
+    .input_bottom{
+        margin-bottom:5px;
+    }
+
 }
 

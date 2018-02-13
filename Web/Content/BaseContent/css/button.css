@@ -53,7 +53,6 @@ float:right;
 .btn-no-border {
     float: none;
     background-color: #fff;
-    border: 0px;
     font-family: Arial;
     color: #00b6ff;
     font-size: 16px;
@@ -128,12 +127,30 @@ background-color:#00b6ff;
     border-radius:0;
     font-family: Arial;
     color: #fff;
-    font-size: 15px;
-    padding: 0px 5px 0px 5px;
+    font-size: 17px;
+    padding: 0px 2px;
     text-decoration: none;
 }
 
     .form-btn-search:hover {
         background: #3498db;
         border: 1px #3498db solid;
+    }
+
+.form-btn-add {
+    width: 100%;
+    float: none;
+    background-color: #2c85c1;
+    border: 1px #2c85c1 solid;
+    border-radius: 0;
+    font-family: Arial;
+    color: #fff;
+    font-size: 17px;
+    padding: 0px 2px;
+    text-decoration: none;
+}
+
+    .form-btn-add:hover {
+        background: #216796;
+        border: 1px #216796 solid;
     }   
