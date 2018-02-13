@@ -96,7 +96,7 @@ namespace Web.eBado.Controllers
             return View();
         }
 
-        [EbadoMvcAuthorization(Roles = "ChangeSettings, Read, Write")]
+        [EbadoMvcAuthorization]
         [Route("ChangeSettings")]
         [NoClientCache]
         public ActionResult ChangeSettings()
@@ -426,7 +426,7 @@ namespace Web.eBado.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [EbadoMvcAuthorization(Roles = "ChangeSettings, Read, Write")]
+        [EbadoMvcAuthorization(Roles = "ChangeSettings, ChangeAccountSettings, Read, Write")]
         [Route("ChangeSettings")]
         [NoClientCache]
         public ActionResult ChangeSettings(AccountSettingsModel model)

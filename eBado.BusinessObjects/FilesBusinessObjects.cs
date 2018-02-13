@@ -66,14 +66,16 @@ namespace eBado.BusinessObjects
 
                 foreach (var file in files)
                 {
-                    CloudBlockBlob blockBlob = container.GetBlockBlobReference($"photos/{batchId}/{file.Name}");
+                    string cleanName = file.Name.Replace("\"", string.Empty).Replace("'", string.Empty);
+
+                    CloudBlockBlob blockBlob = container.GetBlockBlobReference($"photos/{batchId}/{cleanName}");
                     blockBlob.UploadFromByteArray(file.Content, 0, file.Content.Length);
                     file.Url = blockBlob.Uri.ToString();
 
                     if (!supportedFileTypes.Contains(file.ContentType) && !supportedImageTypes.Contains(file.ContentType))
                         continue;
 
-                    string fileThumb = Path.GetFileNameWithoutExtension(file.Name) + "_thumbImg.jpg";
+                    string fileThumb = Path.GetFileNameWithoutExtension(cleanName) + "_thumbImg.jpg";
                     if (supportedImageTypes.Contains(file.ContentType))
                     {
                         using (MemoryStream stream = new MemoryStream(file.Content))
@@ -105,7 +107,7 @@ namespace eBado.BusinessObjects
                     {
                         OriginalUrl = file.Url,
                         ThumbnailUrl = file.ThumbnailUrl,
-                        Name = file.Name,
+                        Name = cleanName,
                         Size = file.Size,
                         FileType = "file"
                     };
@@ -262,7 +264,7 @@ namespace eBado.BusinessObjects
                 var videoAttachment = new AttachmentDbo
                 {
                     BatchAttId = batch.Id,
-                    Name = values["title"],
+                    Name = values["title"].Replace("\"", string.Empty).Replace("'", string.Empty),
                     FileType = "video",
                     ThumbnailUrl = values["thumbnail_url"],
                     Size = 0,
