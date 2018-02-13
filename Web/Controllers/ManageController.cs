@@ -15,6 +15,7 @@ using Web.eBado.Helpers;
 using Web.eBado.Models.Shared;
 using WebAPIFactory.Configuration.Core;
 using Infrastructure.Common;
+using WebAPIFactory.Caching.Core;
 
 namespace Web.eBado.Controllers
 {
@@ -26,12 +27,12 @@ namespace Web.eBado.Controllers
         private readonly SessionHelper sessionHelper;
         private readonly SharedHelper sharedHelper;
 
-        public ManageController(IUnitOfWork unitOfWork, IConfiguration configuration)
+        public ManageController(IUnitOfWork unitOfWork, IConfiguration configuration, ICache httpCache)
         {
             this.unitOfWork = unitOfWork;
             this.configuration = configuration;
             sessionHelper = new SessionHelper(unitOfWork);
-            sharedHelper = new SharedHelper(unitOfWork);
+            sharedHelper = new SharedHelper(unitOfWork, httpCache);
         }
 
         [AllowAnonymous]

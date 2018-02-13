@@ -27,10 +27,10 @@ namespace Web.eBado.Helpers
         private readonly Uri locationBaseUri = new Uri("http://freegeoip.net/xml/");
         private const string baseMapUrl = "https://www.google.com/maps/search/?api=1&query=";
 
-        public SharedHelper(IUnitOfWork unitOfWork)
+        public SharedHelper(IUnitOfWork unitOfWork, ICache httpCache)
         {
             this.unitOfWork = unitOfWork;
-            httpCache = NinjectResolver.GetInstance<ICache>();
+            this.httpCache = httpCache;
         }
 
         public Countries GetUserCountry()
@@ -288,7 +288,7 @@ namespace Web.eBado.Helpers
             }).ToList();
 
 
-            httpCache.Insert(CacheKeys.LanguageKey, cachedLocations, null, cacheSettings);
+            httpCache.Insert(CacheKeys.LocationKey, cachedLocations, null, cacheSettings);
             return cachedLocations;
         }
 

@@ -6,6 +6,7 @@ using Web.eBado.Helpers;
 using Web.eBado.Models.Account;
 using Web.eBado.Models.Company;
 using Web.eBado.Models.Shared;
+using WebAPIFactory.Caching.Core;
 
 namespace Web.eBado.Controllers
 {
@@ -16,11 +17,11 @@ namespace Web.eBado.Controllers
         CompanyHelper companyHelper;
         SharedHelper sharedHelper;
 
-        public CompanyController(IUnitOfWork unitOfWork)
+        public CompanyController(IUnitOfWork unitOfWork, ICache httpCache)
         {
             this.unitOfWork = unitOfWork;
-            companyHelper = new CompanyHelper(unitOfWork);
-            sharedHelper = new SharedHelper(unitOfWork);
+            companyHelper = new CompanyHelper(unitOfWork, httpCache);
+            sharedHelper = new SharedHelper(unitOfWork, httpCache);
         }
 
         [Route("AllCompanies")]

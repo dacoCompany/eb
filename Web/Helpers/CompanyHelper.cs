@@ -11,6 +11,7 @@ using System.Linq;
 using Web.eBado.Models.Account;
 using Web.eBado.Models.Company;
 using Web.eBado.Models.Shared;
+using WebAPIFactory.Caching.Core;
 
 namespace Web.eBado.Helpers
 {
@@ -18,9 +19,9 @@ namespace Web.eBado.Helpers
     {
         private const double MilesToMetersConstant = 1609.344;
         SharedHelper sharedHelper;
-        public CompanyHelper(IUnitOfWork unitOfWork)
+        public CompanyHelper(IUnitOfWork unitOfWork, ICache httpCache)
         {
-            sharedHelper = new SharedHelper(unitOfWork);
+            sharedHelper = new SharedHelper(unitOfWork, httpCache);
         }
 
         public CompanySearchModel GetAllCompanies(CompanySearchModel model, IUnitOfWork unitOfWork, SessionModel session, int? page = null)
