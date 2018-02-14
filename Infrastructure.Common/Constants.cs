@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Infrastructure.Common
+﻿namespace Infrastructure.Common
 {
     public class Constants
     {
@@ -13,5 +7,8 @@ namespace Infrastructure.Common
         public const string HungaryShortCode = "HU";
         public const string EnglishCultureInfo = "en-US";
         public const int DefaultRadius = 30;
+        public const string MaxNumberOfGalleries = "MaxNumberOfGalleries";
+        public const string MaxNumberOfImages = "MaxNumberOfImages";
+        public const string MaxNumberOfVideos = "MaxNumberOfVideos";
     }
 }

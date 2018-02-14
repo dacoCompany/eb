@@ -1,21 +1,15 @@
-﻿using System;
+﻿using AutoMapper;
+using eBado.BusinessObjects;
+using eBado.Entities;
 using Infrastructure.Common.DB;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
-using System.Web.Helpers;
-using System.Web.Hosting;
 using System.Web.Mvc;
-using AutoMapper;
-using eBado.BusinessObjects;
-using eBado.Entities;
-using Microsoft.Practices.EnterpriseLibrary.Logging;
-using Web.eBado.Helpers;
 using Web.eBado.Models.Shared;
 using WebAPIFactory.Configuration.Core;
 using WebAPIFactory.Logging.Core;
@@ -70,7 +64,7 @@ namespace Web.eBado.Controllers
                 }
                 var response = new { files = subFiles };
 
-                return filesModel.Count == uploadedCount ? new JsonNetResult(response) : Json("Some files are not supported.", JsonRequestBehavior.AllowGet);
+                return filesModel.Count == uploadedCount ? new JsonNetResult(response) : Json("File limit reached.", JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
@@ -123,7 +117,7 @@ namespace Web.eBado.Controllers
         {
             bool result = filesBo.UploadVideo(url, batchId, GetActiveCompany());
 
-            return result ? new JsonNetResult("OK") : new JsonNetResult("Upload failed.");
+            return result ? new JsonNetResult("OK") : new JsonNetResult("Video limit reached.");
         }
 
         [HttpPost]

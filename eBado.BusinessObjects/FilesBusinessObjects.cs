@@ -1,21 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data.Entity;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web;
-using System.Web.Helpers;
-using System.Web.Hosting;
-using ByteSizeLib;
+﻿using ByteSizeLib;
 using eBado.Entities;
+using Infrastructure.Common;
 using Infrastructure.Common.DB;
 using Microsoft.Practices.EnterpriseLibrary.Common.Utility;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Configuration;
+using System.Data.Entity;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Web;
+using System.Web.Helpers;
+using System.Web.Hosting;
 using WebAPIFactory.Configuration.Core;
 using WebAPIFactory.Logging.Core;
 using WebAPIFactory.Logging.Core.Diagnostics;
@@ -62,9 +63,15 @@ namespace eBado.BusinessObjects
                 var container = GetAzureBlobContainer();
 
                 var batch = unitOfWork.BatchAttachmentRepository.FindFirstOrDefault(ba => ba.GuId == batchId && ba.CompanyDetailsId == companyId);
+
+                //int imageLimit = configuration.GetValueByKey<int>(Constants.MaxNumberOfImages);
+                int imageLimit = int.Parse(ConfigurationManager.AppSettings[Constants.MaxNumberOfImages]);
+                int diff = imageLimit - batch.Attachments.WhereActive(a => a.FileType == "file").Count();
+                int capSpace = diff > 0 ? diff : 0;
+
                 int fileCount = 0;
 
-                foreach (var file in files)
+                foreach (var file in files.Take(capSpace))
                 {
                     string cleanName = file.Name.Replace("\"", string.Empty).Replace("'", string.Empty);
 
@@ -119,7 +126,6 @@ namespace eBado.BusinessObjects
 
                 EntlibLogger.LogVerbose("File", "Upload", $"Uploaded {fileCount} of {files.Count()} files to batch {batchId}.", diagnosticLogConstant);
                 return fileCount;
-
             }
             catch (Exception ex)
             {
@@ -239,6 +245,14 @@ namespace eBado.BusinessObjects
                 return false;
             }
 
+            var batch = unitOfWork.BatchAttachmentRepository.FindFirstOrDefault(ba => ba.GuId == batchId && ba.CompanyDetailsId == companyId);
+
+            //int videoLimit = configuration.GetValueByKey<int>(Constants.MaxNumberOfVideos);
+            int videoLimit = int.Parse(ConfigurationManager.AppSettings[Constants.MaxNumberOfVideos]);
+            int diff = videoLimit - batch.Attachments.WhereActive(a => a.FileType == "video").Count();
+
+            if (diff <= 0) return false;
+
             string embedUrl = $"https://www.youtube.com/embed/{videoId}?rel=0";
 
             var client = new HttpClient();
@@ -259,8 +273,6 @@ namespace eBado.BusinessObjects
 
             try
             {
-                var batch = unitOfWork.BatchAttachmentRepository.FindFirstOrDefault(ba => ba.GuId == batchId && ba.CompanyDetailsId == companyId);
-
                 var videoAttachment = new AttachmentDbo
                 {
                     BatchAttId = batch.Id,
