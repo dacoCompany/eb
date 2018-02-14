@@ -39,11 +39,11 @@ namespace Web.eBado.Helpers
 
         #region Constructor
 
-        public AccountHelper(IUnitOfWork unitOfWork, IFilesBusinessObjects fileBo)
+        public AccountHelper(IUnitOfWork unitOfWork, IFilesBusinessObjects fileBo, ICache httpCache)
         {
             this.unitOfWork = unitOfWork;
             this.fileBo = fileBo;
-            sharedHelper = new SharedHelper(unitOfWork);
+            sharedHelper = new SharedHelper(unitOfWork, httpCache);
         }
 
         #endregion

@@ -27,6 +27,7 @@ using System.IO;
 using Infrastructure.Common.Enums;
 using Infrastructure.Common;
 using System.Threading;
+using WebAPIFactory.Caching.Core;
 
 namespace Web.eBado.Controllers
 {
@@ -41,11 +42,11 @@ namespace Web.eBado.Controllers
         private readonly IFilesBusinessObjects fileBo;
         private readonly DiagnosticsLogging diagnosticLogConstant;
 
-        public AccountController(IConfiguration configuration, IUnitOfWork unitOfWork, IFilesBusinessObjects fileBo)
+        public AccountController(IConfiguration configuration, IUnitOfWork unitOfWork, IFilesBusinessObjects fileBo, ICache httpCache)
         {
-            accountHelper = new AccountHelper(unitOfWork, fileBo);
+            accountHelper = new AccountHelper(unitOfWork, fileBo, httpCache);
             sessionHelper = new SessionHelper(unitOfWork);
-            sharedHelper = new SharedHelper(unitOfWork);
+            sharedHelper = new SharedHelper(unitOfWork, httpCache);
             this.configuration = configuration;
             this.unitOfWork = unitOfWork;
             this.fileBo = fileBo;
