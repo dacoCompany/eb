@@ -1,4 +1,6 @@
 ﻿@model Web.eBado.Models.Shared.AttachmentGalleryModel
+@using System.Configuration
+@using Infrastructure.Common
 @using Infrastructure.Resources
 @using Web.eBado.Helpers
 @using Web.eBado.Models.Shared
@@ -200,12 +202,13 @@
 
             @{
                 var imgCount = Model.Attachments.Where(att => att.AttachmentType != "video").Count();
+                int imgLimit = int.Parse(ConfigurationManager.AppSettings[Constants.MaxNumberOfImages]);
             }
 
             @if (imgCount > 0)
             {
                 <div id="imgBlock" class="col-sm-12 head_text">
-                    Foto (<a class="head_text" id="imgNumber">@imgCount</a>/10)
+                    Foto (<a class="head_text" id="imgNumber">@imgCount</a>/@imgLimit)
                 </div>
             }
             <div id="links" style="float:left; width:auto; margin:0 auto">
@@ -214,12 +217,13 @@
             </div>
             @{
                 var videoCount = Model.Attachments.Where(att => att.AttachmentType == "video").Count();
+                int videoLimit = int.Parse(ConfigurationManager.AppSettings[Constants.MaxNumberOfVideos]);
             }
 
             @if (videoCount > 0)
             {
                 <div id="videoBlock" class="col-sm-12 head_text">
-                    Video (<a class="head_text" id="videoNumber">@videoCount</a>/3)
+                    Video (<a class="head_text" id="videoNumber">@videoCount</a>/@videoLimit)
                 </div>
             }
             @{ int index = 1; }
