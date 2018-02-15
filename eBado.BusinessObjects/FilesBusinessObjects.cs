@@ -87,7 +87,8 @@ namespace eBado.BusinessObjects
                     {
                         using (MemoryStream stream = new MemoryStream(file.Content))
                         {
-                            var thumbnail = new WebImage(stream).Resize(130, 100, true, true);
+                            var webImage = new WebImage(stream);
+                            var thumbnail = webImage.Height > 2160 ? webImage.Resize(1280, 720, true, true) : webImage.Resize(910, 512, true, true);
                             thumbnail.FileName = fileThumb;
                             byte[] thumb = thumbnail.GetBytes("image/jpeg");
                             CloudBlockBlob blockBlobThumb = container.GetBlockBlobReference($"photos/{batchId}/{fileThumb}");
