@@ -579,4 +579,10 @@
   <data name="YourLanguages" xml:space="preserve">
     <value>Your languages:</value>
   </data>
+  <data name="TooManyRequests" xml:space="preserve">
+    <value>Too many requests</value>
+  </data>
+  <data name="TooManyRequestsMessage" xml:space="preserve">
+    <value>You have exceeded the maximum admitted request quota per minute.</value>
+  </data>
 </root>

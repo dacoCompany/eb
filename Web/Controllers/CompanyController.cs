@@ -1,15 +1,14 @@
 ﻿using Infrastructure.Common.DB;
-using System.Data.Entity;
-using System.Linq;
+using MvcThrottle;
 using System.Web.Mvc;
 using Web.eBado.Helpers;
-using Web.eBado.Models.Account;
 using Web.eBado.Models.Company;
 using Web.eBado.Models.Shared;
 using WebAPIFactory.Caching.Core;
 
 namespace Web.eBado.Controllers
 {
+    [EnableThrottling]
     [RoutePrefix("Company")]
     public class CompanyController : Controller
     {
@@ -34,7 +33,7 @@ namespace Web.eBado.Controllers
             {
                 model.SelectedMainCategory = model.SelectedCategory;
             }
-            model = companyHelper.GetAllCompanies(model, unitOfWork,session);
+            model = companyHelper.GetAllCompanies(model, unitOfWork, session);
             model = companyHelper.InitializeCompanyData(session, model);
 
             return View(model);

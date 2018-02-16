@@ -6,6 +6,7 @@ using Infrastructure.Common.DB;
 using Infrastructure.Common.Enums;
 using Infrastructure.Common.Validations;
 using Microsoft.Practices.EnterpriseLibrary.Validation;
+using MvcThrottle;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -32,6 +33,7 @@ using WebAPIFactory.Logging.Core.Diagnostics;
 
 namespace Web.eBado.Controllers
 {
+    [EnableThrottling]
     [RoutePrefix("Account")]
     public class AccountController : Controller
     {

@@ -2,6 +2,7 @@
 using eBado.BusinessObjects;
 using eBado.Entities;
 using Infrastructure.Common.DB;
+using MvcThrottle;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,6 +18,7 @@ using WebAPIFactory.Logging.Core.Diagnostics;
 
 namespace Web.eBado.Controllers
 {
+    [EnableThrottling(PerMinute = 50)]
     [RoutePrefix("FileUpload")]
     public class FileUploadController : Controller
     {

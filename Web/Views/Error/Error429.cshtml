@@ -1,0 +1,41 @@
+﻿@using Infrastructure.Resources
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eBado :( 429</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/error")
+
+</head>
+<body>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<div class="container">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+        <div class="row errorbox nopadding">
+            <div class="errorcode centerSign">@Resources.Error: 429</div>
+            <div class="col-lg-12 centerSign push_bottom_20">
+                <span class="errorhead">@Resources.TooManyRequests</span>
+            </div>
+            <div class="col-lg-12 centerSign push_bottom_40">
+                <span class="errortext">@Resources.TooManyRequestsMessage</span>
+            </div>
+            <div class="col-sm-4"></div>
+        </div>
+        <br>
+        <br>
+        <footer class="footer">
+            <a href='#'>@Resources.TermsOfUse</a> | 
+            <a href='#'>@Resources.PrivacyPolicy</a> | 
+            <a href='#'>@Resources.ContactUs</a> | 
+            <a href='#'>@Resources.Feedback</a>
+            <p>© 2017 - eBado Company - @Resources.Copyright</p>
+        </footer>
+    </div>
+</div>
+</body>
+</html>

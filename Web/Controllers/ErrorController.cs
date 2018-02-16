@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace Web.eBado.Controllers
 {
@@ -23,6 +19,14 @@ namespace Web.eBado.Controllers
         public ActionResult Error404()
         {
             Response.StatusCode = 404;
+            return View();
+        }
+
+        [Route("Error429")]
+        [AllowAnonymous]
+        public ActionResult Error429()
+        {
+            Response.StatusCode = 429;
             return View();
         }
 
