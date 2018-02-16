@@ -314,7 +314,6 @@
     <Content Include="Content\BaseContent\css\bootstrap-theme.css" />
     <Content Include="Content\BaseContent\css\bootstrap.css" />
     <Content Include="Content\BaseContent\css\button.css" />
-    <Content Include="Content\BaseContent\css\chosen.css" />
     <Content Include="Content\BaseContent\css\company-detail.css" />
     <Content Include="Content\BaseContent\css\font-awesome.min.css" />
     <Content Include="Content\BaseContent\css\jquery-ui.css" />
@@ -664,7 +663,6 @@
     <Content Include="Content\Free-file-icons\icons.ai" />
     <Content Include="Content\Free-file-icons\icons.pdf" />
     <Content Include="Global.app.config" />
-    <Content Include="Scripts\chosen.jquery.js" />
     <Content Include="Scripts\youtube.js" />
     <Content Include="Views\Email\Registration.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

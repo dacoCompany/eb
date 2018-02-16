@@ -132,7 +132,7 @@ body {
 }
 
 .forGotPassword {
-    font-size:11px;
+    font-size: 11px;
     background-color: #E9E9E9;
     padding: 15px 0px;
     text-align: center;
@@ -151,3 +151,34 @@ body {
             text-decoration: none;
             outline: none;
         }
+
+.tag_area {
+    display: table;
+}
+
+.tags_blocks {
+    display: inline-block;
+    height: 30px;
+    box-sizing: border-box;
+    float: left;
+    margin: 0 0 5px 5px;
+    padding-left: 5px;
+    border: 1px solid #00b6ff;
+}
+
+.tags_block-text {
+    float: left;
+    color: #00b6ff;
+    font-size: 15px;
+    margin: 3px 10px 0 0;
+    text-align: left;
+}
+
+.tags_block-symbol {
+    float: right;
+    margin-top: 3px;
+    padding-right: 5px;
+    font-size: 15px;
+    cursor: pointer;
+    color: #808080;
+}

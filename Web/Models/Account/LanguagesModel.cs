@@ -7,6 +7,5 @@ namespace Web.eBado.Models.Account
     {
         public string[] SelectedLanguages { get; set; }
 
-        public IEnumerable<SelectListItem> AllLanguages { get; set; }
     }
 }

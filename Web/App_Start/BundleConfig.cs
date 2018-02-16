@@ -21,10 +21,7 @@ namespace Web.eBado
 
             bundles.Add(new ScriptBundle("~/bundles/changeSettings")
              .Include("~/Scripts/changeSettings.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/chosen")
-               .Include("~/Scripts/chosen.jquery.js"));
-
+            
             bundles.Add(new ScriptBundle("~/bundles/categories")
               .Include("~/Scripts/categories.js"));
 
@@ -63,9 +60,6 @@ namespace Web.eBado
 
             bundles.Add(new StyleBundle("~/Content/check-radio")
                 .Include("~/Content/BaseContent/css/check_radio.css", new CssRewriteUrlTransform()));
-
-            bundles.Add(new StyleBundle("~/Content/chosen")
-                .Include("~/Content/BaseContent/css/chosen.css", new CssRewriteUrlTransform()));
 
             bundles.Add(new StyleBundle("~/Content/company")
                .Include("~/Content/BaseContent/css/company.css", new CssRewriteUrlTransform()));

@@ -1,4 +1,3 @@
-$('.chosen-select').chosen({ width: '100%' });
 jQuery('#newMemberBtn').on('click', function (event) {
     jQuery('#newMember').toggle(400);
     jQuery('#newRole').hide(400);

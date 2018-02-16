@@ -344,6 +344,33 @@ namespace Web.eBado.Controllers
             return Json(locations, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("GetCategories")]
+        public JsonResult GetCategories(string prefix)
+        {
+            //var allCategories = sharedHelper.GetAllCategories();
+
+            //var locations = allCategories.Where(x => x.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+            //    .Take(10).ToList();
+
+            List<SelectListItem> Provinces = new List<SelectListItem>();
+            Provinces.Add(new SelectListItem() { Text = "A Northern Cape", Value = "NC" });
+            Provinces.Add(new SelectListItem() { Text = "A Free State", Value = "FS" });
+            Provinces.Add(new SelectListItem() { Text = "A Western Cape", Value = "WC" });
+
+            return Json(Provinces, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetLanguages(string prefix)
+        {
+            var allLanguages = sharedHelper.GetCachedLanguages();
+
+            var languages = allLanguages.Select(language => new SelectListItem { Value = language.Code, Text = $"({language.Code}) {language.LanguageName}" });
+
+            return Json(languages,JsonRequestBehavior.AllowGet);
+        }
+
         private async Task<bool> GetToken(int userRoleId = 0, int companyRoleId = 0)
         {
             var client = new HttpClient();

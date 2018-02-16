@@ -7,8 +7,6 @@
 }
 
 @Styles.Render("~/Content/settings")
-@Scripts.Render("~/bundles/chosen")
-@Styles.Render("~/Content/chosen")
 @Scripts.Render("~/bundles/jquery_autocomplete")
 <script>
     $(document).ready(function () {
@@ -33,13 +31,13 @@
 {
     @Html.AntiForgeryToken()
     {
-         string token = Request.Cookies["tokenCookie"]?.Value;
-         if (!string.IsNullOrEmpty(token))
-         {
-             Request.Headers.Add("Authorization", $"Bearer {token}");
-             //HttpContext.Current.Request.Headers.Add("Authorization", $"Bearer {token}");
-         }
-     }
+        string token = Request.Cookies["tokenCookie"]?.Value;
+        if (!string.IsNullOrEmpty(token))
+        {
+            Request.Headers.Add("Authorization", $"Bearer {token}");
+            //HttpContext.Current.Request.Headers.Add("Authorization", $"Bearer {token}");
+        }
+    }
     <div class="container">
         <div class="responsive push_top_10">
             @{
@@ -343,7 +341,9 @@
                                     <div class="tags_text">@Resources.AddBusinessArea</div>
                                 </div>
                                 <div class="row">
-                                    @Html.DropDownListFor(m => m.CompanyModel.Categories.SelectedCategories, Model.CompanyModel.Categories.AllCategories, new { @class = "form-control chosen-select", @multiple = "true" })
+                                    <input type="text" class="form-control txt-lg" id="selectedCategoryInput" placeholder="@Resources.ChooseBusinessArea" />
+                                    @Html.HiddenFor(model => model.CompanyModel.Categories.SelectedCategories, new { @id = "hiddenSelectedCategoryInput" })
+                                    <div id="categoryArea" class="tag_area push_top_5"></div>
                                     <div class="val-message"></div>
                                 </div>
                             </div>
@@ -376,7 +376,9 @@
                                     <div class="tags_text">@Resources.AddAdditionalLanguages</div>
                                 </div>
                                 <div class="row">
-                                    @Html.DropDownListFor(m => m.CompanyModel.Languages.SelectedLanguages, Model.CompanyModel.Languages.AllLanguages, new { @class = "form-control chosen-select", @multiple = "true" })
+                                    <input type="text" class="form-control txt-lg" id="selectedLanguageInput" placeholder="Add your language skills" />
+                                    @Html.HiddenFor(model => model.CompanyModel.Languages.SelectedLanguages, new { @id = "hiddenSelectedLanguageInput" })
+                                    <div id="languageArea" class="tag_area push_top_5"></div>
                                     <div class="val-message"></div>
                                 </div>
                             </div>
@@ -645,7 +647,7 @@
                                 }
                                 else
                                 {
-                                                <h4>@Resources.NoMembersAtm</h4>
+                                    <h4>@Resources.NoMembersAtm</h4>
                                 }
                             </div>
                         </div>
@@ -671,4 +673,6 @@
     </script>
     @Scripts.Render("~/bundles/changeSettings")
     @Scripts.Render("~/bundles/postalCode")
+    @Scripts.Render("~/bundles/categories")
+
 }
