@@ -19,6 +19,8 @@ namespace Web.eBado.Models.Account
             Languages = new LanguagesModel();
         }
 
+        public int Id { get; set; }
+
         public string CompanyId { get; set; }
 
         public CompanyType CompanyType { get; set; }

@@ -167,11 +167,19 @@ namespace Web.eBado.Helpers
             return cachedLanguages;
         }
 
-        public int GetLocationByPostalCode(string postalCode)
+        public int GetLocationByPostalCode(string postalCode, IEnumerable<CachedLocationsModel> locations)
         {
-            var locations = GetCachedLocations();
+            var cachedLocations = new List<CachedLocationsModel>();
+            if(locations.Any())
+            {
+                cachedLocations.AddRange(locations);
+            }
+            else
+            {
+                cachedLocations.AddRange(GetCachedLocations());
+            }
 
-            return locations.FirstOrDefault(x => x.PostalCode.Equals(postalCode.Split('-').First()?.Trim())
+            return cachedLocations.FirstOrDefault(x => x.PostalCode.Equals(postalCode.Split('-').First()?.Trim())
                    || x.PostalCode.Replace(" ", "").Equals(postalCode.Replace(" ", ""))
                    || x.City.StartsWith(postalCode, StringComparison.OrdinalIgnoreCase)
                    || x.CityAlias.StartsWith(postalCode, StringComparison.OrdinalIgnoreCase)

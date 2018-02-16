@@ -43,15 +43,21 @@ namespace Web.eBado.Helpers
                 model = sharedHelper.GetDefaultCountry(model);
             }
 
-            var postalCodeList = GetRelatedPostalCodes(model);
+            var postalCodeList = new List<string>();
+
+            if (model.PostalCode != null)
+            {
+               postalCodeList = GetRelatedPostalCodes(model);
+            }
 
             var companyDetails = unitOfWork.CompanyDetailsRepository.FindAll()
                 .WhereIf(!string.IsNullOrEmpty(model.Name), search => search.Name.Contains(model.Name))
                 .WhereIf(!string.IsNullOrEmpty(model.SelectedMainCategory), search => search.Category2CompanyDetails.Select(c => c.Category.Name).Contains(model.SelectedMainCategory))
                 .WhereIf(!string.IsNullOrEmpty(model.SelectedSubCategory), search => search.SubCategory2CompanyDetails.Select(sc => sc.SubCategory.Name).Contains(model.SelectedSubCategory))
-                .Where(search => postalCodeList.Contains(search.Addresses.FirstOrDefault(a => a.IsBillingAddress == true).Location.PostalCode))
+                .WhereIf(postalCodeList.Any(), search => postalCodeList.Contains(search.Addresses.FirstOrDefault(a => a.IsBillingAddress == true).Location.PostalCode))
                 .Select(company => new CompanyModel
                 {
+                    Id = company.Id,
                     CompanyId = company.EncryptedId,
                     CompanyDescription = company.Description,
                     CompanyName = company.Name,
@@ -65,7 +71,7 @@ namespace Web.eBado.Helpers
                     DateRegistered = company.DateCreated.Value
                 });
 
-            model.CompanyModel = companyDetails.OrderBy(cd=>cd.DateRegistered).ToPagedList(model.Page ?? 1, 10);
+            model.CompanyModel = companyDetails.OrderBy(cd => cd.Id).ToPagedList(model.Page ?? 1, 10);
             return model;
         }
 
@@ -154,7 +160,7 @@ namespace Web.eBado.Helpers
             int? locationId = null;
             if (model.PostalCode != null)
             {
-                locationId = sharedHelper.GetLocationByPostalCode(model.PostalCode);
+                locationId = sharedHelper.GetLocationByPostalCode(model.PostalCode, cachedLocations);
             }
             var countryCodes = sharedHelper.GetCountryShortCode(model);
             var currentLocation = cachedLocations.FirstOrDefault(location => location.Id == locationId);
