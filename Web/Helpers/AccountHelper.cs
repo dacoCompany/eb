@@ -532,12 +532,6 @@ namespace Web.eBado.Helpers
             return model;
         }
 
-        public void InitializeData(CompanyModel model, IUnitOfWork unitOfWork)
-        {
-            model.Categories.AllCategories = sharedHelper.GetCategoriesToListItem();
-            model.Languages.AllLanguages = GetAllLanguages(unitOfWork);
-        }
-
         public static string EncodePassword(string pass, string salt)
         {
             byte[] bytes = Encoding.Unicode.GetBytes(pass);
@@ -576,22 +570,22 @@ namespace Web.eBado.Helpers
             return new string(chars);
         }
 
-        private IEnumerable<SelectListItem> GetAllLanguages(IUnitOfWork unitOfWork)
-        {
-            List<SelectListItem> allLanguages = new List<SelectListItem>();
-            var cache = NinjectResolver.GetInstance<ICache>();
-            var cachedLanguages = cache.GetData<List<CachedLanguagesModel>>(CacheKeys.LanguageKey);
+        //private IEnumerable<SelectListItem> GetAllLanguages(IUnitOfWork unitOfWork)
+        //{
+        //    List<SelectListItem> allLanguages = new List<SelectListItem>();
+        //    var cache = NinjectResolver.GetInstance<ICache>();
+        //    var cachedLanguages = cache.GetData<List<CachedLanguagesModel>>(CacheKeys.LanguageKey);
 
-            if (cachedLanguages == null)
-            {
-                cachedLanguages = SetLanguagesCache(cachedLanguages, cache, unitOfWork);
-            }
+        //    if (cachedLanguages == null)
+        //    {
+        //        cachedLanguages = SetLanguagesCache(cachedLanguages, cache, unitOfWork);
+        //    }
 
-            var languages = cachedLanguages.Select(language => new SelectListItem { Value = language.Code, Text = $"({language.Code}) {language.LanguageName}" });
+        //    var languages = cachedLanguages.Select(language => new SelectListItem { Value = language.Code, Text = $"({language.Code}) {language.LanguageName}" });
 
-            allLanguages.AddRange(languages);
-            return allLanguages.AsEnumerable();
-        }
+        //    allLanguages.AddRange(languages);
+        //    return allLanguages.AsEnumerable();
+        //}
 
         private IEnumerable<SelectListItem> GetAllRoles(IUnitOfWork uow, int companyId)
         {
@@ -714,13 +708,7 @@ namespace Web.eBado.Helpers
 
         private void SetSelectedLanguages(IUnitOfWork uow, List<string> selecteLanguages, CompanyDetailDbo companyDetails)
         {
-            var cache = NinjectResolver.GetInstance<ICache>();
-            var cachedLanguages = cache.GetData<List<CachedLanguagesModel>>(CacheKeys.LanguageKey);
-
-            if (cachedLanguages == null)
-            {
-                cachedLanguages = SetLanguagesCache(cachedLanguages, cache, uow);
-            }
+            var cachedLanguages = sharedHelper.GetCachedLanguages();
 
             var alLanguagesIds = cachedLanguages.Where(c => selecteLanguages.Contains(c.Code)).Select(c => c.Id);
             var currentLanguagesId = companyDetails.CompanyDetails2Languages.WhereActive().Select(c => c.LanguageId);
@@ -739,23 +727,23 @@ namespace Web.eBado.Helpers
             }
         }
 
-        private List<CachedLanguagesModel> SetLanguagesCache(List<CachedLanguagesModel> cachedLanguages, ICache cache, IUnitOfWork unitOfWork)
-        {
-            var cacheSettings = new CacheSettings("cacheDurationKey", "cacheExpirationKey");
-            cachedLanguages = new List<CachedLanguagesModel>();
+        //private List<CachedLanguagesModel> SetLanguagesCache(List<CachedLanguagesModel> cachedLanguages, ICache cache, IUnitOfWork unitOfWork)
+        //{
+        //    var cacheSettings = new CacheSettings("cacheDurationKey", "cacheExpirationKey");
+        //    cachedLanguages = new List<CachedLanguagesModel>();
 
-            var languageList = unitOfWork.LanguageRepository.FindAll().Select(language => new CachedLanguagesModel
-            {
-                Id = language.Id,
-                Code = language.Code,
-                LanguageName = language.Name
-            }).ToList();
+        //    var languageList = unitOfWork.LanguageRepository.FindAll().Select(language => new CachedLanguagesModel
+        //    {
+        //        Id = language.Id,
+        //        Code = language.Code,
+        //        LanguageName = language.Name
+        //    }).ToList();
 
-            cachedLanguages.AddRange(languageList);
+        //    cachedLanguages.AddRange(languageList);
 
-            cache.Insert(CacheKeys.LanguageKey, cachedLanguages, null, cacheSettings);
-            return cachedLanguages;
-        }
+        //    cache.Insert(CacheKeys.LanguageKey, cachedLanguages, null, cacheSettings);
+        //    return cachedLanguages;
+        //}
         #endregion
     }
 }

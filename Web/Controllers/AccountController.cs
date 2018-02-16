@@ -85,8 +85,6 @@ namespace Web.eBado.Controllers
         public ActionResult RegisterCompany()
         {
             RegistrationModel model = new RegistrationModel();
-            accountHelper.InitializeData(model.CompanyModel, unitOfWork);
-
             return View(model);
         }
 
@@ -126,7 +124,6 @@ namespace Web.eBado.Controllers
             }
 
 
-            accountHelper.InitializeData(model.CompanyModel, unitOfWork);
             return View(model);
         }
 
@@ -336,7 +333,6 @@ namespace Web.eBado.Controllers
                         }));
                 }
                 this.ModelState.AddValidationErrors(entlibValidationResult);
-                accountHelper.InitializeData(model.CompanyModel, unitOfWork);
                 return View("RegisterCompany", model);
             }
 
@@ -347,7 +343,6 @@ namespace Web.eBado.Controllers
             if (validationResult.Any())
             {
                 ModelState.AddValidationErrors(validationResult);
-                accountHelper.InitializeData(model.CompanyModel, unitOfWork);
                 return View("RegisterCompany", model);
             }
 
@@ -470,7 +465,6 @@ namespace Web.eBado.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
             }
             //}
-            accountHelper.InitializeData(model.CompanyModel, unitOfWork);
             return View(model);
         }
 

@@ -16,8 +16,6 @@ namespace Web.eBado.Models.Account
 
         public string[] SelectedCategories { get; set; }
 
-        public IEnumerable<SelectListItem> AllCategories { get; set; }
-
         /// <summary>
         /// Validation of whether the company address is filled.
         /// </summary>
@@ -31,8 +29,8 @@ namespace Web.eBado.Models.Account
 
             if (SelectedCategories == null || SelectedCategories.Length == 0)
             {
-                results.AddResult(new Microsoft.Practices.EnterpriseLibrary.Validation.ValidationResult("Please select at least one category", this, $"CompanyModel.Categories.{nameof(SelectedCategories)}", null, null));
-                results.AddResult(new Microsoft.Practices.EnterpriseLibrary.Validation.ValidationResult(Resources.RequiredField, this, $"CompanyModel.Categories.{nameof(SelectedCategories)}", null, null));
+                results.AddResult(new ValidationResult("Please select at least one category", this, $"CompanyModel.Categories.{nameof(SelectedCategories)}", null, null));
+                results.AddResult(new ValidationResult(Resources.RequiredField, this, $"CompanyModel.Categories.{nameof(SelectedCategories)}", null, null));
             }
         }
     }

@@ -468,6 +468,10 @@ input[type=checkbox] {
     margin-top: 5px;
 }
 
+.tag_area {
+    display: table;
+}
+
 .tags_blocks {
     display: inline-block;
     height: 30px;

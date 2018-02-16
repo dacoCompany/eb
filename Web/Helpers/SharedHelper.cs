@@ -46,6 +46,17 @@ namespace Web.eBado.Helpers
             return (Countries)Enum.Parse(typeof(Countries), countryCookie.Value);
         }
 
+        public IEnumerable<string> GetAllCategories()
+        {
+            var cachedCategories = httpCache.GetData<IEnumerable<string>>(CacheKeys.AllCategoryKey);
+
+            if (cachedCategories == null)
+            {
+                cachedCategories = SetAllCategories(cachedCategories);
+            }
+
+            return cachedCategories;
+        }
 
         public IEnumerable<SelectListItem> GetCategoriesToListItem()
         {
@@ -82,6 +93,24 @@ namespace Web.eBado.Helpers
             });
         }
 
+        public List<CachedLanguagesModel> SetLanguagesCache(List<CachedLanguagesModel> cachedLanguages)
+        {
+            var cacheSettings = new CacheSettings("cacheDurationKey", "cacheExpirationKey");
+            cachedLanguages = new List<CachedLanguagesModel>();
+
+            var languageList = unitOfWork.LanguageRepository.FindAll().Select(language => new CachedLanguagesModel
+            {
+                Id = language.Id,
+                Code = language.Code,
+                LanguageName = language.Name
+            }).ToList();
+
+            cachedLanguages.AddRange(languageList);
+
+            httpCache.Insert(CacheKeys.LanguageKey, cachedLanguages, null, cacheSettings);
+            return cachedLanguages;
+        }
+
         public List<CachedAllCategoriesModel> SetCategoriesCacheToListItem(List<CachedAllCategoriesModel> cachedCategories)
         {
             var cacheSettings = new CacheSettings("cacheDurationKey", "cacheExpirationKey");
@@ -102,6 +131,18 @@ namespace Web.eBado.Helpers
             return cachedCategories;
         }
 
+        public IEnumerable<string> SetAllCategories(IEnumerable<string> cachedCategories)
+        {
+            var cacheSettings = new CacheSettings("cacheDurationKey", "cacheExpirationKey");
+
+            var categories = unitOfWork.CategoryRepository.FindAll().Select(c=>c.Name).ToList();
+            var subCategories = unitOfWork.SubCategoryRepository.FindAll().Select(s => s.Name).ToList();
+            cachedCategories = categories.Concat(subCategories);
+
+            httpCache.Insert(CacheKeys.AllCategoryKey, cachedCategories, null, cacheSettings);
+            return cachedCategories;
+        }
+
         public IEnumerable<CachedLocationsModel> GetCachedLocations()
         {
 
@@ -113,6 +154,17 @@ namespace Web.eBado.Helpers
             }
 
             return cachedLocations;
+        }
+
+        public IEnumerable<CachedLanguagesModel> GetCachedLanguages()
+        {
+            var cachedLanguages = httpCache.GetData<List<CachedLanguagesModel>>(CacheKeys.LanguageKey);
+
+            if (cachedLanguages == null)
+            {
+                cachedLanguages = SetLanguagesCache(cachedLanguages);
+            }
+            return cachedLanguages;
         }
 
         public int GetLocationByPostalCode(string postalCode)
