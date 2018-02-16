@@ -1,8 +1,10 @@
-﻿using System.Web.Mvc;
+﻿using MvcThrottle;
+using System.Web.Mvc;
 using Web.eBado.Models.Shared;
 
 namespace Web.eBado.Controllers
 {
+    [EnableThrottling]
     [RoutePrefix("Home")]
     [AllowAnonymous]
     public class HomeController : Controller
@@ -14,7 +16,7 @@ namespace Web.eBado.Controllers
         {
             model = model ?? new SiteAreaBaseModel<SiteItemModel>();
             return View(model);
-        }      
+        }
 
         [Route("Index2")]
         [AllowAnonymous]

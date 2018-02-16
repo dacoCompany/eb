@@ -579,4 +579,10 @@
   <data name="YourLanguages" xml:space="preserve">
     <value>Vaše jazyky:</value>
   </data>
+  <data name="TooManyRequests" xml:space="preserve">
+    <value>Príliš veľa požiadaviek</value>
+  </data>
+  <data name="TooManyRequestsMessage" xml:space="preserve">
+    <value>Prekročili ste maximálnu povolenú kvótu žiadosti za minútu.</value>
+  </data>
 </root>

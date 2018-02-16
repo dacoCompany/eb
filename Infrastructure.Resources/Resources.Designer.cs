@@ -1366,6 +1366,24 @@ namespace Infrastructure.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Too many requests.
+        /// </summary>
+        public static string TooManyRequests {
+            get {
+                return ResourceManager.GetString("TooManyRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have exceeded the maximum admitted request quota per minute..
+        /// </summary>
+        public static string TooManyRequestsMessage {
+            get {
+                return ResourceManager.GetString("TooManyRequestsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unauthorized operation.
         /// </summary>
         public static string Unauthorized {

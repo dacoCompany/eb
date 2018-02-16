@@ -567,4 +567,10 @@
   <data name="YourLanguages" xml:space="preserve">
     <value>Beszélt nyelvek:</value>
   </data>
+  <data name="TooManyRequests" xml:space="preserve">
+    <value>Túl sok kérés</value>
+  </data>
+  <data name="TooManyRequestsMessage" xml:space="preserve">
+    <value>Túllépte a percenkénti maximálisan engedélyezett kérési kvótát.</value>
+  </data>
 </root>
