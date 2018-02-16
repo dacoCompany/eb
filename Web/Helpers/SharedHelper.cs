@@ -167,7 +167,7 @@ namespace Web.eBado.Helpers
             return cachedLanguages;
         }
 
-        public int GetLocationByPostalCode(string postalCode, IEnumerable<CachedLocationsModel> locations)
+        public int GetLocationByPostalCode(string postalCode, IEnumerable<CachedLocationsModel> locations = null)
         {
             var cachedLocations = new List<CachedLocationsModel>();
             if(locations.Any())
