@@ -1,33 +1,34 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using Infrastructure.Common.DB;
-using Infrastructure.Common.Validations;
-using System.Web.Mvc;
-using AutoMapper;
+﻿using AutoMapper;
 using eBado.BusinessObjects;
 using eBado.Entities;
+using Infrastructure.Common;
+using Infrastructure.Common.DB;
+using Infrastructure.Common.Enums;
+using Infrastructure.Common.Validations;
+using Microsoft.Practices.EnterpriseLibrary.Validation;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Configuration;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Security;
 using Web.eBado.Helpers;
 using Web.eBado.Models.Account;
 using Web.eBado.Models.MvcExtensions;
 using Web.eBado.Models.Shared;
 using Web.eBado.Validators;
+using WebAPIFactory.Caching.Core;
 using WebAPIFactory.Configuration.Core;
 using WebAPIFactory.Logging.Core;
 using WebAPIFactory.Logging.Core.Diagnostics;
-using System.Linq;
-using System.Web.Security;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web;
-using Microsoft.Practices.EnterpriseLibrary.Validation;
-using System.IO;
-using Infrastructure.Common.Enums;
-using Infrastructure.Common;
-using System.Threading;
-using WebAPIFactory.Caching.Core;
 
 namespace Web.eBado.Controllers
 {
@@ -485,6 +486,14 @@ namespace Web.eBado.Controllers
         [EbadoMvcAuthorization(Roles = "AddGallery")]
         public ActionResult CreateBatch(BatchGalleryModel model)
         {
+            void FillBatches(ICollection<BatchEntity> batchEntities)
+            {
+                Mapper.Initialize(cfg => { cfg.CreateMap<BatchModel, BatchEntity>().ReverseMap(); });
+
+                var fileEntities = Mapper.Map<Collection<BatchModel>>(batchEntities);
+                model.Batch = fileEntities;
+            }
+
             int? companyId = GetActiveCompany();
 
             if (companyId == null)
@@ -492,19 +501,24 @@ namespace Web.eBado.Controllers
                 return new HttpUnauthorizedResult();
             }
 
+            var entities = fileBo.GetBatches(companyId.Value);
+
+            int batchLimit = int.Parse(ConfigurationManager.AppSettings[Constants.MaxNumberOfGalleries]);
+            if (batchLimit - entities.Count <= 0)
+            {
+                FillBatches(entities);
+                model.HasError = true;
+                var results = new ValidationResults();
+                results.AddResult(new Microsoft.Practices.EnterpriseLibrary.Validation.ValidationResult("Gallery limit reached.", this, nameof(model.Name), null, null));
+                this.ModelState.AddValidationErrors(results);
+                return View("BatchAccountGallery", model);
+            }
+
             var entlibValidationResult = Validation.Validate(model, "CreateBatch");
 
             if (!entlibValidationResult.IsValid)
             {
-                var entities = fileBo.GetBatches(companyId.Value);
-
-                Mapper.Initialize(cfg =>
-                {
-                    cfg.CreateMap<BatchModel, BatchEntity>().ReverseMap();
-                });
-
-                var fileEntities = Mapper.Map<Collection<BatchModel>>(entities);
-                model.Batch = fileEntities;
+                FillBatches(entities);
                 model.HasError = true;
 
                 this.ModelState.AddValidationErrors(entlibValidationResult);
