@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Infrastructure.Common;
 using Infrastructure.Common.DB;
 using Infrastructure.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
@@ -13,9 +14,8 @@ using System.Web;
 using System.Web.Mvc;
 using Web.eBado.Helpers;
 using Web.eBado.Models.Shared;
-using WebAPIFactory.Configuration.Core;
-using Infrastructure.Common;
 using WebAPIFactory.Caching.Core;
+using WebAPIFactory.Configuration.Core;
 
 namespace Web.eBado.Controllers
 {
@@ -66,7 +66,7 @@ namespace Web.eBado.Controllers
             }
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
-       
+
         [System.Web.Http.Authorize]
         [Route("SetAccount")]
         public async Task<ActionResult> SetAccount(string accountName)
@@ -362,13 +362,16 @@ namespace Web.eBado.Controllers
             return Json(Provinces, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("GetLanguages")]
         public JsonResult GetLanguages(string prefix)
         {
             var allLanguages = sharedHelper.GetCachedLanguages();
 
-            var languages = allLanguages.Select(language => new SelectListItem { Value = language.Code, Text = $"({language.Code}) {language.LanguageName}" });
+            var languages = allLanguages.Where(a => a.LanguageName.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)).Take(10).Select(language => new SelectListItem { Value = language.Code, Text = $"({language.Code}) {language.LanguageName}" });
 
-            return Json(languages,JsonRequestBehavior.AllowGet);
+            return Json(languages, JsonRequestBehavior.AllowGet);
         }
 
         private async Task<bool> GetToken(int userRoleId = 0, int companyRoleId = 0)

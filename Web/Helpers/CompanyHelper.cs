@@ -1,12 +1,8 @@
 ﻿using GeoCoordinatePortable;
-using Infrastructure.Common;
 using Infrastructure.Common.DB;
-using Infrastructure.Common.Enums;
-using Microsoft.Practices.EnterpriseLibrary.Common.Utility;
 using PagedList;
-using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using Web.eBado.Models.Account;
 using Web.eBado.Models.Company;
@@ -45,11 +41,15 @@ namespace Web.eBado.Helpers
 
             var postalCodeList = new List<string>();
 
+            var timer = Stopwatch.StartNew();
             if (model.PostalCode != null)
             {
-               postalCodeList = GetRelatedPostalCodes(model);
+                postalCodeList = GetRelatedPostalCodes(model);
             }
+            timer.Stop();
+            Debug.WriteLine(timer.ElapsedMilliseconds);
 
+            timer.Restart();
             var companyDetails = unitOfWork.CompanyDetailsRepository.FindAll()
                 .WhereIf(!string.IsNullOrEmpty(model.Name), search => search.Name.Contains(model.Name))
                 .WhereIf(!string.IsNullOrEmpty(model.SelectedMainCategory), search => search.Category2CompanyDetails.Select(c => c.Category.Name).Contains(model.SelectedMainCategory))
@@ -72,6 +72,8 @@ namespace Web.eBado.Helpers
                 });
 
             model.CompanyModel = companyDetails.OrderBy(cd => cd.Id).ToPagedList(model.Page ?? 1, 10);
+            timer.Stop();
+            Debug.WriteLine(timer.ElapsedMilliseconds);
             return model;
         }
 

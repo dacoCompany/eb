@@ -112,14 +112,19 @@ $(function () {
 });
 
 function CreateLanguageTag(value, text) {
-    var tag = $('<div id="div_' + value + '" class="tags_blocks"><div id="name_' + value + '" class="tags_block-text">' + text + '</div><div id="' + value + '" class="tags_block-symbol">&#10006;</div></div>');
+    var tag = $('<div id="div_new_'+value+'" class="tags_blocks"><div id="name_new_'+value+'" class="tags_block-text">'+text+'</div><div id="'+value+'" class="tags_block-symbol">&#10006;</div></div>');
     var languages = [];
-    $("#languageArea .tags_block-symbol").each(function () {
+    var existingLanguages = [];
+    $("#languageArea .tags_block-symbol").each(function() {
         languages.push($(this).attr("id"));
-    })
-    if (languages.indexOf(value) == -1) {
+    });
+    $("#existingLanguages .language_tags_block-symbol").each(function() {
+        existingLanguages.push($(this).attr("id"));
+    });
+    if (languages.indexOf(value) == -1 && existingLanguages.indexOf(value) == -1) {
         $('#languageArea').append(tag);
     } else {
+        $("#div_new_" + value).effect("highlight", { color: '#ff552b' }, 1000);
         $("#div_" + value).effect("highlight", { color: '#ff552b' }, 1000);
     }
     $("#selectedLanguageInput").val("");
