@@ -24,7 +24,6 @@ namespace Infrastructure.Common.DB
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<AddressDbo> AddressDboes { get; set; }
         public virtual DbSet<AttachmentDbo> AttachmentDboes { get; set; }
         public virtual DbSet<BatchAttachmentDbo> BatchAttachmentDboes { get; set; }
         public virtual DbSet<CategoryDbo> CategoryDboes { get; set; }
@@ -48,5 +47,6 @@ namespace Infrastructure.Common.DB
         public virtual DbSet<CompanySettingDbo> CompanySettingDboes { get; set; }
         public virtual DbSet<EmailTemplateDbo> EmailTemplateDboes { get; set; }
         public virtual DbSet<UserSettingDbo> UserSettingDboes { get; set; }
+        public virtual DbSet<AddressDbo> AddressDboes { get; set; }
     }
 }

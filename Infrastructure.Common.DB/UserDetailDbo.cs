@@ -17,8 +17,8 @@ namespace Infrastructure.Common.DB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public UserDetailDbo()
         {
-            this.Addresses = new HashSet<AddressDbo>();
             this.CompanyDetails2UserDetails = new HashSet<CompanyDetails2UserDetailsDbo>();
+            this.Addresses = new HashSet<AddressDbo>();
         }
     
         public int Id { get; set; }
@@ -46,10 +46,10 @@ namespace Infrastructure.Common.DB
         public string ProfilePictureUrlMedium { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AddressDbo> Addresses { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CompanyDetails2UserDetailsDbo> CompanyDetails2UserDetails { get; set; }
         public virtual UserRoleDbo UserRole { get; set; }
         public virtual UserSettingDbo UserSetting { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AddressDbo> Addresses { get; set; }
     }
 }

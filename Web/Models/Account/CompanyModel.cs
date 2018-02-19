@@ -1,12 +1,12 @@
-﻿using Infrastructure.Common.Enums;
-using System.ComponentModel.DataAnnotations;
-using Infrastructure.Common.DB;
+﻿using Infrastructure.Common.DB;
+using Infrastructure.Common.Enums;
 using Infrastructure.Resources;
 using Microsoft.Practices.EnterpriseLibrary.Validation;
 using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
-using Web.eBado.IoC;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using Web.eBado.IoC;
 
 namespace Web.eBado.Models.Account
 {
@@ -38,7 +38,6 @@ namespace Web.eBado.Models.Account
         public string CompanyEmail { get; set; }
 
         [RangeValidator(1, RangeBoundaryType.Inclusive, 10, RangeBoundaryType.Ignore, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "RequiredField", Ruleset = "RegisterCompany")]
-        [RangeValidator(1, RangeBoundaryType.Inclusive, 999999999, RangeBoundaryType.Inclusive, MessageTemplateResourceType = typeof(Resources), MessageTemplateResourceName = "Must be 9 characters long.", Ruleset = "RegisterCompany")]
         public int CompanyIco { get; set; }
 
         public int? CompanyDic { get; set; }

@@ -15,7 +15,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using System.Xml;
 using Web.eBado.IoC;
 using Web.eBado.Models.Account;
 using Web.eBado.Models.Shared;
@@ -77,7 +76,7 @@ namespace Web.eBado.Helpers
             try
             {
                 var userRole = uow.UserRoleRepository.FindFirstOrDefault(r => r.Name == UserRole.User.ToString());
-                int postalCodeId = sharedHelper.GetLocationByPostalCode(model.UserModel.PostalCode);
+                var location = sharedHelper.GetLocationByPostalCode(model.UserModel.PostalCode);
                 string salt = GenerateSalt();
                 var userDetail = new UserDetailDbo
                 {
@@ -108,7 +107,8 @@ namespace Web.eBado.Helpers
                 userDetail.Addresses.Add(new AddressDbo
                 {
                     IsBillingAddress = true,
-                    LocationId = postalCodeId
+                    LocationId = location.Id,
+                    PostalCode = location.PostalCode
                 });
 
                 uow.UserDetailsRepository.Add(userDetail);
@@ -127,7 +127,8 @@ namespace Web.eBado.Helpers
                 companyDetail.Addresses.Add(new AddressDbo
                 {
                     IsBillingAddress = true,
-                    LocationId = postalCodeId
+                    LocationId = location.Id,
+                    PostalCode = location.PostalCode
                 });
 
                 companyDetail.CompanySetting = new CompanySettingDbo
@@ -224,7 +225,7 @@ namespace Web.eBado.Helpers
         {
             var companyTypeId = uow.CompanyTypeRepository.FindFirstOrDefault(ct => ct.Name == model.CompanyType.ToString()).Id;
             var companyRoleId = uow.CompanyRoleRepository.FindFirstOrDefault(cr => cr.Name == CompanyRole.Owner.ToString()).Id;
-            int postalCodeId = sharedHelper.GetLocationByPostalCode(model.CompanyPostalCode);
+            var location = sharedHelper.GetLocationByPostalCode(model.CompanyPostalCode);
 
             var companyDetails = new CompanyDetailDbo
             {
@@ -239,7 +240,8 @@ namespace Web.eBado.Helpers
             companyDetails.Addresses.Add(new AddressDbo
             {
                 IsBillingAddress = true,
-                LocationId = postalCodeId
+                LocationId = location.Id,
+                PostalCode = location.PostalCode
             });
             companyDetails.CompanyDetails2UserDetails.Add(new CompanyDetails2UserDetailsDbo
             {
@@ -333,7 +335,9 @@ namespace Web.eBado.Helpers
                 var address = userDetails.Addresses.FirstOrDefault(ad => ad.IsBillingAddress.Value);
                 address.Street = userModel.Street;
                 address.Number = userModel.StreetNumber;
-                address.LocationId = sharedHelper.GetLocationByPostalCode(userModel.PostalCode);
+                var location = sharedHelper.GetLocationByPostalCode(userModel.PostalCode);
+                address.LocationId = location.Id;
+                address.PostalCode = location.PostalCode;
             }
             var userSettings = userDetails.UserSetting;
             userSettings.SearchInCZ = searchModel.SearchInCZ;
@@ -398,7 +402,9 @@ namespace Web.eBado.Helpers
             address.Street = companyModel.CompanyStreet;
             address.Number = companyModel.CompanyStreetNumber;
 
-            address.LocationId = sharedHelper.GetLocationByPostalCode(companyModel.CompanyPostalCode);
+            var location = sharedHelper.GetLocationByPostalCode(companyModel.CompanyPostalCode);
+            address.LocationId = location.Id;
+            address.PostalCode = location.PostalCode;
 
             var companySettings = companyDetails.CompanySetting;
             companySettings.SearchInCZ = searchModel.SearchInCZ;

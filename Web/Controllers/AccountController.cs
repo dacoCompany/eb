@@ -311,15 +311,10 @@ namespace Web.eBado.Controllers
         {
             EntlibLogger.LogVerbose("Account", "Register", $"Registration attempt (user & company) with e-mail address: {model.UserModel.Email}", diagnosticLogConstant);
 
+            #region Validation
+
             var ruleSets = new List<string> { RuleSets.User };
-            if (model.CompanyModel.CompanyType == CompanyType.PartTime)
-            {
-                ruleSets.Add(RuleSets.Contractor);
-            }
-            else
-            {
-                ruleSets.Add(RuleSets.Company);
-            }
+            ruleSets.Add(model.CompanyModel.CompanyType == CompanyType.PartTime ? RuleSets.Contractor : RuleSets.Company);
 
             var entlibValidationResult = Validation.Validate(model, ruleSets.ToArray());
 
@@ -339,6 +334,7 @@ namespace Web.eBado.Controllers
                 return View("RegisterCompany", model);
             }
 
+
             var validationResult = new ValidationResultCollection();
 
             AccountValidator.ValidateUserRegistration(unitOfWork, validationResult, model.UserModel);
@@ -348,6 +344,8 @@ namespace Web.eBado.Controllers
                 ModelState.AddValidationErrors(validationResult);
                 return View("RegisterCompany", model);
             }
+
+            #endregion
 
             if (AccountHelper.IsValidCaptcha())
             {

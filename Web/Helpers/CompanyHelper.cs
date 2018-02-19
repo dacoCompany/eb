@@ -162,7 +162,7 @@ namespace Web.eBado.Helpers
             int? locationId = null;
             if (model.PostalCode != null)
             {
-                locationId = sharedHelper.GetLocationByPostalCode(model.PostalCode, cachedLocations);
+                locationId = sharedHelper.GetLocationByPostalCode(model.PostalCode, cachedLocations).Id;
             }
             var countryCodes = sharedHelper.GetCountryShortCode(model);
             var currentLocation = cachedLocations.FirstOrDefault(location => location.Id == locationId);

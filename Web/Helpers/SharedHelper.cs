@@ -5,12 +5,10 @@ using Infrastructure.Common.Models;
 using Infrastructure.Common.Models.Cache;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
-using Web.eBado.IoC;
 using Web.eBado.Models.Account;
 using Web.eBado.Models.Company;
 using Web.eBado.Models.Shared;
@@ -135,7 +133,7 @@ namespace Web.eBado.Helpers
         {
             var cacheSettings = new CacheSettings("cacheDurationKey", "cacheExpirationKey");
 
-            var categories = unitOfWork.CategoryRepository.FindAll().Select(c=>c.Name).ToList();
+            var categories = unitOfWork.CategoryRepository.FindAll().Select(c => c.Name).ToList();
             var subCategories = unitOfWork.SubCategoryRepository.FindAll().Select(s => s.Name).ToList();
             cachedCategories = categories.Concat(subCategories);
 
@@ -167,10 +165,10 @@ namespace Web.eBado.Helpers
             return cachedLanguages;
         }
 
-        public int GetLocationByPostalCode(string postalCode, IEnumerable<CachedLocationsModel> locations = null)
+        public CachedLocationsModel GetLocationByPostalCode(string postalCode, IEnumerable<CachedLocationsModel> locations = null)
         {
             var cachedLocations = new List<CachedLocationsModel>();
-            if(locations.Any())
+            if (locations != null && locations.Any())
             {
                 cachedLocations.AddRange(locations);
             }
@@ -183,7 +181,7 @@ namespace Web.eBado.Helpers
                    || x.PostalCode.Replace(" ", "").Equals(postalCode.Replace(" ", ""))
                    || x.City.StartsWith(postalCode, StringComparison.OrdinalIgnoreCase)
                    || x.CityAlias.StartsWith(postalCode, StringComparison.OrdinalIgnoreCase)
-                   || x.DistrictAlias.StartsWith(postalCode, StringComparison.OrdinalIgnoreCase)).Id;
+                   || x.DistrictAlias.StartsWith(postalCode, StringComparison.OrdinalIgnoreCase));
         }
 
         public int GetDefaultRadius(SessionModel session)
@@ -314,7 +312,7 @@ namespace Web.eBado.Helpers
             var city = !string.IsNullOrEmpty(location.District) ? location.District : location.City;
             return $"{baseMapUrl}{address.Street}+{address.Number},+{location.PostalCode.Replace(" ", "+")}+{city}";
         }
-       
+
         private List<CachedAllCategoriesModel> GetCachedCategoriesInListItem()
         {
             var cachedCategories = httpCache.GetData<List<CachedAllCategoriesModel>>(CacheKeys.CategoryKey);
