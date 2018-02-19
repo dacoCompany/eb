@@ -39,14 +39,19 @@ $(function () {
 });
 
 function CreateCategoryTag(value, text) {
-    var tag = $('<div id="div_'+value+'" class="tags_blocks"><div id="name_'+value+'" class="tags_block-text">'+text+'</div><div id="'+value+'" class="tags_block-symbol">&#10006;</div></div>');
+    var tag = $('<div id="div_new_'+value+'" class="tags_blocks"><div id="name_'+value+'" class="tags_block-text">'+text+'</div><div id="'+value+'" class="tags_block-symbol">&#10006;</div></div>');
     var categories = [];
+    var existingCategories = [];
     $("#categoryArea .tags_block-symbol").each(function () {
         categories.push($(this).attr("id"));
-    })
-    if (categories.indexOf(value) == -1) {
+    });
+    $("#existingCategories .category_tags_block-symbol").each(function () {
+        existingCategories.push($(this).attr("id"));
+    });
+    if (categories.indexOf(value) == -1 && existingCategories.indexOf(value) == -1) {
         $('#categoryArea').append(tag);
     } else {
+        $("#div_new_" + value).effect("highlight", { color: '#ff552b' }, 1000);
         $("#div_" + value).effect("highlight", { color: '#ff552b' }, 1000);
     }
     $("#selectedCategoryInput").val("");

@@ -34,7 +34,7 @@ namespace Web.eBado.Controllers
                 model.SelectedMainCategory = model.SelectedCategory;
             }
             model = companyHelper.GetAllCompanies(model, unitOfWork, session);
-            model = companyHelper.InitializeCompanyData(session, model);
+            model = companyHelper.InitializeCompanyData(session, model, unitOfWork);
 
             return View(model);
         }

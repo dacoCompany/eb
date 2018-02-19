@@ -21,24 +21,7 @@ namespace Web.eBado.Helpers
         }
 
         public CompanySearchModel GetAllCompanies(CompanySearchModel model, IUnitOfWork unitOfWork, SessionModel session, int? page = null)
-        {
-            if (session != null)
-            {
-                var companySesion = session.Companies.FirstOrDefault(c => c.IsActive);
-                if (session.IsActive)
-                {
-                    model = sharedHelper.GetUserSettings(unitOfWork, model, session.Id);
-                }
-                else if (companySesion != null)
-                {
-                    model = sharedHelper.GetCompanySettings(unitOfWork, model, companySesion.Id);
-                }
-            }
-            else
-            {
-                model = sharedHelper.GetDefaultCountry(model);
-            }
-
+        {                   
             var postalCodeList = new List<string>();
 
             var timer = Stopwatch.StartNew();
@@ -54,7 +37,7 @@ namespace Web.eBado.Helpers
                 .WhereIf(!string.IsNullOrEmpty(model.Name), search => search.Name.Contains(model.Name))
                 .WhereIf(!string.IsNullOrEmpty(model.SelectedMainCategory), search => search.Category2CompanyDetails.Select(c => c.Category.Name).Contains(model.SelectedMainCategory))
                 .WhereIf(!string.IsNullOrEmpty(model.SelectedSubCategory), search => search.SubCategory2CompanyDetails.Select(sc => sc.SubCategory.Name).Contains(model.SelectedSubCategory))
-                .WhereIf(postalCodeList.Any(), search => postalCodeList.Contains(search.Addresses.FirstOrDefault(a => a.IsBillingAddress == true).Location.PostalCode))
+                //.WhereIf(postalCodeList.Any(), search => postalCodeList.Contains(search.Addresses.SelectMany(a=>a.Street)))
                 .Select(company => new CompanyModel
                 {
                     Id = company.Id,
@@ -147,11 +130,29 @@ namespace Web.eBado.Helpers
             return model;
         }
 
-        public CompanySearchModel InitializeCompanyData(SessionModel session, CompanySearchModel model)
+        public CompanySearchModel InitializeCompanyData(SessionModel session, CompanySearchModel model, IUnitOfWork unitOfWork)
         {
-            model.DefaultRadius = sharedHelper.GetDefaultRadius(session);
+            model.DefaultRadius = model.Radius != 0 ? model.Radius : sharedHelper.GetDefaultRadius(session);
             model.AllMainCategories = sharedHelper.GetMainCategoriesToListItem();
             model.AllCategories = sharedHelper.GetCategoriesWithSubCategories();
+
+            if (session != null)
+            {
+                var companySesion = session.Companies.FirstOrDefault(c => c.IsActive);
+                if (session.IsActive)
+                {
+                    model = sharedHelper.GetUserSettings(unitOfWork, model, session.Id);
+                }
+                else if (companySesion != null)
+                {
+                    model = sharedHelper.GetCompanySettings(unitOfWork, model, companySesion.Id);
+                }
+            }
+            else
+            {
+                model = sharedHelper.GetDefaultCountry(model);
+            }
+
             return model;
         }
 

@@ -102,8 +102,6 @@
                                             <div class="form-group col-sm-6">
                                                 <input type="text" class="form-control txt-lg" id="txtPostalCode" placeholder="@Resources.PHPostalCode" />
                                                 @Html.HiddenFor(model => model.UserModel.PostalCode, new { @id = "hiddenPostalCode" })
-                                                @*@Html.EditorFor(model => model.UserModel.PostalCode, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtPostalCode", @placeholder = @Resources.PHPostalCode } })
-                                                    @Html.HiddenFor(model => model.UserModel.PostalCode, new { @id = "hiddenPostalCode" })*@
                                                 <label class="label-form" for="email">
                                                     @Html.ValidationMessageFor(model => model.UserModel.PostalCode)
                                                 </label>
@@ -117,7 +115,7 @@
                                                 </label>
                                             </div>
                                             <div class="form-group col-sm-4">
-                                                @Html.EditorFor(model => model.CompanyModel.CompanyIco, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHCompanyNumber } })
+                                                @Html.EditorFor(model => model.CompanyModel.CompanyIco, new { htmlAttributes = new { @class = "form-control txt-lg", @placeholder = @Resources.PHCompanyNumber, @id="ico" } })
                                                 <label class="label-form" for="email">
                                                     @Html.ValidationMessageFor(model => model.CompanyModel.CompanyIco)
                                                 </label>
@@ -129,7 +127,7 @@
                                                 </label>
                                             </div>
                                             <div class="form-group col-sm-6">
-                                                @Html.EditorFor(model => model.CompanyModel.CompanyPostalCode, new { htmlAttributes = new { @class = "form-control txt-lg", @id = "txtCompanyPostalCode", @placeholder = @Resources.PHPostalCode } })
+                                                <input type="text" class="form-control txt-lg" id="txtCompanyPostalCode" placeholder="@Resources.PHPostalCode" />
                                                 @Html.HiddenFor(model => model.CompanyModel.CompanyPostalCode, new { @id = "hiddenCompanyPostalCode" })
                                                 <label class="label-form" for="email">
                                                     @Html.ValidationMessageFor(model => model.CompanyModel.CompanyPostalCode)
@@ -192,6 +190,8 @@
             else if (registerType === 2 || registerType === 3) {
                 jQuery("#company").show();
             }
+
+            $("#ico").val('');
         });
 
         $('#companyType').on('change', function () {
