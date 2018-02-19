@@ -497,15 +497,7 @@ input[type=checkbox] {
     text-align: left;
 }
 
-.language_tags_block-symbol {
-    float: right;
-    margin-top: 3px;
-    padding-right: 5px;
-    font-size: 15px;
-    cursor: pointer;
-}
-
-.tags_block-symbol {
+.tags_block-symbol, .category_tags_block-symbol, .language_tags_block-symbol {
     float: right;
     margin-top: 3px;
     padding-right: 5px;
