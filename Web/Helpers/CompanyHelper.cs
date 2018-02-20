@@ -35,8 +35,8 @@ namespace Web.eBado.Helpers
             timer.Restart();
             var companyDetails = unitOfWork.CompanyDetailsRepository.FindAll()
                 .WhereIf(!string.IsNullOrEmpty(model.Name), search => search.Name.Contains(model.Name))
-                .WhereIf(!string.IsNullOrEmpty(model.SelectedMainCategory), search => search.Category2CompanyDetails.Select(c => c.Category.Name).Contains(model.SelectedMainCategory))
-                .WhereIf(!string.IsNullOrEmpty(model.SelectedSubCategory), search => search.SubCategory2CompanyDetails.Select(sc => sc.SubCategory.Name).Contains(model.SelectedSubCategory))
+                //.WhereIf(!string.IsNullOrEmpty(model.SelectedMainCategory), search => search.Category2CompanyDetails.Select(c => c.Category.Name).Contains(model.SelectedMainCategory))
+                //.WhereIf(!string.IsNullOrEmpty(model.SelectedSubCategory), search => search.SubCategory2CompanyDetails.Select(sc => sc.SubCategory.Name).Contains(model.SelectedSubCategory))
                 .WhereIf(postalCodeList.Any(), search => postalCodeList.Intersect(search.Addresses.Select(a => a.PostalCode)).Any())
                 .Select(company => new CompanyModel
                 {
