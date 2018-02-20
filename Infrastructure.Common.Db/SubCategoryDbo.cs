@@ -21,12 +21,16 @@ namespace Infrastructure.Common.DB
         }
     
         public int Id { get; set; }
-        public string Name { get; set; }
         public string Description { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
         public int CategoryId { get; set; }
+        public string ValueEn { get; set; }
+        public string ValueSk { get; set; }
+        public string ValueHu { get; set; }
+        public string ValueCz { get; set; }
+        public string SubKey { get; set; }
     
         public virtual CategoryDbo Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

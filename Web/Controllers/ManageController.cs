@@ -125,25 +125,25 @@ namespace Web.eBado.Controllers
             var session = Session["User"] as SessionModel;
             int companyId = session.Companies.FirstOrDefault(c => c.IsActive).Id;
             var companyDetails = unitOfWork.CompanyDetailsRepository.FindFirstOrDefault(cd => cd.Id == companyId);
-            var categoryDbo = companyDetails.Category2CompanyDetails.FirstOrDefault(c => c.IsActive && c.Category.Name == category);
+            //var categoryDbo = companyDetails.Category2CompanyDetails.FirstOrDefault(c => c.IsActive && c.Category.Name == category);
 
-            if (categoryDbo != null)
-            {
-                categoryDbo.IsActive = false;
-            }
-            else
-            {
-                var subCategoryDbo = companyDetails.SubCategory2CompanyDetails.FirstOrDefault(c => c.SubCategory.Name == category);
-                if (subCategoryDbo == null)
-                {
-                    response = ErrorMessages.CategoryNotExists;
-                }
-                else
-                {
-                    subCategoryDbo.IsActive = false;
-                }
-            }
-            unitOfWork.Commit();
+            //if (categoryDbo != null)
+            //{
+            //    categoryDbo.IsActive = false;
+            //}
+            //else
+            //{
+            //    var subCategoryDbo = companyDetails.SubCategory2CompanyDetails.FirstOrDefault(c => c.SubCategory.Name == category);
+            //    if (subCategoryDbo == null)
+            //    {
+            //        response = ErrorMessages.CategoryNotExists;
+            //    }
+            //    else
+            //    {
+            //        subCategoryDbo.IsActive = false;
+            //    }
+            //}
+            //unitOfWork.Commit();
             return new JsonNetResult(response);
         }
 

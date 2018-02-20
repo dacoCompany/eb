@@ -116,11 +116,11 @@ namespace Web.eBado.Helpers
             cachedCategories = unitOfWork.CategoryRepository.FindAll().Select(category => new CachedAllCategoriesModel
             {
                 Id = category.Id,
-                CategoryName = category.Name,
+                //CategoryName = category.Name,
                 SubCategories = category.SubCategories.Select(sc => new SubCategoryModel
                 {
                     Id = sc.Id,
-                    SubCategoryName = sc.Name
+                    //SubCategoryName = sc.Name
                 })
             }).ToList();
 
@@ -131,14 +131,16 @@ namespace Web.eBado.Helpers
 
         public IEnumerable<string> SetAllCategories(IEnumerable<string> cachedCategories)
         {
-            var cacheSettings = new CacheSettings("cacheDurationKey", "cacheExpirationKey");
+            return new List<string>();
 
-            var categories = unitOfWork.CategoryRepository.FindAll().Select(c => c.Name).ToList();
-            var subCategories = unitOfWork.SubCategoryRepository.FindAll().Select(s => s.Name).ToList();
-            cachedCategories = categories.Concat(subCategories);
+            //var cacheSettings = new CacheSettings("cacheDurationKey", "cacheExpirationKey");
 
-            httpCache.Insert(CacheKeys.AllCategoryKey, cachedCategories, null, cacheSettings);
-            return cachedCategories;
+            //var categories = unitOfWork.CategoryRepository.FindAll().Select(c => c.Name).ToList();
+            //var subCategories = unitOfWork.SubCategoryRepository.FindAll().Select(s => s.Name).ToList();
+            //cachedCategories = categories.Concat(subCategories);
+
+            //httpCache.Insert(CacheKeys.AllCategoryKey, cachedCategories, null, cacheSettings);
+            //return cachedCategories;
         }
 
         public IEnumerable<CachedLocationsModel> GetCachedLocations()
