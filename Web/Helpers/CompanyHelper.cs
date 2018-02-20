@@ -1,7 +1,10 @@
 ﻿using GeoCoordinatePortable;
+using Infrastructure.Common;
 using Infrastructure.Common.DB;
+using Infrastructure.Common.Models;
 using PagedList;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using Web.eBado.Models.Account;
@@ -21,14 +24,11 @@ namespace Web.eBado.Helpers
         }
 
         public CompanySearchModel GetAllCompanies(CompanySearchModel model, IUnitOfWork unitOfWork, SessionModel session, int? page = null)
-        {                   
-            var postalCodeList = new List<string>();
-
+        {
             var timer = Stopwatch.StartNew();
-            if (model.PostalCode != null)
-            {
-                postalCodeList = GetRelatedPostalCodes(model);
-            }
+
+            var postalCodeList = GetRelatedPostalCodes(model);
+
             timer.Stop();
             Debug.WriteLine(timer.ElapsedMilliseconds);
 
@@ -37,7 +37,7 @@ namespace Web.eBado.Helpers
                 .WhereIf(!string.IsNullOrEmpty(model.Name), search => search.Name.Contains(model.Name))
                 .WhereIf(!string.IsNullOrEmpty(model.SelectedMainCategory), search => search.Category2CompanyDetails.Select(c => c.Category.Name).Contains(model.SelectedMainCategory))
                 .WhereIf(!string.IsNullOrEmpty(model.SelectedSubCategory), search => search.SubCategory2CompanyDetails.Select(sc => sc.SubCategory.Name).Contains(model.SelectedSubCategory))
-                //.WhereIf(postalCodeList.Any(), search => postalCodeList.Contains(search.Addresses.SelectMany(a=>a.Street)))
+                .WhereIf(postalCodeList.Any(), search => postalCodeList.Intersect(search.Addresses.Select(a => a.PostalCode)).Any())
                 .Select(company => new CompanyModel
                 {
                     Id = company.Id,
@@ -130,12 +130,17 @@ namespace Web.eBado.Helpers
             return model;
         }
 
-        public CompanySearchModel InitializeCompanyData(SessionModel session, CompanySearchModel model, IUnitOfWork unitOfWork)
+        public CompanySearchModel InitializeCompanyData(SessionModel session, CompanySearchModel model)
         {
             model.DefaultRadius = model.Radius != 0 ? model.Radius : sharedHelper.GetDefaultRadius(session);
             model.AllMainCategories = sharedHelper.GetMainCategoriesToListItem();
             model.AllCategories = sharedHelper.GetCategoriesWithSubCategories();
 
+            return model;
+        }
+
+        public CompanySearchModel InitializeAccountSettings(SessionModel session, CompanySearchModel model, IUnitOfWork unitOfWork)
+        {
             if (session != null)
             {
                 var companySesion = session.Companies.FirstOrDefault(c => c.IsActive);
@@ -160,19 +165,15 @@ namespace Web.eBado.Helpers
         {
             List<string> postalCodeList = new List<string>();
             var cachedLocations = sharedHelper.GetCachedLocations();
-            int? locationId = null;
-            if (model.PostalCode != null)
-            {
-                locationId = sharedHelper.GetLocationByPostalCode(model.PostalCode, cachedLocations).Id;
-            }
+            var relatedLocations = GetRelatedLocations(model, cachedLocations);
+            var locationDbo = sharedHelper.GetLocationByPostalCode(model.PostalCode, relatedLocations);
             var countryCodes = sharedHelper.GetCountryShortCode(model);
-            var currentLocation = cachedLocations.FirstOrDefault(location => location.Id == locationId);
-            var locationsBySelectedCountries = cachedLocations.Where(location => countryCodes.Contains(location.Country));
-            if (currentLocation != null)
+            var locationsBySelectedCountries = relatedLocations.Where(location => countryCodes.Contains(location.Country));
+            if (locationDbo != null)
             {
                 foreach (var location in locationsBySelectedCountries)
                 {
-                    var sCoord = new GeoCoordinate((double)currentLocation.Lat, (double)currentLocation.Lon);
+                    var sCoord = new GeoCoordinate((double)locationDbo.Lat, (double)locationDbo.Lon);
                     var eCoord = new GeoCoordinate((double)location.Lat, (double)location.Lon);
 
                     var result = (sCoord.GetDistanceTo(eCoord)) / MilesToMetersConstant;
@@ -187,6 +188,26 @@ namespace Web.eBado.Helpers
                 postalCodeList.AddRange(locationsBySelectedCountries.Select(location => location.PostalCode));
             }
             return postalCodeList;
+        }
+
+        private IEnumerable<CachedLocationsModel> GetRelatedLocations(CompanySearchModel model, IEnumerable<CachedLocationsModel> cachedLocations)
+        {
+            var relatedLocations = new Collection<CachedLocationsModel>();
+
+            if (model.SearchInSK)
+            {
+                relatedLocations.AddRange(cachedLocations.Where(cl => cl.Country == Constants.SlovakiaShortCode));
+            }
+            else if (model.SearchInHU)
+            {
+                relatedLocations.AddRange(cachedLocations.Where(cl => cl.Country == Constants.HungaryShortCode));
+            }
+            else if (model.SearchInCZ)
+            {
+                relatedLocations.AddRange(cachedLocations.Where(cl => cl.Country == Constants.CzechiaShortCode));
+            }
+
+            return relatedLocations;
         }
     }
 }
