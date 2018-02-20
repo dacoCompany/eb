@@ -649,15 +649,17 @@ namespace Web.eBado.Helpers
 
         private IEnumerable<string> GetCurrentCategories(CompanyDetailDbo companyDetails, List<string> selectedCategories = null)
         {
-            var allCategories = new List<string>();
-            var categories = companyDetails.Category2CompanyDetails.WhereActive().Select(c => c.Category.Name);
-            var subCategories = companyDetails.SubCategory2CompanyDetails.WhereActive().Select(c => c.SubCategory.Name);
-            allCategories.AddRange(categories.Concat(subCategories));
-            if (selectedCategories != null)
-            {
-                allCategories.AddRange(selectedCategories);
-            }
-            return allCategories;
+            return new List<string>();
+
+            //var allCategories = new List<string>();
+            //var categories = companyDetails.Category2CompanyDetails.WhereActive().Select(c => c.Category.Name);
+            //var subCategories = companyDetails.SubCategory2CompanyDetails.WhereActive().Select(c => c.SubCategory.Name);
+            //allCategories.AddRange(categories.Concat(subCategories));
+            //if (selectedCategories != null)
+            //{
+            //    allCategories.AddRange(selectedCategories);
+            //}
+            //return allCategories;
         }
 
         private IEnumerable<CurrentLanguagesModel> GetCurrentLanguages(CompanyDetailDbo companyDetails, IUnitOfWork unitOfWork)

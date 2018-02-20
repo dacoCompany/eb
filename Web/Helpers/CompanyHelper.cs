@@ -21,7 +21,7 @@ namespace Web.eBado.Helpers
         }
 
         public CompanySearchModel GetAllCompanies(CompanySearchModel model, IUnitOfWork unitOfWork, SessionModel session, int? page = null)
-        {                   
+        {
             var postalCodeList = new List<string>();
 
             var timer = Stopwatch.StartNew();
@@ -35,8 +35,8 @@ namespace Web.eBado.Helpers
             timer.Restart();
             var companyDetails = unitOfWork.CompanyDetailsRepository.FindAll()
                 .WhereIf(!string.IsNullOrEmpty(model.Name), search => search.Name.Contains(model.Name))
-                .WhereIf(!string.IsNullOrEmpty(model.SelectedMainCategory), search => search.Category2CompanyDetails.Select(c => c.Category.Name).Contains(model.SelectedMainCategory))
-                .WhereIf(!string.IsNullOrEmpty(model.SelectedSubCategory), search => search.SubCategory2CompanyDetails.Select(sc => sc.SubCategory.Name).Contains(model.SelectedSubCategory))
+                //.WhereIf(!string.IsNullOrEmpty(model.SelectedMainCategory), search => search.Category2CompanyDetails.Select(c => c.Category.Name).Contains(model.SelectedMainCategory))
+                //.WhereIf(!string.IsNullOrEmpty(model.SelectedSubCategory), search => search.SubCategory2CompanyDetails.Select(sc => sc.SubCategory.Name).Contains(model.SelectedSubCategory))
                 //.WhereIf(postalCodeList.Any(), search => postalCodeList.Contains(search.Addresses.SelectMany(a=>a.Street)))
                 .Select(company => new CompanyModel
                 {
@@ -48,8 +48,8 @@ namespace Web.eBado.Helpers
                     CompanyCity = !(string.IsNullOrEmpty(company.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value).Location.District))
                     ? company.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value).Location.District
                     : company.Addresses.FirstOrDefault(a => a.IsBillingAddress.Value).Location.City,
-                    AllSelectedCategories = company.Category2CompanyDetails.Where(c => c.IsActive).Select(c => c.Category.Name)
-                    .Concat(company.SubCategory2CompanyDetails.Where(s => s.IsActive).Select(s => s.SubCategory.Name)),
+                    //AllSelectedCategories = company.Category2CompanyDetails.Where(c => c.IsActive).Select(c => c.Category.Name)
+                    //.Concat(company.SubCategory2CompanyDetails.Where(s => s.IsActive).Select(s => s.SubCategory.Name)),
                     ProfileUrl = company.ProfilePictureUrl,
                     DateRegistered = company.DateCreated.Value
                 });
@@ -119,8 +119,8 @@ namespace Web.eBado.Helpers
             model.ImagesCount = imageCount;
             model.VideosCount = videoCount;
             model.Languages = company.CompanyDetails2Languages.WhereActive().Select(cd => sharedHelper.GetFormattedLanguage(cd.Language)).ToList();
-            model.Categories = company.Category2CompanyDetails.WhereActive().Select(c => c.Category.Name)
-                    .Concat(company.SubCategory2CompanyDetails.WhereActive().Select(s => s.SubCategory.Name)).ToList();
+            //model.Categories = company.Category2CompanyDetails.WhereActive().Select(c => c.Category.Name)
+            //        .Concat(company.SubCategory2CompanyDetails.WhereActive().Select(s => s.SubCategory.Name)).ToList();
             if (session != null)
             {
                 model.CustomerEmail = session.Email;

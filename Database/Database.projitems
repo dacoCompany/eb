@@ -20,6 +20,7 @@
     <None Include="$(MSBuildThisFileDirectory)Insert\insert_SK_PostalCodes.sql" />
     <None Include="$(MSBuildThisFileDirectory)Insert\insert_Role_Permissions.sql" />
     <None Include="$(MSBuildThisFileDirectory)Update\Update_005.sql" />
+    <None Include="$(MSBuildThisFileDirectory)Update\Update_008.sql" />
     <None Include="$(MSBuildThisFileDirectory)Update\Update_007.sql" />
     <None Include="$(MSBuildThisFileDirectory)Update\Update_006.sql" />
     <None Include="$(MSBuildThisFileDirectory)Update\Update_004.sql" />

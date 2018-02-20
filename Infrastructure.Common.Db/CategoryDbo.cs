@@ -17,20 +17,24 @@ namespace Infrastructure.Common.DB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public CategoryDbo()
         {
-            this.SubCategories = new HashSet<SubCategoryDbo>();
             this.Category2CompanyDetails = new HashSet<Category2CompanyDetailsDbo>();
+            this.SubCategories = new HashSet<SubCategoryDbo>();
         }
     
         public int Id { get; set; }
-        public string Name { get; set; }
         public string Description { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
+        public string MainKey { get; set; }
+        public string ValueEn { get; set; }
+        public string ValueSk { get; set; }
+        public string ValueHu { get; set; }
+        public string ValueCz { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SubCategoryDbo> SubCategories { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Category2CompanyDetailsDbo> Category2CompanyDetails { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SubCategoryDbo> SubCategories { get; set; }
     }
 }

@@ -186,7 +186,6 @@
 		CREATE TABLE [Category]
 		(
 			[Id] INT IDENTITY(1,1),
-			[Name] VARCHAR(50) NOT NULL,
 			[Description] VARCHAR(100),
 			[IsActive] BIT NOT NULL DEFAULT 'true',
 			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
@@ -199,7 +198,6 @@
 		CREATE TABLE [SubCategory]
 		(
 			[Id] INT IDENTITY(1,1),
-			[Name] VARCHAR(100) NOT NULL,
 			[Description] VARCHAR(100),
 			[IsActive] BIT NOT NULL DEFAULT 'true',
 			[DateCreated] DATETIME2(0) DEFAULT CURRENT_TIMESTAMP,
