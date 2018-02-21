@@ -169,6 +169,11 @@ namespace Web.eBado.Helpers
 
         public CachedLocationsModel GetLocationByPostalCode(string postalCode, IEnumerable<CachedLocationsModel> locations = null)
         {
+            if(string.IsNullOrEmpty(postalCode))
+            {
+                return null;
+            }
+
             var cachedLocations = new List<CachedLocationsModel>();
             if (locations != null && locations.Any())
             {

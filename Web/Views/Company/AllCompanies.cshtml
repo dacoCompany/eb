@@ -27,7 +27,7 @@
                 @Html.EditorFor(model => model.Radius, new { htmlAttributes = new { @class = "form-control", @placeholder = "km", @Value = Model.DefaultRadius } })
             </div>
             <div class="search_button">
-                <button id="searchBtn" type="submit" class="white-border-btn search_btn_resp"><i class="glyphicon glyphicon-search"></i> @Resources.Search</button>
+                <button id="searchBtn" name="submit" type="submit" class="white-border-btn search_btn_resp"><i class="glyphicon glyphicon-search"></i> @Resources.Search</button>
             </div>
         </div>
 
