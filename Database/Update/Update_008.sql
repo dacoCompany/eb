@@ -44,7 +44,7 @@ END
 IF COL_LENGTH('SubCategory','SubKey') IS NULL
  BEGIN
  PRINT 'Creating Column [SubKey]'
- ALTER TABLE SubCategory ADD SubKey VARCHAR(50);
+ ALTER TABLE SubCategory ADD SubKey VARCHAR(100);
  PRINT 'Column created'
 END
 

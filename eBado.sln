@@ -47,6 +47,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackgroundProcessing.Hangfi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackgroundProcessing.Common", "BackgroundProcessing.Common\BackgroundProcessing.Common.csproj", "{ECA5194A-02D1-4884-A99D-BEE2E643568C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SDL", "SDL", "{4AE6BD5A-7BBB-4B4A-974B-3B170A13B060}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eBado.StaticDataLoader", "eBado.StaticDataLoader\eBado.StaticDataLoader.csproj", "{1B136329-4CEC-4D31-AFE1-0A015264BCF6}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Database\Database.projitems*{fa8ee37f-9caa-4641-965f-6ec584f4ac24}*SharedItemsImports = 13
@@ -104,6 +108,10 @@ Global
 		{ECA5194A-02D1-4884-A99D-BEE2E643568C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECA5194A-02D1-4884-A99D-BEE2E643568C}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{ECA5194A-02D1-4884-A99D-BEE2E643568C}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{1B136329-4CEC-4D31-AFE1-0A015264BCF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B136329-4CEC-4D31-AFE1-0A015264BCF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B136329-4CEC-4D31-AFE1-0A015264BCF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B136329-4CEC-4D31-AFE1-0A015264BCF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -122,9 +130,10 @@ Global
 		{B52611A1-2E7B-487B-8921-01846B72B9C2} = {D2D8A54B-D692-4830-9114-204FC5514BE0}
 		{D90AFC1B-2965-4CD7-ADF1-1BD215C1D551} = {E307EB11-4330-4998-B655-F7FB24F0915D}
 		{ECA5194A-02D1-4884-A99D-BEE2E643568C} = {E307EB11-4330-4998-B655-F7FB24F0915D}
+		{1B136329-4CEC-4D31-AFE1-0A015264BCF6} = {4AE6BD5A-7BBB-4B4A-974B-3B170A13B060}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.Database.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Validation.6.0.1304.0\lib\NET45
 		SolutionGuid = {6187297D-79F8-45AB-9D59-49F5542BB1B6}
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.Database.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Validation.6.0.1304.0\lib\NET45
 	EndGlobalSection
 EndGlobal
