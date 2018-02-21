@@ -3,11 +3,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Web;
-using System.Web.Mvc;
-using System.Web.Optimization;
-using System.Web.Routing;
-using Microsoft.Practices.EnterpriseLibrary.Data;
-using Web.eBado.IoC;
 using WebAPIFactory.Logging.Core;
 using WebAPIFactory.Logging.Core.Diagnostics;
 

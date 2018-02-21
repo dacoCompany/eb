@@ -135,7 +135,7 @@ namespace Messaging.Email
         {
             return new RegisterEmailModel
             {
-                CompanyName = userAccount.ToString(),
+                CompanyName = userAccount.CompanyDetails2UserDetails.FirstActive()?.CompanyDetail?.Name,
                 FirstName = userAccount.FirstName,
                 LastName = userAccount.Surname,
                 Login = userAccount.Email,

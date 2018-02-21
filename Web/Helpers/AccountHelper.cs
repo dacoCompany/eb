@@ -15,7 +15,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using Web.eBado.IoC;
 using Web.eBado.Models.Account;
 using Web.eBado.Models.Shared;
 using WebAPIFactory.Caching.Core;
@@ -32,6 +31,7 @@ namespace Web.eBado.Helpers
 
         private readonly IUnitOfWork unitOfWork;
         private readonly IFilesBusinessObjects fileBo;
+        private readonly ICache httpCache;
         SharedHelper sharedHelper;
 
         #endregion
@@ -42,6 +42,7 @@ namespace Web.eBado.Helpers
         {
             this.unitOfWork = unitOfWork;
             this.fileBo = fileBo;
+            this.httpCache = httpCache;
             sharedHelper = new SharedHelper(unitOfWork, httpCache);
         }
 
@@ -674,8 +675,7 @@ namespace Web.eBado.Helpers
 
         private void SetSelectedCategories(List<string> selectedCategories, CompanyDetailDbo companyDetails)
         {
-            var cache = NinjectResolver.GetInstance<ICache>();
-            var cachedCategories = cache.GetData<List<CachedAllCategoriesModel>>(CacheKeys.CategoryKey);
+            var cachedCategories = httpCache.GetData<List<CachedAllCategoriesModel>>(CacheKeys.CategoryKey);
 
             if (cachedCategories == null)
             {

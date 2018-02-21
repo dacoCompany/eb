@@ -6,7 +6,7 @@ using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Web.eBado.IoC;
+using System.Web.Mvc;
 
 namespace Web.eBado.Models.Account
 {
@@ -95,7 +95,7 @@ namespace Web.eBado.Models.Account
 
             if (CompanyType != CompanyType.PartTime)
             {
-                using (var uow = NinjectResolver.GetInstance<IUnitOfWork>())
+                using (var uow = DependencyResolver.Current.GetService<IUnitOfWork>())
                 {
                     var company = uow.CompanyDetailsRepository.FindFirstOrDefault(cd => cd.Ico == CompanyIco);
 
