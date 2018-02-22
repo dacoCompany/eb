@@ -116,10 +116,6 @@
       <Project>{46C55C67-5CAA-411C-9E44-14C6E63FECD9}</Project>
       <Name>eBado.Entities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Infrastructure.Common.DB\Infrastructure.Common.DB.csproj">
-      <Project>{6B3ADF23-F140-4A73-96F0-23F98F14F90F}</Project>
-      <Name>Infrastructure.Common.DB</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Infrastructure.Common\Infrastructure.Common.csproj">
       <Project>{C0F4027E-B71A-448E-9950-A27E5CE6D55C}</Project>
       <Name>Infrastructure.Common</Name>

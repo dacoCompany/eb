@@ -9,8 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{D2D8A54B-D69
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{273DD6C5-5742-4CB9-ADB7-941C4A3467B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Common.DB", "Infrastructure.Common.DB\Infrastructure.Common.DB.csproj", "{6B3ADF23-F140-4A73-96F0-23F98F14F90F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Common", "Infrastructure.Common\Infrastructure.Common.csproj", "{C0F4027E-B71A-448E-9950-A27E5CE6D55C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Configuration", "Infrastructure.Configuration\Infrastructure.Configuration.csproj", "{AEDF78F1-5D47-4D81-9DB1-BD64C22F4310}"
@@ -66,10 +64,6 @@ Global
 		{294EF68E-1610-424D-A1A7-8A7ADB988730}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{294EF68E-1610-424D-A1A7-8A7ADB988730}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{294EF68E-1610-424D-A1A7-8A7ADB988730}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{6B3ADF23-F140-4A73-96F0-23F98F14F90F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6B3ADF23-F140-4A73-96F0-23F98F14F90F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6B3ADF23-F140-4A73-96F0-23F98F14F90F}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{6B3ADF23-F140-4A73-96F0-23F98F14F90F}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{C0F4027E-B71A-448E-9950-A27E5CE6D55C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C0F4027E-B71A-448E-9950-A27E5CE6D55C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0F4027E-B71A-448E-9950-A27E5CE6D55C}.Release|Any CPU.ActiveCfg = Debug|Any CPU
@@ -124,7 +118,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{294EF68E-1610-424D-A1A7-8A7ADB988730} = {D2D8A54B-D692-4830-9114-204FC5514BE0}
-		{6B3ADF23-F140-4A73-96F0-23F98F14F90F} = {273DD6C5-5742-4CB9-ADB7-941C4A3467B4}
 		{C0F4027E-B71A-448E-9950-A27E5CE6D55C} = {273DD6C5-5742-4CB9-ADB7-941C4A3467B4}
 		{AEDF78F1-5D47-4D81-9DB1-BD64C22F4310} = {273DD6C5-5742-4CB9-ADB7-941C4A3467B4}
 		{DFE452B4-8A20-463F-84EE-D8D9CD631053} = {070A4630-5B4D-435D-A4DA-1E9790A7D2DF}
@@ -140,7 +133,7 @@ Global
 		{F2BD9091-A19B-41D2-BFCA-254FDE294A84} = {273DD6C5-5742-4CB9-ADB7-941C4A3467B4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.Database.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Validation.6.0.1304.0\lib\NET45
 		SolutionGuid = {6187297D-79F8-45AB-9D59-49F5542BB1B6}
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.Database.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Validation.6.0.1304.0\lib\NET45
 	EndGlobalSection
 EndGlobal
