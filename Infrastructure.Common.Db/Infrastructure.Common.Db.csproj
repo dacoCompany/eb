@@ -69,9 +69,6 @@
     <Compile Include="AddressDbo.cs">
       <DependentUpon>EBADOModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="AllDeviceDbo.cs">
-      <DependentUpon>EBADOModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="AttachmentDbo.cs">
       <DependentUpon>EBADOModel.tt</DependentUpon>
     </Compile>
