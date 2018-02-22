@@ -57,7 +57,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\ForgotPasswordModel.cs" />
+    <Compile Include="Models\ForgotPasswordEmailModel.cs" />
+    <Compile Include="Models\BaseEmailModel.cs" />
     <Compile Include="Models\RegisterEmailModel.cs" />
     <Compile Include="SmtpEmailSender.cs" />
     <Compile Include="IEmailSender.cs" />

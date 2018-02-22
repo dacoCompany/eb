@@ -2,9 +2,9 @@
 using Hangfire.SqlServer;
 using Infrastructure.Common;
 using Infrastructure.Configuration;
-using Ninject;
 using System;
 using System.Configuration;
+using Unity;
 
 namespace BackgroundProcessing.Hangfire
 {
@@ -28,15 +28,15 @@ namespace BackgroundProcessing.Hangfire
         public DashboardOptions DashboardOptions { get { return dashboardOptions; } }
 
 
-        public HangfireConfiguration(IKernel kernel)
+        public HangfireConfiguration(IUnityContainer container)
         {
             storageOptions = new SqlServerStorageOptions();
             serverOptions = new BackgroundJobServerOptions();
             dashboardOptions = new DashboardOptions();
-            Configure(kernel);
+            Configure(container);
         }
 
-        private void Configure(IKernel kernel)
+        private void Configure(IUnityContainer container)
         {
             var configuration = ConfigurationManager.GetSection("hangfire") as HangfireConfigurationSection;
 
@@ -60,7 +60,7 @@ namespace BackgroundProcessing.Hangfire
             string connectionString = ConfigurationManager.ConnectionStrings["dbsEbadoMaster"].ConnectionString;
 
             GlobalConfiguration.Configuration.UseSqlServerStorage(connectionString, storageOptions);
-            GlobalConfiguration.Configuration.UseNinjectActivator(kernel);
+            GlobalConfiguration.Configuration.UseUnityActivator(container);
             GlobalConfiguration.Configuration.UseEntLibLogProvider();
         }
     }

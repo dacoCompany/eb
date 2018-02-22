@@ -35,6 +35,7 @@ namespace Infrastructure.Common.DB
         private Repository<UserRole2UserPermissionDbo> userRole2UserPermissionsRespository;
         private Repository<LanguageDbo> languageRespository;
         private Repository<CompanyDetails2LanguagesDbo> companyDetails2LanguagesRespository;
+        private Repository<EmailTemplateDbo> emailTemplateRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UnitOfWork"/> class.
@@ -156,6 +157,9 @@ namespace Infrastructure.Common.DB
 
         public IRepository<CompanyDetails2LanguagesDbo> CompanyDetails2LanguagesRepository =>
            companyDetails2LanguagesRespository ?? (companyDetails2LanguagesRespository = new Repository<CompanyDetails2LanguagesDbo>(context));
+
+        public IRepository<EmailTemplateDbo> EmailTemplateRepository =>
+           emailTemplateRepository ?? (emailTemplateRepository = new Repository<EmailTemplateDbo>(context));
 
 
         /// <summary>

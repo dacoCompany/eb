@@ -41,12 +41,11 @@ namespace Infrastructure.Common.DB
         public virtual DbSet<UserPermissionDbo> UserPermissionDboes { get; set; }
         public virtual DbSet<UserRoleDbo> UserRoleDboes { get; set; }
         public virtual DbSet<UserRole2UserPermissionDbo> UserRole2UserPermissionDbo { get; set; }
-        public virtual DbSet<AllDeviceDbo> AllDeviceDboes { get; set; }
         public virtual DbSet<CompanySettingDbo> CompanySettingDboes { get; set; }
-        public virtual DbSet<EmailTemplateDbo> EmailTemplateDboes { get; set; }
         public virtual DbSet<UserSettingDbo> UserSettingDboes { get; set; }
         public virtual DbSet<CategoryDbo> CategoryDboes { get; set; }
         public virtual DbSet<SubCategoryDbo> SubCategoryDboes { get; set; }
         public virtual DbSet<AddressDbo> AddressDboes { get; set; }
+        public virtual DbSet<EmailTemplateDbo> EmailTemplateDboes { get; set; }
     }
 }

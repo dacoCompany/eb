@@ -7,7 +7,6 @@ using Messaging.Email.Models;
 using RazorEngine.Templating;
 using System;
 using System.Configuration;
-using System.IO;
 using System.Net;
 using System.Net.Mail;
 
@@ -18,15 +17,17 @@ namespace Messaging.Email
         private MailMessage message;
         private SmtpClient client;
         private IJobClient jobClient;
+        private IUnitOfWork uow;
 
         private bool disposed = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SmtpEmailSender"/> class.
         /// </summary>
-        public SmtpEmailSender(IJobClient jobClient)
+        public SmtpEmailSender(IJobClient jobClient, IUnitOfWork uow)
         {
             this.jobClient = jobClient;
+            this.uow = uow;
 
             client = new SmtpClient();
             message = new MailMessage();
@@ -36,9 +37,9 @@ namespace Messaging.Email
         /// <summary>
         /// Sends email message
         /// </summary>
-        public void Send(MailMessageType messageType, UserDetailDbo userDetail)
+        public void Send<T>(MailMessageType messageType, T model) where T : BaseEmailModel
         {
-            jobClient.Enqueue(() => SendToQueue(messageType, userDetail));
+            jobClient.Enqueue(() => ProcessInQueue(messageType, model));
         }
 
         /// <summary>
@@ -47,9 +48,9 @@ namespace Messaging.Email
         /// <param name="messageType">Type of the message.</param>
         /// <param name="userDetail">The user detail.</param>
         [Queue("messaging")]
-        public void SendToQueue(MailMessageType messageType, UserDetailDbo userDetail)
+        public void ProcessInQueue<T>(MailMessageType messageType, T model)
         {
-            CreateMessage(messageType, userDetail);
+            CreateMessage(messageType, model);
             client.Send(message);
         }
 
@@ -98,50 +99,33 @@ namespace Messaging.Email
         /// </summary>
         /// <param name="type">The type.</param>
         /// <param name="userAccount">The user account.</param>
-        private void CreateMessage(MailMessageType messageType, UserDetailDbo userAccount)
+        private void CreateMessage<T>(MailMessageType messageType, T model)
         {
+            var contactInfo = model as BaseEmailModel;
             string displayName = ConfigurationManager.AppSettings.Get(ConfigurationKeys.EmailDisplayName);
             string from = ConfigurationManager.AppSettings.Get(ConfigurationKeys.EmailFrom);
 
             MailAddress sender = new MailAddress(from, displayName);
-            MailAddress recepient = new MailAddress(userAccount.Email);
+            MailAddress recepient = new MailAddress(contactInfo.Login);
 
             message.From = sender;
             message.To.Add(recepient);
             message.IsBodyHtml = true;
+
+            var userCulture = uow.UserDetailsRepository.FindFirstOrDefault(user => user.Email == contactInfo.Login).UserSetting.Language;
+            var template = uow.EmailTemplateRepository.FindFirstOrDefault(temp => temp.Type == messageType.ToString() && temp.Language == userCulture);
 
             switch (messageType)
             {
                 case MailMessageType.ForgotPassword:
                     break;
                 case MailMessageType.Registration:
-                    var model = CreateRegistrationCompleteModel(userAccount);
-                    message.Body = GetHtmlBodyString(messageType, model);
-                    message.Subject = "Registracia";
+                    var templateModel = (model as RegisterEmailModel) ?? throw new InvalidCastException("Model does not equals to specified message type");
+                    message.Body = GetHtmlBodyString(messageType, template.Body, templateModel);
+                    message.Subject = template.Subject;
 
                     break;
             }
-        }
-
-        /// <summary>
-        /// Creates the forgot password model.
-        /// </summary>
-        /// <param name="userAccount">The user account.</param>
-        /// <returns>
-        /// Model
-        /// </returns>
-
-        private RegisterEmailModel CreateRegistrationCompleteModel(UserDetailDbo userAccount)
-        {
-            return new RegisterEmailModel
-            {
-                CompanyName = userAccount.CompanyDetails2UserDetails.FirstActive()?.CompanyDetail?.Name,
-                FirstName = userAccount.FirstName,
-                LastName = userAccount.Surname,
-                Login = userAccount.Email,
-                Password = userAccount.Password,
-                Title = userAccount.Title
-            };
         }
 
         /// <summary>
@@ -153,11 +137,9 @@ namespace Messaging.Email
         /// <returns>
         /// HTML body string
         /// </returns>
-        private string GetHtmlBodyString<T>(MailMessageType messageType, T model) where T : new()
+        private string GetHtmlBodyString<T>(MailMessageType messageType, string template, T model) where T : new()
         {
-            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Views\Email", string.Concat(messageType.ToString(), ".cshtml"));
-            var templateContent = File.ReadAllText(filePath);
-            return RazorEngine.Engine.Razor.RunCompile(templateContent, messageType.ToString(), typeof(T), model);
+            return RazorEngine.Engine.Razor.RunCompile(template, messageType.ToString(), typeof(T), model);
         }
     }
 }

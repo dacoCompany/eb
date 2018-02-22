@@ -5,6 +5,8 @@ using Infrastructure.Common;
 using Infrastructure.Common.DB;
 using Infrastructure.Common.Enums;
 using Infrastructure.Common.Validations;
+using Messaging.Email;
+using Messaging.Email.Models;
 using Microsoft.Practices.EnterpriseLibrary.Validation;
 using MvcThrottle;
 using System;
@@ -43,9 +45,10 @@ namespace Web.eBado.Controllers
         private readonly IConfiguration configuration;
         private readonly IUnitOfWork unitOfWork;
         private readonly IFilesBusinessObjects fileBo;
+        private readonly IEmailSender emailSender;
         private readonly DiagnosticsLogging diagnosticLogConstant;
 
-        public AccountController(IConfiguration configuration, IUnitOfWork unitOfWork, IFilesBusinessObjects fileBo, ICache httpCache)
+        public AccountController(IConfiguration configuration, IUnitOfWork unitOfWork, IFilesBusinessObjects fileBo, ICache httpCache, IEmailSender emailSender)
         {
             accountHelper = new AccountHelper(unitOfWork, fileBo, httpCache);
             sessionHelper = new SessionHelper(unitOfWork);
@@ -53,6 +56,7 @@ namespace Web.eBado.Controllers
             this.configuration = configuration;
             this.unitOfWork = unitOfWork;
             this.fileBo = fileBo;
+            this.emailSender = emailSender;
             diagnosticLogConstant = new DiagnosticsLogging { DiagnosticsArea = "Controller", DiagnosticsCategory = "Account" };
         }
 
@@ -300,6 +304,21 @@ namespace Web.eBado.Controllers
                 }
             }
 
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<RegistrationModel, RegisterEmailModel>()
+                    .ForMember(s => s.Title, d => d.MapFrom(m => m.UserModel.Title))
+                    .ForMember(s => s.FirstName, d => d.MapFrom(m => m.UserModel.FirstName))
+                    .ForMember(s => s.LastName, d => d.MapFrom(m => m.UserModel.Surname))
+                    .ForMember(s => s.Login, d => d.MapFrom(m => m.UserModel.Email))
+                    .ForMember(s => s.Password, d => d.MapFrom(m => m.UserModel.Password))
+                    .ForMember(s => s.CompanyName, d => d.MapFrom(m => m.CompanyModel.CompanyName));
+            });
+
+            var emailModel = Mapper.Map<RegistrationModel, RegisterEmailModel>(model);
+
+            emailSender.Send(MailMessageType.Registration, emailModel);
+
             return RedirectToAction("ChangeSettings", "Account");
         }
 
@@ -359,6 +378,20 @@ namespace Web.eBado.Controllers
                     accountHelper.RegisterCompany(unitOfWork, model.CompanyModel, userDetail);
                 }
             }
+
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<RegistrationModel, RegisterEmailModel>()
+                    .ForMember(s => s.Title, d => d.MapFrom(m => m.UserModel.Title))
+                    .ForMember(s => s.FirstName, d => d.MapFrom(m => m.UserModel.FirstName))
+                    .ForMember(s => s.LastName, d => d.MapFrom(m => m.UserModel.Surname))
+                    .ForMember(s => s.Login, d => d.MapFrom(m => m.UserModel.Email))
+                    .ForMember(s => s.Password, d => d.MapFrom(m => m.UserModel.Password))
+                    .ForMember(s => s.CompanyName, d => d.MapFrom(m => m.CompanyModel.CompanyName));
+            });
+
+            var emailModel = Mapper.Map<RegistrationModel, RegisterEmailModel>(model);
+            emailSender.Send(MailMessageType.Registration, emailModel);
 
             return RedirectToAction("ChangeSettings", "Account");
         }

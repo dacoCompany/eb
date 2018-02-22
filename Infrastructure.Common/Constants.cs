@@ -6,6 +6,9 @@
         public const string CzechiaShortCode = "CZ";
         public const string HungaryShortCode = "HU";
         public const string EnglishCultureInfo = "en-US";
+        public const string SlovakCultureInfo = "sk-SK";
+        public const string HungaryCultureInfo = "hu-HU";
+        public const string CzechCultureInfo = "cz-CZ";
         public const int DefaultRadius = 30;
         public const string MaxNumberOfGalleries = "MaxNumberOfGalleries";
         public const string MaxNumberOfImages = "MaxNumberOfImages";

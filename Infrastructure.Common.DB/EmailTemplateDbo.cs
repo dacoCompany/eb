@@ -16,14 +16,9 @@ namespace Infrastructure.Common.DB
     {
         public int Id { get; set; }
         public string Type { get; set; }
-        public string SkSubject { get; set; }
-        public string SkBody { get; set; }
-        public string CzSubject { get; set; }
-        public string CzBody { get; set; }
-        public string HuSubject { get; set; }
-        public string HuBody { get; set; }
-        public string EnSubject { get; set; }
-        public string EnBody { get; set; }
+        public string Subject { get; set; }
+        public string Body { get; set; }
+        public string Language { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }

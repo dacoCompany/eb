@@ -1,7 +1,6 @@
-﻿using Infrastructure.Common.DB;
-using Infrastructure.Common.Enums;
+﻿using Infrastructure.Common.Enums;
+using Messaging.Email.Models;
 using System;
-using System.Net.Mail;
 
 namespace Messaging.Email
 {
@@ -10,6 +9,6 @@ namespace Messaging.Email
         /// <summary>
         /// Sends email message synchronosly
         /// </summary>
-        void Send(MailMessageType messageType, UserDetailDbo userDetail);
+        void Send<T>(MailMessageType messageType, T model) where T : BaseEmailModel;
     }
 }

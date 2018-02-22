@@ -10,7 +10,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Street" Type="varchar" MaxLength="100" />
+          <Property Name="Street" Type="nvarchar" MaxLength="100" />
           <Property Name="Number" Type="varchar" MaxLength="10" />
           <Property Name="IsDeliveryAddress" Type="bit" />
           <Property Name="IsBillingAddress" Type="bit" />
@@ -22,27 +22,12 @@
           <Property Name="CompanyDetailsId" Type="int" />
           <Property Name="PostalCode" Type="varchar" MaxLength="10" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="AllDevices">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="IsActive" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="DeviceId" Type="varchar" MaxLength="36" />
-          <Property Name="AudienceKey" Type="varchar" MaxLength="100" />
-          <Property Name="SecretKey" Type="varchar" MaxLength="100" />
-          <Property Name="IsActive" Type="bit" Nullable="false" />
-          <Property Name="DateCreated" Type="datetime2" Precision="0" />
-          <Property Name="DateModified" Type="datetime2" Precision="0" />
-        </EntityType>
         <EntityType Name="Attachment">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Size" Type="int" Nullable="false" />
           <Property Name="OriginalUrl" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="ThumbnailUrl" Type="varchar" MaxLength="255" />
@@ -58,8 +43,8 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="GuId" Type="varchar" MaxLength="36" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Description" Type="varchar" MaxLength="100" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
           <Property Name="ThumbnailUrl" Type="varchar" MaxLength="255" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="DateCreated" Type="datetime2" Precision="0" />
@@ -77,9 +62,9 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="DateModified" Type="datetime2" Precision="0" />
           <Property Name="MainKey" Type="varchar" MaxLength="50" />
           <Property Name="ValueEn" Type="varchar" MaxLength="100" />
-          <Property Name="ValueSk" Type="varchar" MaxLength="100" />
-          <Property Name="ValueHu" Type="varchar" MaxLength="100" />
-          <Property Name="ValueCz" Type="varchar" MaxLength="100" />
+          <Property Name="ValueSk" Type="nvarchar" MaxLength="100" />
+          <Property Name="ValueHu" Type="nvarchar" MaxLength="100" />
+          <Property Name="ValueCz" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Category2CompanyDetails">
           <Key>
@@ -97,8 +82,8 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="Description" Type="text" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="PhoneNumber" Type="varchar" MaxLength="20" />
           <Property Name="AdditionalPhoneNumber" Type="varchar" MaxLength="20" />
           <Property Name="Email" Type="varchar" MaxLength="50" />
@@ -154,7 +139,7 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="CreatedByCompId" Type="int" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="DateCreated" Type="datetime2" Precision="0" />
@@ -206,17 +191,12 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Type" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="SkSubject" Type="varchar" MaxLength="50" />
-          <Property Name="SkBody" Type="nvarchar" MaxLength="1" />
-          <Property Name="CzSubject" Type="varchar" MaxLength="50" />
-          <Property Name="CzBody" Type="nvarchar" MaxLength="1" />
-          <Property Name="HuSubject" Type="varchar" MaxLength="50" />
-          <Property Name="HuBody" Type="nvarchar" MaxLength="1" />
-          <Property Name="EnSubject" Type="varchar" MaxLength="50" />
-          <Property Name="EnBody" Type="nvarchar" MaxLength="1" />
-          <Property Name="Is_Active" Type="bit" Nullable="false" />
-          <Property Name="Date_Created" Type="datetime2" Precision="0" />
-          <Property Name="Date_Modified" Type="datetime2" Precision="2" />
+          <Property Name="Subject" Type="nvarchar" MaxLength="60" Nullable="false" />
+          <Property Name="Body" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Language" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime2" Precision="0" />
+          <Property Name="DateModified" Type="datetime2" Precision="2" />
         </EntityType>
         <EntityType Name="Languages">
           <Key>
@@ -236,10 +216,10 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Country" Type="varchar" MaxLength="100" />
           <Property Name="PostalCode" Type="varchar" MaxLength="100" />
-          <Property Name="City" Type="varchar" MaxLength="100" />
+          <Property Name="City" Type="nvarchar" MaxLength="100" />
           <Property Name="CityAlias" Type="varchar" MaxLength="100" />
-          <Property Name="County" Type="varchar" MaxLength="100" />
-          <Property Name="District" Type="varchar" MaxLength="100" />
+          <Property Name="County" Type="nvarchar" MaxLength="100" />
+          <Property Name="District" Type="nvarchar" MaxLength="100" />
           <Property Name="DistrictAlias" Type="varchar" MaxLength="100" />
           <Property Name="Lat" Type="decimal" Precision="10" Scale="4" />
           <Property Name="Lon" Type="decimal" Precision="10" Scale="4" />
@@ -258,10 +238,10 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="DateModified" Type="datetime2" Precision="0" />
           <Property Name="CategoryId" Type="int" Nullable="false" />
           <Property Name="ValueEn" Type="varchar" MaxLength="100" />
-          <Property Name="ValueSk" Type="varchar" MaxLength="100" />
-          <Property Name="ValueHu" Type="varchar" MaxLength="100" />
-          <Property Name="ValueCz" Type="varchar" MaxLength="100" />
-          <Property Name="SubKey" Type="varchar" MaxLength="50" />
+          <Property Name="ValueSk" Type="nvarchar" MaxLength="100" />
+          <Property Name="ValueHu" Type="nvarchar" MaxLength="100" />
+          <Property Name="ValueCz" Type="nvarchar" MaxLength="100" />
+          <Property Name="SubKey" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="SubCategory2CompanyDetails">
           <Key>
@@ -280,9 +260,9 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Title" Type="varchar" MaxLength="20" />
-          <Property Name="FirstName" Type="varchar" MaxLength="50" />
-          <Property Name="Surname" Type="varchar" MaxLength="50" />
-          <Property Name="DisplayName" Type="varchar" MaxLength="50" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Surname" Type="nvarchar" MaxLength="100" />
+          <Property Name="DisplayName" Type="nvarchar" MaxLength="150" />
           <Property Name="PhoneNumber" Type="varchar" MaxLength="20" />
           <Property Name="AdditionalPhoneNumber" Type="varchar" MaxLength="20" />
           <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
@@ -649,17 +629,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <EntitySet Name="UserRole" EntityType="Self.UserRole" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRole2UserPermission" EntityType="Self.UserRole2UserPermission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserSettings" EntityType="Self.UserSettings" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="AllDevices" EntityType="Self.AllDevices" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [AllDevices].[Id] AS [Id], 
-    [AllDevices].[DeviceId] AS [DeviceId], 
-    [AllDevices].[AudienceKey] AS [AudienceKey], 
-    [AllDevices].[SecretKey] AS [SecretKey], 
-    [AllDevices].[IsActive] AS [IsActive], 
-    [AllDevices].[DateCreated] AS [DateCreated], 
-    [AllDevices].[DateModified] AS [DateModified]
-    FROM [dbo].[AllDevices] AS [AllDevices]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FKAddressCompanyDetailsId" Association="Self.FKAddressCompanyDetailsId">
             <End Role="CompanyDetails" EntitySet="CompanyDetails" />
             <End Role="Address" EntitySet="Address" />
@@ -775,7 +744,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <EntitySet Name="UserPermissionDboes" EntityType="testDBModel.UserPermissionDbo" />
           <EntitySet Name="UserRoleDboes" EntityType="testDBModel.UserRoleDbo" />
           <EntitySet Name="UserRole2UserPermissionDbo" EntityType="testDBModel.UserRole2UserPermissionDbo" />
-          <EntitySet Name="AllDeviceDboes" EntityType="testDBModel.AllDeviceDbo" />
           <AssociationSet Name="FKAttachmentBatchAttachmentId" Association="testDBModel.FKAttachmentBatchAttachmentId">
             <End Role="BatchAttachment" EntitySet="BatchAttachmentDboes" />
             <End Role="Attachment" EntitySet="AttachmentDboes" />
@@ -837,7 +805,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             <End Role="UserRole2UserPermission" EntitySet="UserRole2UserPermissionDbo" />
           </AssociationSet>
           <EntitySet Name="CompanySettingDboes" EntityType="testDBModel.CompanySettingDbo" />
-          <EntitySet Name="EmailTemplateDboes" EntityType="testDBModel.EmailTemplateDbo" />
           <EntitySet Name="UserSettingDboes" EntityType="testDBModel.UserSettingDbo" />
           <AssociationSet Name="FKCompanySettings" Association="testDBModel.FKCompanySettings">
             <End Role="CompanySetting" EntitySet="CompanySettingDboes" />
@@ -874,13 +841,14 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             <End Role="UserDetailDbo" EntitySet="UserDetailDboes" />
             <End Role="Address" EntitySet="AddressDboes" />
           </AssociationSet>
+          <EntitySet Name="EmailTemplateDboes" EntityType="testDBModel.EmailTemplateDbo" />
         </EntityContainer>
         <EntityType Name="AttachmentDbo">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Size" Type="Int32" Nullable="false" />
           <Property Name="OriginalUrl" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="ThumbnailUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
@@ -897,8 +865,8 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="GuId" Type="String" Nullable="false" MaxLength="36" FixedLength="false" Unicode="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="ThumbnailUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="DateCreated" Type="DateTime" Precision="0" />
@@ -925,8 +893,8 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="AdditionalPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -996,7 +964,7 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="CreatedByCompId" Type="Int32" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="DateCreated" Type="DateTime" Precision="0" />
@@ -1048,10 +1016,10 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Country" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="PostalCode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="CityAlias" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="County" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="District" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="County" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="District" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="DistrictAlias" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Lat" Type="Decimal" Precision="10" Scale="4" />
           <Property Name="Lon" Type="Decimal" Precision="10" Scale="4" />
@@ -1079,9 +1047,9 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Title" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DisplayName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Surname" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DisplayName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="AdditionalPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
@@ -1140,19 +1108,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="DateModified" Type="DateTime" Precision="0" />
           <NavigationProperty Name="UserPermission" Relationship="testDBModel.FKUserPermission" FromRole="UserRole2UserPermission" ToRole="UserPermission" />
           <NavigationProperty Name="UserRole" Relationship="testDBModel.FKUserRole" FromRole="UserRole2UserPermission" ToRole="UserRole" />
-        </EntityType>
-        <EntityType Name="AllDeviceDbo">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="IsActive" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DeviceId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
-          <Property Name="AudienceKey" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="SecretKey" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="DateCreated" Type="DateTime" Precision="0" />
-          <Property Name="DateModified" Type="DateTime" Precision="0" />
         </EntityType>
         <Association Name="FKAttachmentBatchAttachmentId">
           <End Type="testDBModel.BatchAttachmentDbo" Role="BatchAttachment" Multiplicity="1" />
@@ -1353,24 +1308,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="Language" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="CompanyDetails" Relationship="testDBModel.FKCompanySettings" FromRole="CompanySetting" ToRole="CompanyDetailDbo" />
         </EntityType>
-        <EntityType Name="EmailTemplateDbo">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Type" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="SkSubject" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="SkBody" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-          <Property Name="CzSubject" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CzBody" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-          <Property Name="HuSubject" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="HuBody" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-          <Property Name="EnSubject" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="EnBody" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="DateCreated" Type="DateTime" Precision="0" />
-          <Property Name="DateModified" Type="DateTime" Precision="2" />
-        </EntityType>
         <EntityType Name="UserSettingDbo">
           <Key>
             <PropertyRef Name="Id" />
@@ -1423,9 +1360,9 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="DateModified" Type="DateTime" Precision="0" />
           <Property Name="MainKey" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ValueEn" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ValueSk" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ValueHu" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ValueCz" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ValueSk" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ValueHu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ValueCz" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Category2CompanyDetails" Relationship="testDBModel.FKCategory2CompanyDetailsCategory" FromRole="Category" ToRole="Category2CompanyDetailsDbo" />
           <NavigationProperty Name="SubCategories" Relationship="testDBModel.FKCategory" FromRole="CategoryDbo" ToRole="SubCategory" />
         </EntityType>
@@ -1452,10 +1389,10 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
           <Property Name="DateModified" Type="DateTime" Precision="0" />
           <Property Name="CategoryId" Type="Int32" Nullable="false" />
           <Property Name="ValueEn" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ValueSk" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ValueHu" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ValueCz" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="SubKey" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ValueSk" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ValueHu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ValueCz" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SubKey" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Category" Relationship="testDBModel.FKCategory" FromRole="SubCategory" ToRole="CategoryDbo" />
           <NavigationProperty Name="SubCategory2CompanyDetails" Relationship="testDBModel.FKSubCategory2CompanyDetailsSubCategory" FromRole="SubCategory" ToRole="SubCategory2CompanyDetailsDbo" />
         </EntityType>
@@ -1488,7 +1425,7 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Street" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Street" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Number" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="IsDeliveryAddress" Type="Boolean" />
           <Property Name="IsBillingAddress" Type="Boolean" />
@@ -1539,6 +1476,19 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="EmailTemplateDbo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Subject" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="Body" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Language" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="0" />
+          <Property Name="DateModified" Type="DateTime" Precision="2" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1791,19 +1741,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="AllDeviceDboes">
-            <EntityTypeMapping TypeName="testDBModel.AllDeviceDbo">
-              <MappingFragment StoreEntitySet="AllDevices">
-                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
-                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="SecretKey" ColumnName="SecretKey" />
-                <ScalarProperty Name="AudienceKey" ColumnName="AudienceKey" />
-                <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="CompanySettingDboes">
             <EntityTypeMapping TypeName="testDBModel.CompanySettingDbo">
               <MappingFragment StoreEntitySet="CompanySettings">
@@ -1819,25 +1756,6 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
                 <ScalarProperty Name="SearchInCZ" ColumnName="SearchInCZ" />
                 <ScalarProperty Name="SearchInSK" ColumnName="SearchInSK" />
                 <ScalarProperty Name="SearchRadius" ColumnName="SearchRadius" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="EmailTemplateDboes">
-            <EntityTypeMapping TypeName="testDBModel.EmailTemplateDbo">
-              <MappingFragment StoreEntitySet="EmailTemplate">
-                <ScalarProperty Name="DateModified" ColumnName="Date_Modified" />
-                <ScalarProperty Name="DateCreated" ColumnName="Date_Created" />
-                <ScalarProperty Name="IsActive" ColumnName="Is_Active" />
-                <ScalarProperty Name="EnBody" ColumnName="EnBody" />
-                <ScalarProperty Name="EnSubject" ColumnName="EnSubject" />
-                <ScalarProperty Name="HuBody" ColumnName="HuBody" />
-                <ScalarProperty Name="HuSubject" ColumnName="HuSubject" />
-                <ScalarProperty Name="CzBody" ColumnName="CzBody" />
-                <ScalarProperty Name="CzSubject" ColumnName="CzSubject" />
-                <ScalarProperty Name="SkBody" ColumnName="SkBody" />
-                <ScalarProperty Name="SkSubject" ColumnName="SkSubject" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1906,6 +1824,20 @@ warning 6002: The table/view 'testDb.dbo.AllDevices' does not have a primary key
                 <ScalarProperty Name="IsDeliveryAddress" ColumnName="IsDeliveryAddress" />
                 <ScalarProperty Name="Number" ColumnName="Number" />
                 <ScalarProperty Name="Street" ColumnName="Street" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmailTemplateDboes">
+            <EntityTypeMapping TypeName="testDBModel.EmailTemplateDbo">
+              <MappingFragment StoreEntitySet="EmailTemplate">
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Language" ColumnName="Language" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

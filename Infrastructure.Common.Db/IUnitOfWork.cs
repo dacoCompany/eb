@@ -27,6 +27,7 @@ namespace Infrastructure.Common.DB
         IRepository<UserRole2UserPermissionDbo> UserRole2UserPermissionsRepository { get; }
         IRepository<LanguageDbo> LanguageRepository { get; }
         IRepository<CompanyDetails2LanguagesDbo> CompanyDetails2LanguagesRepository { get; }
+        IRepository<EmailTemplateDbo> EmailTemplateRepository { get; }
 
         void Commit();
     }

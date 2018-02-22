@@ -1,4 +1,5 @@
-﻿using Infrastructure.IoC;
+﻿using BackgroundProcessing.Hangfire;
+using Infrastructure.IoC;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Jwt;
@@ -24,7 +25,8 @@ namespace Web.eBado
         {
             // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=316888
 
-            DependencyResolver.SetResolver(new UnityDependencyResolver(IocContainer.GetContainer()));
+            var container = IocContainer.GetContainer();
+            DependencyResolver.SetResolver(new UnityDependencyResolver(container));
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
@@ -35,9 +37,9 @@ namespace Web.eBado
             ViewEngines.Engines.Add(new RazorViewEngine());
             Logger.SetLogWriter(new LogWriterFactory().Create());
 
-            ////var hangfireConfiguration = new HangfireConfiguration(resolver.Kernel);
-            ////app.UseHangfireJobServer(hangfireConfiguration.ServerOptions);
-            ////app.UseHangfireJobDashboard("/hangfire", hangfireConfiguration.DashboardOptions);
+            var hangfireConfiguration = new HangfireConfiguration(container);
+            app.UseHangfireJobServer(hangfireConfiguration.ServerOptions);
+            app.UseHangfireJobDashboard("/hangfire", hangfireConfiguration.DashboardOptions);
 
             string issuer = "http://ebadoauthorization.azurewebsites.net/";
             string audience = "eBado";
