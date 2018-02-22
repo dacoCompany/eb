@@ -88,5 +88,11 @@
     <None Include="packages.config" />
     <None Include="Unity.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Infrastructure.Common.DB\Infrastructure.Common.DB.csproj">
+      <Project>{6b3adf23-f140-4a73-96f0-23f98f14f90f}</Project>
+      <Name>Infrastructure.Common.DB</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
